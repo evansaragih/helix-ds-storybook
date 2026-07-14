@@ -1,0 +1,17 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { ChangelogTable } from './blocks/ChangelogTable';
+
+<Meta title="Changelog" />
+
+# Changelog
+
+Every component change recorded across the design system, newest first. This
+page is generated from each component's `changelog[]` in
+`src/data/changelog.ts` — it updates automatically the next time Storybook is
+built. See `CHANGELOG_GUIDE.md` at the repo root for how to add an entry.
+
+Entries are never deleted (see the guide's "append-only" rule), so this list
+only grows — use the date filter below to narrow it down, and it's paginated
+15 rows at a time so a long history stays readable.
+
+<ChangelogTable />

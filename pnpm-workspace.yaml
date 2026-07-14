@@ -1,0 +1,7 @@
+packages:
+  - '.'
+  - '../helix-design-system'
+  - '../helix-design-brief'
+allowBuilds:
+  '@tailwindcss/oxide': true
+  esbuild: true

@@ -1,0 +1,29 @@
+{
+  "name": "helix-storybook",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "helix-design-system": "workspace:*",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "lucide-react": "0.487.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.4.6",
+    "@storybook/addon-docs": "10.4.6",
+    "@storybook/react-vite": "10.4.6",
+    "@tailwindcss/vite": "4.1.12",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "@vitejs/plugin-react": "4.7.0",
+    "storybook": "10.4.6",
+    "tailwindcss": "4.1.12",
+    "typescript": "5.7.3",
+    "vite": "6.3.5"
+  }
+}

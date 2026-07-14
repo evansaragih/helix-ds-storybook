@@ -1,0 +1,39 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# Helix Design System — Storybook
+
+Living documentation and playground for the **Helix Design System**, shared across
+Nusantics, CeKolam, and Causa.
+
+Every component here is imported directly from the `helix-design-system` package
+(workspace-linked from `../helix-design-system/src/components`) — nothing is
+duplicated or re-implemented, so this Storybook always reflects the real,
+shipped components, tokens, and styles.
+
+## How to use this
+
+- **Use the "Brand" toolbar button** (top toolbar, paint‑brush icon) to preview
+  every component under `nusantics`, `cekolam`, or `causa` brand mode.
+- Each component's **Controls** tab lets you live-edit props — this is the
+  playground for designers and FE engineers to explore variants before wiring
+  up a real screen.
+- The **Accessibility** tab (addon-a11y) runs automated a11y checks on every
+  story.
+
+## Design tokens
+
+Tokens are defined in `helix-design-system/src/styles/theme.css` (3 layers:
+primitives → semantics → brand modes) and are the single source of truth —
+also mirrored in the Figma library ("Nusantics Design System"). When designing
+a new screen in Figma or in code, always reach for a semantic token
+(`--color-*`, `--spacing-*`, `--radius-*`) instead of a hardcoded value, so
+Figma, code, and this documentation stay in lockstep.
+
+## Keeping this in sync
+
+This project has **no build/compile step for components** — it consumes
+`helix-design-system`'s TSX source directly via a pnpm workspace link. Any
+change made in `helix-design-system/src/components` is reflected here
+immediately on save, with no publish/version step required.
