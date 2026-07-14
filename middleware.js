@@ -7,7 +7,7 @@ export default function middleware(req) {
 
     // 👇 This is the list of users you can manage
     const allowedUsers = {
-      'admin': 'helix2024',
+      'admin': 'helix2026',
       'recruiter': 'hireme'
     };
 
