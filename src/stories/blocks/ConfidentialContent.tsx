@@ -18,8 +18,7 @@ export const ConfidentialContent = ({ children }) => {
           <button 
             onClick={() => {
               const pwd = prompt("Enter unlock password:");
-              // Using a simple client-side password (e.g., 'helix2026')
-              if (pwd === "helix2026") {
+              if (pwd === "evanhimawansaragih") {
                 setUnlocked(true);
               } else if (pwd !== null) {
                 alert("Incorrect password.");
