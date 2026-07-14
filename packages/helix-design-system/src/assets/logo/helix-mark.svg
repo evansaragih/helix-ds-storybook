@@ -1,0 +1,12 @@
+<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="36" height="36" rx="7.2" fill="#F57E20"/>
+  <!-- Double helix: two interlocking S-curves -->
+  <path d="M10 7 C10 12 26 14 26 18 C26 22 10 24 10 29"
+        stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M26 7 C26 12 10 14 10 18 C10 22 26 24 26 29"
+        stroke="white" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <!-- Connecting rungs -->
+  <line x1="10" y1="11" x2="26" y2="11" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="10" y1="18" x2="26" y2="18" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+  <line x1="10" y1="25" x2="26" y2="25" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+</svg>

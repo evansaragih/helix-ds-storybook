@@ -1,0 +1,697 @@
+/* ================================================================
+ * Nusantics Design System — Design Tokens
+ * Source: figma.com/design/GWzBKGr6512AeMOapwgQhj
+ *
+ * Token Architecture (mirrors Figma variable collections):
+ *
+ *   Layer 1 — Primitives   (--primitive-*)
+ *     Raw color ramps. Never reference in components directly.
+ *     Components must always go through a Semantic token.
+ *
+ *   Layer 2 — Semantics    (--color-*)
+ *     Purpose-named tokens that map to Primitives.
+ *     Brand-aware tokens default to Nusantics; overridden below.
+ *
+ *   Layer 3 — Brand modes  ([data-brand="*"])
+ *     Override only the brand-aware Semantic tokens.
+ *     Apply to the <html> or any root element.
+ *
+ *   Utilities  (--spacing-*, --radius-*, --container-*, --max-width-*)
+ *   Typography (--font-*, --text-*, --line-height-*, --letter-spacing-*)
+ *
+ * Brand modes: nusantics (default) | cekolam | causa
+ * ================================================================ */
+
+:root {
+
+  /* ==============================================================
+   * LAYER 1 — PRIMITIVES
+   * Color ramps 0 (lightest) → 100 (darkest).
+   * 0-level is always the tint used for status surfaces/inputs.
+   * 50-level is the base/default hue for each palette.
+   * ============================================================== */
+
+  /* --- Nusantics / Lively Orange -------------------------------- */
+  --primitive-orange-0:   #FEF2E9;
+  --primitive-orange-5:   #FDE6D3;
+  --primitive-orange-10:  #FCC9A3;
+  --primitive-orange-20:  #F9AD72;
+  --primitive-orange-30:  #F79449;
+  --primitive-orange-40:  #F68A31;
+  --primitive-orange-50:  #F57E20;
+  --primitive-orange-60:  #DF6505;
+  --primitive-orange-70:  #B35001;
+  --primitive-orange-80:  #8A3D00;
+  --primitive-orange-90:  #5C2800;
+  --primitive-orange-100: #2E1400;
+
+  /* --- CeKolam / Warm Tangerine --------------------------------- */
+  --primitive-cekolam-primary-0:   #FEF3EC;
+  --primitive-cekolam-primary-10:  #FDD5B8;
+  --primitive-cekolam-primary-30:  #F39B5F;
+  --primitive-cekolam-primary-50:  #EB7323;
+  --primitive-cekolam-primary-60:  #D4611A;
+  --primitive-cekolam-primary-70:  #A84E14;
+  --primitive-cekolam-primary-80:  #7C3A0E;
+  --primitive-cekolam-primary-90:  #502608;
+
+  /* --- CeKolam / Teal ------------------------------------------ */
+  --primitive-teal-0:   #E6F7F9;
+  --primitive-teal-10:  #B3E6EB;
+  --primitive-teal-30:  #3EC4D1;
+  --primitive-teal-50:  #089AAA;
+  --primitive-teal-60:  #077E8C;
+  --primitive-teal-70:  #056570;
+  --primitive-teal-80:  #034B54;
+  --primitive-teal-90:  #023238;
+
+  /* --- CeKolam / Denim ----------------------------------------- */
+  --primitive-denim-0:   #E8EEF2;
+  --primitive-denim-10:  #C0CED8;
+  --primitive-denim-30:  #5B7D96;
+  --primitive-denim-50:  #2B485E;
+  --primitive-denim-60:  #243E50;
+  --primitive-denim-70:  #1A2E3C;
+  --primitive-denim-80:  #112028;
+  --primitive-denim-90:  #081014;
+
+  /* --- Causa / Safety Orange (same ramp as Nusantics orange) --- */
+  /* References --primitive-orange-* */
+
+  /* --- Causa / Slate ------------------------------------------- */
+  --primitive-slate-0:   #ECEEF3;
+  --primitive-slate-10:  #CBD1DE;
+  --primitive-slate-30:  #6B7BA0;
+  --primitive-slate-50:  #434F6A;
+  --primitive-slate-60:  #38435A;
+  --primitive-slate-70:  #2C3649;
+  --primitive-slate-80:  #202738;
+  --primitive-slate-90:  #141827;
+
+  /* --- Causa / Steel Blue -------------------------------------- */
+  --primitive-steel-0:   #F1F5F8;
+  --primitive-steel-10:  #DCE5EC;
+  --primitive-steel-30:  #BACBD5;
+  --primitive-steel-50:  #A4B8C4;
+  --primitive-steel-60:  #8C9EAC;
+  --primitive-steel-70:  #6E8290;
+  --primitive-steel-80:  #526270;
+  --primitive-steel-90:  #374350;
+
+  /* --- Nusantics / Olive Green --------------------------------- */
+  --primitive-olive-0:   #EBF0EA;
+  --primitive-olive-10:  #C8D5C6;
+  --primitive-olive-30:  #6D8E68;
+  --primitive-olive-50:  #476142;
+  --primitive-olive-60:  #3E5639;
+  --primitive-olive-70:  #2E402A;
+  --primitive-olive-80:  #1E2B1B;
+  --primitive-olive-90:  #10160F;
+
+  /* --- Nusantics / Charcoal ------------------------------------ */
+  --primitive-charcoal-0:   #EBEBEB;
+  --primitive-charcoal-10:  #D0D0D1;
+  --primitive-charcoal-30:  #848485;
+  --primitive-charcoal-50:  #58595B;
+  --primitive-charcoal-60:  #48494B;
+  --primitive-charcoal-70:  #393A3B;
+  --primitive-charcoal-80:  #2A2B2C;
+  --primitive-charcoal-90:  #1A1B1C;
+
+  /* --- Neutral (Grayscale) ------------------------------------- */
+  --primitive-neutral-0:   #FFFFFF;
+  --primitive-neutral-5:   #F7F7F7;
+  --primitive-neutral-10:  #EEEEEE;
+  --primitive-neutral-20:  #D7D7D7;
+  --primitive-neutral-30:  #C2C2C2;
+  --primitive-neutral-40:  #9F9F9F;
+  --primitive-neutral-50:  #828282;
+  --primitive-neutral-60:  #656565;
+  --primitive-neutral-70:  #49494A;
+  --primitive-neutral-80:  #2F2F2F;
+  --primitive-neutral-90:  #14141E;
+  --primitive-neutral-100: #000000;
+
+  /* --- Green --------------------------------------------------- */
+  --primitive-green-0:   #E9F9EF;
+  --primitive-green-5:   #D3F3DF;
+  --primitive-green-10:  #AAEBBF;
+  --primitive-green-20:  #7FDE9E;
+  --primitive-green-30:  #54D17E;
+  --primitive-green-40:  #34C468;
+  --primitive-green-50:  #22C55E;
+  --primitive-green-60:  #19A54C;
+  --primitive-green-70:  #12843C;
+  --primitive-green-80:  #0C632C;
+  --primitive-green-90:  #07421D;
+  --primitive-green-100: #03210E;
+
+  /* --- Red ----------------------------------------------------- */
+  --primitive-red-0:   #FEE2E2;
+  --primitive-red-5:   #FECACA;
+  --primitive-red-10:  #FCA5A5;
+  --primitive-red-20:  #F87171;
+  --primitive-red-30:  #F35353;
+  --primitive-red-40:  #EF4444;
+  --primitive-red-50:  #DC2626;
+  --primitive-red-60:  #B91C1C;
+  --primitive-red-70:  #991B1B;
+  --primitive-red-80:  #7F1D1D;
+  --primitive-red-90:  #5C1414;
+  --primitive-red-100: #3B0000;
+
+  /* --- Blue ---------------------------------------------------- */
+  --primitive-blue-0:   #EBF2FE;
+  --primitive-blue-5:   #DBEAFE;
+  --primitive-blue-10:  #BFDBFE;
+  --primitive-blue-20:  #93C5FD;
+  --primitive-blue-30:  #60A5FA;
+  --primitive-blue-40:  #3B82F6;
+  --primitive-blue-50:  #2563EB;
+  --primitive-blue-60:  #0560F5;
+  --primitive-blue-70:  #014CC5;
+  --primitive-blue-80:  #013899;
+  --primitive-blue-90:  #012570;
+  --primitive-blue-100: #001247;
+
+  /* --- Yellow -------------------------------------------------- */
+  --primitive-yellow-0:   #FEF5E7;
+  --primitive-yellow-5:   #FEF0D9;
+  --primitive-yellow-10:  #FDE8BC;
+  --primitive-yellow-20:  #FBDA8E;
+  --primitive-yellow-30:  #FACB60;
+  --primitive-yellow-40:  #F8BC32;
+  --primitive-yellow-50:  #F59E0B;
+  --primitive-yellow-60:  #CE8303;
+  --primitive-yellow-70:  #A66800;
+  --primitive-yellow-80:  #7F4E00;
+  --primitive-yellow-90:  #593600;
+  --primitive-yellow-100: #331F00;
+
+  /* --- Black & White ------------------------------------------ */
+  --primitive-black: #000000;
+  --primitive-white: #FFFFFF;
+
+
+  /* ==============================================================
+   * LAYER 2 — SEMANTICS
+   * Purpose-named tokens. Use these in all components and styles.
+   * ============================================================== */
+
+  /* --- Text ---------------------------------------------------- */
+  --color-text-primary:    #14141E;   /* Body text */
+  --color-text-secondary:  #49494A;   /* Subtitles */
+  --color-text-tertiary:   #828282;   /* Captions */
+  --color-text-muted:      #9F9F9F;   /* Disabled text */
+  --color-text-on-primary: #FFFFFF;   /* Text on colored/dark surfaces */
+  --color-text-error:      #EF4444;
+  --color-text-success:    #12843C;
+  --color-text-warning:    #A66800;
+  --color-text-info:       #014CC5;
+
+  /* Brand text — overridden per brand mode */
+  --color-text-brand-primary:   #F57E20;
+  --color-text-brand-secondary: #58595B;
+  --color-text-brand-tertiary:  #476142;
+
+  /* --- Backgrounds --------------------------------------------- */
+  --color-bg-page:    #FFFFFF;
+  --color-bg-subtle:  #EEEEEE;
+  --color-bg-hover:   #EEEEEE;
+  --color-bg-inverse: #14141E;
+
+  /* --- Containers ---------------------------------------------- */
+  --color-container-primary:     #FFFFFF;
+  --color-container-secondary:   #F7F7F7;
+  --color-container-tertiary:    #EEEEEE;
+  --color-container-disabled:    #D7D7D7;
+  --color-container-primary-60:  rgba(255, 255, 255, 0.6);
+  --color-container-primary-10:  rgba(255, 255, 255, 0.1);
+
+  /* --- Stroke / Border ----------------------------------------- */
+  --color-stroke-default:       #D7D7D7;
+  --color-stroke-subtle:        #EEEEEE;
+  --color-stroke-hover:         #9F9F9F;
+  --color-stroke-strong:        #49494A;
+  --color-stroke-error:         #DC2626;
+  --color-stroke-success:       #22C55E;
+  --color-stroke-info:          #3B82F6;
+  /* Used as inner border on solid buttons (Colors/Stroke/Neutral-20) */
+  --color-stroke-neutral-20:    rgba(255, 255, 255, 0.2);
+  /* Top color of Stroke Linear White gradient (Colors/Stroke/Neutral-50) */
+  --color-stroke-neutral-50:    rgba(255, 255, 255, 0.5);
+  --color-stroke-neutral-white: #FFFFFF;
+
+  /* --- Input --------------------------------------------------- */
+  --color-input-bg-default:  #FFFFFF;
+  --color-input-bg-hover:    #EEEEEE;
+  --color-input-bg-focus:    #FFFFFF;
+  --color-input-bg-disabled: #D7D7D7;
+  --color-input-bg-error:    #FEE2E2;
+  --color-input-bg-success:  #E9F9EF;
+
+  --color-input-border-default:  #D7D7D7;
+  --color-input-border-hover:    #9F9F9F;
+  --color-input-border-focus:    #F57E20;   /* brand-aware — overridden per brand */
+  --color-input-border-error:    #DC2626;
+  --color-input-border-success:  #22C55E;
+  --color-input-border-disabled: #D7D7D7;
+
+  --color-input-text-default:     #14141E;
+  --color-input-text-placeholder: #9F9F9F;
+  --color-input-text-disabled:    #9F9F9F;
+  --color-input-text-error:       #DC2626;
+
+  /* --- Status Surfaces ----------------------------------------- */
+  --color-status-brand-bg:   #FEF2E9;   /* brand-aware — overridden per brand */
+  --color-status-error-bg:   #FEE2E2;
+  --color-status-success-bg: #E9F9EF;
+  --color-status-warning-bg: #FEF5E7;
+  --color-status-info-bg:    #EBF2FE;
+
+  /* --- Shadow -------------------------------------------------- */
+  --color-shadow-neutral:          rgba(0, 0, 0, 0.08);
+  --color-shadow-brand-primary:    #F57E20;   /* brand-aware */
+  --color-shadow-brand-secondary:  #58595B;   /* brand-aware */
+  --color-shadow-brand-tertiary:   #476142;   /* brand-aware */
+
+  /* --- Shadows (Standard Elevations) --------------------------- */
+  --shadow-sm: 0 33px 9px 0 rgba(0, 0, 0, 0.00), 0 21px 8px 0 rgba(0, 0, 0, 0.01), 0 12px 7px 0 rgba(0, 0, 0, 0.05), 0 5px 5px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10);
+  --shadow:    0 84px 23px 0 rgba(0, 0, 0, 0.00), 0 54px 21px 0 rgba(0, 0, 0, 0.01), 0 30px 18px 0 rgba(0, 0, 0, 0.05), 0 13px 13px 0 rgba(0, 0, 0, 0.09), 0 3px 7px 0 rgba(0, 0, 0, 0.10);
+  --shadow-md: 26px 176px 50px 0 rgba(0, 0, 0, 0.00), 17px 113px 46px 0 rgba(0, 0, 0, 0.01), 9px 63px 38px 0 rgba(0, 0, 0, 0.05), 4px 28px 28px 0 rgba(0, 0, 0, 0.09), 1px 7px 16px 0 rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 359px 101px 0 rgba(0, 0, 0, 0.00), 0 230px 92px 0 rgba(0, 0, 0, 0.01), 0 129px 78px 0 rgba(0, 0, 0, 0.05), 0 57px 57px 0 rgba(0, 0, 0, 0.09), 0 14px 32px 0 rgba(0, 0, 0, 0.10);
+
+  /* --- Overlay ------------------------------------------------- */
+  --color-overlay-black: rgba(0, 0, 0, 0.5);
+  --color-overlay-white: rgba(255, 255, 255, 0.1);
+
+  /* --- Brand Tokens (Nusantics default) ------------------------
+   * All brand-aware tokens live here so any component can consume
+   * var(--color-brand-primary) without knowing which brand is active.
+   * The [data-brand] blocks below override only these tokens.
+   * ------------------------------------------------------------ */
+  --color-brand-primary:           #F57E20;
+  --color-brand-primary-hover:     #DF6505;
+  --color-brand-primary-pressed:   #B35001;
+
+  --color-brand-secondary:         #58595B;
+  --color-brand-secondary-hover:   #48494B;
+  --color-brand-secondary-pressed: #393A3B;
+
+  --color-brand-tertiary:          #476142;
+  --color-brand-tertiary-hover:    #3E5639;
+  --color-brand-tertiary-pressed:  #2E402A;
+
+  /* Destructive (not brand-aware, always the same) */
+  --color-destructive:         #DC2626;
+  --color-destructive-hover:   #B91C1C;
+  --color-destructive-pressed: #991B1B;
+
+  /* Neutral button */
+  --color-btn-neutral:         #F7F7F7;
+  --color-btn-neutral-hover:   #EEEEEE;
+  --color-btn-neutral-pressed: #D7D7D7;
+  --color-btn-neutral-border:  #D7D7D7;
+  --color-btn-neutral-text:    #49494A;
+
+  /* Invert button */
+  --color-btn-invert:         #59595A;
+  --color-btn-invert-hover:   #49494A;
+  --color-btn-invert-pressed: #3A3A3B;
+  --color-btn-invert-border:  #3A3A3B;
+
+  /* Disabled state (shared) */
+  --color-btn-disabled-bg:   #D7D7D7;
+  --color-btn-disabled-text: #9F9F9F;
+
+  /* Focus rings (70% opacity of brand color) — brand-aware */
+  --color-brand-primary-ring:   rgba(245, 126, 32, 0.7);
+  --color-brand-secondary-ring: rgba(88, 89, 91, 0.7);
+  --color-brand-tertiary-ring:  rgba(71, 97, 66, 0.7);
+
+  /* Ghost / Outline hover & focus backgrounds — brand-aware */
+  --color-brand-primary-ghost-hover: rgba(245, 126, 32, 0.08);
+  --color-brand-primary-ghost-focus: rgba(245, 126, 32, 0.16);
+  --color-brand-secondary-ghost-hover: rgba(88, 89, 91, 0.08);
+  --color-brand-secondary-ghost-focus: rgba(88, 89, 91, 0.16);
+  --color-brand-tertiary-ghost-hover: rgba(71, 97, 66, 0.08);
+  --color-brand-tertiary-ghost-focus: rgba(71, 97, 66, 0.16);
+
+  /* Secondary page background */
+  --color-bg-secondary: #F5F5F5;
+
+
+  /* ==============================================================
+   * TYPOGRAPHY
+   * Collection: "Typography" in Figma
+   * ============================================================== */
+
+  /* Font Families */
+  --font-family-heading: 'Quicksand', sans-serif;
+  --font-family-body:    'Rubik', sans-serif;
+
+  /* Font Weights */
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* Letter Spacing */
+  --letter-spacing-default: -0.01em;
+
+  /* Font Sizes — Display */
+  --text-display-hero:  76px;
+  --text-display-large: 61px;
+
+  /* Font Sizes — Heading */
+  --text-heading-page-title:    49px;
+  --text-heading-section-title: 39px;
+  --text-heading-card-title:    31px;
+  --text-heading-sub-section:   25px;
+
+  /* Font Sizes — Body */
+  --text-body-large:   20px;
+  --text-body-default: 16px;
+  --text-body-small:   13px;
+
+  /* Font Sizes — Micro */
+  --text-caption-badge: 10px;
+  --text-micro-legal:    8px;
+
+  /* Line Heights (paired with font sizes above) */
+  --line-height-8:   9.6px;   /* micro */
+  --line-height-10:  12px;    /* caption */
+  --line-height-13:  15.6px;  /* body-small */
+  --line-height-16:  19.2px;  /* body-default */
+  --line-height-20:  24px;    /* body-large */
+  --line-height-25:  30px;    /* sub-section */
+  --line-height-31:  37.2px;  /* card-title */
+  --line-height-39:  46.8px;  /* section-title */
+  --line-height-49:  58.8px;  /* page-title */
+  --line-height-61:  73px;    /* display-large */
+  --line-height-76:  91.2px;  /* display-hero */
+
+
+  /* ==============================================================
+   * UTILITIES
+   * Collection: "📐 Utilities" in Figma
+   * ============================================================== */
+
+  /* Spacing Scale */
+  --spacing-0:  0px;
+  --spacing-2:  2px;
+  --spacing-4:  4px;
+  --spacing-6:  6px;
+  --spacing-8:  8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+
+  /* Border Radius */
+  --radius-none: 0px;           /* No rounding */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;           /* Inputs, buttons (dashboard) */
+  --radius-xl:   12px;          /* Minor containers */
+  --radius-2xl:  16px;          /* Cards, sheets, dialogs */
+  --radius-3xl:  24px;          /* Dropdowns, popovers */
+  --radius-full: 9999px;        /* Buttons (landing page), pills */
+
+  /* Breakpoints / Container widths */
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1280px;
+  --container-2xl: 1536px;
+
+  /* Max Widths */
+  --max-width-3xs: 256px;
+  --max-width-2xs: 288px;
+  --max-width-xs:  320px;
+  --max-width-sm:  384px;
+  --max-width-md:  448px;
+  --max-width-lg:  512px;
+  --max-width-xl:  576px;
+  --max-width-2xl: 672px;
+  --max-width-3xl: 768px;
+  --max-width-4xl: 896px;
+  --max-width-5xl: 1024px;
+  --max-width-6xl: 1152px;
+  --max-width-7xl: 1280px;
+
+  /* Motion — shared duration/easing so every floating panel (Sheet, Dialog,
+   * AlertDialog, Popover, Toast, UploadProgressDrawer, ...) enters/exits with
+   * the same feel instead of each component inventing its own curve.
+   * JS-side mount/unmount timers can't read var(), so src/components/motion.ts
+   * mirrors these two duration values — keep both in sync by hand. */
+  --motion-duration-fast: 160ms;   /* micro-interactions: hover, chevron rotate */
+  --motion-duration-base: 200ms;   /* small overlays: popover, toast, alert dialog */
+  --motion-duration-slow: 280ms;   /* large panels: sheet, drawer */
+  --motion-easing-standard:   cubic-bezier(0.4, 0, 0.2, 1);   /* symmetric — expand/collapse, resize */
+  --motion-easing-decelerate: cubic-bezier(0.32, 0.72, 0, 1); /* enter/exit — fast in, gentle settle */
+}
+
+
+/* ================================================================
+ * LAYER 3 — BRAND MODES
+ * Apply data-brand="nusantics|cekolam|causa" to <html> or any
+ * wrapping element to activate a brand theme. Only the tokens
+ * that differ across brands need to be listed here.
+ * ================================================================ */
+
+/* --- Nusantics (default, also explicit for clarity) ------------ */
+:root,
+[data-brand="nusantics"] {
+  --color-brand-primary-ring:          rgba(245, 126, 32, 0.7);
+  --color-brand-secondary-ring:        rgba(88, 89, 91, 0.7);
+  --color-brand-tertiary-ring:         rgba(71, 97, 66, 0.7);
+  --color-brand-primary-ghost-hover:   rgba(245, 126, 32, 0.08);
+  --color-brand-primary-ghost-focus:   rgba(245, 126, 32, 0.16);
+  --color-brand-secondary-ghost-hover: rgba(88, 89, 91, 0.08);
+  --color-brand-secondary-ghost-focus: rgba(88, 89, 91, 0.16);
+  --color-brand-tertiary-ghost-hover:  rgba(71, 97, 66, 0.08);
+  --color-brand-tertiary-ghost-focus:  rgba(71, 97, 66, 0.16);
+  --color-brand-primary:           #F57E20;
+  --color-brand-primary-hover:     #DF6505;
+  --color-brand-primary-pressed:   #B35001;
+
+  --color-brand-secondary:         #58595B;
+  --color-brand-secondary-hover:   #48494B;
+  --color-brand-secondary-pressed: #393A3B;
+
+  --color-brand-tertiary:          #476142;
+  --color-brand-tertiary-hover:    #3E5639;
+  --color-brand-tertiary-pressed:  #2E402A;
+
+  --color-text-brand-primary:      #F57E20;
+  --color-text-brand-secondary:    #58595B;
+  --color-text-brand-tertiary:     #476142;
+
+  --color-input-border-focus:      #F57E20;
+  --color-shadow-brand-primary:    #F57E20;
+  --color-shadow-brand-secondary:  #58595B;
+  --color-shadow-brand-tertiary:   #476142;
+  --color-status-brand-bg:         #FEF2E9;
+}
+
+/* --- CeKolam --------------------------------------------------- */
+[data-brand="cekolam"] {
+  --color-brand-primary-ring:          rgba(235, 115, 35, 0.7);
+  --color-brand-secondary-ring:        rgba(8, 154, 170, 0.7);
+  --color-brand-tertiary-ring:         rgba(87, 87, 86, 0.7);
+  --color-brand-primary-ghost-hover:   rgba(235, 115, 35, 0.08);
+  --color-brand-primary-ghost-focus:   rgba(235, 115, 35, 0.16);
+  --color-brand-secondary-ghost-hover: rgba(8, 154, 170, 0.08);
+  --color-brand-secondary-ghost-focus: rgba(8, 154, 170, 0.16);
+  --color-brand-tertiary-ghost-hover:  rgba(87, 87, 86, 0.08);
+  --color-brand-tertiary-ghost-focus:  rgba(87, 87, 86, 0.16);
+  --color-brand-primary:           #EB7323;
+  --color-brand-primary-hover:     #B2571A;
+  --color-brand-primary-pressed:   #7C431D;
+
+  --color-brand-secondary:         #089AAA;
+  --color-brand-secondary-hover:   #078597;
+  --color-brand-secondary-pressed: #066F84;
+
+  --color-brand-tertiary:          #575756;
+  --color-brand-tertiary-hover:    #676765;
+  --color-brand-tertiary-pressed:  #4D4D4C;
+
+  --color-text-brand-primary:      #EB7323;
+  --color-text-brand-secondary:    #089AAA;
+  --color-text-brand-tertiary:     #575756;
+
+  --color-input-border-focus:      #EB7323;
+  --color-shadow-brand-primary:    #EB7323;
+  --color-shadow-brand-secondary:  #089AAA;
+  --color-shadow-brand-tertiary:   #575756;
+  --color-status-brand-bg:         #FDF1E9;
+}
+
+/* --- Causa ----------------------------------------------------- */
+[data-brand="causa"] {
+  --color-brand-primary-ring:          rgba(67, 79, 106, 0.7);
+  --color-brand-secondary-ring:        rgba(245, 126, 32, 0.7);
+  --color-brand-tertiary-ring:         rgba(164, 184, 196, 0.7);
+  --color-brand-primary-ghost-hover:   rgba(67, 79, 106, 0.08);
+  --color-brand-primary-ghost-focus:   rgba(67, 79, 106, 0.16);
+  --color-brand-secondary-ghost-hover: rgba(245, 126, 32, 0.08);
+  --color-brand-secondary-ghost-focus: rgba(245, 126, 32, 0.16);
+  --color-brand-tertiary-ghost-hover:  rgba(164, 184, 196, 0.08);
+  --color-brand-tertiary-ghost-focus:  rgba(164, 184, 196, 0.16);
+  --color-brand-primary:           #434F6A;
+  --color-brand-primary-hover:     #343D50;
+  --color-brand-primary-pressed:   #292F3D;
+
+  --color-brand-secondary:         #F57E20;
+  --color-brand-secondary-hover:   #DF6505;
+  --color-brand-secondary-pressed: #B35001;
+
+  --color-brand-tertiary:          #A4B8C4;
+  --color-brand-tertiary-hover:    #526B7A;
+  --color-brand-tertiary-pressed:  #405059;
+
+  --color-text-brand-primary:      #434F6A;
+  --color-text-brand-secondary:    #F57E20;
+  --color-text-brand-tertiary:     #A4B8C4;
+
+  --color-input-border-focus:      #434F6A;
+  --color-shadow-brand-primary:    #434F6A;
+  --color-shadow-brand-secondary:  #F57E20;
+  --color-shadow-brand-tertiary:   #A4B8C4;
+  --color-status-brand-bg:         #ECEDF0;
+}
+
+
+/* ================================================================
+ * BRAND IDENTITY (LOGO)
+ * <Logo /> renders one <img> per brand and relies on this same
+ * [data-brand] cascade to show/hide them — no JS brand detection.
+ * ================================================================ */
+
+.helix-logo__img {
+  display: none;
+}
+
+/* Nusantics shows by default (undecorated root); any explicit [data-brand]
+   hides it again unless that brand IS nusantics — keeps exactly one <img>
+   visible no matter how the selectors stack. */
+.helix-logo__img--nusantics {
+  display: inline-block;
+}
+
+[data-brand] .helix-logo__img--nusantics {
+  display: none;
+}
+
+[data-brand="nusantics"] .helix-logo__img--nusantics {
+  display: inline-block;
+}
+
+[data-brand="cekolam"] .helix-logo__img--cekolam {
+  display: inline-block;
+}
+
+[data-brand="causa"] .helix-logo__img--causa {
+  display: inline-block;
+}
+
+
+/* ================================================================
+ * BASE TYPOGRAPHY RULES
+ * ================================================================ */
+
+body {
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--text-body-default);
+  line-height: 1.5;
+  color: var(--color-text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-default);
+  line-height: 1.2;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+h1 { font-size: var(--text-heading-page-title); }
+h2 { font-size: var(--text-heading-section-title); }
+h3 { font-size: var(--text-heading-card-title); }
+h4 { font-size: var(--text-heading-sub-section); }
+
+p { margin: 0; }
+
+.text-display-hero  { font-size: var(--text-display-hero);  font-family: var(--font-family-heading); }
+.text-display-large { font-size: var(--text-display-large); font-family: var(--font-family-heading); }
+.text-large         { font-size: var(--text-body-large); }
+.text-small         { font-size: var(--text-body-small); }
+.text-caption       { font-size: var(--text-caption-badge); }
+.text-micro         { font-size: var(--text-micro-legal); }
+
+@keyframes badge-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spinner-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(12px); }
+}
+
+/* Dialog is Radix-based — Radix's Presence looks for a real CSS animation
+ * on [data-state="closed"] and waits for it to finish before unmounting,
+ * so this has to be an actual keyframe/selector pair, not an inline style. */
+@keyframes helix-dialog-overlay-show {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes helix-dialog-overlay-hide {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes helix-dialog-content-show {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes helix-dialog-content-hide {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+}
+
+.helix-dialog-overlay[data-state="open"] {
+  animation: helix-dialog-overlay-show var(--motion-duration-base) var(--motion-easing-standard);
+}
+.helix-dialog-overlay[data-state="closed"] {
+  animation: helix-dialog-overlay-hide var(--motion-duration-base) var(--motion-easing-standard);
+}
+.helix-dialog-content[data-state="open"] {
+  animation: helix-dialog-content-show var(--motion-duration-base) var(--motion-easing-standard);
+}
+.helix-dialog-content[data-state="closed"] {
+  animation: helix-dialog-content-hide var(--motion-duration-base) var(--motion-easing-standard);
+}
+
+@keyframes trace-border {
+  from { stroke-dashoffset: 9999; }
+  to   { stroke-dashoffset: 0; }
+}

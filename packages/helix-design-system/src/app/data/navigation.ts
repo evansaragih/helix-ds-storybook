@@ -1,0 +1,52 @@
+export interface NavItem {
+  label: string;
+  id: string;
+}
+
+export const foundationItems: NavItem[] = [
+  { label: 'Color', id: 'primitives' },
+  { label: 'Typography', id: 'typography' },
+  { label: 'Spacing Layout', id: 'utilities' },
+  { label: 'Elevation', id: 'elevation' },
+];
+
+export const componentItems: NavItem[] = [
+  { label: 'Overview', id: 'components-overview' },
+  { label: 'Accordion', id: 'accordion' },
+  { label: 'Alert', id: 'alert' },
+  { label: 'Alert Dialog', id: 'alert-dialog' },
+  { label: 'Avatar', id: 'avatar' },
+  { label: 'Badge', id: 'badge' },
+  { label: 'Breadcrumb', id: 'breadcrumb' },
+  { label: 'Button', id: 'button' },
+  { label: 'Card', id: 'card' },
+  { label: 'Card Metric', id: 'card-metric' },
+  { label: 'Carousel', id: 'carousel' },
+  { label: 'Checkbox', id: 'checkbox' },
+  { label: 'Comparison Table', id: 'comparison-table' },
+  { label: 'Date Picker', id: 'date-picker' },
+  { label: 'Dialog', id: 'dialog' },
+  { label: 'Divider', id: 'divider' },
+  { label: 'Dropzone', id: 'dropzone' },
+  { label: 'Empty State', id: 'empty-state' },
+  { label: 'Info Card', id: 'info-card' },
+  { label: 'Input', id: 'input' },
+  { label: 'Input OTP', id: 'input-otp' },
+  { label: 'Menu', id: 'menu-item' },
+  { label: 'Navbar', id: 'navbar' },
+  { label: 'Pagination', id: 'pagination' },
+  { label: 'Popover', id: 'popover' },
+  { label: 'Progress Bar', id: 'progress-bar' },
+  { label: 'Radio Button', id: 'radio-button' },
+  { label: 'Select', id: 'select' },
+  { label: 'Sheet', id: 'sheet' },
+  { label: 'Spinner', id: 'spinner' },
+  { label: 'Stepper', id: 'stepper' },
+  { label: 'Switch', id: 'switch' },
+  { label: 'Table', id: 'table' },
+  { label: 'Tabs', id: 'tabs' },
+  { label: 'Text Link', id: 'text-link' },
+  { label: 'Toast', id: 'toast' },
+  { label: 'Toolbar Filter', id: 'toolbar-filter' },
+  { label: 'Tooltip', id: 'tooltip' },
+];

@@ -1,6 +1,6 @@
 packages:
   - '.'
-  - '../helix-design-system'
+  - 'packages/*'
   - '../helix-design-brief'
 allowBuilds:
   '@tailwindcss/oxide': true
