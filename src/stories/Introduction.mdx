@@ -2,6 +2,15 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Introduction" />
 
+<div style={{ position: 'relative' }}>
+  <div style={{ position: 'absolute', inset: 0, zIndex: 10, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '4rem' }}>
+    <div style={{ background: 'rgba(0,0,0,0.85)', color: 'white', padding: '1.5rem 2rem', borderRadius: '8px', fontWeight: 'bold', fontSize: '1.2rem', textAlign: 'center', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+      ⚠️ Confidential Content<br/>
+      <span style={{ fontSize: '0.9rem', fontWeight: 'normal', opacity: 0.8 }}>Access to this page is limited.</span>
+    </div>
+  </div>
+  <div style={{ filter: 'blur(6px)', pointerEvents: 'none', userSelect: 'none', opacity: 0.7 }}>
+
 # Helix Design System — Storybook
 
 Living documentation and playground for the **Helix Design System**, shared across
@@ -37,3 +46,6 @@ This project has **no build/compile step for components** — it consumes
 `helix-design-system`'s TSX source directly via a pnpm workspace link. Any
 change made in `helix-design-system/src/components` is reflected here
 immediately on save, with no publish/version step required.
+
+  </div>
+</div>
