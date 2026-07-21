@@ -21,7 +21,7 @@ const ElevationCard = ({ level, shadow, description }: { level: string; shadow: 
   onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
   >
     <div style={{
-      fontFamily: 'Rubik, sans-serif',
+      fontFamily: 'var(--font-family-body)',
       fontWeight: 600,
       fontSize: '16px',
       color: '#14141e'
@@ -29,7 +29,7 @@ const ElevationCard = ({ level, shadow, description }: { level: string; shadow: 
       {level}
     </div>
     <div style={{
-      fontFamily: 'Rubik, sans-serif',
+      fontFamily: 'var(--font-family-body)',
       fontSize: '13px',
       color: '#828282',
       lineHeight: '1.5'
@@ -105,7 +105,7 @@ export function ElevationSection() {
           <ul style={{ 
             margin: 0, 
             paddingLeft: '20px', 
-            fontFamily: 'Rubik, sans-serif', 
+            fontFamily: 'var(--font-family-body)', 
             fontSize: '14px', 
             color: '#49494a',
             lineHeight: '1.8'

@@ -136,7 +136,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(({
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{
             margin: 0,
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 500,
             fontSize: 14,
             lineHeight: '21px',
@@ -148,7 +148,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(({
           {description && (
             <p style={{
               margin: '4px 0 0',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 400,
               fontSize: 13,
               lineHeight: '19.2px',
@@ -200,7 +200,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(({
                 border: `1px solid ${v.border}`,
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 fontSize: 13,
                 lineHeight: '19.2px',
@@ -219,7 +219,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(({
                 border: 'none',
                 backgroundColor: v.actionBg,
                 cursor: 'pointer',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 fontSize: 13,
                 lineHeight: '19.2px',

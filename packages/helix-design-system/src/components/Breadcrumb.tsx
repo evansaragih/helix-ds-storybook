@@ -45,7 +45,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(({
                 <span
                   aria-current="page"
                   style={{
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontWeight: 400,
                     fontSize: sz.fontSize,
                     lineHeight: sz.lineHeight,
@@ -60,7 +60,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(({
                   href={item.href ?? '#'}
                   onClick={item.onClick ? (e) => { e.preventDefault(); item.onClick!(); } : undefined}
                   style={{
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontWeight: 400,
                     fontSize: sz.fontSize,
                     lineHeight: sz.lineHeight,

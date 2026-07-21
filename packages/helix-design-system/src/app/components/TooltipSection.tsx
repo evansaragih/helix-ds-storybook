@@ -11,7 +11,7 @@ const toc = [
 function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>{children}</div>
     </div>
   );
@@ -34,15 +34,15 @@ export function TooltipSection() {
               { heading: 'Never put critical info here', body: 'Tooltips are invisible until hovered. Never hide required field instructions, errors, or legal text in a tooltip.' },
             ].map(g => (
               <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-                <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+                <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
               </div>
             ))}
           </div>
         </Section>
 
         <Section id="tooltip-variants" title="Variants">
-          <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+          <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
             <code>dark</code> (default) uses a near-black background. <code>light</code> uses white with a subtle shadow — better on dark surfaces.
           </p>
           <DemoCard title="dark vs light">
@@ -56,7 +56,7 @@ export function TooltipSection() {
         </Section>
 
         <Section id="tooltip-sides" title="Placement">
-          <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+          <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
             Control placement with the <code>side</code> prop: <code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code>.
           </p>
           <DemoCard title="Four sides">

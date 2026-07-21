@@ -13,7 +13,7 @@ const toc = [
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: '0 0 0', backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE', overflow: 'hidden' }}>
-      <p style={{ margin: '0', padding: '14px 20px 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E', borderBottom: '1px solid #EEEEEE' }}>{title}</p>
+      <p style={{ margin: '0', padding: '14px 20px 12px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E', borderBottom: '1px solid #EEEEEE' }}>{title}</p>
       <div style={{ padding: 0 }}>{children}</div>
     </div>
   );
@@ -22,7 +22,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 const logo = (
   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
     <img src={helixMarkSvg} alt="Helix" style={{ width: 28, height: 28 }} />
-    <span style={{ fontFamily: 'Rubik, sans-serif', fontWeight: 700, fontSize: 15, color: '#14141E' }}>Helix</span>
+    <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 700, fontSize: 15, color: '#14141E' }}>Helix</span>
   </div>
 );
 
@@ -49,8 +49,8 @@ export function NavbarSection() {
             { heading: 'Limit nav items', body: 'Keep top-level navigation to 5–7 items maximum. More than this creates decision fatigue. Move less-used items to a sidebar or user menu.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>

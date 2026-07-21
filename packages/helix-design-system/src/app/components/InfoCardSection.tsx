@@ -30,8 +30,8 @@ export function InfoCardSection() {
             { heading: 'Keep content brief', body: 'Title under 6 words, description under 2 sentences. Info cards complement the page, they shouldn\'t dominate it.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -49,7 +49,7 @@ export function InfoCardSection() {
       </Section>
 
       <Section id="infocard-compact" title="Compact">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Compact cards render as a single row — useful inside settings pages, sidebars, or table rows.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -60,7 +60,7 @@ export function InfoCardSection() {
       </Section>
 
       <Section id="infocard-interactive" title="Interactive">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Pass <code>onClick</code> to make the card clickable — useful for navigating to related pages.
         </p>
         <Grid>
@@ -70,7 +70,7 @@ export function InfoCardSection() {
       </Section>
 
       <Section id="infocard-examples" title="Examples">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Info cards with footer content for richer layouts.
         </p>
         <Grid>
@@ -82,7 +82,7 @@ export function InfoCardSection() {
             footer={
               <div style={{ display: 'flex', gap: 6 }}>
                 {['Connect GitHub', 'Invite team', 'Create project'].map((step, i) => (
-                  <span key={step} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: i === 0 ? '#12843C' : '#828282' }}>
+                  <span key={step} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'var(--font-family-body)', fontSize: 12, color: i === 0 ? '#12843C' : '#828282' }}>
                     {i === 0 ? '✓' : '○'} {step}
                   </span>
                 ))}
@@ -98,7 +98,7 @@ export function InfoCardSection() {
             footer={
               <div style={{ display: 'flex', gap: 8 }}>
                 {['API', 'Dashboard', 'Webhooks', 'CDN'].map(s => (
-                  <span key={s} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#12843C' }}>
+                  <span key={s} style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#12843C' }}>
                     <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#12843C', display: 'inline-block' }} /> {s}
                   </span>
                 ))}

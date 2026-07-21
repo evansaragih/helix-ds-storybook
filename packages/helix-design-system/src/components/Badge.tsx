@@ -187,7 +187,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(({
 
       {/* Label */}
       <span style={{
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontWeight: s.fontWeight,
         fontSize: s.fontSize,
         lineHeight: s.lineHeight,

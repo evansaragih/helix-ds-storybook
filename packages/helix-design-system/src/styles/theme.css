@@ -230,7 +230,7 @@
 
   /* --- Stroke / Border ----------------------------------------- */
   --color-stroke-default:       #D7D7D7;
-  --color-stroke-subtle:        #EEEEEE;
+  --color-stroke-subtle:        #D7D7D7;
   --color-stroke-hover:         #9F9F9F;
   --color-stroke-strong:        #49494A;
   --color-stroke-error:         #DC2626;

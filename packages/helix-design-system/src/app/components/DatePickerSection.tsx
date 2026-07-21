@@ -12,7 +12,7 @@ const toc = [
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'flex-start' }}>{children}</div>
     </div>
   );
@@ -44,8 +44,8 @@ export function DatePickerSection() {
             { heading: 'Restrict invalid dates', body: 'Use minDate and maxDate to prevent selecting past dates for future bookings, or future dates for historical records.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -79,7 +79,7 @@ export function DatePickerSection() {
         </Card>
         <div style={{ marginTop: 12 }}>
           {(rangeStart || rangeEnd) && (
-            <p style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#828282', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#828282', margin: 0 }}>
               Selected: {rangeStart?.toLocaleDateString()} – {rangeEnd?.toLocaleDateString() ?? '…'}
             </p>
           )}

@@ -60,7 +60,7 @@ const COLUMNS: Column<ActivityRow>[] = [
     header: 'ID Sampel',
     width: 160,
     render: row => (
-      <span style={{ fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: 13, color: '#111827' }}>
+      <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13, color: '#111827' }}>
         {row.sampleId}
       </span>
     ),
@@ -69,7 +69,7 @@ const COLUMNS: Column<ActivityRow>[] = [
     key: 'analysisType',
     header: 'Jenis Analisis',
     render: row => (
-      <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#111827' }}>
+      <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#111827' }}>
         {row.analysisType}
       </span>
     ),
@@ -86,7 +86,7 @@ const COLUMNS: Column<ActivityRow>[] = [
           padding: '3px 12px', borderRadius: 999,
           backgroundColor: cfg.bg,
           color: cfg.color,
-          fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: 12,
+          fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 12,
         }}>
           {row.status}
         </span>
@@ -98,7 +98,7 @@ const COLUMNS: Column<ActivityRow>[] = [
     header: 'Tanggal',
     width: 140,
     render: row => (
-      <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#6B7280' }}>
+      <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#6B7280' }}>
         {row.date}
       </span>
     ),
@@ -109,12 +109,12 @@ const COLUMNS: Column<ActivityRow>[] = [
     render: row => row.report ? (
       <button style={{
         background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-        fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#F57E20',
+        fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#F57E20',
       }}>
         Lihat Laporan →
       </button>
     ) : (
-      <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#9CA3AF' }}>—</span>
+      <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#9CA3AF' }}>—</span>
     ),
   },
 ];
@@ -160,7 +160,7 @@ function SidebarNavItem({
         border: 'none', cursor: 'pointer',
         backgroundColor: active ? '#FFF3E6' : hovered ? '#F9FAFB' : 'transparent',
         color: active ? '#F57E20' : '#6B7280',
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontWeight: active ? 500 : 400,
         fontSize: 14,
         transition: 'background-color 0.15s, color 0.15s',
@@ -221,12 +221,12 @@ function StatCard({ label, value, sub, accentColor, circleBg }: typeof STAT_CARD
         </div>
 
         {/* Label */}
-        <p style={{ margin: '0 0 4px', fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#6B7280' }}>
+        <p style={{ margin: '0 0 4px', fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#6B7280' }}>
           {label}
         </p>
 
         {/* Sub text */}
-        <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: accentColor, fontWeight: 500 }}>
+        <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: accentColor, fontWeight: 500 }}>
           {sub}
         </p>
       </div>
@@ -303,7 +303,7 @@ function WelcomeDialog({ open, onClose }: { open: boolean; onClose: () => void }
           <div style={{ padding: '28px 32px 32px' }}>
             <p style={{
               margin: '0 0 20px',
-              fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#6B7280',
+              fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#6B7280',
               lineHeight: 1.7,
             }}>
               Platform riset mikrobiom Anda siap digunakan. Berikut yang bisa Anda lakukan hari ini:
@@ -324,7 +324,7 @@ function WelcomeDialog({ open, onClose }: { open: boolean; onClose: () => void }
                   }}>
                     <div style={{ width: 16, height: 16, borderRadius: 3, backgroundColor: item.accentColor }} />
                   </div>
-                  <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#374151' }}>
+                  <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#374151' }}>
                     {item.text}
                   </p>
                 </div>
@@ -338,7 +338,7 @@ function WelcomeDialog({ open, onClose }: { open: boolean; onClose: () => void }
                 backgroundColor: '#F57E20',
                 color: 'white', border: 'none',
                 borderRadius: 8, cursor: 'pointer',
-                fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: 14,
+                fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 14,
                 transition: 'background-color 0.15s',
                 boxShadow: '0 4px 14px rgba(245,126,32,0.35)',
               }}
@@ -365,7 +365,7 @@ export function DashboardPage() {
       position: 'fixed', inset: 0, zIndex: 50,
       backgroundColor: '#F6F7F9',
       display: 'flex', flexDirection: 'column',
-      fontFamily: 'Rubik, sans-serif',
+      fontFamily: 'var(--font-family-body)',
     }}>
 
       {/* ── Navbar ─────────────────────────────────────────────── */}
@@ -380,7 +380,7 @@ export function DashboardPage() {
         {/* Brand text — "nusantics" only, no SVG mark */}
         <div style={{ width: 176, flexShrink: 0 }}>
           <span style={{
-            fontFamily: 'Quicksand, sans-serif',
+            fontFamily: 'var(--font-family-heading)',
             fontWeight: 700, fontSize: 22,
             color: '#F57E20',
             letterSpacing: '-0.3px',
@@ -417,7 +417,7 @@ export function DashboardPage() {
           {/* User section — name + Avatar */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500, fontSize: 14,
               color: '#111827',
             }}>
@@ -443,7 +443,7 @@ export function DashboardPage() {
             {/* "MENU" label */}
             <p style={{
               margin: '0 0 8px 24px',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500, fontSize: 11,
               color: '#6B7280',
               letterSpacing: '1.2px',
@@ -488,7 +488,7 @@ export function DashboardPage() {
             }}>
               Selamat datang kembali, Dr. Andi!
             </h1>
-            <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#6B7280' }}>
+            <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#6B7280' }}>
               Berikut ringkasan aktivitas riset Anda di platform Nusantics.
             </p>
           </div>
@@ -511,7 +511,7 @@ export function DashboardPage() {
             </h2>
             <button style={{
               background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-              fontFamily: 'Rubik, sans-serif', fontSize: 13,
+              fontFamily: 'var(--font-family-body)', fontSize: 13,
               color: '#F57E20', fontWeight: 500,
             }}>
               Lihat semua →

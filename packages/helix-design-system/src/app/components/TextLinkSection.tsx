@@ -14,7 +14,7 @@ const toc = [
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>{children}</div>
     </div>
   );
@@ -36,8 +36,8 @@ export function TextLinkSection() {
             { heading: 'Match variant to context', body: 'Use neutral on dark/colored backgrounds. Use destructive only for links that affect critical data (e.g., "Revoke access").' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -88,8 +88,8 @@ export function TextLinkSection() {
           <TextLink underline="none" href="#">Never underlined</TextLink>
         </Card>
         <div style={{ marginTop: 12, padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-          <p style={{ margin: '0 0 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>In prose</p>
-          <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#49494A', lineHeight: '1.7' }}>
+          <p style={{ margin: '0 0 12px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>In prose</p>
+          <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#49494A', lineHeight: '1.7' }}>
             Your project settings have been updated. Changes to billing are reflected immediately —{' '}
             <TextLink size="md" href="#">view your invoice</TextLink> or{' '}
             <TextLink size="md" variant="secondary" href="#">contact support</TextLink> if anything looks incorrect.

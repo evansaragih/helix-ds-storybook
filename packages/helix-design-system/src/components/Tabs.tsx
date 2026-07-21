@@ -105,7 +105,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
               paddingRight: px,
               border: 'none',
               cursor: tab.disabled ? 'not-allowed' : 'pointer',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500,
               fontSize,
               lineHeight: lineH,

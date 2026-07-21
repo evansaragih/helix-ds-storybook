@@ -58,7 +58,7 @@ function StepCircle({ step, index }: { step: Step; index: number }) {
         : step.icon
         ? <span style={{ display: 'flex', color: textColor, width: 14, height: 14 }}>{step.icon}</span>
         : <span style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 500,
             fontSize: 12,
             lineHeight: 1,
@@ -134,7 +134,7 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(({
               <div style={{ paddingTop: 4, paddingBottom: i < steps.length - 1 ? 24 : 0, flex: 1 }}>
                 <p style={{
                   margin: 0,
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontWeight: step.status === 'active' ? 600 : 400,
                   fontSize: 13,
                   lineHeight: '19.2px',
@@ -148,7 +148,7 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(({
                 {step.description && (
                   <p style={{
                     margin: '2px 0 0',
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontSize: 12,
                     lineHeight: '18px',
                     color: 'var(--color-text-tertiary, #828282)',
@@ -177,7 +177,7 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(({
             <StepCircle step={step} index={i} />
             <p style={{
               margin: 0,
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: step.status === 'active' ? 600 : 400,
               fontSize: 12,
               lineHeight: '18px',

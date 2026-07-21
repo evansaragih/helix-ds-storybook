@@ -52,7 +52,7 @@ export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(({
     display: 'inline-flex',
     alignItems: 'center',
     gap: 8,
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'var(--font-family-body)',
     fontWeight: weight === 'semibold' ? 500 : 400,
     fontSize: sz.fontSize,
     lineHeight: sz.lineHeight,

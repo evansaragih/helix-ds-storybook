@@ -221,7 +221,7 @@ export function Command({
             </div>
           )}
           <span style={{
-            fontFamily: 'Rubik, sans-serif', fontWeight: 400,
+            fontFamily: 'var(--font-family-body)', fontWeight: 400,
             fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px',
             color: 'var(--color-text-primary, #14141E)',
             flex: 1, minWidth: 0,
@@ -240,7 +240,7 @@ export function Command({
         )}
         {type === 'default' && item.shortcut && (
           <span style={{
-            fontFamily: 'Rubik, sans-serif', fontWeight: 400,
+            fontFamily: 'var(--font-family-body)', fontWeight: 400,
             fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px',
             color: 'var(--color-text-tertiary, #828282)',
             opacity: 0.6, flexShrink: 0, whiteSpace: 'nowrap',
@@ -278,7 +278,7 @@ export function Command({
             </div>
           )}
           <span style={{
-            fontFamily: 'Rubik, sans-serif', fontWeight: 400,
+            fontFamily: 'var(--font-family-body)', fontWeight: 400,
             fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px',
             color: 'var(--color-text-primary, #14141E)',
             flex: 1, minWidth: 0,
@@ -289,7 +289,7 @@ export function Command({
         </div>
         {item.shortcut && (
           <span style={{
-            fontFamily: 'Rubik, sans-serif', fontWeight: 400,
+            fontFamily: 'var(--font-family-body)', fontWeight: 400,
             fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px',
             color: 'var(--color-text-tertiary, #828282)',
             opacity: 0.6, flexShrink: 0, whiteSpace: 'nowrap',
@@ -327,7 +327,7 @@ export function Command({
             padding: '6px 8px',
           }}>
             <span style={{
-              fontFamily: 'Rubik, sans-serif', fontWeight: 500,
+              fontFamily: 'var(--font-family-body)', fontWeight: 500,
               fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.13px',
               color: 'var(--color-text-primary, #14141E)',
               whiteSpace: 'nowrap',
@@ -397,7 +397,7 @@ export function Command({
         {filtered.length === 0 ? (
           <div style={{
             padding: '20px 12px', textAlign: 'center',
-            fontFamily: 'Rubik, sans-serif', fontSize: 13,
+            fontFamily: 'var(--font-family-body)', fontSize: 13,
             color: 'var(--color-text-tertiary, #828282)',
           }}>
             No results for &ldquo;{query}&rdquo;
@@ -417,7 +417,7 @@ export function Command({
                 {group && (
                   <div style={{ padding: '6px 8px' }}>
                     <span style={{
-                      fontFamily: 'Rubik, sans-serif', fontWeight: 500,
+                      fontFamily: 'var(--font-family-body)', fontWeight: 500,
                       fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.13px',
                       color: 'var(--color-text-primary, #14141E)',
                       whiteSpace: 'nowrap',

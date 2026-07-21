@@ -117,7 +117,7 @@ export const InputOTP = ({
           minWidth: 36,
           padding: '8px 11px',
           textAlign: 'center',
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontSize: 13,
           lineHeight: '19.2px',
           fontWeight: 400,
@@ -158,7 +158,7 @@ export const InputOTP = ({
     <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       {label && (
         <span style={{
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontWeight: 400,
           fontSize: 13,
           lineHeight: '19.2px',

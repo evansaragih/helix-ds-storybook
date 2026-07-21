@@ -12,7 +12,7 @@ const toc = [
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-      <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 12, color: 'var(--color-text-tertiary, #828282)', width: 120, flexShrink: 0 }}>
+      <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 12, color: 'var(--color-text-tertiary, #828282)', width: 120, flexShrink: 0 }}>
         {label}
       </span>
       <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
@@ -25,7 +25,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
     </div>
   );
@@ -47,27 +47,27 @@ export function AvatarSection() {
             { heading: 'Fallback gracefully', body: 'Always provide a name or initials fallback in case the image fails to load.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
       </Section>
 
       <Section id="avatar-sizes" title="Sizes">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Four sizes are available: <code>xs</code> (24 px), <code>sm</code> (32 px), <code>md</code> (40 px), and <code>lg</code> (48 px).
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+          Four sizes are available: <code>xs</code> (26 px), <code>sm</code> (38 px), <code>md</code> (48 px), and <code>lg</code> (58 px).
         </p>
         <DemoCard title="Initials avatars at all sizes">
-          <Row label="xs (24px)"><Avatar size="xs" name="Evan Himawan" /></Row>
-          <Row label="sm (32px)"><Avatar size="sm" name="Evan Himawan" /></Row>
-          <Row label="md (40px)"><Avatar size="md" name="Evan Himawan" /></Row>
-          <Row label="lg (48px)"><Avatar size="lg" name="Evan Himawan" /></Row>
+          <Row label="xs (26px)"><Avatar size="xs" name="Evan Himawan" /></Row>
+          <Row label="sm (38px)"><Avatar size="sm" name="Evan Himawan" /></Row>
+          <Row label="md (48px)"><Avatar size="md" name="Evan Himawan" /></Row>
+          <Row label="lg (58px)"><Avatar size="lg" name="Evan Himawan" /></Row>
         </DemoCard>
       </Section>
 
       <Section id="avatar-shapes" title="Shapes">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Use <code>circular</code> (default) for people and <code>rounded</code> for teams, bots, or entities.
         </p>
         <DemoCard title="Shape comparison">
@@ -83,7 +83,7 @@ export function AvatarSection() {
       </Section>
 
       <Section id="avatar-content" title="Content Types">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Avatars support three content types: <code>image</code>, <code>placeholder</code> (initials derived from name), and <code>icon</code>.
         </p>
         <DemoCard title="All content types">

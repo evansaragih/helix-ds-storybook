@@ -12,7 +12,7 @@ const meta = {
   args: {
     elevation: 'sm',
     padding: 'md',
-    bordered: true,
+    bordered: false,
     hoverable: false,
   },
 } satisfies Meta<typeof Card>;
@@ -47,6 +47,20 @@ export const WithHeaderAndFooter: Story = {
         <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: 'var(--color-text-secondary)' }}>
           Configure how this project behaves.
         </p>
+      </Card>
+    </div>
+  ),
+};
+
+export const Bordered: Story = {
+  args: { bordered: true },
+  render: (args) => (
+    <div style={{ width: 360 }}>
+      <Card {...args}>
+        <CardHeader>
+          <CardTitle>Bordered card</CardTitle>
+          <CardDescription>Opts back into a 1px outline on top of the default shadow.</CardDescription>
+        </CardHeader>
       </Card>
     </div>
   ),

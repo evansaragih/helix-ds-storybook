@@ -219,7 +219,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     boxShadow,
     cursor: isDisabled ? 'not-allowed' : 'pointer',
     gap: s.gap,
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'var(--font-family-body)',
     fontWeight: 400,
     fontSize: s.fontSize,
     lineHeight: s.lineHeight,

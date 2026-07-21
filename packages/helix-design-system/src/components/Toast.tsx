@@ -115,7 +115,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(({
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{
           margin: 0,
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontWeight: 500,
           fontSize: 14,
           lineHeight: '21px',
@@ -127,7 +127,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(({
         {description && (
           <p style={{
             margin: '2px 0 0',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 13,
             lineHeight: '19.2px',
@@ -146,7 +146,7 @@ export const Toast = forwardRef<HTMLDivElement, ToastProps>(({
               border: 'none',
               background: 'none',
               cursor: 'pointer',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500,
               fontSize: 13,
               color: v.iconColor,

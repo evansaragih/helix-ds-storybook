@@ -145,7 +145,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
       {label && (
         <label 
           style={{ 
-            fontFamily: 'Rubik, sans-serif', 
+            fontFamily: 'var(--font-family-body)', 
             fontWeight: 500, 
             fontSize: isSmall ? '13px' : '14px', 
             color: '#14141E',
@@ -162,7 +162,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
       )}
       {description && (
         <span style={{ 
-          fontFamily: 'Rubik, sans-serif', 
+          fontFamily: 'var(--font-family-body)', 
           fontSize: isSmall ? '12px' : '13px', 
           color: '#828282',
           lineHeight: '1.4'

@@ -67,10 +67,10 @@ export function UtilitiesSection() {
                 minWidth: item.value === '0px' ? '2px' : undefined
               }} />
               <div style={{ flex: 1 }}>
-                <span style={{ fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>
+                <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>
                   {item.name}
                 </span>
-                <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282', marginLeft: '8px' }}>
+                <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282', marginLeft: '8px' }}>
                   {item.value} · var(--spacing-{item.name.replace('sp-', '')})
                 </span>
               </div>
@@ -95,9 +95,9 @@ export function UtilitiesSection() {
                 borderRadius: item.value === '9999px' ? '9999px' : item.value,
                 marginBottom: '12px'
               }} />
-              <p style={{ margin: '0 0 2px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{item.name}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{item.value}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#9f9f9f' }}>var({item.var})</p>
+              <p style={{ margin: '0 0 2px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{item.name}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{item.value}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#9f9f9f' }}>var({item.var})</p>
             </div>
           ))}
         </div>
@@ -124,14 +124,14 @@ export function UtilitiesSection() {
                   height: '36px',
                   backgroundColor: '#F57E20',
                   borderRadius: '6px',
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontWeight: 700,
                   fontSize: '13px',
                   color: 'white'
                 }}>{item.name}</span>
                 <div>
-                  <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '14px', color: '#14141e' }}>{item.value}</p>
-                  <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>var({item.var})</p>
+                  <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '14px', color: '#14141e' }}>{item.value}</p>
+                  <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>var({item.var})</p>
                 </div>
               </div>
               <div style={{

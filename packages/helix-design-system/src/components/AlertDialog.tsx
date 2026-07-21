@@ -131,7 +131,7 @@ export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogProps>(({
           {description && (
             <p style={{
               margin: 0,
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 400,
               fontSize: 13,
               lineHeight: '19.2px',

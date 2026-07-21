@@ -93,7 +93,7 @@ function DocButton({
           border: hasInnerBorder ? '1px solid rgba(255,255,255,0.2)' : 'none',
         }}>
           <span style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: '13px',
             lineHeight: '19.2px',
@@ -118,7 +118,7 @@ function DocButton({
       </div>
       <span style={{
         display: 'block',
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontSize: '11px',
         color: darkBg ? 'rgba(255,255,255,0.5)' : '#828282',
       }}>
@@ -149,8 +149,8 @@ function VariantCard({ name, description, states, darkBg }: {
   return (
     <div style={{ padding: '20px 24px', backgroundColor: '#f7f7f7', borderRadius: '8px', border: '1px solid #eee', marginBottom: '12px' }}>
       <div style={{ marginBottom: '16px' }}>
-        <p style={{ margin: '0 0 4px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '16px', color: '#14141e' }}>{name}</p>
-        <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '13px', color: '#828282' }}>{description}</p>
+        <p style={{ margin: '0 0 4px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '16px', color: '#14141e' }}>{name}</p>
+        <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '13px', color: '#828282' }}>{description}</p>
       </div>
       <div style={{
         display: 'flex', gap: '24px', padding: '20px',
@@ -184,8 +184,8 @@ function VariantCard({ name, description, states, darkBg }: {
               flexShrink: 0,
             }} />
             <div>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '12px', fontWeight: 500, color: '#14141e' }}>{s.label}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{s.bg}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '12px', fontWeight: 500, color: '#14141e' }}>{s.label}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{s.bg}</p>
             </div>
           </div>
         ))}
@@ -203,7 +203,7 @@ function BrandSelector({ brand, onChange }: { brand: Brand; onChange: (b: Brand)
           onClick={() => onChange(b)}
           style={{
             padding: '6px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer',
-            fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: '13px',
+            fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: '13px',
             backgroundColor: brand === b ? '#FFFFFF' : 'transparent',
             color: brand === b ? '#14141E' : '#828282',
             boxShadow: brand === b ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
@@ -357,7 +357,7 @@ export function ButtonSection() {
     >
       <Section id="usage-guidelines" title="Usage Guidelines">
         <div style={{ padding: '20px 24px', backgroundColor: '#f7f7f7', borderRadius: '8px', border: '1px solid #eee' }}>
-          <ul style={{ margin: 0, paddingLeft: '20px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#49494a', lineHeight: '1.8' }}>
+          <ul style={{ margin: 0, paddingLeft: '20px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#49494a', lineHeight: '1.8' }}>
             <li style={{ marginBottom: '8px' }}>Use <strong>Primary</strong> for the single most important action — one per view</li>
             <li style={{ marginBottom: '8px' }}>Use <strong>Secondary</strong> alongside Primary for supporting actions (e.g. "Save" + "Cancel")</li>
             <li style={{ marginBottom: '8px' }}>Use <strong>Tertiary</strong> for supplementary actions that carry brand context</li>
@@ -371,24 +371,24 @@ export function ButtonSection() {
       </Section>
 
       <Section id="button-variants" title="Button Variants">
-        <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Each variant shows Default, Hover, Focus (focus ring), and Disabled states. Primary, Secondary, and Tertiary include drop-shadow and inner shadow per Figma effect styles.
         </p>
         <BrandSelector brand={brand} onChange={setBrand} />
 
-        <p style={{ margin: '0 0 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '12px', color: '#828282', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Solid</p>
+        <p style={{ margin: '0 0 12px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '12px', color: '#828282', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Solid</p>
         {solidVariants.map((v) => (
           <VariantCard key={v.name} name={v.name} description={v.description} states={v.states} darkBg={v.darkBg} />
         ))}
 
-        <p style={{ margin: '16px 0 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '12px', color: '#828282', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ghost</p>
+        <p style={{ margin: '16px 0 12px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '12px', color: '#828282', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ghost</p>
         {ghostVariants.map((v) => (
           <VariantCard key={v.name} name={v.name} description={v.description} states={v.states} />
         ))}
       </Section>
 
       <Section id="button-styles" title="Button Styles">
-        <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Primary, Secondary, and Tertiary are available in Solid and Outline. Outline uses a transparent background with a colored border — no inner highlight border.
         </p>
         <BrandSelector brand={brand} onChange={setBrand} />
@@ -396,8 +396,8 @@ export function ButtonSection() {
           <VariantCard key={v.name} name={v.name} description={v.description} states={v.states} />
         ))}
         <div style={{ padding: '16px 20px', backgroundColor: '#EBF2FE', borderRadius: '8px', border: '1px solid #3B82F6', marginTop: '16px' }}>
-          <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#014CC5' }}>Solid vs Outline</p>
-          <ul style={{ margin: 0, paddingLeft: '20px', fontFamily: 'Rubik, sans-serif', fontSize: '13px', color: '#49494a', lineHeight: '1.8' }}>
+          <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#014CC5' }}>Solid vs Outline</p>
+          <ul style={{ margin: 0, paddingLeft: '20px', fontFamily: 'var(--font-family-body)', fontSize: '13px', color: '#49494a', lineHeight: '1.8' }}>
             <li>Solid: higher visual prominence, best for primary CTAs</li>
             <li>Outline: lower visual weight, best in toolbars or alongside a Solid primary button</li>
           </ul>
@@ -405,7 +405,7 @@ export function ButtonSection() {
       </Section>
 
       <Section id="button-sizes" title="Button Sizes">
-        <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Four sizes defined by Figma height tokens. Heights: 24 / 36 / 52 / 64px.
         </p>
         <BrandSelector brand={brand} onChange={setBrand} />
@@ -435,7 +435,7 @@ export function ButtonSection() {
                   overflow: 'hidden',
                 }}>
                   <span style={{
-                    fontFamily: 'Rubik, sans-serif', fontWeight: 400,
+                    fontFamily: 'var(--font-family-body)', fontWeight: 400,
                     fontSize: s.fontSize, lineHeight: s.lineHeight,
                     color: '#FFFFFF', letterSpacing: '-0.01px', whiteSpace: 'nowrap',
                   }}>Button</span>
@@ -446,8 +446,8 @@ export function ButtonSection() {
                   boxShadow: `inset 0px -5px 4px 0px ${c.primary}`,
                 }} aria-hidden="true" />
               </div>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '12px', fontWeight: 600, color: '#14141e' }}>{s.label}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>h={s.height} · {s.fontSize}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '12px', fontWeight: 600, color: '#14141e' }}>{s.label}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>h={s.height} · {s.fontSize}</p>
             </div>
           ))}
         </div>
@@ -455,18 +455,18 @@ export function ButtonSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
           {sizes.map((s) => (
             <div key={s.label} style={{ padding: '14px 16px', backgroundColor: '#f7f7f7', borderRadius: '8px', border: '1px solid #eee' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{s.label}</p>
-              <p style={{ margin: '0 0 2px', fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>Height: {s.height}</p>
-              <p style={{ margin: '0 0 2px', fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>Padding: {s.py} {s.px}</p>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>Font: {s.fontSize}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#9f9f9f' }}>{s.usage}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{s.label}</p>
+              <p style={{ margin: '0 0 2px', fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>Height: {s.height}</p>
+              <p style={{ margin: '0 0 2px', fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>Padding: {s.py} {s.px}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>Font: {s.fontSize}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#9f9f9f' }}>{s.usage}</p>
             </div>
           ))}
         </div>
       </Section>
 
       <Section id="button-states" title="Button States">
-        <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Focus rings are implemented as <code style={{ fontFamily: 'monospace', fontSize: '12px', backgroundColor: '#f7f7f7', padding: '1px 5px', borderRadius: '4px' }}>box-shadow: 0 0 0 3px rgba(color, 0.7)</code> — matching the Figma <strong>Ring Default</strong> effect. Primary, Secondary, and Tertiary also carry a drop-shadow and inset shadow from Figma effect styles.
         </p>
         <BrandSelector brand={brand} onChange={setBrand} />
@@ -480,7 +480,7 @@ export function ButtonSection() {
             { name: 'Neutral', default: '#F7F7F7', hover: '#EEEEEE', pressed: '#D7D7D7', ring: '#D7D7D7', hasShadow: false, textColor: '#49494A' as const },
           ].map((v) => (
             <div key={v.name} style={{ padding: '16px 20px', backgroundColor: '#f7f7f7', borderRadius: '8px', border: '1px solid #eee' }}>
-              <p style={{ margin: '0 0 14px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{v.name}</p>
+              <p style={{ margin: '0 0 14px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{v.name}</p>
               <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
                 <DocButton
                   label="Default"
@@ -519,7 +519,7 @@ export function ButtonSection() {
                 <div style={{ marginLeft: 'auto', padding: '8px 12px', backgroundColor: 'white', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <div style={{ width: '20px', height: '20px', borderRadius: '4px', backgroundColor: v.default, boxShadow: `0 0 0 3px ${v.ring}` }} />
                   <div>
-                    <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', fontWeight: 500, color: '#14141e' }}>Ring Default/{v.name}</p>
+                    <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', fontWeight: 500, color: '#14141e' }}>Ring Default/{v.name}</p>
                     <p style={{ margin: 0, fontFamily: 'monospace', fontSize: '10px', color: '#828282' }}>{v.ring}</p>
                   </div>
                 </div>

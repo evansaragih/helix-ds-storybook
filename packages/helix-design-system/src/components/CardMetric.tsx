@@ -58,7 +58,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
         <p style={{
           margin: 0,
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontWeight: 500,
           fontSize: 13,
           lineHeight: '19.2px',
@@ -93,7 +93,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
         </span>
         {unit && (
           <span style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 16,
             color: 'var(--color-text-secondary, #49494A)',
@@ -114,7 +114,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
             <TrendIcon size={14} color={tm.color} />
             {trendValue && (
               <span style={{
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 fontSize: 10,
                 color: tm.color,
@@ -126,7 +126,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
         )}
         {(trendLabel || description) && (
           <span style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 13,
             color: 'var(--color-text-tertiary, #828282)',

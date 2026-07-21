@@ -96,7 +96,7 @@ export const ToolbarFilter = forwardRef<HTMLDivElement, ToolbarFilterProps>(({
               paddingRight: searchValue ? 28 : 12,
               border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
               borderRadius: 8,
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontSize: 13,
               color: 'var(--color-text-primary, #14141E)',
               outline: 'none',
@@ -137,7 +137,7 @@ export const ToolbarFilter = forwardRef<HTMLDivElement, ToolbarFilterProps>(({
                 borderRadius: 8,
                 backgroundColor: count > 0 ? 'var(--color-brand-primary-ghost-hover, #FEF2E9)' : '#FFFFFF',
                 cursor: 'pointer',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontSize: 13,
                 color: count > 0 ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-text-primary, #14141E)',
                 whiteSpace: 'nowrap',
@@ -150,7 +150,7 @@ export const ToolbarFilter = forwardRef<HTMLDivElement, ToolbarFilterProps>(({
                   minWidth: 18, height: 18, borderRadius: 9,
                   backgroundColor: 'var(--color-brand-primary, #F57E20)',
                   color: '#FFFFFF',
-                  fontFamily: 'Rubik, sans-serif', fontSize: 11, fontWeight: 600,
+                  fontFamily: 'var(--font-family-body)', fontSize: 11, fontWeight: 600,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   padding: '0 5px',
                 }}>
@@ -183,7 +183,7 @@ export const ToolbarFilter = forwardRef<HTMLDivElement, ToolbarFilterProps>(({
                         width: '100%', padding: '9px 14px',
                         border: 'none', backgroundColor: 'transparent',
                         cursor: 'pointer',
-                        fontFamily: 'Rubik, sans-serif', fontSize: 13,
+                        fontFamily: 'var(--font-family-body)', fontSize: 13,
                         color: isActive ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-text-primary, #14141E)',
                         textAlign: 'left',
                       }}
@@ -219,7 +219,7 @@ export const ToolbarFilter = forwardRef<HTMLDivElement, ToolbarFilterProps>(({
             height: 36, padding: '0 10px',
             border: 'none', backgroundColor: 'transparent',
             cursor: 'pointer',
-            fontFamily: 'Rubik, sans-serif', fontSize: 13,
+            fontFamily: 'var(--font-family-body)', fontSize: 13,
             color: 'var(--color-text-tertiary, #828282)',
           }}
           onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-text-primary, #14141E)'; }}
@@ -236,7 +236,7 @@ export const ToolbarFilter = forwardRef<HTMLDivElement, ToolbarFilterProps>(({
       {/* Results count */}
       {totalResults !== undefined && (
         <span style={{
-          fontFamily: 'Rubik, sans-serif', fontSize: 13,
+          fontFamily: 'var(--font-family-body)', fontSize: 13,
           color: 'var(--color-text-tertiary, #828282)', whiteSpace: 'nowrap',
         }}>
           {totalResults} result{totalResults !== 1 ? 's' : ''}

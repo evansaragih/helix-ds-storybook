@@ -13,7 +13,7 @@ const toc = [
 function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{children}</div>
     </div>
   );
@@ -41,7 +41,7 @@ export function SheetSection() {
       <Sheet open={open === 'left'} onClose={() => setOpen(null)} side="left" title="Navigation" description="Browse pages and sections.">
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           {['Dashboard', 'Analytics', 'Projects', 'Team', 'Settings'].map(item => (
-            <button key={item} style={{ padding: '10px 12px', borderRadius: 8, border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#14141E', textAlign: 'left' }}
+            <button key={item} style={{ padding: '10px 12px', borderRadius: 8, border: 'none', backgroundColor: 'transparent', cursor: 'pointer', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#14141E', textAlign: 'left' }}
               onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#F7F7F7'; }}
               onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; }}
             >{item}</button>
@@ -66,8 +66,8 @@ export function SheetSection() {
             { heading: 'Provide a close action', body: 'Always include a close button (X) and support pressing Escape. Don\'t rely solely on clicking the overlay.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>

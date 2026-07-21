@@ -47,7 +47,7 @@ function FileRow({ df, onRemove, disabled }: { df: DropzoneFile; onRemove: () =>
       <div style={{ flex: 1, minWidth: 0 }}>
         <p style={{
           margin: 0,
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontWeight: 500,
           fontSize: 13,
           lineHeight: '19.2px',
@@ -60,7 +60,7 @@ function FileRow({ df, onRemove, disabled }: { df: DropzoneFile; onRemove: () =>
         </p>
         <p style={{
           margin: 0,
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontWeight: 400,
           fontSize: 11,
           lineHeight: '16px',
@@ -203,7 +203,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         <label
           htmlFor={id}
           style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 13,
             lineHeight: '19.2px',
@@ -265,7 +265,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         <div style={{ textAlign: 'center' }}>
           <p style={{
             margin: '0 0 4px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 500,
             fontSize: 14,
             lineHeight: '21px',
@@ -276,7 +276,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
           {!isDragOver && (
             <p style={{
               margin: 0,
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 400,
               fontSize: 13,
               lineHeight: '19.2px',
@@ -303,7 +303,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
                 padding: '2px 8px',
                 borderRadius: 99,
                 border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontSize: 11,
                 fontWeight: 400,
                 color: 'var(--color-text-tertiary, #828282)',
@@ -317,7 +317,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
                 padding: '2px 8px',
                 borderRadius: 99,
                 border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontSize: 11,
                 fontWeight: 400,
                 color: 'var(--color-text-tertiary, #828282)',
@@ -357,7 +357,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
           {hasError && <AlertCircle size={12} color="var(--color-destructive, #DC2626)" style={{ flexShrink: 0 }} />}
           <span style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontSize: 12,
             lineHeight: '18px',
             letterSpacing: '-0.01px',

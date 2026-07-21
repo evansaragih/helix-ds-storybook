@@ -82,6 +82,20 @@ export const componentChangelogs: ComponentChangelog[] = [
     ],
   },
   {
+    id: 'avatargroup', category: 'Data Display', name: 'AvatarGroup', status: 'beta',
+    description: 'Stacks multiple Avatars with a 50%-style overlap and a white separator ring, collapsing anything past `max` into a "+N" count badge. Optionally pairs with a dashed add-user button (circle or square) for team-management surfaces. Use AvatarLabelGroup instead when the viewer needs to identify one specific person rather than see headcount.',
+    changelog: [
+      { date: '2026-07-21', version: '0.0.1', summary: 'New component, matching Figma\'s "Avatar group" component set (xs/sm/md sizes, add-user button, overflow badge). Documented in Storybook with Sizes and add-button stories.' },
+    ],
+  },
+  {
+    id: 'avatarlabelgroup', category: 'Data Display', name: 'AvatarLabelGroup', status: 'beta',
+    description: 'Pairs a single Avatar with a bold name and muted email below it, in sm/md/lg/xl sizes — for comment authors, assignee rows, and member lists where the viewer needs to identify one specific person, not just a count.',
+    changelog: [
+      { date: '2026-07-21', version: '0.0.1', summary: 'New component, matching Figma\'s "Avatar label group" component set. Documented in Storybook with size, no-email, and placeholder-avatar stories.' },
+    ],
+  },
+  {
     id: 'badge', category: 'Data Display', name: 'Badge', status: 'stable',
     description: 'Small label for tagging status, category, or count next to other content — "New", a plan tier, a notification count. Not interactive by default; supports an optional close (×) button when it needs to be dismissible.',
     changelog: [
@@ -103,10 +117,19 @@ export const componentChangelogs: ComponentChangelog[] = [
     ],
   },
   {
+    id: 'iconbutton', category: 'Inputs & Forms', name: 'IconButton', status: 'beta',
+    description: 'Icon-only counterpart to Button, sharing the same variant/state model — available as a square (matches Figma\'s "Buttons / Icon") or fully circular pill ("Buttons / Icon Pill") shape, both a fixed 36×36 (1:1) footprint differing only in corner radius, plus a bare `transparent` variant. Always requires an `aria-label` since there is no visible text.',
+    changelog: [
+      { date: '2026-07-21', version: '0.0.1', summary: 'New component, matching Figma\'s "Buttons / Icon" and "Buttons / Icon Pill" component sets. Documented in Storybook with Shapes, Variants, and Disabled stories.' },
+      { date: '2026-07-21', version: '0.0.1', summary: 'Corrected the square shape\'s footprint from 38×36 to a true 1:1 36×36, matching Figma exactly.' },
+    ],
+  },
+  {
     id: 'card', category: 'Data Display', name: 'Card', status: 'stable',
-    description: 'General-purpose content container with optional header and footer, used to group related information into a distinct visual block. Reach for CardMetric instead when the content is a single labeled stat.',
+    description: 'General-purpose content container with optional header and footer, used to group related information into a distinct visual block. Reach for CardMetric instead when the content is a single labeled stat. Shadow-only by default, matching Figma\'s "Content Container" — pass `bordered` to opt into a 1px outline on top of the shadow.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-07-21', version: '0.0.1', summary: 'Breaking: `bordered` default changed from `true` to `false`, matching Figma\'s "Content Container" (node 233:17314), which has no outer border — shadow-only. Existing usages relying on the implicit border must now pass `bordered` explicitly. Added a Bordered story.' },
     ],
   },
   {
@@ -121,6 +144,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Horizontally scrollable set of slides with arrow and dot navigation, plus optional autoplay. For cycling through a small set of featured items — not a substitute for a paginated list.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-07-21', version: '0.0.1', summary: 'Fixed dot indicators to overlay the bottom edge of the slide track (matching Figma) instead of rendering as a separate row below it.' },
     ],
   },
   {
@@ -136,6 +160,13 @@ export const componentChangelogs: ComponentChangelog[] = [
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
       { date: '2026-07-08', version: '0.0.1', summary: 'Marked deprecated — Figma tags this component "Command (Deprecated)"; compose MenuItem rows instead for any new work. Still documented here for legacy screens only.' },
+    ],
+  },
+  {
+    id: 'contentcontainer', category: 'Data Display', name: 'ContentContainer', status: 'beta',
+    description: 'Generic single-card shell for metrics cards, feature cards, and custom layouts — an opinionated header (leading icon + title/description + optional badge + optional action button) above a freeform content slot. Shadow-only, no border, matching Figma\'s "Content Container". Reach for Card instead when you don\'t need the icon/title/description/badge header composition.',
+    changelog: [
+      { date: '2026-07-21', version: '0.0.1', summary: 'New component, matching Figma\'s "Content Container" (node 233:17314). Documented in Storybook with NoActionButton, NoBadge, CustomHeader, and NoBody stories.' },
     ],
   },
   {
@@ -199,6 +230,13 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Segmented one-time-passcode input, one character per slot, with per-token focus and error states — for phone/email verification flows.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+    ],
+  },
+  {
+    id: 'listcontainer', category: 'Data Display', name: 'ListContainer', status: 'beta',
+    description: 'Wraps a header (icon + title/description + badge + action button), an optional toolbar-filter row, a body, and a footer (pagination or Cancel/Continue) around any collection of items. Matches Figma\'s "List Container", which defines four layout modes — Card List, Row List, Data Table, Sortable List. Card List auto-renders via `items`/`ListItemCard`; the other three are supported by passing your own rows or a Table as `children`, since ListContainer only owns the surrounding chrome for those.',
+    changelog: [
+      { date: '2026-07-21', version: '0.0.1', summary: 'New component, matching Figma\'s "List Container" (node 1057:19300). Ships with ListItemCard (matches Figma\'s "Item / Card") as a standalone export too. Documented in Storybook with WithPagination, WithFooterActions, and CustomBody stories.' },
     ],
   },
   {

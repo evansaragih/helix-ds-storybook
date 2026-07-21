@@ -67,7 +67,7 @@ export function Table<T = Record<string, unknown>>({
                   style={{
                     padding: `${cellPy}px ${cellPx}px`,
                     textAlign: col.align ?? 'left',
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontWeight: 500,
                     fontSize,
                     lineHeight: '19.2px',
@@ -100,7 +100,7 @@ export function Table<T = Record<string, unknown>>({
               <td colSpan={columns.length} style={{
                 padding: '32px 16px',
                 textAlign: 'center',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontSize: 13,
                 color: 'var(--color-text-muted, #9F9F9F)',
               }}>
@@ -143,7 +143,7 @@ export function Table<T = Record<string, unknown>>({
                         style={{
                           padding: `${cellPy}px ${cellPx}px`,
                           textAlign: col.align ?? 'left',
-                          fontFamily: 'Rubik, sans-serif',
+                          fontFamily: 'var(--font-family-body)',
                           fontWeight: 400,
                           fontSize,
                           lineHeight: '19.2px',

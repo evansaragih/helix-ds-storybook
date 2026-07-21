@@ -19,7 +19,7 @@ const ColorCard = ({ shade, hex }: { shade: string; hex: string }) => (
     <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
       <p style={{
         margin: 0,
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontWeight: 600,
         fontSize: '13px',
         color: '#14141e',
@@ -28,12 +28,12 @@ const ColorCard = ({ shade, hex }: { shade: string; hex: string }) => (
         {shade}
       </p>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282', fontWeight: 400 }}>HEX</span>
-        <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#14141e', fontWeight: 400 }}>{hex}</span>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282', fontWeight: 400 }}>HEX</span>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#14141e', fontWeight: 400 }}>{hex}</span>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282', fontWeight: 400 }}>RGB</span>
-        <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#14141e', fontWeight: 400 }}>{hexToRgb(hex)}</span>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282', fontWeight: 400 }}>RGB</span>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#14141e', fontWeight: 400 }}>{hexToRgb(hex)}</span>
       </div>
     </div>
   </div>
@@ -42,7 +42,7 @@ const ColorCard = ({ shade, hex }: { shade: string; hex: string }) => (
 const PaletteSection = ({ id, name, colors }: { id: string; name: string; colors: Array<{ shade: string; hex: string }> }) => (
   <div id={id} style={{ marginBottom: '40px', scrollMarginTop: '160px' }}>
     <h3 style={{
-      fontFamily: 'Rubik, sans-serif',
+      fontFamily: 'var(--font-family-body)',
       fontWeight: 600,
       fontSize: '18px',
       color: '#14141e',
@@ -321,7 +321,7 @@ export function PrimitivesSection() {
         }}>
           <p style={{
             margin: '0 0 8px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: '13px',
             color: 'rgba(255,255,255,0.8)',
@@ -331,7 +331,7 @@ export function PrimitivesSection() {
           </p>
           <h1 style={{
             margin: '0 0 16px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 700,
             fontSize: '40px',
             color: 'white',
@@ -341,7 +341,7 @@ export function PrimitivesSection() {
           </h1>
           <p style={{
             margin: 0,
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: '14px',
             color: 'rgba(255,255,255,0.9)',
@@ -376,7 +376,7 @@ export function PrimitivesSection() {
                 borderBottom: isActive ? '2px solid #F57E20' : '2px solid transparent',
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: isActive ? 500 : 400,
                 fontSize: '14px',
                 color: isActive ? '#F57E20' : '#828282',
@@ -411,7 +411,7 @@ export function PrimitivesSection() {
                 style={{
                   padding: '6px 16px',
                   borderRadius: '6px',
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontWeight: isActive ? 500 : 400,
                   fontSize: '13px',
                   color: isActive ? 'white' : '#58595b',
@@ -454,7 +454,7 @@ export function PrimitivesSection() {
         }}>
           <p style={{
             margin: '0 0 12px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 600,
             fontSize: '13px',
             color: '#14141e'
@@ -479,7 +479,7 @@ export function PrimitivesSection() {
                     border: 'none',
                     backgroundColor: 'transparent',
                     cursor: 'pointer',
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontWeight: 400,
                     fontSize: '12px',
                     color: isActive ? '#F57E20' : '#828282',

@@ -14,7 +14,7 @@ const toc = [
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>
         {title}
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -41,8 +41,8 @@ export function AlertSection() {
             { heading: 'Offer a path out',    body: 'If an error occurred, provide an action that helps resolve it. Dismissible alerts should close immediately.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -50,7 +50,7 @@ export function AlertSection() {
 
       {/* Variants */}
       <Section id="alert-variants" title="Variants">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Five semantic variants — each mapped to the status surface tokens from the design token system.
         </p>
         <Card title="All variants">
@@ -84,7 +84,7 @@ export function AlertSection() {
 
       {/* With Badge */}
       <Section id="alert-badge" title="With Badge">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           An optional badge appears next to the title to surface a version label, status tag, or category. The badge variant is automatically matched to the alert variant.
         </p>
         <Card title="Badge on alert">
@@ -97,7 +97,7 @@ export function AlertSection() {
 
       {/* With Actions */}
       <Section id="alert-actions" title="With Actions">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Alerts can carry a primary action and an optional secondary action. Action color is automatically derived from the variant.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
@@ -136,7 +136,7 @@ export function AlertSection() {
 
       {/* Dismissible */}
       <Section id="alert-dismissible" title="Dismissible">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Pass <code>onClose</code> to show a close button. Use for non-critical notices the user can safely dismiss.
         </p>
         <Card title="Dismissible alerts">
@@ -162,7 +162,7 @@ export function AlertSection() {
 
       {/* Examples */}
       <Section id="alert-examples" title="Examples">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Real-world combinations with custom icons, badges, and actions.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>

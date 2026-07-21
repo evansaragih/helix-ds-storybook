@@ -16,7 +16,7 @@ const toc = [
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>
         {title}
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -72,7 +72,7 @@ function PhoneSelectInput() {
             style={{
               display: 'flex', alignItems: 'center', gap: 4,
               border: 'none', background: 'none', cursor: 'pointer', padding: 0,
-              fontFamily: 'Rubik, sans-serif', fontSize: 13, fontWeight: 600,
+              fontFamily: 'var(--font-family-body)', fontSize: 13, fontWeight: 600,
               color: '#49494A',
             }}
           >
@@ -137,7 +137,7 @@ function PriceSelectInput() {
         label="Price"
         placeholder="0"
         leadingContent={
-          <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, fontWeight: 600, color: '#49494A' }}>
+          <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, fontWeight: 600, color: '#49494A' }}>
             {selected.symbol}
           </span>
         }
@@ -149,7 +149,7 @@ function PriceSelectInput() {
             style={{
               display: 'flex', alignItems: 'center', gap: 4,
               border: 'none', background: 'none', cursor: 'pointer', padding: 0,
-              fontFamily: 'Rubik, sans-serif', fontSize: 13, fontWeight: 500,
+              fontFamily: 'var(--font-family-body)', fontSize: 13, fontWeight: 500,
               color: '#49494A',
             }}
           >
@@ -180,7 +180,7 @@ function PriceSelectInput() {
               size="Small"
               state={selected.id === c.id ? 'Selected' : 'Default'}
               leadingContent={
-                <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 12, fontWeight: 600, color: '#828282', minWidth: 20 }}>
+                <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 12, fontWeight: 600, color: '#828282', minWidth: 20 }}>
                   {c.symbol}
                 </span>
               }
@@ -291,8 +291,8 @@ export function InputSection() {
             { heading: 'Give immediate feedback', body: "Show validation on blur or submit. Always pair color change with a helper message — don't rely on color alone." },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -300,7 +300,7 @@ export function InputSection() {
 
       {/* Sizes */}
       <Section id="input-sizes" title="Sizes">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Four sizes for the default text field — extra small (32px), small (38px), medium (42px), and large (48px).
         </p>
         <Card title="All sizes">
@@ -313,7 +313,7 @@ export function InputSection() {
 
       {/* Floating */}
       <Section id="input-floating" title="Floating">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           The floating variant is a single size (56px). When empty and unfocused the label sits centered as a large placeholder — click or type to animate it up to a small caption.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
@@ -323,14 +323,14 @@ export function InputSection() {
           </Card>
           <Card title="With leading content">
             <Input floating label="Search" leadingContent={<Search size={18} />} />
-            <Input floating label="Website" leadingContent={<span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#828282' }}>https://</span>} leadingDivider />
+            <Input floating label="Website" leadingContent={<span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#828282' }}>https://</span>} leadingDivider />
           </Card>
         </div>
       </Section>
 
       {/* States */}
       <Section id="input-states" title="States">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Inputs respond to hover and focus automatically. Error and disabled states are set explicitly.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
@@ -347,7 +347,7 @@ export function InputSection() {
 
       {/* Leading & Trailing */}
       <Section id="input-addons" title="Leading & Trailing">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Use leading or trailing content to add icons, prefixes, or interactive selectors.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
@@ -372,7 +372,7 @@ export function InputSection() {
 
       {/* Helper & Validation */}
       <Section id="input-support" title="Helper & Validation">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Add a helper message below the field. Use <code>error</code> + <code>errorText</code> for validation. Use <code>showCharCount</code> + <code>maxLength</code> for character limits.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>

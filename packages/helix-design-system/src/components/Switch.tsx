@@ -110,7 +110,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, paddingTop: size === 'md' ? 2 : 1 }}>
           {label && (
             <span style={{
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 400,
               fontSize: 13,
               lineHeight: '19.2px',
@@ -124,7 +124,7 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(({
           )}
           {helperText && (
             <span style={{
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 400,
               fontSize: 12,
               lineHeight: '18px',

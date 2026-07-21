@@ -86,7 +86,7 @@ function AccordionItemComponent({
             padding: '14px 16px',
             border: 'none',
             cursor: item.disabled ? 'not-allowed' : 'pointer',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 13,
             lineHeight: '19.2px',
@@ -131,7 +131,7 @@ function AccordionItemComponent({
         <div
           style={{
             padding: '0 16px 16px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 13,
             lineHeight: '19.2px',

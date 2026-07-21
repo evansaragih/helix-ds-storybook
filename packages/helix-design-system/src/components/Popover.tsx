@@ -121,11 +121,11 @@ export interface PopoverHeaderProps extends React.HTMLAttributes<HTMLDivElement>
 export function PopoverHeader({ title, description, style, ...props }: PopoverHeaderProps) {
   return (
     <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid var(--color-stroke-subtle, #EEEEEE)', ...style }} {...props}>
-      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: 13, color: 'var(--color-text-primary, #14141E)', lineHeight: '19.2px' }}>
+      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13, color: 'var(--color-text-primary, #14141E)', lineHeight: '19.2px' }}>
         {title}
       </p>
       {description && (
-        <p style={{ margin: '2px 0 0', fontFamily: 'Rubik, sans-serif', fontWeight: 400, fontSize: 12, color: 'var(--color-text-tertiary, #828282)', lineHeight: '18px' }}>
+        <p style={{ margin: '2px 0 0', fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 12, color: 'var(--color-text-tertiary, #828282)', lineHeight: '18px' }}>
           {description}
         </p>
       )}

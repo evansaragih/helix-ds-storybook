@@ -14,7 +14,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
       <span style={{
-        fontFamily: 'Rubik, sans-serif', fontSize: 12,
+        fontFamily: 'var(--font-family-body)', fontSize: 12,
         color: 'var(--color-text-tertiary, #828282)',
         width: 100, flexShrink: 0,
       }}>
@@ -33,7 +33,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
       padding: 20, backgroundColor: '#F7F7F7',
       borderRadius: 10, border: '1px solid #EEEEEE',
     }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>
         {title}
       </p>
       {children}
@@ -58,8 +58,8 @@ export function BadgeSection() {
             { heading: 'Use sparingly',        body: 'Too many badges compete for attention. Reserve them for status or counts that truly need to stand out.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -67,7 +67,7 @@ export function BadgeSection() {
 
       {/* Variants */}
       <Section id="badge-variants" title="Variants">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Structural variants control background, border, and text — independent of semantic color.
         </p>
         <Card title="All variants">
@@ -83,7 +83,7 @@ export function BadgeSection() {
 
       {/* Color Badges */}
       <Section id="badge-colors" title="Color Badges">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Semantic status colors — all mapped to CSS variables from the design token system.
         </p>
         <Card title="Status colors">
@@ -108,8 +108,8 @@ export function BadgeSection() {
           ].map(({ variant, token, text }) => (
             <div key={variant} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
               <Badge variant={variant} label={variant} style={{ marginBottom: 10 }} />
-              <p style={{ margin: '0 0 2px', fontFamily: 'Rubik, sans-serif', fontSize: 11, color: '#828282' }}>bg: <code>{token}</code></p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 11, color: '#828282' }}>text: <code>{text}</code></p>
+              <p style={{ margin: '0 0 2px', fontFamily: 'var(--font-family-body)', fontSize: 11, color: '#828282' }}>bg: <code>{token}</code></p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 11, color: '#828282' }}>text: <code>{text}</code></p>
             </div>
           ))}
         </div>
@@ -117,7 +117,7 @@ export function BadgeSection() {
 
       {/* Sizes */}
       <Section id="badge-sizes" title="Sizes">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Four sizes — <strong>sm</strong> (10px) for dense UI, <strong>md</strong> (13px) for default use, <strong>lg</strong> (16px) for emphasis, <strong>xl</strong> (20px) for hero areas.
         </p>
         <Card title="Size scale">
@@ -132,7 +132,7 @@ export function BadgeSection() {
 
       {/* Slots */}
       <Section id="badge-slots" title="Slots">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Badges accept optional leading/trailing icons, a status dot, a loading spinner, and a close button.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>

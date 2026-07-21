@@ -20,7 +20,7 @@ const steps: Step[] = [
 function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       {children}
     </div>
   );
@@ -44,15 +44,15 @@ export function StepperSection() {
             { heading: 'Show progress clearly', body: 'Always highlight the current step and visually differentiate completed from pending steps.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
       </Section>
 
       <Section id="stepper-orientation" title="Orientation">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           <code>horizontal</code> (default) is best for page headers. <code>vertical</code> works well in sidebars or onboarding flows with descriptions.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -66,7 +66,7 @@ export function StepperSection() {
       </Section>
 
       <Section id="stepper-statuses" title="Step Statuses">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Individual steps can have explicit statuses: <code>completed</code>, <code>active</code>, <code>pending</code>, or <code>error</code>.
         </p>
         <DemoCard title="With explicit statuses">
@@ -82,13 +82,13 @@ export function StepperSection() {
       </Section>
 
       <Section id="stepper-interactive" title="Interactive">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Use <code>activeStep</code> with external state to drive a wizard flow.
         </p>
         <DemoCard title={`Step ${activeStep + 1} of ${steps.length}`}>
           <Stepper steps={steps} activeStep={activeStep} />
           <div style={{ marginTop: 24, padding: 16, backgroundColor: 'white', borderRadius: 8, border: '1px solid #EEEEEE', minHeight: 60, display: 'flex', alignItems: 'center' }}>
-            <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#49494A' }}>
+            <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A' }}>
               {steps[activeStep]?.description ?? 'All steps complete!'}
             </p>
           </div>

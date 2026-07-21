@@ -12,7 +12,7 @@ const toc = [
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
     </div>
   );
@@ -47,8 +47,8 @@ export function BreadcrumbSection() {
             { heading: 'Keep labels short', body: 'Truncate or abbreviate long segment names. Breadcrumbs should never wrap to a second line on typical viewports.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -66,11 +66,11 @@ export function BreadcrumbSection() {
         <Card title="Size variants">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#828282' }}>Small</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#828282' }}>Small</p>
               <Breadcrumb size="sm" items={dashboardCrumbs} />
             </div>
             <div>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#828282' }}>Medium (default)</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#828282' }}>Medium (default)</p>
               <Breadcrumb size="md" items={dashboardCrumbs} />
             </div>
           </div>
@@ -81,16 +81,16 @@ export function BreadcrumbSection() {
         <Card title="Separator variants">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#828282' }}>Default (ChevronRight)</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#828282' }}>Default (ChevronRight)</p>
               <Breadcrumb items={dashboardCrumbs} />
             </div>
             <div>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#828282' }}>Slash</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#828282' }}>Slash</p>
               <Breadcrumb items={dashboardCrumbs} separator={<Slash size={14} strokeWidth={1.5} />} />
             </div>
             <div>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#828282' }}>Text dot</p>
-              <Breadcrumb items={dashboardCrumbs} separator={<span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282' }}>·</span>} />
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#828282' }}>Text dot</p>
+              <Breadcrumb items={dashboardCrumbs} separator={<span style={{ fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282' }}>·</span>} />
             </div>
           </div>
         </Card>

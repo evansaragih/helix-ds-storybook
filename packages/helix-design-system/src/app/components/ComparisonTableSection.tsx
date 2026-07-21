@@ -57,8 +57,8 @@ export function ComparisonTableSection() {
             { heading: 'Be honest with "partial"', body: 'Use the partial cell (dash icon) for features that are available in a limited form. Don\'t show ✓ for partial access.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -69,14 +69,14 @@ export function ComparisonTableSection() {
       </Section>
 
       <Section id="comparison-grouped" title="Grouped Rows">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Set a <code>group</code> on each row to insert category headers that organise the feature list into sections.
         </p>
         <ComparisonTable columns={groupedCols} rows={groupedRows} featureLabel="Feature" />
       </Section>
 
       <Section id="comparison-highlighted" title="Highlighted Column">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Set <code>highlighted: true</code> on a column to apply the brand accent treatment. Combine with a <code>badge</code> to call out the recommended tier.
         </p>
         <ComparisonTable

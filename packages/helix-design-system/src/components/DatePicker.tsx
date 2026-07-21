@@ -104,7 +104,7 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(({
     }} style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', gap: 4 }}>
       {label && (
         <label style={{
-          fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: 13,
+          fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13,
           color: 'var(--color-text-primary, #14141E)', lineHeight: '19.2px',
         }}>
           {label}
@@ -130,7 +130,7 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(({
         <Calendar size={16} color="var(--color-text-tertiary, #828282)" style={{ flexShrink: 0 }} />
         <span style={{
           flex: 1,
-          fontFamily: 'Rubik, sans-serif', fontSize: 13,
+          fontFamily: 'var(--font-family-body)', fontSize: 13,
           color: displayValue ? 'var(--color-text-primary, #14141E)' : 'var(--color-text-tertiary, #828282)',
         }}>
           {displayValue || (placeholder ?? (mode === 'range' ? 'Select date range' : 'Select date'))}
@@ -150,7 +150,7 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(({
       </div>
 
       {error && (
-        <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 12, color: 'var(--color-destructive, #DC2626)', lineHeight: '18px' }}>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 12, color: 'var(--color-destructive, #DC2626)', lineHeight: '18px' }}>
           {error}
         </span>
       )}
@@ -171,7 +171,7 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(({
             <button onClick={prevMonth} style={{ padding: 4, border: 'none', background: 'none', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', color: 'var(--color-text-secondary, #49494A)' }}>
               <ChevronLeft size={16} />
             </button>
-            <span style={{ fontFamily: 'Rubik, sans-serif', fontWeight: 400, fontSize: 13, letterSpacing: '-0.01px', color: 'var(--color-text-primary, #14141E)' }}>
+            <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, letterSpacing: '-0.01px', color: 'var(--color-text-primary, #14141E)' }}>
               {MONTHS[month]} {year}
             </span>
             <button onClick={nextMonth} style={{ padding: 4, border: 'none', background: 'none', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', color: 'var(--color-text-secondary, #49494A)' }}>
@@ -182,7 +182,7 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(({
           {/* Day headers */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: 4 }}>
             {DAYS.map(d => (
-              <div key={d} style={{ textAlign: 'center', fontFamily: 'Rubik, sans-serif', fontWeight: 400, fontSize: 13, letterSpacing: '-0.01px', color: 'var(--color-text-tertiary, #828282)', padding: '4px 0' }}>
+              <div key={d} style={{ textAlign: 'center', fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, letterSpacing: '-0.01px', color: 'var(--color-text-tertiary, #828282)', padding: '4px 0' }}>
                 {d}
               </div>
             ))}
@@ -216,7 +216,7 @@ export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(({
                       : (isInRange || (today && !isActive)) ? 'var(--color-status-brand-bg, #FEF2E9)' : 'transparent',
                     color: isActive ? '#FFFFFF' : isDis ? '#D7D7D7' : 'var(--color-text-primary, #14141E)',
                     cursor: isDis ? 'not-allowed' : 'pointer',
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontSize: 13,
                     fontWeight: 400,
                     letterSpacing: '-0.01px',

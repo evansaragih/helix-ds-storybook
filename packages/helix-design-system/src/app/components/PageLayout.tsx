@@ -83,7 +83,7 @@ export function PageLayout({ category, title, description, tocItems, children }:
         }}>
           <p style={{
             margin: '0 0 8px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: '13px',
             color: 'rgba(255,255,255,0.8)',
@@ -93,7 +93,7 @@ export function PageLayout({ category, title, description, tocItems, children }:
           </p>
           <h1 style={{
             margin: '0 0 16px',
-            fontFamily: 'Quicksand, sans-serif',
+            fontFamily: 'var(--font-family-heading)',
             fontWeight: 700,
             fontSize: '40px',
             color: 'white',
@@ -103,7 +103,7 @@ export function PageLayout({ category, title, description, tocItems, children }:
           </h1>
           <p style={{
             margin: 0,
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: '14px',
             color: 'rgba(255,255,255,0.9)',
@@ -124,7 +124,7 @@ export function PageLayout({ category, title, description, tocItems, children }:
         <div style={{ width: '160px', flexShrink: 0, position: 'sticky', top: '120px' }}>
           <p style={{
             margin: '0 0 12px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 600,
             fontSize: '13px',
             color: '#14141e'
@@ -146,7 +146,7 @@ export function PageLayout({ category, title, description, tocItems, children }:
                     border: 'none',
                     backgroundColor: 'transparent',
                     cursor: 'pointer',
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontWeight: 400,
                     fontSize: '12px',
                     color: isActive ? '#F57E20' : '#828282',
@@ -169,7 +169,7 @@ export function Section({ id, title, children }: { id: string; title: string; ch
     <div id={id} style={{ marginBottom: '48px', scrollMarginTop: '160px' }}>
       <h2 style={{
         margin: '0 0 24px',
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontWeight: 600,
         fontSize: '22px',
         color: '#14141e'

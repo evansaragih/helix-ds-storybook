@@ -14,7 +14,7 @@ const toc = [
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24, alignItems: 'flex-start', minHeight: 120 }}>{children}</div>
     </div>
   );
@@ -36,8 +36,8 @@ export function PopoverSection() {
             { heading: 'Don\'t nest', body: 'Avoid opening a popover from inside another popover. This creates a confusing layering experience.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -50,7 +50,7 @@ export function PopoverSection() {
             placement="bottom-start"
           >
             <PopoverBody>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>
                 This is a basic popover. Click outside to close it.
               </p>
             </PopoverBody>
@@ -64,7 +64,7 @@ export function PopoverSection() {
             <PopoverBody>
               {[['⌘K', 'Command palette'], ['⌘S', 'Save'], ['⌘Z', 'Undo']].map(([key, label]) => (
                 <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #EEEEEE' }}>
-                  <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#14141E' }}>{label}</span>
+                  <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#14141E' }}>{label}</span>
                   <kbd style={{ fontFamily: 'monospace', fontSize: 12, backgroundColor: '#F7F7F7', border: '1px solid #EEEEEE', borderRadius: 4, padding: '2px 6px', color: '#828282' }}>{key}</kbd>
                 </div>
               ))}
@@ -78,7 +78,7 @@ export function PopoverSection() {
           {(['bottom-start', 'bottom', 'bottom-end', 'top-start'] as const).map(p => (
             <Popover key={p} trigger={<Button variant="neutral" size="sm">{p}</Button>} placement={p}>
               <PopoverBody>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#49494A' }}>Placement: {p}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A' }}>Placement: {p}</p>
               </PopoverBody>
             </Popover>
           ))}
@@ -111,7 +111,7 @@ export function PopoverSection() {
         <Card title="Notification popover">
           <Popover
             trigger={
-              <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 8, border: '1px solid #EEEEEE', backgroundColor: '#FFF', cursor: 'pointer', fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#14141E' }}>
+              <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 8, border: '1px solid #EEEEEE', backgroundColor: '#FFF', cursor: 'pointer', fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#14141E' }}>
                 <Bell size={14} /> Notifications <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#F57E20', display: 'inline-block' }} />
               </button>
             }
@@ -123,7 +123,7 @@ export function PopoverSection() {
               {['Deployment complete', 'New comment on PR #42', 'Your export is ready'].map(n => (
                 <div key={n} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: '1px solid #F0F0F0' }}>
                   <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#F57E20', flexShrink: 0 }} />
-                  <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#14141E' }}>{n}</span>
+                  <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#14141E' }}>{n}</span>
                 </div>
               ))}
             </PopoverBody>

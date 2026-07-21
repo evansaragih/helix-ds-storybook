@@ -70,7 +70,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(({
       >
         <span style={{ flex: leftFlex, borderBottom: `${thickness}px ${lineStyle.borderStyle} ${lineStyle.borderColor}` }} />
         <span style={{
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontSize: 12,
           lineHeight: '18px',
           color: 'var(--color-text-tertiary, #828282)',

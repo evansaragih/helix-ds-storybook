@@ -147,7 +147,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
     border: 'none',
     outline: 'none',
     background: 'transparent',
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'var(--font-family-body)',
     color: inputTextColor,
     padding: 0,
     margin: 0,
@@ -212,7 +212,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
                 left: labelLeft,
                 right: labelRight,
                 pointerEvents: 'none',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 letterSpacing: '-0.01px',
                 color: 'var(--colors/input/text/placeholder, #9f9f9f)',
@@ -308,13 +308,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               {error && <AlertCircle size={10} color="var(--color-destructive, #DC2626)" />}
               {supportingText && (
-                <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '10px', lineHeight: '15.6px', letterSpacing: '-0.01px', color: error ? 'var(--color-destructive, #DC2626)' : 'var(--color-text-tertiary, #828282)' }}>
+                <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', letterSpacing: '-0.01px', color: error ? 'var(--color-destructive, #DC2626)' : 'var(--color-text-tertiary, #828282)' }}>
                   {supportingText}
                 </span>
               )}
             </div>
             {showCharCount && maxLength && (
-              <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '10px', lineHeight: '15.6px', color: 'var(--color-text-tertiary, #828282)', letterSpacing: '-0.01px' }}>
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', color: 'var(--color-text-tertiary, #828282)', letterSpacing: '-0.01px' }}>
                 {charCount}/{maxLength}
               </span>
             )}
@@ -331,7 +331,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
       {label && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <label style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: '13px',
             lineHeight: '19.2px',
@@ -343,7 +343,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
             {required && <span style={{ color: 'var(--color-destructive, #DC2626)' }}>*</span>}
           </label>
           {secondaryLabel && (
-            <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: 'var(--color-text-secondary, #828282)' }}>
+            <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '12px', color: 'var(--color-text-secondary, #828282)' }}>
               {secondaryLabel}
             </span>
           )}
@@ -401,13 +401,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             {error && <AlertCircle size={10} color="var(--color-destructive, #DC2626)" />}
             {supportingText && (
-              <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '10px', lineHeight: '15.6px', letterSpacing: '-0.01px', color: error ? 'var(--color-destructive, #DC2626)' : 'var(--color-text-tertiary, #828282)' }}>
+              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', letterSpacing: '-0.01px', color: error ? 'var(--color-destructive, #DC2626)' : 'var(--color-text-tertiary, #828282)' }}>
                 {supportingText}
               </span>
             )}
           </div>
           {showCharCount && maxLength && (
-            <span style={{ fontFamily: 'Rubik, sans-serif', fontSize: '10px', lineHeight: '15.6px', color: 'var(--color-text-tertiary, #828282)', letterSpacing: '-0.01px' }}>
+            <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', color: 'var(--color-text-tertiary, #828282)', letterSpacing: '-0.01px' }}>
               {charCount}/{maxLength}
             </span>
           )}

@@ -94,7 +94,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(({
               style={{
                 padding: '6px 12px',
                 borderRadius: 8,
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: link.active ? 500 : 400,
                 fontSize: 14,
                 lineHeight: '21px',
@@ -181,7 +181,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(({
                 backgroundColor: 'var(--color-brand-primary, #F57E20)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: '#FFFFFF',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 600,
                 fontSize: 14,
               }}>
@@ -190,7 +190,7 @@ export const Navbar = forwardRef<HTMLElement, NavbarProps>(({
             )}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <span style={{
-                fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: 13,
+                fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13,
                 lineHeight: '19.2px', color: 'var(--color-text-primary, #14141E)',
                 letterSpacing: '-0.01px',
               }}>

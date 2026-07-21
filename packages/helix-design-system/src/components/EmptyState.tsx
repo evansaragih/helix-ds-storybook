@@ -77,7 +77,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
       {/* Title */}
       <h3 style={{
         margin: '0 0 8px',
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontWeight: 500,
         fontSize: compact ? 14 : 16,
         lineHeight: compact ? '21px' : '24px',
@@ -91,7 +91,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
       {description && (
         <p style={{
           margin: 0,
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontWeight: 400,
           fontSize: 13,
           lineHeight: '19.2px',
@@ -115,7 +115,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
                 border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
                 backgroundColor: 'transparent',
                 cursor: 'pointer',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 fontSize: 14,
                 color: 'var(--color-text-primary, #14141E)',
@@ -137,7 +137,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
                   ? 'transparent'
                   : 'var(--color-brand-primary, #F57E20)',
                 cursor: 'pointer',
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 fontSize: 14,
                 color: action.variant === 'outline'

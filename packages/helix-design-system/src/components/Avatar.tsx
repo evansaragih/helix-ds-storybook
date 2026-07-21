@@ -110,7 +110,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
       {...props}
     >
       <span style={{
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontWeight: 500,
         fontSize: cfg.fontSize,
         lineHeight: 1,

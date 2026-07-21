@@ -33,7 +33,7 @@ function renderCell(value: CellValue): React.ReactNode {
   if (value === 'partial')  return <Minus size={18} color="var(--color-text-warning, #A66800)" strokeWidth={2} />;
   return (
     <span style={{
-      fontFamily: 'Rubik, sans-serif', fontSize: 13,
+      fontFamily: 'var(--font-family-body)', fontSize: 13,
       color: 'var(--color-text-primary, #14141E)', lineHeight: '19.2px',
     }}>
       {value as React.ReactNode}
@@ -70,7 +70,7 @@ export const ComparisonTable = forwardRef<HTMLDivElement, ComparisonTableProps>(
               width: '20%',
               padding: '16px 20px',
               textAlign: 'left',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500,
               fontSize: 12,
               color: 'var(--color-text-tertiary, #828282)',
@@ -91,7 +91,7 @@ export const ComparisonTable = forwardRef<HTMLDivElement, ComparisonTableProps>(
                   width: colWidth,
                   padding: '16px 20px',
                   textAlign: 'center',
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontWeight: 600,
                   fontSize: 14,
                   color: col.highlighted ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-text-primary, #14141E)',
@@ -109,7 +109,7 @@ export const ComparisonTable = forwardRef<HTMLDivElement, ComparisonTableProps>(
                       padding: '2px 8px', borderRadius: 20,
                       backgroundColor: col.highlighted ? 'var(--color-brand-primary, #F57E20)' : '#E0E0E0',
                       color: col.highlighted ? '#FFFFFF' : 'var(--color-text-secondary, #49494A)',
-                      fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: 11,
+                      fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 11,
                       lineHeight: '16px',
                     }}>
                       {col.badge}
@@ -130,7 +130,7 @@ export const ComparisonTable = forwardRef<HTMLDivElement, ComparisonTableProps>(
                     colSpan={columns.length + 1}
                     style={{
                       padding: '10px 20px',
-                      fontFamily: 'Rubik, sans-serif',
+                      fontFamily: 'var(--font-family-body)',
                       fontWeight: 600,
                       fontSize: 11,
                       color: 'var(--color-text-tertiary, #828282)',
@@ -147,7 +147,7 @@ export const ComparisonTable = forwardRef<HTMLDivElement, ComparisonTableProps>(
               <tr key={ri} style={{ borderBottom: ri < rows.length - 1 ? '1px solid var(--color-stroke-subtle, #EEEEEE)' : 'none' }}>
                 <td style={{
                   padding: '14px 20px',
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontWeight: 400,
                   fontSize: 13,
                   color: 'var(--color-text-primary, #14141E)',

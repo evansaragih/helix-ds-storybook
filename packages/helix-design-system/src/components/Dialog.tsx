@@ -85,7 +85,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
                 {title && (
                   <RadixDialog.Title style={{
                     margin: 0,
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontWeight: 500,
                     fontSize: 16,
                     lineHeight: '24px',
@@ -98,7 +98,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
                 {description && (
                   <RadixDialog.Description style={{
                     margin: title ? '4px 0 0' : 0,
-                    fontFamily: 'Rubik, sans-serif',
+                    fontFamily: 'var(--font-family-body)',
                     fontWeight: 400,
                     fontSize: 13,
                     lineHeight: '19.2px',

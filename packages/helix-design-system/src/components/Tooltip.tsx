@@ -49,7 +49,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(({
             border: isDark ? 'none' : '1px solid var(--color-stroke-subtle, #EEEEEE)',
             borderRadius: 'var(--radius-md, 6px)',
             padding: '6px 10px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 13,
             lineHeight: '19.2px',

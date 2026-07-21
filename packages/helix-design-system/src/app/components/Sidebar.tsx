@@ -60,7 +60,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
         {!isCollapsed && (
           <div style={{ flex: 1, minWidth: 0 }}>
             <span style={{
-              fontFamily: 'Quicksand, sans-serif',
+              fontFamily: 'var(--font-family-heading)',
               fontWeight: 700,
               fontSize: '20px',
               color: '#14141E',
@@ -87,7 +87,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <p style={{
               margin: '0 0 4px 8px',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500, fontSize: '10px',
               color: '#9CA3AF', letterSpacing: '1px',
               textTransform: 'uppercase',
@@ -104,7 +104,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
                     display: 'flex', alignItems: 'center', gap: '8px',
                     padding: '7px 10px',
                     borderRadius: '6px', border: 'none', cursor: 'pointer',
-                    fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: '13px',
+                    fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: '13px',
                     color: isActive ? 'white' : '#F57E20',
                     backgroundColor: isActive ? '#F57E20' : 'rgba(245,126,32,0.08)',
                     width: '100%', textAlign: 'left',
@@ -138,7 +138,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
               border: 'none',
               width: '100%',
               cursor: 'pointer',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500,
               fontSize: '13px',
               color: '#14141e',
@@ -205,7 +205,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
                         width: isCollapsed ? '100%' : '202px',
                         textAlign: 'left',
                         cursor: 'pointer',
-                        fontFamily: 'Rubik, sans-serif',
+                        fontFamily: 'var(--font-family-body)',
                         fontWeight: 400,
                         fontSize: '14px',
                         lineHeight: '19.2px',
@@ -242,7 +242,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
               border: 'none',
               width: '100%',
               cursor: 'pointer',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500,
               fontSize: '13px',
               color: '#14141e',
@@ -309,7 +309,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
                         width: isCollapsed ? '100%' : '202px',
                         textAlign: 'left',
                         cursor: 'pointer',
-                        fontFamily: 'Rubik, sans-serif',
+                        fontFamily: 'var(--font-family-body)',
                         fontWeight: 400,
                         fontSize: '14px',
                         lineHeight: '19.2px',
@@ -359,7 +359,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
               justifyContent: 'center',
               flexShrink: 0,
               color: 'white',
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 500,
               fontSize: '16px'
             }}>
@@ -369,7 +369,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{
                   margin: 0,
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontWeight: 400,
                   fontSize: '13px',
                   lineHeight: '19.2px',
@@ -380,7 +380,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
                 </p>
                 <p style={{
                   margin: 0,
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontWeight: 400,
                   fontSize: '10px',
                   lineHeight: '15.6px',

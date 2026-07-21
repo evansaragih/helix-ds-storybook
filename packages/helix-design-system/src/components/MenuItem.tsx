@@ -158,7 +158,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(({
       <div style={{ flex: 1, minWidth: 0 }}>
         <span style={{
           display: 'block',
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontSize,
           fontWeight: 400,
           lineHeight: '1.5',
@@ -172,7 +172,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(({
         {supportingText && (
           <span style={{
             display: 'block',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontSize: supportingFontSize,
             fontWeight: 400,
             lineHeight: '1.4',
@@ -195,7 +195,7 @@ export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(({
           padding: '1px 6px',
           borderRadius: '4px',
           backgroundColor: 'var(--color-container-tertiary, #EEEEEE)',
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontSize: '11px',
           fontWeight: 400,
           color: 'var(--color-text-secondary, #49494A)',

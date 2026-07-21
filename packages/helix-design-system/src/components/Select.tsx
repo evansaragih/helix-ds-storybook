@@ -83,7 +83,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
       ? 'var(--color-input-bg-disabled, #D7D7D7)'
       : 'var(--color-input-bg-default, #FFFFFF)',
     cursor: disabled ? 'not-allowed' : 'pointer',
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'var(--font-family-body)',
     fontWeight: 400,
     fontSize: cfg.fontSize,
     lineHeight: '19.2px',
@@ -99,7 +99,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
     justifyContent: 'space-between',
     padding: '8px 12px',
     fontSize: 13,
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'var(--font-family-body)',
     color: 'var(--color-text-primary, #14141E)',
     cursor: 'pointer',
     outline: 'none',
@@ -112,7 +112,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
       {label && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <label style={{
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: 13,
             lineHeight: '19.2px',
@@ -166,7 +166,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
                     <RadixSelect.Label style={{
                       padding: '6px 12px 2px',
                       fontSize: 11,
-                      fontFamily: 'Rubik, sans-serif',
+                      fontFamily: 'var(--font-family-body)',
                       fontWeight: 600,
                       color: 'var(--color-text-tertiary, #828282)',
                       textTransform: 'uppercase',
@@ -212,7 +212,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
       {(helperText || errorText) && (
         <p style={{
           margin: 0,
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontSize: 12,
           lineHeight: '18px',
           color: errorText

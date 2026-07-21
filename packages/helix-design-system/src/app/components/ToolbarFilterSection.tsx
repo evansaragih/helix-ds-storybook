@@ -65,8 +65,8 @@ export function ToolbarFilterSection() {
             { heading: 'Easy to clear', body: 'Provide a "Clear all" button whenever at least one filter is active. Don\'t make users individually deselect each filter.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -74,7 +74,7 @@ export function ToolbarFilterSection() {
 
       <Section id="toolbar-search" title="Search Only">
         <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-          <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search bar</p>
+          <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search bar</p>
           <ToolbarFilter
             searchValue={search1}
             onSearchChange={setSearch1}
@@ -86,7 +86,7 @@ export function ToolbarFilterSection() {
 
       <Section id="toolbar-filters" title="With Filters">
         <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-          <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search + filters (try clicking the filter buttons)</p>
+          <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search + filters (try clicking the filter buttons)</p>
           <ToolbarFilter
             searchValue={search2}
             onSearchChange={setSearch2}
@@ -101,7 +101,7 @@ export function ToolbarFilterSection() {
 
       <Section id="toolbar-full" title="Full Toolbar">
         <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-          <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search + filters + actions</p>
+          <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search + filters + actions</p>
           <ToolbarFilter
             searchValue={search3}
             onSearchChange={setSearch3}

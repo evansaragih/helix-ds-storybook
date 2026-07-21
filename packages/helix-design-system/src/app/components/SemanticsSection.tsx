@@ -93,8 +93,8 @@ export function SemanticsSection() {
             <div key={c.name} style={rowCard}>
               {swatch(c.hex)}
               <div style={{ flex: 1, minWidth: 0 }}>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{c.name}</p>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{c.hex} · {c.usage}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141e' }}>{c.name}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{c.hex} · {c.usage}</p>
               </div>
             </div>
           ))}
@@ -105,14 +105,14 @@ export function SemanticsSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
           {buttonColors.map((btn) => (
             <div key={btn.category} style={{ padding: '16px', backgroundColor: '#f7f7f7', borderRadius: '8px', border: '1px solid #eee' }}>
-              <p style={{ margin: '0 0 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '14px', color: '#14141e' }}>{btn.category}</p>
+              <p style={{ margin: '0 0 12px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '14px', color: '#14141e' }}>{btn.category}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {btn.states.map((s) => (
                   <div key={s.state} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     {swatch(s.hex, 32)}
                     <div>
-                      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#49494a' }}>{s.state}</p>
-                      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{s.hex}</p>
+                      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#49494a' }}>{s.state}</p>
+                      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{s.hex}</p>
                     </div>
                   </div>
                 ))}
@@ -126,14 +126,14 @@ export function SemanticsSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
           {inputColors.map((input) => (
             <div key={input.category} style={{ padding: '16px', backgroundColor: '#f7f7f7', borderRadius: '8px', border: '1px solid #eee' }}>
-              <p style={{ margin: '0 0 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '14px', color: '#14141e' }}>{input.category}</p>
+              <p style={{ margin: '0 0 12px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '14px', color: '#14141e' }}>{input.category}</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {input.colors.map((c) => (
                   <div key={c.state} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     {swatch(c.hex, 28)}
                     <div>
-                      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#49494a' }}>{c.state}</p>
-                      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
+                      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#49494a' }}>{c.state}</p>
+                      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
                     </div>
                   </div>
                 ))}
@@ -144,26 +144,26 @@ export function SemanticsSection() {
       </Section>
 
       <Section id="background-colors" title="Backgrounds & Containers">
-        <h3 style={{ margin: '0 0 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: '14px', color: '#828282' }}>Backgrounds</h3>
+        <h3 style={{ margin: '0 0 12px', fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: '14px', color: '#828282' }}>Backgrounds</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginBottom: '20px' }}>
           {backgroundColors.map((c) => (
             <div key={c.name} style={{ borderRadius: '8px', border: '1px solid #eee', overflow: 'hidden' }}>
               <div style={{ height: '60px', backgroundColor: c.hex, borderBottom: '1px solid #eee' }} />
               <div style={{ padding: '8px 10px', backgroundColor: '#f7f7f7' }}>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
               </div>
             </div>
           ))}
         </div>
-        <h3 style={{ margin: '0 0 12px', fontFamily: 'Rubik, sans-serif', fontWeight: 500, fontSize: '14px', color: '#828282' }}>Containers</h3>
+        <h3 style={{ margin: '0 0 12px', fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: '14px', color: '#828282' }}>Containers</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
           {containerColors.map((c) => (
             <div key={c.name} style={{ borderRadius: '8px', border: '1px solid #eee', overflow: 'hidden' }}>
               <div style={{ height: '60px', backgroundColor: c.hex, borderBottom: '1px solid #eee' }} />
               <div style={{ padding: '8px 10px', backgroundColor: '#f7f7f7' }}>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
               </div>
             </div>
           ))}
@@ -176,9 +176,9 @@ export function SemanticsSection() {
             <div key={c.name} style={{ borderRadius: '8px', border: '1px solid #eee', overflow: 'hidden' }}>
               <div style={{ height: '72px', backgroundColor: c.hex, borderBottom: '1px solid #eee' }} />
               <div style={{ padding: '8px 10px' }}>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
-                <p style={{ margin: '2px 0 0', fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#9f9f9f' }}>{c.usage}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
+                <p style={{ margin: '2px 0 0', fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#9f9f9f' }}>{c.usage}</p>
               </div>
             </div>
           ))}
@@ -191,8 +191,8 @@ export function SemanticsSection() {
             <div key={c.name} style={{ borderRadius: '8px', border: '1px solid #eee', overflow: 'hidden' }}>
               <div style={{ height: '72px', backgroundColor: c.hex }} />
               <div style={{ padding: '8px 10px' }}>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
-                <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '12px', color: '#14141e' }}>{c.name}</p>
+                <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '11px', color: '#828282' }}>{c.hex}</p>
               </div>
             </div>
           ))}

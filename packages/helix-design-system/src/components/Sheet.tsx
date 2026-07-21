@@ -129,7 +129,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(({
             {description && (
               <p style={{
                 margin: title ? '4px 0 0' : 0,
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 fontSize: 13,
                 lineHeight: '19.2px',

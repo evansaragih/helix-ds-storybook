@@ -89,7 +89,7 @@ export const InfoCard = forwardRef<HTMLDivElement, InfoCardProps>(({
         {title && (
           <p style={{
             margin: '0 0 4px',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 600,
             fontSize: compact ? 13 : 14,
             lineHeight: compact ? '19.2px' : '21px',
@@ -102,7 +102,7 @@ export const InfoCard = forwardRef<HTMLDivElement, InfoCardProps>(({
         {description && (
           <p style={{
             margin: 0,
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
             fontSize: compact ? 12 : 13,
             lineHeight: '1.6',
@@ -123,7 +123,7 @@ export const InfoCard = forwardRef<HTMLDivElement, InfoCardProps>(({
             border: `1px solid ${v.border}`,
             backgroundColor: 'transparent',
             cursor: 'pointer',
-            fontFamily: 'Rubik, sans-serif',
+            fontFamily: 'var(--font-family-body)',
             fontWeight: 500,
             fontSize: 13,
             color: v.accent,

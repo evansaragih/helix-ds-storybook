@@ -45,7 +45,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   return (
     <div
       ref={ref}
-      style={{ display: 'flex', flexDirection: 'column', gap: 16, ...style }}
+      style={{ display: 'flex', flexDirection: 'column', ...style }}
       {...props}
     >
       {/* Track */}
@@ -113,32 +113,35 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             </button>
           </>
         )}
-      </div>
 
-      {/* Dots */}
-      {showDots && maxIndex > 0 && (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
-          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrent(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              style={{
-                width: i === current ? 40 : 12,
-                height: 12,
-                borderRadius: 'var(--radius-3xl, 24px)',
-                border: 'none',
-                cursor: 'pointer',
-                backgroundColor: i === current
-                  ? 'var(--color-brand-primary, #F57E20)'
-                  : 'var(--color-status-brand-bg, #FEF2E9)',
-                transition: 'width 0.3s ease, background-color 0.2s',
-                padding: 0,
-              }}
-            />
-          ))}
-        </div>
-      )}
+        {/* Dots — overlaid on the bottom edge of the track, matching Figma */}
+        {showDots && maxIndex > 0 && (
+          <div style={{
+            position: 'absolute', left: 0, right: 0, bottom: 12,
+            display: 'flex', justifyContent: 'center', gap: 6, zIndex: 10,
+          }}>
+            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrent(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                style={{
+                  width: i === current ? 40 : 12,
+                  height: 12,
+                  borderRadius: 'var(--radius-3xl, 24px)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: i === current
+                    ? 'var(--color-brand-primary, #F57E20)'
+                    : 'var(--color-status-brand-bg, #FEF2E9)',
+                  transition: 'width 0.3s ease, background-color 0.2s',
+                  padding: 0,
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 });

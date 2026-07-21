@@ -105,7 +105,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(({
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {label && (
               <span style={{
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontWeight: 400,
                 fontSize: size === 'md' ? 13 : 12,
                 lineHeight: '19.2px',
@@ -117,7 +117,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(({
             )}
             {helperText && (
               <span style={{
-                fontFamily: 'Rubik, sans-serif',
+                fontFamily: 'var(--font-family-body)',
                 fontSize: 12,
                 lineHeight: '18px',
                 color: invalid ? 'var(--color-text-error, #EF4444)' : 'var(--color-text-tertiary, #828282)',

@@ -28,7 +28,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(({
   footer,
   elevation = 'sm',
   padding = 'md',
-  bordered = true,
+  bordered = false,
   hoverable = false,
   children,
   style,
@@ -105,7 +105,7 @@ export const CardTitle = forwardRef<HTMLParagraphElement, React.HTMLAttributes<H
   ({ children, style, ...props }, ref) => (
     <h3 ref={ref as React.Ref<HTMLHeadingElement>} style={{
       margin: 0,
-      fontFamily: 'Rubik, sans-serif',
+      fontFamily: 'var(--font-family-body)',
       fontWeight: 500,
       fontSize: 16,
       lineHeight: '24px',
@@ -121,7 +121,7 @@ export const CardDescription = forwardRef<HTMLParagraphElement, React.HTMLAttrib
   ({ children, style, ...props }, ref) => (
     <p ref={ref} style={{
       margin: '4px 0 0',
-      fontFamily: 'Rubik, sans-serif',
+      fontFamily: 'var(--font-family-body)',
       fontWeight: 400,
       fontSize: 13,
       lineHeight: '19.2px',

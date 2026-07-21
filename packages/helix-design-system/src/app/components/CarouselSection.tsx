@@ -18,7 +18,7 @@ function SlideCard({ index, color }: { index: number; color: string }) {
       alignItems: 'center',
       justifyContent: 'center',
       color: '#FFFFFF',
-      fontFamily: 'Rubik, sans-serif',
+      fontFamily: 'var(--font-family-body)',
       fontWeight: 600,
       fontSize: 24,
     }}>
@@ -38,29 +38,29 @@ const featureSlides = [
   { id: 1, content: (
     <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
       <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#FEF2E9', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#F57E20', fontSize: 20 }}>🚀</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Fast onboarding</h3>
-      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Get your team up and running in minutes with guided setup and pre-built templates.</p>
+      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Fast onboarding</h3>
+      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Get your team up and running in minutes with guided setup and pre-built templates.</p>
     </div>
   )},
   { id: 2, content: (
     <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
       <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#E6F7F9', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#089AAA', fontSize: 20 }}>📊</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Advanced analytics</h3>
-      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Track every metric that matters with real-time dashboards and custom report exports.</p>
+      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Advanced analytics</h3>
+      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Track every metric that matters with real-time dashboards and custom report exports.</p>
     </div>
   )},
   { id: 3, content: (
     <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
       <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#EBF0EA', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#476142', fontSize: 20 }}>🔒</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Enterprise security</h3>
-      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>SOC 2 compliant, SSO, audit logs, and role-based access control built in from day one.</p>
+      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Enterprise security</h3>
+      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>SOC 2 compliant, SSO, audit logs, and role-based access control built in from day one.</p>
     </div>
   )},
   { id: 4, content: (
     <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
       <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#EBF2FE', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#014CC5', fontSize: 20 }}>🤝</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Team collaboration</h3>
-      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Comments, mentions, shared views, and live presence — work together in real time.</p>
+      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Team collaboration</h3>
+      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Comments, mentions, shared views, and live presence — work together in real time.</p>
     </div>
   )},
 ];
@@ -81,8 +81,8 @@ export function CarouselSection() {
             { heading: 'Don\'t auto-play text', body: 'Auto-play is acceptable for image galleries but avoid it for carousels containing text or interactive elements — users may not have time to read.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -93,7 +93,7 @@ export function CarouselSection() {
       </Section>
 
       <Section id="carousel-multi" title="Multiple Visible">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Set <code>visibleCount</code> to show multiple slides at once — useful for feature or card grids.
         </p>
         <Carousel items={featureSlides} visibleCount={2} gap={16} />
@@ -103,7 +103,7 @@ export function CarouselSection() {
       </Section>
 
       <Section id="carousel-autoplay" title="Auto-play">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Pass <code>autoPlay</code> in milliseconds to enable automatic advancing. Suitable for image galleries.
         </p>
         <Carousel items={slides} visibleCount={1} autoPlay={3000} />

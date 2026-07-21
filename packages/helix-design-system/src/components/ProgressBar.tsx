@@ -36,7 +36,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(({
   const pctStr = `${Math.round(pct)}%`;
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: 'Rubik, sans-serif',
+    fontFamily: 'var(--font-family-body)',
     fontWeight: 400,
     fontSize: 13,
     lineHeight: '19.2px',
@@ -116,7 +116,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(({
         {showPercent && (
           <div style={{ display: 'flex' }}>
             <span style={{
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 400,
               fontSize: 10,
               lineHeight: '15.6px',
@@ -144,7 +144,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(({
         {showPercent && (
           <div style={{ display: 'flex' }}>
             <span style={{
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontWeight: 400,
               fontSize: 10,
               lineHeight: '15.6px',

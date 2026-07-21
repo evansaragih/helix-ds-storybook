@@ -16,7 +16,7 @@ export function InputOTPSection() {
     >
       {/* Variants & States */}
       <Section id="otp-variants" title="Variants & States">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Two layout variants — Digits Only (6 continuous cells) and Alphanumeric (two groups of 3 separated by a dash). Each can appear in Default or Invalid state.
         </p>
         <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE', display: 'flex', flexDirection: 'column', gap: 24, overflowX: 'auto' }}>
@@ -29,7 +29,7 @@ export function InputOTPSection() {
 
       {/* Usage Example */}
       <Section id="otp-usage" title="Usage Example">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Typical login verification dialog — pair the OTP field with a clear title, description, and a primary action button.
         </p>
         <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
@@ -46,7 +46,7 @@ export function InputOTPSection() {
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <InputOTP variant="Alphanumeric" state="Default" label="Alphanumeric" />
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 13, lineHeight: '20px', color: '#49494A' }}>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '20px', color: '#49494A' }}>
                 I no longer have access to this email address.
               </p>
             </div>

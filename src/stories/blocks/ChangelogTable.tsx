@@ -84,7 +84,7 @@ export function ChangelogTable() {
             <tr key={`${entry.componentId}-${currentPage}-${i}`}>
               <td>{entry.date}</td>
               <td>
-                <a href={`?path=/docs/${entry.docsId}`} target="_top">{entry.componentName}</a>
+                <a href={`/?path=/docs/${entry.docsId}`} target="_top">{entry.componentName}</a>
               </td>
               <td>{entry.version}</td>
               <td>{entry.summary}</td>

@@ -22,7 +22,7 @@ Nusantics is an Indonesian precision molecular diagnostics and microbiome biotec
 Three products share a unified **Helix Design System** (GitHub: `evansaragih/helix-design-system`,
 Figma: `Nusantics-Design-System`, fileKey `GWzBKGr6512AeMOapwgQhj`).
 
-Component specs in this document were verified 2026-07-04 against the published "Nusantics Design
+Component specs in this document were verified 2026-07-21 against the published "Nusantics Design
 System" Figma library (see `figma-library-key` above). When generating new designs in Figma, search
 this library first (`search_design_system`) and reuse/import matching components rather than
 inventing new styles — see the `figma-generate-design` skill.
@@ -210,7 +210,7 @@ trace-border  SVG stroke-dashoffset reveal — floating Input focus border
 
 ---
 
-## Component Library — 38 Components
+## Component Library — 43 Components
 
 All exported from `src/components/index.ts`.
 Radix UI used internally: Accordion, Select, Tabs, Tooltip, Dialog.
@@ -244,6 +244,25 @@ Rules:
 - `pill=true`: border-radius 9999px (landing page context)
 - Ghost/outline: transparent bg, uses `--color-brand-*-ghost-hover/focus` on interaction
 - Loading: shows `badge-spin` spinner, hides icons and children label
+
+---
+
+### IconButton
+
+Icon-only counterpart to Button — maps to Figma's "Buttons / Icon" (square) and "Buttons / Icon Pill" (circle) component sets.
+
+```tsx
+type IconButtonVariant = ButtonVariant | 'transparent'
+type IconButtonShape = 'square' | 'circle'
+
+props: variant='primary', shape='circle', icon (required), disabled, 'aria-label' (required)
+```
+
+Rules:
+- Fixed size: 36×36px for both `circle` and `square` shapes — 1:1, no size prop (one size per Figma spec)
+- Shares the same variant palette/hover/focus/disabled tokens as `Button`
+- `transparent` variant has no border and no idle background — hover/focus states only
+- Always requires `aria-label` (no visible text label)
 
 ---
 
@@ -493,7 +512,7 @@ Arrow fill matches bg. Wrap app in `<TooltipProvider>` to enable.
 props: header, footer,
        elevation='sm' ('none'|'sm'|'default'|'md'),
        padding='md' ('none'|'sm'|'md'|'lg'),
-       bordered=true, hoverable=false
+       bordered=false, hoverable=false
 ```
 
 | Padding | px |
@@ -503,11 +522,30 @@ props: header, footer,
 | md | 16px |
 | lg | 24px |
 
-Container: `--color-container-primary`, `--radius-lg` (8px), border `--color-stroke-subtle`.
+Container: `--color-container-primary`, `--radius-lg` (8px), no outer border by default — shadow-only, matching Figma's "Content Container" (`bordered` opts back into a `--color-stroke-subtle` outline for cases that need one).
 Header: padding `pad × pad × pad/2`, border-bottom `--color-stroke-subtle`.
 Footer: padding `pad/2 × pad × pad`, border-top, bg `--color-container-secondary`.
 Hoverable: `translateY(-1px)` + elevates to `--shadow` on hover.
 Sub-components: `CardHeader` (mb 12px), `CardTitle` (Rubik 500 16px), `CardDescription` (Rubik 400 13px `--color-text-secondary`).
+
+---
+
+### ContentContainer
+
+Matches Figma's "Content Container" (node 233:17314) — "Metrics cards, feature cards, custom layouts".
+
+```tsx
+props: title, description, leadingIcon, badgeLabel, badgeVariant='blue',
+       headerContent (full header override), showActionButton=true, actionIcon, onActionClick,
+       padding='md' ('none'|'sm'|'md'|'lg')
+```
+
+Container: `--color-container-primary`, `--radius-lg` (8px), two-layer drop-shadow (`0px 1px 2px rgba(0,0,0,.04)` + `0px 1px 3px rgba(0,0,0,.08)`), no border — shadow-only.
+Header: 16px padding all sides, border-bottom `--color-stroke-subtle`, only rendered if title/description/badgeLabel/headerContent is given.
+Header content slot (default): 32×32 leading icon tile (`--color-status-brand-bg` bg, brand-primary color) + title (Rubik 500 16px) + description (Rubik 400 13px secondary) + optional Badge, all in one row.
+Action button: `IconButton` (`shape="square"`, `variant="primary-outline"`), right-aligned, hidden via `showActionButton={false}`.
+Body: rendered only if children given, padding per `padding` prop, `flex-col gap-12`.
+Reach for `Card` instead when you don't need the opinionated icon/title/description/badge header composition.
 
 ---
 
@@ -626,6 +664,32 @@ Image: object-fit cover. Initials derived: first char of first + last word in na
 
 ---
 
+### AvatarGroup
+
+```tsx
+interface AvatarGroupItem { id: string | number; name?: string; src?: string; alt?: string }
+
+props: items (required), size='sm' ('xs'|'sm'|'md'), max, showAddButton, addButtonShape='circle' ('circle'|'square'), onAddClick
+```
+
+Rules:
+- Avatars overlap with a negative `margin-left`; each carries a `0 0 0 2px var(--color-surface)` ring to separate it from its neighbor
+- `max` collapses remaining avatars into an orange "+N" circle styled to match the avatar size
+- `showAddButton` appends a dashed-outline button (circle or square) for an add-member action
+- Sizes: `xs`/`sm`/`md` only (no `lg` — matches Figma's Avatar Group component set)
+
+### AvatarLabelGroup
+
+```tsx
+type AvatarLabelGroupSize = 'sm' | 'md' | 'lg' | 'xl'
+
+props: name (required), email, src, size='md'
+```
+
+Pairs a single `Avatar` with a bold name and muted email — use to identify one specific person (comment authors, assignee rows), not headcount.
+
+---
+
 ### Divider
 
 ```tsx
@@ -731,7 +795,7 @@ Rules:
 - Arrows: 36×36px circle, inset 16px from edge, bg `--color-btn-invert` (`#59595A`) with `backdrop-filter: blur(2px)`, border `rgba(255,255,255,0.2)`, icon white 14px; disabled at bounds (`opacity: 0.4`, `cursor: not-allowed`) — not looping via arrows
 - autoPlay loops back to index 0 once past `maxIndex` (`items.length - visibleCount`)
 - Dots: 12px circle default, active dot widens to 40px (pill) at 12px height, `border-radius: var(--radius-3xl, 24px)`, active bg `--color-brand-primary`, inactive bg `--color-status-brand-bg` (`#FEF2E9`); `transition: width 0.3s ease, background-color 0.2s`; only rendered when `maxIndex > 0`
-- Gap between Track and Dots row: 16px
+- Dots are absolutely positioned `bottom: 12px` inside the track, overlapping the bottom edge of the slide content (matches Figma) — not a separate row below the track
 
 ---
 
@@ -1132,6 +1196,28 @@ Divider between groups: 1px `--color-stroke-default`.
 ### InputOTP
 
 Full prop API in source file. N-slot OTP input with token-based focus/error states.
+
+---
+
+### ListContainer
+
+Matches Figma's "List Container" (node 1057:19300) — defines four layout modes: Card List, Row List, Data Table, Sortable List.
+
+```tsx
+type ListContainerLayout = 'card-list' | 'row-list' | 'data-table' | 'sortable-list';
+
+props: title, description, leadingIcon, badgeLabel, badgeVariant='blue', headerContent,
+       showActionButton=true, actionIcon, onActionClick,
+       toolbarFilter (slot rendered below header — bring your own ToolbarFilter or filter pills),
+       layout='card-list', items (ListContainerItem[], auto-renders as ListItemCard rows),
+       showPagination=true, paginationProps, showFooterActions=false,
+       onCancel, onContinue, cancelLabel='Cancel', continueLabel='Continue'
+```
+
+Same shadow-only container, header, and 16px padding as `ContentContainer` (they intentionally share the same visual header treatment).
+Body: if `items` is given and no `children`, auto-renders each as `ListItemCard` (gap 8). Otherwise renders `children` directly — this is how Row List / Data Table / Sortable List layouts are supported: bring your own rows/`Table` as children, `layout` is descriptive only in that case.
+Footer: only rendered if `showPagination && paginationProps` or `showFooterActions` — bg `--color-container-secondary`, border-top `--color-stroke-subtle`, 12px padding. Pagination footer uses the existing `Pagination` component; actions footer renders `Button` Cancel (ghost-neutral) + Continue (primary).
+`ListItemCard` (also exported standalone) — matches Figma's "Item / Card": 40×40 leading content, title (Rubik 400 13px primary) + description (Rubik 400 13px tertiary), optional trailing badge, 1px `--color-stroke-subtle` border, `--radius-lg`.
 
 ---
 

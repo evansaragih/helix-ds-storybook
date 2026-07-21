@@ -13,7 +13,7 @@ const toc = [
 function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       {children}
     </div>
   );
@@ -37,15 +37,15 @@ export function PaginationSection() {
             { heading: 'Preserve state on back', body: 'Encode the current page in the URL so the browser back button returns the user to the right page.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
       </Section>
 
       <Section id="pagination-rows" title="Rows Per Page">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Enable <code>showRowsPerPage</code> to display the full layout matching the Figma design — "Rows per page" label on the left, pagination controls on the right.
         </p>
         <DemoCard title="With rows per page selector">
@@ -54,7 +54,7 @@ export function PaginationSection() {
       </Section>
 
       <Section id="pagination-basic" title="Basic Usage">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Provide <code>total</code> items and <code>pageSize</code>. The component derives total pages automatically.
         </p>
         <DemoCard title="5 pages (no ellipsis)">
@@ -63,7 +63,7 @@ export function PaginationSection() {
       </Section>
 
       <Section id="pagination-many" title="Many Pages">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           With many pages, smart ellipsis collapses the middle. The <code>siblingCount</code> prop controls how many pages appear on each side of the current page.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -77,7 +77,7 @@ export function PaginationSection() {
       </Section>
 
       <Section id="pagination-controlled" title="Controlled">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
           Pass <code>page</code> and <code>onPageChange</code> to control the active page externally.
         </p>
         <DemoCard title={`Current page: ${page} / 20`}>

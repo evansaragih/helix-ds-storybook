@@ -95,8 +95,8 @@ export function MenuItemSection() {
             { heading: 'Destructive actions', body: 'Use the Destructive variant for permanent, irreversible actions like Delete or Remove.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: '16px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>
@@ -104,13 +104,13 @@ export function MenuItemSection() {
 
       {/* States */}
       <Section id="menu-states" title="States">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Menu items respond to pointer and keyboard interactions with distinct visual states.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
           {stateCards.map(({ state, label }) => (
             <div key={state} style={{ padding: '16px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 12px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>{label}</p>
+              <p style={{ margin: '0 0 12px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>{label}</p>
               <MenuGroup>
                 <MenuItem
                   label="Menu item"
@@ -129,7 +129,7 @@ export function MenuItemSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
           {/* Default */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Default</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Default</p>
             <MenuGroup>
               <MenuItem label="Edit" leadingContent={<Edit3 size={16} />} shortcut="⌘E" />
               <MenuItem label="Duplicate" leadingContent={<Copy size={16} />} shortcut="⌘D" />
@@ -143,8 +143,8 @@ export function MenuItemSection() {
 
           {/* Destructive */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Destructive</p>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282', lineHeight: '1.5' }}>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Destructive</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282', lineHeight: '1.5' }}>
               Use for permanent, irreversible actions. Always place at the bottom of the menu, separated by a divider.
             </p>
             <MenuGroup>
@@ -158,13 +158,13 @@ export function MenuItemSection() {
 
       {/* Sizes */}
       <Section id="menu-sizes" title="Sizes">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Menu items are available in Medium (40px) and Small (32px) heights.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 4px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Medium (Default)</p>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>Height: 40px · Font: 14px</p>
+            <p style={{ margin: '0 0 4px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Medium (Default)</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>Height: 40px · Font: 14px</p>
             <MenuGroup>
               <MenuItem size="Medium" label="Profile" leadingContent={<User size={18} />} />
               <MenuItem size="Medium" label="Notifications" leadingContent={<Bell size={18} />} />
@@ -174,8 +174,8 @@ export function MenuItemSection() {
             </MenuGroup>
           </div>
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 4px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Small</p>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>Height: 32px · Font: 13px</p>
+            <p style={{ margin: '0 0 4px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Small</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>Height: 32px · Font: 13px</p>
             <MenuGroup>
               <MenuItem size="Small" label="Profile" leadingContent={<User size={16} />} />
               <MenuItem size="Small" label="Notifications" leadingContent={<Bell size={16} />} />
@@ -192,7 +192,7 @@ export function MenuItemSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
           {/* Context menu */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Context Menu</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Context Menu</p>
             <MenuGroup>
               <MenuItem label="Open" leadingContent={<ExternalLink size={16} />} />
               <MenuItem label="Open in new tab" leadingContent={<ExternalLink size={16} />} shortcut="⌘↵" />
@@ -206,12 +206,12 @@ export function MenuItemSection() {
 
           {/* Navigation menu */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Navigation Menu</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Navigation Menu</p>
             <MenuGroup>
               <MenuItem label="Dashboard" leadingContent={<Star size={16} />} state="Selected" />
               <MenuItem label="Search" leadingContent={<Search size={16} />} shortcut="⌘K" />
               <MenuItem label="Notifications" leadingContent={<Bell size={16} />} trailingContent={
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 18, height: 18, borderRadius: '9999px', backgroundColor: '#F57E20', fontFamily: 'Rubik, sans-serif', fontSize: '10px', color: 'white', fontWeight: 600 }}>3</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 18, height: 18, borderRadius: '9999px', backgroundColor: '#F57E20', fontFamily: 'var(--font-family-body)', fontSize: '10px', color: 'white', fontWeight: 600 }}>3</span>
               } />
               <MenuItem label="Settings" leadingContent={<Settings size={16} />} hasSubmenu />
               <Divider />
@@ -221,7 +221,7 @@ export function MenuItemSection() {
 
           {/* With supporting text */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>With Supporting Text</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>With Supporting Text</p>
             <MenuGroup>
               <MenuItem label="Starter" supportingText="Up to 3 projects, free forever" leadingContent={<Star size={16} />} />
               <MenuItem label="Pro" supportingText="Unlimited projects, $12/mo" leadingContent={<Star size={16} />} state="Selected" />
@@ -235,14 +235,14 @@ export function MenuItemSection() {
 
       {/* Command */}
       <Section id="menu-command" title="Command">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           The Command extends the menu with a search input that filters items in real time. Use it for command palettes, quick launchers, or any menu with more than 7 options. Fully keyboard navigable — ↑ ↓ to move, Enter to select, Escape to clear.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
           {/* Live demo */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Live demo</p>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>Type to filter · ↑↓ to navigate · Enter to select</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Live demo</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>Type to filter · ↑↓ to navigate · Enter to select</p>
             <Command
               items={commandItems}
               placeholder="Search commands…"
@@ -253,8 +253,8 @@ export function MenuItemSection() {
 
           {/* Empty state */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Empty state</p>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>Shown when the query matches no items</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Empty state</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>Shown when the query matches no items</p>
             <Command
               items={commandItems}
               placeholder="Search commands…"
@@ -265,8 +265,8 @@ export function MenuItemSection() {
 
           {/* Checkbox variant */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Checkbox</p>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>Multi-select filter with a clear action</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Checkbox</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>Multi-select filter with a clear action</p>
             <Command
               type="checkbox"
               header="Last edited by"
@@ -282,8 +282,8 @@ export function MenuItemSection() {
 
           {/* Radio variant */}
           <div style={{ padding: '20px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Radio</p>
-            <p style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#828282' }}>Single-select filter with a clear action</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>Radio</p>
+            <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#828282' }}>Single-select filter with a clear action</p>
             <Command
               type="radio"
               header="Last edited by"
@@ -306,8 +306,8 @@ export function MenuItemSection() {
             { heading: 'Keyboard nav', body: '↑ / ↓ moves the active highlight. Enter selects. Disabled items are skipped.' },
           ].map(g => (
             <div key={g.heading} style={{ padding: '16px', backgroundColor: '#F7F7F7', borderRadius: '10px', border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontSize: '12px', color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
+              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: '13px', color: '#14141E' }}>{g.heading}</p>
+              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: '12px', color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
             </div>
           ))}
         </div>

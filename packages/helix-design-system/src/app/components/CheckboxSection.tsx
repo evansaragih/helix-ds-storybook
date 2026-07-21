@@ -15,7 +15,7 @@ export function CheckboxSection() {
       tocItems={toc}
     >
       <Section id="states" title="States">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Checkboxes communicate their status through visual changes. They support Checked, Unchecked, and Indeterminate states.
         </p>
         
@@ -33,14 +33,14 @@ export function CheckboxSection() {
       </Section>
 
       <Section id="variants" title="Variants">
-        <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: '14px', color: '#828282', lineHeight: '1.6' }}>
           Checkboxes can be used standalone, with labels, or with supporting description text. They can also be right-aligned for list views.
         </p>
         
         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
           
           <div style={{ padding: '32px', backgroundColor: '#f9f9f9', borderRadius: '16px', border: '1px solid #EEEEEE' }}>
-            <h4 style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', fontWeight: 600, color: '#14141E' }}>Standalone & Small Size</h4>
+            <h4 style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '14px', fontWeight: 600, color: '#14141E' }}>Standalone & Small Size</h4>
             <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
               <Checkbox checked />
               <Checkbox checked size="Small" />
@@ -53,10 +53,10 @@ export function CheckboxSection() {
           </div>
 
           <div style={{ padding: '32px', backgroundColor: '#FFFFFF', borderRadius: '16px', border: '1px solid #EEEEEE' }}>
-            <h4 style={{ margin: '0 0 16px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', fontWeight: 600, color: '#14141E' }}>
+            <h4 style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontSize: '14px', fontWeight: 600, color: '#14141E' }}>
               Show these items on the desktop:
             </h4>
-            <p style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: '13px', color: '#828282' }}>
+            <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: '13px', color: '#828282' }}>
               Describe your task in natural language.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -68,7 +68,7 @@ export function CheckboxSection() {
           </div>
 
           <div style={{ padding: '32px', backgroundColor: '#f9f9f9', borderRadius: '16px', border: '1px solid #EEEEEE' }}>
-            <h4 style={{ margin: '0 0 24px', fontFamily: 'Rubik, sans-serif', fontSize: '14px', fontWeight: 600, color: '#14141E' }}>Right-Aligned (List Items)</h4>
+            <h4 style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: '14px', fontWeight: 600, color: '#14141E' }}>Right-Aligned (List Items)</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ padding: '16px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid #EEEEEE' }}>
                 <Checkbox align="Right" label="Unchecked" description="Description text" />

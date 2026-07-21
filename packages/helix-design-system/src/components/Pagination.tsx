@@ -88,7 +88,7 @@ function PageBtn({
         backgroundColor: bg,
         color,
         cursor: disabled ? 'default' : 'pointer',
-        fontFamily: 'Rubik, sans-serif',
+        fontFamily: 'var(--font-family-body)',
         fontWeight: 400,
         fontSize: 13,
         lineHeight: '19.2px',
@@ -202,7 +202,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(({
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span style={{
-          fontFamily: 'Rubik, sans-serif',
+          fontFamily: 'var(--font-family-body)',
           fontWeight: 400,
           fontSize: 13,
           lineHeight: '19.2px',
@@ -217,7 +217,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(({
             value={resolvedPageSize}
             onChange={e => handlePageSizeChange(Number(e.target.value))}
             style={{
-              fontFamily: 'Rubik, sans-serif',
+              fontFamily: 'var(--font-family-body)',
               fontSize: 13,
               lineHeight: '19.2px',
               color: 'var(--color-text-secondary, #49494A)',

@@ -6,12 +6,15 @@ import { UtilitiesSection } from './UtilitiesSection';
 import { ElevationSection } from './ElevationSection';
 import { InputSection } from './InputSection';
 import { InputOTPSection } from './InputOTPSection';
+import { ListContainerSection } from './ListContainerSection';
 import { CheckboxSection } from './CheckboxSection';
 import { ButtonSection } from './ButtonSection';
 import { MenuItemSection } from './MenuItemSection';
 import { BadgeSection } from './BadgeSection';
 import { AlertSection } from './AlertSection';
 import { AvatarSection } from './AvatarSection';
+import { AvatarGroupSection } from './AvatarGroupSection';
+import { IconButtonSection } from './IconButtonSection';
 import { CardSection } from './CardSection';
 import { AccordionSection } from './AccordionSection';
 import { DividerSection } from './DividerSection';
@@ -38,6 +41,7 @@ import { DatePickerSection } from './DatePickerSection';
 import { CardMetricSection } from './CardMetricSection';
 import { InfoCardSection } from './InfoCardSection';
 import { ComparisonTableSection } from './ComparisonTableSection';
+import { ContentContainerSection } from './ContentContainerSection';
 import { CarouselSection } from './CarouselSection';
 import { ToolbarFilterSection } from './ToolbarFilterSection';
 import { DropzoneSection } from './DropzoneSection';
@@ -58,12 +62,15 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
       case 'elevation':         return <ElevationSection />;
       case 'input':             return <InputSection />;
       case 'input-otp':         return <InputOTPSection />;
+      case 'list-container':    return <ListContainerSection />;
       case 'checkbox':          return <CheckboxSection />;
       case 'button':            return <ButtonSection />;
       case 'menu-item':         return <MenuItemSection />;
       case 'badge':             return <BadgeSection />;
       case 'alert':             return <AlertSection />;
       case 'avatar':            return <AvatarSection />;
+      case 'avatar-group':      return <AvatarGroupSection />;
+      case 'icon-button':       return <IconButtonSection />;
       case 'card':              return <CardSection />;
       case 'accordion':         return <AccordionSection />;
       case 'divider':           return <DividerSection />;
@@ -90,6 +97,7 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
       case 'card-metric':       return <CardMetricSection />;
       case 'info-card':         return <InfoCardSection />;
       case 'comparison-table':  return <ComparisonTableSection />;
+      case 'content-container': return <ContentContainerSection />;
       case 'carousel':          return <CarouselSection />;
       case 'toolbar-filter':    return <ToolbarFilterSection />;
       case 'dropzone':          return <DropzoneSection />;
@@ -112,14 +120,14 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
               lineHeight: '1.6',
               marginBottom: 32,
             }}>
-              The Helix design system includes 37 production-ready components. Select any component from the sidebar to view its documentation and interactive examples.
+              The Helix design system includes 43 production-ready components. Select any component from the sidebar to view its documentation and interactive examples.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
               {[
-                'Accordion', 'Alert', 'Alert Dialog', 'Avatar', 'Badge', 'Breadcrumb',
-                'Button', 'Card', 'Card Metric', 'Carousel', 'Checkbox', 'Comparison Table',
-                'Date Picker', 'Dialog', 'Divider', 'Empty State', 'Info Card', 'Input',
-                'Input OTP', 'Menu', 'Navbar', 'Pagination', 'Popover', 'Progress Bar',
+                'Accordion', 'Alert', 'Alert Dialog', 'Avatar', 'Avatar Group', 'Badge', 'Breadcrumb',
+                'Button', 'Card', 'Card Metric', 'Carousel', 'Checkbox', 'Comparison Table', 'Content Container',
+                'Date Picker', 'Dialog', 'Divider', 'Empty State', 'Icon Button', 'Info Card', 'Input',
+                'Input OTP', 'List Container', 'Menu', 'Navbar', 'Pagination', 'Popover', 'Progress Bar',
                 'Radio Button', 'Select', 'Sheet', 'Spinner', 'Stepper', 'Switch',
                 'Table', 'Tabs', 'Text Link', 'Toast', 'Toolbar Filter', 'Tooltip',
               ].map(name => (
@@ -128,7 +136,7 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
                   backgroundColor: '#F7F7F7',
                   borderRadius: 8,
                   border: '1px solid #EEEEEE',
-                  fontFamily: 'Rubik, sans-serif',
+                  fontFamily: 'var(--font-family-body)',
                   fontSize: 13,
                   color: '#14141E',
                   fontWeight: 500,

@@ -10,7 +10,7 @@ const toc = [
 function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{ padding: 24, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE', display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <p style={{ margin: 0, fontFamily: 'Rubik, sans-serif', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
+      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
       {children}
     </div>
   );
