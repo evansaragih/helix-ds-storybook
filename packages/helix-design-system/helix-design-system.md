@@ -22,7 +22,7 @@ Nusantics is an Indonesian precision molecular diagnostics and microbiome biotec
 Three products share a unified **Helix Design System** (GitHub: `evansaragih/helix-design-system`,
 Figma: `Nusantics-Design-System`, fileKey `GWzBKGr6512AeMOapwgQhj`).
 
-Component specs in this document were verified 2026-07-21 against the published "Nusantics Design
+Component specs in this document were verified 2026-07-23 against the published "Nusantics Design
 System" Figma library (see `figma-library-key` above). When generating new designs in Figma, search
 this library first (`search_design_system`) and reuse/import matching components rather than
 inventing new styles — see the `figma-generate-design` skill.
@@ -223,7 +223,8 @@ Radix UI used internally: Accordion, Select, Tabs, Tooltip, Dialog.
 type ButtonVariant =
   'primary' | 'secondary' | 'tertiary' | 'destructive' | 'neutral' | 'invert' |
   'ghost-neutral' | 'ghost-brand' |
-  'primary-outline' | 'secondary-outline' | 'tertiary-outline'
+  'primary-outline' | 'secondary-outline' | 'tertiary-outline' |
+  'primary-subtle' | 'neutral-subtle'
 
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg'
 
@@ -244,6 +245,8 @@ Rules:
 - `pill=true`: border-radius 9999px (landing page context)
 - Ghost/outline: transparent bg, uses `--color-brand-*-ghost-hover/focus` on interaction
 - Loading: shows `badge-spin` spinner, hides icons and children label
+- `primary-subtle`: bg `--color-status-brand-bg` (#FEF2E9), text `--color-brand-primary`, no border, hover bg `#EADFD6`; disabled dims to 50% opacity instead of swapping to the shared disabled tokens
+- `neutral-subtle`: frosted-glass style for buttons placed over images/dark surfaces — bg `rgba(255,255,255,0.1)` + `backdrop-filter: blur(2px)`, `1px solid white` border, text `--color-text-secondary` (→ `--color-text-primary` on hover/focus), hover bg `rgba(255,255,255,0.3)`; disabled dims to 50% opacity
 
 ---
 
@@ -335,7 +338,9 @@ props: variant='default', title (required), description, icon (override),
 
 Layout: border-radius 8px, padding 16px, full width.
 Icon: 20×20px. Title: Rubik 500 14px. Description: Rubik 400 13px `--color-text-secondary`.
-Actions: primary filled `actionBg`, secondary transparent with variant border.
+Actions row: `padding-left: 24px` (aligns under the title/description, past the icon), gap 12px, buttons height 36px, `padding: 8px 12px`, `border-radius: 8px`.
+- Primary: bg `actionBg`, border `1px solid actionBg`, inner highlight `inset 0 0 0 1px rgba(255,255,255,0.2)`, text `actionText`
+- Secondary: transparent bg, `1px solid` variant border, text `--color-text-primary` (not accent-colored)
 
 ---
 
@@ -396,7 +401,7 @@ type TabsType = 'default' | 'white'
 
 interface TabItem { id, label, content?, disabled?, badge?, icon? }
 props: items, tabStyle='primary', size='sm', type='default',
-       defaultValue, value, onValueChange, renderContent=true
+       defaultValue, value, onValueChange, renderContent=true, showNavArrows=false
 ```
 
 | Style | List bg | Active tab | Indicator |
@@ -409,6 +414,7 @@ Size sm: font 13px, py 6px, px 12px. Size md: font 14px, py 8px, px 16px.
 Line-style active color: `--color-brand-primary` (or white if `type="white"`).
 Inactive: `--color-text-tertiary`. Disabled: `--color-text-muted`.
 Badge count pill: 18px height, radius-full, bg brandColor, font 10px.
+`showNavArrows=true`: tab list becomes horizontally scrollable (`overflow-x: auto`, hidden scrollbar) with two 24px circular "Buttons / Icon Pill"-style prev/next buttons (`--color-btn-neutral` bg, `backdrop-filter: blur(2px)`, `--color-stroke-default` border) absolutely positioned at the list's left/right edges, vertically centered — for overflowing tab rows.
 
 ---
 
@@ -730,10 +736,11 @@ Rows-per-page select (when `showRowsPerPage`): border `--color-input-border-defa
 type AlertDialogVariant = 'default' | 'destructive' | 'info'
 
 interface AlertDialogAction { label: string; onClick: () => void; loading?: boolean }
+interface AlertDialogCheckboxAction { label: ReactNode; checked: boolean; onChange: (checked: boolean) => void }
 
 props: open (required), variant='default', title (required), description,
        icon (override), confirmAction (required), cancelAction, onClose (required),
-       size='md' ('sm'|'md')
+       size='md' ('sm'|'md'), checkboxAction
 ```
 
 | Variant | Icon bg | Icon color | Default Icon |
@@ -756,6 +763,7 @@ Rules:
 - Actions row: `flex-direction: row-reverse`, gap 8px — confirm renders first (rightmost)
 - confirmAction uses `Button` `variant="destructive"` when `variant="destructive"`, else `variant="primary"`; cancelAction uses `variant="neutral"`; both `size="sm"`
 - confirmAction supports `loading` (passed straight to `Button`'s loading state)
+- `checkboxAction` (e.g. "Don't show this again"): renders a `Checkbox` (`size="Small"`) at the start of the actions row, which switches to `justify-content: space-between` to pin it left of the Cancel/Confirm group
 
 ---
 
@@ -803,9 +811,11 @@ Rules:
 
 ```tsx
 type MetricTrend = 'up' | 'down' | 'neutral'
+interface CardMetricFooterAction { label: string; onClick: () => void }
 
 props: label (required), value (required, string|number), unit, trend, trendValue,
-       trendLabel, icon, accentColor='var(--color-brand-primary, #F57E20)', description
+       trendLabel, icon, accentColor='var(--color-brand-primary, #F57E20)', description,
+       onMoreClick, chart, footerAction, floatingIcon
 ```
 
 | Trend | Color | bg | Icon |
@@ -821,6 +831,10 @@ Rules:
 - Value: `--font-family-heading` 700 25px/30px `--color-text-primary`, `letter-spacing: -0.01px`; unit inline Rubik 400 16px `--color-text-secondary`
 - Trend pill: inline-flex, `padding: 2px 6px`, `border-radius: 9999px` (pill), bg per trend, icon 14px + Rubik 400 10px trendValue in trend color
 - `trendLabel` (or fallback `description`): Rubik 400 13px/19.2px `--color-text-tertiary`, rendered beside the trend pill
+- `onMoreClick`: renders a borderless 24×24px overflow button (`MoreHorizontal`, `--color-text-tertiary`) in the header, after the icon well
+- `chart`: bordered slot below the trend row — white bg, `0.5px solid --color-stroke-subtle`, `border-radius: 12px`, `height: 210px`
+- `footerAction`: renders a `1px dashed --color-stroke-subtle` divider then a full-width "label + `ArrowRight`" link row (Rubik 400 13px `--color-text-secondary`, `justify-content: space-between`)
+- `floatingIcon`: decorative 64×64px circular badge floating over the top-right corner (`top:-9px; right:-9px`), `rgba(255,255,255,0.2)` bg + `backdrop-filter: blur(2px)`, icon bottom-aligned inside 20px padding
 
 ---
 

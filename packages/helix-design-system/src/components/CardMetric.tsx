@@ -1,7 +1,12 @@
 import { forwardRef } from 'react';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, MoreHorizontal, ArrowRight } from 'lucide-react';
 
 export type MetricTrend = 'up' | 'down' | 'neutral';
+
+export interface CardMetricFooterAction {
+  label: string;
+  onClick: () => void;
+}
 
 export interface CardMetricProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
@@ -14,6 +19,14 @@ export interface CardMetricProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Accent color on the icon area */
   accentColor?: string;
   description?: string;
+  /** Overflow ("...") button in the header, e.g. for a context menu */
+  onMoreClick?: () => void;
+  /** Bordered slot below the value row — pass a chart component */
+  chart?: React.ReactNode;
+  /** "View details"-style link row at the bottom, separated by a dashed divider */
+  footerAction?: CardMetricFooterAction;
+  /** Decorative accent badge floating over the top-right corner */
+  floatingIcon?: React.ReactNode;
 }
 
 const TREND_META = {
@@ -32,6 +45,10 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
   icon,
   accentColor = 'var(--color-brand-primary, #F57E20)',
   description,
+  onMoreClick,
+  chart,
+  footerAction,
+  floatingIcon,
   style,
   ...props
 }, ref) => {
@@ -42,6 +59,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
     <div
       ref={ref}
       style={{
+        position: 'relative',
         backgroundColor: 'var(--color-container-secondary, #F7F7F7)',
         borderRadius: 8,
         padding: 16,
@@ -50,6 +68,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
         gap: 12,
         boxSizing: 'border-box',
         boxShadow: 'var(--shadow-sm)',
+        overflow: 'hidden',
         ...style,
       }}
       {...props}
@@ -58,6 +77,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
         <p style={{
           margin: 0,
+          flex: 1,
           fontFamily: 'var(--font-family-body)',
           fontWeight: 500,
           fontSize: 13,
@@ -76,6 +96,22 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
           }}>
             {icon}
           </div>
+        )}
+        {onMoreClick && (
+          <button
+            type="button"
+            onClick={onMoreClick}
+            aria-label="More options"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 24, height: 24, flexShrink: 0,
+              border: 'none', borderRadius: 8, padding: 0,
+              backgroundColor: 'transparent', cursor: 'pointer',
+              color: 'var(--color-text-tertiary, #828282)',
+            }}
+          >
+            <MoreHorizontal size={14} />
+          </button>
         )}
       </div>
 
@@ -136,6 +172,59 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
           </span>
         )}
       </div>
+
+      {chart && (
+        <div style={{
+          backgroundColor: '#FFFFFF',
+          border: '0.5px solid var(--color-stroke-subtle, #D7D7D7)',
+          borderRadius: 12,
+          height: 210,
+          boxSizing: 'border-box',
+        }}>
+          {chart}
+        </div>
+      )}
+
+      {footerAction && (
+        <>
+          <div style={{ borderTop: '1px dashed var(--color-stroke-subtle, #D7D7D7)' }} />
+          <button
+            type="button"
+            onClick={footerAction.onClick}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              width: '100%', border: 'none', background: 'transparent', padding: 0,
+              cursor: 'pointer',
+              fontFamily: 'var(--font-family-body)',
+              fontWeight: 400,
+              fontSize: 13,
+              lineHeight: '19.2px',
+              color: 'var(--color-text-secondary, #49494A)',
+              letterSpacing: '-0.01px',
+            }}
+          >
+            {footerAction.label}
+            <ArrowRight size={14} />
+          </button>
+        </>
+      )}
+
+      {floatingIcon && (
+        <div style={{
+          position: 'absolute',
+          top: -9, right: -9,
+          width: 64, height: 64,
+          borderRadius: 9999,
+          backgroundColor: 'rgba(255,255,255,0.2)',
+          backdropFilter: 'blur(2px)',
+          display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+          padding: 20,
+          boxSizing: 'border-box',
+          color: 'var(--color-text-tertiary, #828282)',
+        }}>
+          {floatingIcon}
+        </div>
+      )}
     </div>
   );
 });

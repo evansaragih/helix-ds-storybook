@@ -65,6 +65,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Inline, non-blocking banner for surfacing contextual information, warnings, or errors within a page or form. Supports an icon, a badge, and up to two actions — use it for messages the user should see but doesn’t need to dismiss a modal for.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with variant stories.' },
+      { date: '2026-07-23', version: '0.0.1', summary: 'Fixed the action/secondaryAction buttons to match Figma\'s updated "Alert / with Action Buttons" variants (node 855:23516): 36px height, 8px/12px padding, 24px row indent (was 32px), and the primary action now has a border plus the same inner white-highlight ring as Button.' },
     ],
   },
   {
@@ -72,6 +73,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Modal confirmation dialog for actions that need explicit user confirmation before proceeding, especially destructive ones like delete. Blocks interaction until confirmed or cancelled — use Dialog instead for general-purpose modal content.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-07-23', version: '0.0.1', summary: 'Added an optional `checkboxAction` prop (e.g. "Don\'t show this again"), rendered left of the Cancel/Confirm buttons, matching Figma\'s updated "Dialog / Action Buttons" (node 26:11850).' },
     ],
   },
   {
@@ -114,6 +116,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'The primary interactive control for triggering actions. Covers solid, outline, and ghost treatments across brand-aware (primary/secondary/tertiary), neutral, invert, and destructive intents, plus loading and pill (fully-rounded) states.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with variant, size, icon, loading, and pill stories.' },
+      { date: '2026-07-23', version: '0.0.1', summary: 'Added `primary-subtle` and `neutral-subtle` variants, matching Figma\'s new "Style=Subtle" option on "Buttons / Button" (node 26:2341, subtle variants at 1053:103964 and 1424:21109); `neutral-subtle` is a frosted-glass treatment for buttons placed over images/dark surfaces and both dim via opacity rather than the shared disabled tokens when disabled.' },
     ],
   },
   {
@@ -122,6 +125,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     changelog: [
       { date: '2026-07-21', version: '0.0.1', summary: 'New component, matching Figma\'s "Buttons / Icon" and "Buttons / Icon Pill" component sets. Documented in Storybook with Shapes, Variants, and Disabled stories.' },
       { date: '2026-07-21', version: '0.0.1', summary: 'Corrected the square shape\'s footprint from 38×36 to a true 1:1 36×36, matching Figma exactly.' },
+      { date: '2026-07-23', version: '0.0.1', summary: 'Added `primary-subtle` and `neutral-subtle` variants to match Button\'s new subtle style, for type-level parity — Figma\'s "Buttons / Icon" and "Buttons / Icon Pill" sets don\'t yet have a Subtle style, so these reuse Button\'s subtle colors pending a matching icon-button spec.' },
     ],
   },
   {
@@ -137,6 +141,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Compact stat tile for dashboards — a labeled value with an optional unit, accent icon, and up/down/neutral trend indicator. Purpose-built for KPI rows; use Card for anything less structured.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-07-23', version: '0.0.1', summary: 'Added optional `onMoreClick` (header overflow button), `chart` (bordered slot below the trend row), `footerAction` (dashed-divider "View details" link row), and `floatingIcon` (decorative frosted badge over the top-right corner), matching Figma\'s expanded "Card / Metric" (node 879:21298). Added a WithChartAndFooter story.' },
     ],
   },
   {
@@ -329,6 +334,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Set of switchable panels under labeled triggers, for organizing related content into sections a user can flip between without navigating away. Three visual styles: primary (pill), line (underline), and default.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-07-23', version: '0.0.1', summary: 'Added optional `showNavArrows` prop, which makes the tab list horizontally scrollable and adds frosted-glass prev/next circular buttons at its edges, matching Figma\'s new `tabNavPrevNext` option on "Tab Group" (node 498:52594). Added a WithNavArrows story.' },
     ],
   },
   {

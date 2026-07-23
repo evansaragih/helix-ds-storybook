@@ -190,12 +190,13 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(({
 
       {/* Action buttons */}
       {(action || secondaryAction) && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingLeft: 24 }}>
           {secondaryAction && (
             <button
               onClick={secondaryAction.onClick}
               style={{
-                padding: '5px 12px',
+                height: 36,
+                padding: '8px 12px',
                 borderRadius: 8,
                 border: `1px solid ${v.border}`,
                 backgroundColor: 'transparent',
@@ -214,9 +215,11 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(({
             <button
               onClick={action.onClick}
               style={{
-                padding: '5px 12px',
+                height: 36,
+                padding: '8px 12px',
                 borderRadius: 8,
-                border: 'none',
+                border: `1px solid ${v.actionBg}`,
+                boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.2)',
                 backgroundColor: v.actionBg,
                 cursor: 'pointer',
                 fontFamily: 'var(--font-family-body)',

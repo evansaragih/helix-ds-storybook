@@ -4,7 +4,8 @@ export type ButtonVariant =
   | 'primary' | 'secondary' | 'tertiary'
   | 'destructive' | 'neutral' | 'invert'
   | 'ghost-neutral' | 'ghost-brand'
-  | 'primary-outline' | 'secondary-outline' | 'tertiary-outline';
+  | 'primary-outline' | 'secondary-outline' | 'tertiary-outline'
+  | 'primary-subtle' | 'neutral-subtle';
 
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -47,6 +48,12 @@ interface VariantStyles {
   bgHover: string;
   bgFocus: string;
   ring?: string;
+  /** Text color swapped in on hover/focus (defaults to `color`) */
+  colorHover?: string;
+  /** Frosted-glass surface (e.g. for buttons placed over images) */
+  backdropBlur?: boolean;
+  /** Disabled state dims the resting style via opacity instead of swapping to the shared disabled tokens */
+  subtleDisabled?: boolean;
 }
 
 const VARIANTS: Record<ButtonVariant, VariantStyles> = {
@@ -146,6 +153,26 @@ const VARIANTS: Record<ButtonVariant, VariantStyles> = {
     bgFocus: 'var(--color-brand-tertiary-ghost-focus)',
     ring: 'var(--color-brand-tertiary-ring)',
   },
+  'primary-subtle': {
+    bg: 'var(--color-status-brand-bg)',
+    border: 'transparent',
+    color: 'var(--color-brand-primary)',
+    bgHover: '#EADFD6',
+    bgFocus: 'var(--color-status-brand-bg)',
+    ring: 'var(--color-brand-primary-ring)',
+    subtleDisabled: true,
+  },
+  'neutral-subtle': {
+    bg: 'rgba(255,255,255,0.1)',
+    border: 'rgba(255,255,255,1)',
+    color: 'var(--color-text-secondary)',
+    colorHover: 'var(--color-text-primary)',
+    bgHover: 'rgba(255,255,255,0.3)',
+    bgFocus: 'rgba(255,255,255,0.1)',
+    backdropBlur: true,
+    ring: '#D7D7D7',
+    subtleDisabled: true,
+  },
 };
 
 function Spinner({ size }: { size: number }) {
@@ -191,13 +218,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   };
   const vs = getVS();
 
-  const bg = isDisabled ? 'var(--color-btn-disabled-bg)' :
+  const bg = isDisabled ? (v.subtleDisabled ? v.bg : 'var(--color-btn-disabled-bg)') :
     vs === 'hover' ? v.bgHover :
     vs === 'focus' ? v.bgFocus :
     v.bg;
 
-  const borderColor = isDisabled ? 'var(--color-btn-disabled-bg)' : v.border;
-  const textColor = isDisabled ? 'var(--color-btn-disabled-text)' : v.color;
+  const borderColor = isDisabled ? (v.subtleDisabled ? v.border : 'var(--color-btn-disabled-bg)') : v.border;
+  const textColor = isDisabled
+    ? (v.subtleDisabled ? v.color : 'var(--color-btn-disabled-text)')
+    : (vs === 'hover' || vs === 'focus') ? (v.colorHover ?? v.color) : v.color;
 
   const boxShadow = isDisabled ? 'none' :
     focused && v.ring ? `0 0 0 3px ${v.ring}` :
@@ -226,6 +255,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     color: textColor,
     letterSpacing: '-0.01px',
     whiteSpace: 'nowrap',
+    opacity: isDisabled && v.subtleDisabled ? 0.5 : 1,
+    backdropFilter: v.backdropBlur ? 'blur(2px)' : undefined,
     userSelect: 'none',
     outline: 'none',
     transition: 'background-color 0.15s, box-shadow 0.15s',

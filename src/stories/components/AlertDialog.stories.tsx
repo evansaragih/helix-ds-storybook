@@ -2,6 +2,24 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AlertDialog, Button } from 'helix-design-system/components';
 
+function CheckboxDialogDemo(args: React.ComponentProps<typeof AlertDialog>) {
+  const [open, setOpen] = useState(false);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open dialog</Button>
+      <AlertDialog
+        {...args}
+        open={open}
+        onClose={() => setOpen(false)}
+        confirmAction={{ ...args.confirmAction, onClick: () => setOpen(false) }}
+        cancelAction={args.cancelAction ? { ...args.cancelAction, onClick: () => setOpen(false) } : undefined}
+        checkboxAction={{ label: "Don't show this again", checked: dontShowAgain, onChange: setDontShowAgain }}
+      />
+    </>
+  );
+}
+
 const meta = {
   title: 'Components/Overlays/AlertDialog',
   component: AlertDialog,
@@ -76,4 +94,8 @@ export const Loading: Story = {
 export const Small: Story = {
   args: { size: 'sm' },
   render: (args) => <DialogDemo {...args} />,
+};
+
+export const WithCheckbox: Story = {
+  render: (args) => <CheckboxDialogDemo {...args} />,
 };

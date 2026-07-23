@@ -12,6 +12,7 @@ const meta = {
       options: [
         'primary', 'secondary', 'tertiary', 'destructive', 'neutral', 'invert',
         'ghost-neutral', 'ghost-brand', 'primary-outline', 'secondary-outline', 'tertiary-outline',
+        'primary-subtle', 'neutral-subtle',
       ],
     },
     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg'] },
@@ -34,11 +35,21 @@ export const Variants: Story = {
       {[
         'primary', 'secondary', 'tertiary', 'destructive', 'neutral', 'invert',
         'ghost-neutral', 'ghost-brand', 'primary-outline', 'secondary-outline', 'tertiary-outline',
+        'primary-subtle', 'neutral-subtle',
       ].map((variant) => (
         <Button key={variant} {...args} variant={variant as any}>
           {variant}
         </Button>
       ))}
+    </div>
+  ),
+};
+
+export const Subtle: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', gap: 12, padding: 24, borderRadius: 8, background: 'linear-gradient(135deg, #58595B, #14141E)' }}>
+      <Button {...args} variant="primary-subtle">Primary subtle</Button>
+      <Button {...args} variant="neutral-subtle">Neutral subtle</Button>
     </div>
   ),
 };

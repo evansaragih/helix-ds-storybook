@@ -8,6 +8,7 @@ export default function middleware(req) {
     // 👇 This is the list of users you can manage
     const allowedUsers = {
       'evanportfolio': 'helix2026',
+      'nusantics': 'helix',
       'recruiter': 'hireme'
     };
 

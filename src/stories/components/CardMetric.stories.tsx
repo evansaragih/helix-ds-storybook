@@ -47,3 +47,13 @@ export const WithoutTrend: Story = {
   args: { trend: undefined, trendValue: undefined, trendLabel: undefined, description: 'Updated 2 hours ago' },
   render: (args) => <div style={{ width: 280 }}><CardMetric {...args} /></div>,
 };
+
+export const WithChartAndFooter: Story = {
+  args: {
+    onMoreClick: () => {},
+    chart: <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--color-text-tertiary)', fontSize: 12 }}>Chart goes here</div>,
+    footerAction: { label: 'View details', onClick: () => {} },
+    floatingIcon: <FlaskConical size={20} />,
+  },
+  render: (args) => <div style={{ width: 320 }}><CardMetric {...args} /></div>,
+};

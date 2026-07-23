@@ -1,5 +1,6 @@
 import * as RadixTabs from '@radix-ui/react-tabs';
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export type TabsStyle = 'primary' | 'line' | 'default';
 export type TabsSize = 'sm' | 'md';
@@ -26,6 +27,8 @@ export interface TabsProps {
   className?: string;
   /** Whether to render the content panels (set false to control externally) */
   renderContent?: boolean;
+  /** Show prev/next scroll arrows over the tab list (for overflowing tab rows) */
+  showNavArrows?: boolean;
 }
 
 interface StyleConfig {
@@ -49,7 +52,9 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
   style,
   className,
   renderContent = true,
+  showNavArrows = false,
 }, ref) => {
+  const listScrollRef = useRef<HTMLDivElement>(null);
   const defaultV = defaultValue ?? items.find(i => !i.disabled)?.id ?? '';
 
   const fontSize = size === 'md' ? 14 : 13;
@@ -74,7 +79,9 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
       style={{ display: 'flex', flexDirection: 'column', ...style }}
       className={className}
     >
+      <div style={{ position: 'relative', flexShrink: 0 }}>
       <RadixTabs.List
+        ref={listScrollRef}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -87,7 +94,8 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
             ? `2px solid ${isWhite ? 'rgba(255,255,255,0.2)' : 'var(--color-stroke-subtle, #EEEEEE)'}`
             : 'none',
           gap: tabStyle === 'primary' ? 0 : 0,
-          flexShrink: 0,
+          overflowX: showNavArrows ? 'auto' : undefined,
+          scrollbarWidth: showNavArrows ? 'none' : undefined,
         }}
       >
         {items.map((tab) => (
@@ -146,6 +154,43 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
           </RadixTabs.Trigger>
         ))}
       </RadixTabs.List>
+      {showNavArrows && (
+        <>
+          <button
+            type="button"
+            aria-label="Scroll tabs left"
+            onClick={() => listScrollRef.current?.scrollBy({ left: -120, behavior: 'smooth' })}
+            style={{
+              position: 'absolute', top: '50%', left: -12, transform: 'translateY(-50%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 24, height: 24, borderRadius: 9999, flexShrink: 0,
+              backgroundColor: 'var(--color-btn-neutral, #F7F7F7)',
+              border: '1px solid var(--color-stroke-default, #D7D7D7)',
+              backdropFilter: 'blur(2px)', cursor: 'pointer', padding: 0,
+              color: 'var(--color-text-secondary, #49494A)',
+            }}
+          >
+            <ChevronLeft size={12} />
+          </button>
+          <button
+            type="button"
+            aria-label="Scroll tabs right"
+            onClick={() => listScrollRef.current?.scrollBy({ left: 120, behavior: 'smooth' })}
+            style={{
+              position: 'absolute', top: '50%', right: -11, transform: 'translateY(-50%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 24, height: 24, borderRadius: 9999, flexShrink: 0,
+              backgroundColor: 'var(--color-btn-neutral, #F7F7F7)',
+              border: '1px solid var(--color-stroke-default, #D7D7D7)',
+              backdropFilter: 'blur(2px)', cursor: 'pointer', padding: 0,
+              color: 'var(--color-text-secondary, #49494A)',
+            }}
+          >
+            <ChevronRight size={12} />
+          </button>
+        </>
+      )}
+      </div>
 
       {/* Inject active/inactive styles via a style tag pattern is not ideal;
           instead wrap content with Radix which applies data-state */}

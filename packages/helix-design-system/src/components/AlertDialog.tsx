@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { AlertTriangle, Trash2, Info } from 'lucide-react';
 import { Button } from './Button';
+import { Checkbox } from './Checkbox';
 import { MOTION_DURATION_BASE } from './motion';
 
 export type AlertDialogVariant = 'default' | 'destructive' | 'info';
@@ -9,6 +10,12 @@ export interface AlertDialogAction {
   label: string;
   onClick: () => void;
   loading?: boolean;
+}
+
+export interface AlertDialogCheckboxAction {
+  label: React.ReactNode;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
 }
 
 export interface AlertDialogProps {
@@ -23,6 +30,8 @@ export interface AlertDialogProps {
   onClose: () => void;
   /** 'sm' condenses the layout */
   size?: 'sm' | 'md';
+  /** Optional checkbox (e.g. "Don't show this again") shown left of the actions */
+  checkboxAction?: AlertDialogCheckboxAction;
 }
 
 const VARIANT_META: Record<AlertDialogVariant, { iconBg: string; iconColor: string; Icon: React.ComponentType<{ size?: number }> }> = {
@@ -41,6 +50,7 @@ export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogProps>(({
   cancelAction,
   onClose,
   size = 'md',
+  checkboxAction,
 }, ref) => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const vm = VARIANT_META[variant];
@@ -144,26 +154,37 @@ export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogProps>(({
 
         {/* Actions */}
         <div style={{
-          display: 'flex', gap: 8, flexDirection: 'row-reverse',
+          display: 'flex', alignItems: 'center', gap: 8,
+          justifyContent: checkboxAction ? 'space-between' : 'flex-end',
           padding: size === 'sm' ? '20px 24px 24px' : '24px 32px 32px',
         }}>
-          <Button
-            variant={variant === 'destructive' ? 'destructive' : 'primary'}
-            size="sm"
-            loading={confirmAction.loading}
-            onClick={confirmAction.onClick}
-          >
-            {confirmAction.label}
-          </Button>
-          {cancelAction && (
-            <Button
-              variant="neutral"
-              size="sm"
-              onClick={cancelAction.onClick}
-            >
-              {cancelAction.label}
-            </Button>
+          {checkboxAction && (
+            <Checkbox
+              size="Small"
+              checked={checkboxAction.checked}
+              onChange={(c) => checkboxAction.onChange(c === true)}
+              label={checkboxAction.label}
+            />
           )}
+          <div style={{ display: 'flex', gap: 8, flexDirection: 'row-reverse' }}>
+            <Button
+              variant={variant === 'destructive' ? 'destructive' : 'primary'}
+              size="sm"
+              loading={confirmAction.loading}
+              onClick={confirmAction.onClick}
+            >
+              {confirmAction.label}
+            </Button>
+            {cancelAction && (
+              <Button
+                variant="neutral"
+                size="sm"
+                onClick={cancelAction.onClick}
+              >
+                {cancelAction.label}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

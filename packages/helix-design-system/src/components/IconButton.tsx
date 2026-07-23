@@ -79,6 +79,14 @@ const VARIANTS: Record<IconButtonVariant, VariantStyles> = {
     bg: 'transparent', border: 'transparent', color: 'var(--color-text-secondary, #49494A)',
     bgHover: '#F7F7F7', bgFocus: '#EEEEEE', ring: '#D7D7D7',
   },
+  'primary-subtle': {
+    bg: 'var(--color-status-brand-bg)', border: 'transparent', color: 'var(--color-brand-primary)',
+    bgHover: '#EADFD6', bgFocus: 'var(--color-status-brand-bg)', ring: 'var(--color-brand-primary-ring)',
+  },
+  'neutral-subtle': {
+    bg: 'rgba(255,255,255,0.1)', border: 'rgba(255,255,255,1)', color: 'var(--color-text-secondary)',
+    bgHover: 'rgba(255,255,255,0.3)', bgFocus: 'rgba(255,255,255,0.1)', ring: '#D7D7D7',
+  },
 };
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({

@@ -43,6 +43,15 @@ export const Variants: Story = {
   ),
 };
 
+export const WithNavArrows: Story = {
+  args: {
+    showNavArrows: true,
+    items: Array.from({ length: 10 }, (_, i) => ({ id: `tab-${i}`, label: `Tab ${i + 1}`, content: <div style={{ padding: '16px 0' }}>{`Content ${i + 1}`}</div> })),
+    defaultValue: 'tab-0',
+  },
+  render: (args) => <div style={{ width: 320 }}><Tabs {...args} /></div>,
+};
+
 export const WhiteOnDark: Story = {
   args: { type: 'white' },
   render: (args) => (
