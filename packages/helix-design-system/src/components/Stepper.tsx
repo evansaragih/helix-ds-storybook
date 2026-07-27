@@ -73,9 +73,10 @@ function StepCircle({ step, index }: { step: Step; index: number }) {
 
 function StepLabel({ step, clickable, onClick, style }: { step: Step; clickable: boolean; onClick?: () => void; style: React.CSSProperties }) {
   const [hovered, setHovered] = useState(false);
-  const baseColor = step.status === 'active' || step.status === 'completed'
-    ? 'var(--color-text-primary, #14141E)'
-    : 'var(--color-text-tertiary, #828282)';
+  const baseColor =
+    step.status === 'active'    ? 'var(--color-brand-primary, #F57E20)' :
+    step.status === 'completed' ? 'var(--color-text-primary, #14141E)' :
+    'var(--color-text-tertiary, #828282)';
 
   return (
     <p
@@ -85,8 +86,8 @@ function StepLabel({ step, clickable, onClick, style }: { step: Step; clickable:
       style={{
         margin: 0,
         fontFamily: 'var(--font-family-body)',
-        fontWeight: step.status === 'active' ? 600 : 400,
-        color: clickable && hovered ? 'var(--color-brand-primary, #F57E20)' : baseColor,
+        fontWeight: step.status === 'active' ? 500 : 400,
+        color: clickable && hovered && step.status !== 'active' ? 'var(--color-brand-primary, #F57E20)' : baseColor,
         letterSpacing: '-0.01px',
         cursor: clickable ? 'pointer' : undefined,
         transition: 'color 0.15s',

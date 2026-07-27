@@ -441,8 +441,8 @@ Step circle (32×32px, 50% radius):
 Connector: 2px line; `--color-text-success` (#12843C) if step completed, `--color-stroke-subtle` if pending.
 Horizontal: connector `flex: 1` between circles with `padding-top: 15px`.
 Vertical: connector `width: 2px, flex: 1, minHeight: 24px, margin-left: 15px`.
-Label: Rubik 500 when active, 400 otherwise. 12px horizontal, 13px vertical.
-`onStepClick`: makes labels clickable and adds a hover state — label text turns `--color-brand-primary` on hover, matching Figma's "stepper / label" `isHover=True` variant. No-op (no cursor/hover) when omitted.
+Label: Rubik 500 `--color-brand-primary` when active (matches Figma's "stepper / label" `isHover=True` styling — the active/selected step reads the same as the hover treatment), Rubik 400 `--color-text-primary` when completed, Rubik 400 `--color-text-tertiary` otherwise. 12px horizontal, 13px vertical.
+`onStepClick`: makes non-active labels clickable and hoverable — label text turns `--color-brand-primary` on hover (no-op on the already-brand-colored active label). No cursor/hover at all when omitted.
 
 ---
 
@@ -904,6 +904,7 @@ Rules:
 - Background: disabled → `--color-container-secondary`; drag-over → `--color-status-brand-bg` (`#FEF2E9`); default → `#FFFFFF`
 - Icon well: 56×56px, `border-radius: var(--radius-lg, 8px)`, two-layer `box-shadow: 0px 2px 4px rgba(0,0,0,0.04), 0px 4px 8px rgba(0,0,0,0.08)`; bg `--color-container-secondary` (default) → `--color-brand-primary` on drag-over; `UploadCloud` 24px, `--color-text-secondary` (default) → white on drag-over
 - Text block: title "Drop to upload" (dragging) / "Drag & drop your file here" — Rubik 500 13px/19.2px `--color-text-secondary`; helper paragraph below (Rubik 400 10px/15.6px `--color-text-tertiary`) merges the "or **click to browse**" prompt (brand-colored) and the accept/maxSize constraints onto one two-line block instead of separate rows/pills
+- Decorative background (behind the content, `overflow: hidden`, `pointer-events: none`): 5 concentric ring outlines centered on the zone (`--color-stroke-subtle` default → `--color-brand-primary` on drag-over, 25% opacity) + 6 scattered 32px rotated file-type icon chips (white/`--color-container-secondary` bg, two-layer shadow) + a left/right edge gradient fading to the zone's own background color, so the pattern reads as a soft radiating illustration rather than hard-clipped shapes
 - File rows: `padding: 8px 12px`, `border-radius: 8px`, border `--color-stroke-subtle`, `FileText` icon `--color-brand-primary`, filename Rubik 500 13px, size Rubik 400 11px `--color-text-tertiary`; remove (×) button 24×24px `border-radius: 6px`, hover bg `#F5F5F5`
 - Error/helper text row: `AlertCircle` 12px + text 12px/18px, `--color-destructive` when erroring (oversized-file message takes priority over `errorText`) else `--color-text-tertiary`
 - `multiple=false` keeps only the first accepted file

@@ -208,6 +208,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
       { date: '2026-07-27', version: '0.0.1', summary: 'Reworked the idle/drag-over drop zone to a horizontal layout — a larger 56px icon well (solid brand bg on drag-over) beside a merged two-line text block, replacing the previous vertical layout with separate title/browse-link/constraint-pill rows; matches Figma\'s "Input / Upload-file" (node 1666:24135). Padding tightened to 16px.' },
+      { date: '2026-07-27', version: '0.0.1', summary: 'Added the decorative background layer from the same Figma node — concentric rings, 6 scattered rotated file-type icon chips, and left/right edge fade gradients, clipped behind the drop zone content — which had been skipped in the initial resync.' },
     ],
   },
   {
@@ -315,6 +316,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
       { date: '2026-07-27', version: '0.0.1', summary: 'Added optional `onStepClick` prop, which makes step labels clickable and turns them `--color-brand-primary` on hover, matching Figma\'s new hover variant on "stepper / label" (node 138:12263). No-op when omitted. Added a Clickable story.' },
+      { date: '2026-07-27', version: '0.0.1', summary: 'Fixed the active/selected step\'s label to use `--color-brand-primary` (was `--color-text-primary`) — Figma\'s "isHover=True" label styling turns out to represent the active step\'s resting color, not a literal mouse-hover state.' },
     ],
   },
   {

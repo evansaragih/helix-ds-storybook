@@ -1,5 +1,5 @@
 import { forwardRef, useRef, useState, useId } from 'react';
-import { UploadCloud, X, FileText, AlertCircle } from 'lucide-react';
+import { UploadCloud, X, FileText, AlertCircle, Files, FileSpreadsheet, FileImage, FileArchive, FileBarChart2 } from 'lucide-react';
 
 export interface DropzoneFile {
   file: File;
@@ -93,6 +93,56 @@ function FileRow({ df, onRemove, disabled }: { df: DropzoneFile; onRemove: () =>
           <X size={14} />
         </button>
       )}
+    </div>
+  );
+}
+
+const RING_SIZES = [90, 140, 190, 240, 290];
+
+const ICON_CHIPS = [
+  { Icon: Files,          x: 160,  y: 70,  rotate: 15 },
+  { Icon: FileText,       x: -155, y: -10, rotate: -15 },
+  { Icon: FileArchive,    x: -190, y: 65,  rotate: -37 },
+  { Icon: FileBarChart2,  x: 135,  y: -60, rotate: 5 },
+  { Icon: FileSpreadsheet, x: 210, y: 5,   rotate: 16 },
+  { Icon: FileImage,      x: -225, y: -50, rotate: -29 },
+];
+
+/** Decorative background layer behind the drop zone content — concentric rings, scattered
+ * file-type icon chips, and edge fade gradients — matching Figma's "Input / Upload-file". */
+function DropzoneBackground({ active, disabled }: { active: boolean; disabled: boolean }) {
+  const ringColor = disabled ? 'transparent' : active ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-stroke-subtle, #EEEEEE)';
+  const chipBg = active ? '#FFFFFF' : 'var(--color-container-secondary, #F7F7F7)';
+  const chipColor = 'var(--color-text-tertiary, #828282)';
+  const fadeColor = active ? '#FEF2E9' : '#FFFFFF';
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 'inherit', pointerEvents: 'none', zIndex: 0 }}>
+      {RING_SIZES.map((size) => (
+        <div key={size} style={{
+          position: 'absolute', top: '50%', left: '50%',
+          width: size, height: size,
+          transform: 'translate(-50%, -50%)',
+          borderRadius: '50%',
+          border: `1px solid ${ringColor}`,
+          opacity: 0.25,
+        }} />
+      ))}
+      {ICON_CHIPS.map(({ Icon, x, y, rotate }, i) => (
+        <div key={i} style={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotate}deg)`,
+          width: 32, height: 32,
+          borderRadius: 6,
+          backgroundColor: chipBg,
+          boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.04), 0px 4px 8px 0px rgba(0,0,0,0.08)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: chipColor,
+        }}>
+          <Icon size={16} />
+        </div>
+      ))}
+      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${fadeColor}, transparent 20%, transparent 80%, ${fadeColor})` }} />
     </div>
   );
 }
@@ -226,6 +276,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         style={{
+          position: 'relative',
           display: 'flex',
           alignItems: 'center',
           gap: 16,
@@ -237,10 +288,14 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
           transition: 'border-color 0.2s, background-color 0.2s',
           outline: 'none',
           userSelect: 'none',
+          overflow: 'hidden',
         }}
       >
+        <DropzoneBackground active={isDragOver && !disabled} disabled={disabled} />
+
         {/* Icon well */}
         <div style={{
+          position: 'relative',
           width: 56,
           height: 56,
           borderRadius: 'var(--radius-lg, 8px)',
@@ -260,7 +315,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         </div>
 
         {/* Text */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
           <p style={{
             margin: 0,
             fontFamily: 'var(--font-family-body)',
