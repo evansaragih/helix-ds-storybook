@@ -22,7 +22,7 @@ Nusantics is an Indonesian precision molecular diagnostics and microbiome biotec
 Three products share a unified **Helix Design System** (GitHub: `evansaragih/helix-design-system`,
 Figma: `Nusantics-Design-System`, fileKey `GWzBKGr6512AeMOapwgQhj`).
 
-Component specs in this document were verified 2026-07-23 against the published "Nusantics Design
+Component specs in this document were verified 2026-07-27 against the published "Nusantics Design
 System" Figma library (see `figma-library-key` above). When generating new designs in Figma, search
 this library first (`search_design_system`) and reuse/import matching components rather than
 inventing new styles — see the `figma-generate-design` skill.
@@ -292,6 +292,7 @@ Rules:
 - Error: bg `--color-input-bg-error`, border `--color-input-border-error`, trailing `AlertCircle` icon
 - Focus border: `--color-input-border-focus` (brand-aware)
 - Helper text: Rubik 12px `--color-text-tertiary`; error text: `--color-text-error`
+- Filled (non-floating only, `State=Filled`): when the field has a value and isn't focused, the border stays `--color-input-border-focus` (same as focus) plus `box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.06)`, so a completed field still reads as "filled" at a glance
 
 ---
 
@@ -425,7 +426,7 @@ type StepperOrientation = 'horizontal' | 'vertical'
 type StepStatus = 'completed' | 'active' | 'pending' | 'error'
 
 interface Step { id, label, description?, status?, icon? }
-props: steps, orientation='horizontal', activeStep? (0-based, auto-derives status)
+props: steps, orientation='horizontal', activeStep? (0-based, auto-derives status), onStepClick?
 ```
 
 Step circle (32×32px, 50% radius):
@@ -441,6 +442,7 @@ Connector: 2px line; `--color-text-success` (#12843C) if step completed, `--colo
 Horizontal: connector `flex: 1` between circles with `padding-top: 15px`.
 Vertical: connector `width: 2px, flex: 1, minHeight: 24px, margin-left: 15px`.
 Label: Rubik 500 when active, 400 otherwise. 12px horizontal, 13px vertical.
+`onStepClick`: makes labels clickable and adds a hover state — label text turns `--color-brand-primary` on hover, matching Figma's "stepper / label" `isHover=True` variant. No-op (no cursor/hover) when omitted.
 
 ---
 
@@ -897,13 +899,11 @@ props: accept, multiple=false, maxSize (bytes), disabled=false, error=false,
 
 Rules:
 - Label: Rubik 400 13px/19.2px, `--color-text-primary` (or `--color-text-disabled` `#929292` when disabled)
-- Drop zone: `padding: 32px 24px`, `border-radius: var(--radius-lg, 8px)`, `border: 1.5px dashed`
+- Drop zone: horizontal layout (icon well + text, `gap: 16px`), `padding: 16px`, `border-radius: var(--radius-lg, 8px)`, `border: 1.5px dashed`, matching Figma's "Input / Upload-file" (node 1666:24135)
 - Border color: disabled → `--color-stroke-subtle`; error (prop or oversized file) → `--color-destructive`; drag-over → `--color-brand-primary`; default → `--color-stroke-default`
 - Background: disabled → `--color-container-secondary`; drag-over → `--color-status-brand-bg` (`#FEF2E9`); default → `#FFFFFF`
-- Icon well: 48×48px, `border-radius: 12px`, border/bg brand-tinted on drag-over (`rgba(245,126,32,0.08)`), `UploadCloud` 22px
-- Title copy: "Drop to upload" while dragging, else "Drag & drop your file here" — Rubik 500 14px/21px
-- Helper row (when not dragging): "or **browse files**" — browse text underlined `--color-brand-primary` (brand-disabled `#929292` when disabled)
-- Constraint pills (accept/maxSize): `padding: 2px 8px`, `border-radius: 99px`, border `--color-stroke-subtle`, bg `--color-container-secondary`, Rubik 11px `--color-text-tertiary`
+- Icon well: 56×56px, `border-radius: var(--radius-lg, 8px)`, two-layer `box-shadow: 0px 2px 4px rgba(0,0,0,0.04), 0px 4px 8px rgba(0,0,0,0.08)`; bg `--color-container-secondary` (default) → `--color-brand-primary` on drag-over; `UploadCloud` 24px, `--color-text-secondary` (default) → white on drag-over
+- Text block: title "Drop to upload" (dragging) / "Drag & drop your file here" — Rubik 500 13px/19.2px `--color-text-secondary`; helper paragraph below (Rubik 400 10px/15.6px `--color-text-tertiary`) merges the "or **click to browse**" prompt (brand-colored) and the accept/maxSize constraints onto one two-line block instead of separate rows/pills
 - File rows: `padding: 8px 12px`, `border-radius: 8px`, border `--color-stroke-subtle`, `FileText` icon `--color-brand-primary`, filename Rubik 500 13px, size Rubik 400 11px `--color-text-tertiary`; remove (×) button 24×24px `border-radius: 6px`, hover bg `#F5F5F5`
 - Error/helper text row: `AlertCircle` 12px + text 12px/18px, `--color-destructive` when erroring (oversized-file message takes priority over `errorText`) else `--color-text-tertiary`
 - `multiple=false` keeps only the first accepted file

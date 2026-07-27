@@ -227,11 +227,9 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         onDrop={handleDrop}
         style={{
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          gap: 12,
-          padding: '32px 24px',
+          gap: 16,
+          padding: 16,
           borderRadius: 'var(--radius-lg, 8px)',
           border: `1.5px dashed ${zoneBorderColor}`,
           backgroundColor: zoneBg,
@@ -241,93 +239,65 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
           userSelect: 'none',
         }}
       >
-        {/* Icon */}
+        {/* Icon well */}
         <div style={{
-          width: 48,
-          height: 48,
-          borderRadius: 12,
-          border: `1px solid ${isDragOver && !disabled ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-stroke-subtle, #EEEEEE)'}`,
-          backgroundColor: isDragOver && !disabled ? 'rgba(245, 126, 32, 0.08)' : 'var(--color-container-secondary, #F7F7F7)',
+          width: 56,
+          height: 56,
+          borderRadius: 'var(--radius-lg, 8px)',
+          backgroundColor: isDragOver && !disabled ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-container-secondary, #F7F7F7)',
+          boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.04), 0px 4px 8px 0px rgba(0,0,0,0.08)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
-          transition: 'border-color 0.2s, background-color 0.2s',
+          transition: 'background-color 0.2s',
         }}>
           <UploadCloud
-            size={22}
-            color={disabled ? 'var(--color-text-disabled, #929292)' : isDragOver ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-text-secondary, #828282)'}
+            size={24}
+            color={disabled ? 'var(--color-text-disabled, #929292)' : isDragOver ? '#FFFFFF' : 'var(--color-text-secondary, #828282)'}
             style={{ transition: 'color 0.2s' }}
           />
         </div>
 
         {/* Text */}
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
           <p style={{
-            margin: '0 0 4px',
+            margin: 0,
             fontFamily: 'var(--font-family-body)',
             fontWeight: 500,
-            fontSize: 14,
-            lineHeight: '21px',
-            color: disabled ? 'var(--color-text-disabled, #929292)' : 'var(--color-text-primary, #14141E)',
+            fontSize: 13,
+            lineHeight: '19.2px',
+            color: disabled ? 'var(--color-text-disabled, #929292)' : 'var(--color-text-secondary, #49494A)',
           }}>
             {isDragOver ? 'Drop to upload' : 'Drag & drop your file here'}
           </p>
-          {!isDragOver && (
-            <p style={{
-              margin: 0,
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: 400,
-              fontSize: 13,
-              lineHeight: '19.2px',
-              color: 'var(--color-text-tertiary, #828282)',
-            }}>
-              or{' '}
-              <span style={{
-                color: disabled ? 'var(--color-text-disabled, #929292)' : 'var(--color-brand-primary, #F57E20)',
-                fontWeight: 500,
-                textDecoration: 'underline',
-                textUnderlineOffset: 2,
-              }}>
-                browse files
-              </span>
-            </p>
-          )}
+          <p style={{
+            margin: 0,
+            fontFamily: 'var(--font-family-body)',
+            fontWeight: 400,
+            fontSize: 10,
+            lineHeight: '15.6px',
+            color: 'var(--color-text-tertiary, #828282)',
+          }}>
+            {!isDragOver && (
+              <>
+                or{' '}
+                <span style={{
+                  color: disabled ? 'var(--color-text-disabled, #929292)' : 'var(--color-brand-primary, #F57E20)',
+                  fontWeight: 500,
+                }}>
+                  click to browse
+                </span>
+              </>
+            )}
+            {(acceptLabel || maxSize) && (
+              <>
+                <br />
+                {[acceptLabel, maxSize ? `Max ${formatBytes(maxSize)} per file` : null].filter(Boolean).join('  ·  ')}
+              </>
+            )}
+          </p>
         </div>
-
-        {/* Constraints */}
-        {(acceptLabel || maxSize) && (
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {acceptLabel && (
-              <span style={{
-                padding: '2px 8px',
-                borderRadius: 99,
-                border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-                fontFamily: 'var(--font-family-body)',
-                fontSize: 11,
-                fontWeight: 400,
-                color: 'var(--color-text-tertiary, #828282)',
-                backgroundColor: 'var(--color-container-secondary, #F7F7F7)',
-              }}>
-                {acceptLabel}
-              </span>
-            )}
-            {maxSize && (
-              <span style={{
-                padding: '2px 8px',
-                borderRadius: 99,
-                border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-                fontFamily: 'var(--font-family-body)',
-                fontSize: 11,
-                fontWeight: 400,
-                color: 'var(--color-text-tertiary, #828282)',
-                backgroundColor: 'var(--color-container-secondary, #F7F7F7)',
-              }}>
-                Max {formatBytes(maxSize)}
-              </span>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Hidden input */}

@@ -51,3 +51,8 @@ export const JustStarted: Story = {
   args: { activeStep: 0 },
   render: (args) => <div style={{ width: 560 }}><Stepper {...args} /></div>,
 };
+
+export const Clickable: Story = {
+  args: { onStepClick: (i: number) => console.log('go to step', i) },
+  render: (args) => <div style={{ width: 560 }}><Stepper {...args} /></div>,
+};

@@ -105,6 +105,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
   // Floating label is "active" when the field is focused or has a value
   const hasValue = value !== undefined ? String(value).length > 0 : charCount > 0;
   const isFloatingActive = isFocused || hasValue;
+  // "Filled" state (non-floating only): a field with a value keeps the focus-colored
+  // border + a subtle shadow even when not focused, so it reads as filled at a glance.
+  const isFilled = !floating && hasValue;
 
   const cfg = floating ? null : SIZE[size];
   const height    = floating ? F.height    : cfg!.height;
@@ -127,6 +130,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
     borderColor = floating
       ? 'transparent'
       : 'var(--color-brand-primary, #F57E20)';
+  } else if (isFilled) {
+    borderColor = 'var(--color-input-border-focus, #F57E20)';
   } else if (isHovered) {
     borderColor = floating
       ? 'var(--color-input-border-hover, #9F9F9F)'
@@ -161,7 +166,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
     borderRadius: `${radius}px`,
     border: `1px solid ${borderColor}`,
     backgroundColor: bgColor,
-    transition: 'border-color 0.15s ease',
+    boxShadow: isFilled ? '0px 1px 2px 0px rgba(0,0,0,0.06)' : undefined,
+    transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
     overflow: 'hidden',
     boxSizing: 'border-box',
     ...style,

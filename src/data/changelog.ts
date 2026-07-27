@@ -207,6 +207,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Drag-and-drop (or click-to-browse) file upload target with inline validation for file type and size, and a list of accepted files with per-file removal.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-07-27', version: '0.0.1', summary: 'Reworked the idle/drag-over drop zone to a horizontal layout — a larger 56px icon well (solid brand bg on drag-over) beside a merged two-line text block, replacing the previous vertical layout with separate title/browse-link/constraint-pill rows; matches Figma\'s "Input / Upload-file" (node 1666:24135). Padding tightened to 16px.' },
     ],
   },
   {
@@ -228,6 +229,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Standard text field with label, helper/error text, leading/trailing content and dividers, and an optional floating-label variant with an animated focus border.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with state stories.' },
+      { date: '2026-07-27', version: '0.0.1', summary: 'Added a "Filled" state (non-floating sizes only): a field with a value now keeps the focus-colored border plus a subtle shadow even when not focused, matching Figma\'s new "State=Filled" variant. Added a Filled story.' },
     ],
   },
   {
@@ -312,6 +314,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Horizontal or vertical sequence of steps showing progress through a multi-stage process — onboarding, checkout, a wizard — with completed/active/pending/error states per step.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-07-27', version: '0.0.1', summary: 'Added optional `onStepClick` prop, which makes step labels clickable and turns them `--color-brand-primary` on hover, matching Figma\'s new hover variant on "stepper / label" (node 138:12263). No-op when omitted. Added a Clickable story.' },
     ],
   },
   {

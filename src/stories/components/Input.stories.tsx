@@ -58,3 +58,7 @@ export const CharCount: Story = {
 export const Disabled: Story = {
   args: { disabled: true, value: 'disabled@example.com' },
 };
+
+export const Filled: Story = {
+  args: { defaultValue: 'you@example.com' },
+};

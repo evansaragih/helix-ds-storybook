@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import { Check } from 'lucide-react';
 
 export type StepperOrientation = 'horizontal' | 'vertical';
@@ -17,6 +17,8 @@ export interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: StepperOrientation;
   /** Controlled active step index (0-based) */
   activeStep?: number;
+  /** Makes step labels clickable — also enables the brand-primary hover color on the label */
+  onStepClick?: (index: number) => void;
 }
 
 function StepCircle({ step, index }: { step: Step; index: number }) {
@@ -69,6 +71,33 @@ function StepCircle({ step, index }: { step: Step; index: number }) {
   );
 }
 
+function StepLabel({ step, clickable, onClick, style }: { step: Step; clickable: boolean; onClick?: () => void; style: React.CSSProperties }) {
+  const [hovered, setHovered] = useState(false);
+  const baseColor = step.status === 'active' || step.status === 'completed'
+    ? 'var(--color-text-primary, #14141E)'
+    : 'var(--color-text-tertiary, #828282)';
+
+  return (
+    <p
+      onClick={clickable ? onClick : undefined}
+      onMouseEnter={clickable ? () => setHovered(true) : undefined}
+      onMouseLeave={clickable ? () => setHovered(false) : undefined}
+      style={{
+        margin: 0,
+        fontFamily: 'var(--font-family-body)',
+        fontWeight: step.status === 'active' ? 600 : 400,
+        color: clickable && hovered ? 'var(--color-brand-primary, #F57E20)' : baseColor,
+        letterSpacing: '-0.01px',
+        cursor: clickable ? 'pointer' : undefined,
+        transition: 'color 0.15s',
+        ...style,
+      }}
+    >
+      {step.label}
+    </p>
+  );
+}
+
 function ConnectorLine({ status, orientation }: { status: StepStatus; orientation: StepperOrientation }) {
   const isComplete = status === 'completed';
   if (orientation === 'vertical') {
@@ -101,6 +130,7 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(({
   steps,
   orientation = 'horizontal',
   activeStep,
+  onStepClick,
   style,
   className,
   ...props
@@ -132,19 +162,12 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(({
                 )}
               </div>
               <div style={{ paddingTop: 4, paddingBottom: i < steps.length - 1 ? 24 : 0, flex: 1 }}>
-                <p style={{
-                  margin: 0,
-                  fontFamily: 'var(--font-family-body)',
-                  fontWeight: step.status === 'active' ? 600 : 400,
-                  fontSize: 13,
-                  lineHeight: '19.2px',
-                  color: step.status === 'active' || step.status === 'completed'
-                    ? 'var(--color-text-primary, #14141E)'
-                    : 'var(--color-text-tertiary, #828282)',
-                  letterSpacing: '-0.01px',
-                }}>
-                  {step.label}
-                </p>
+                <StepLabel
+                  step={step}
+                  clickable={!!onStepClick}
+                  onClick={() => onStepClick?.(i)}
+                  style={{ fontSize: 13, lineHeight: '19.2px' }}
+                />
                 {step.description && (
                   <p style={{
                     margin: '2px 0 0',
@@ -175,21 +198,12 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(({
         <div key={step.id} style={{ display: 'flex', alignItems: 'flex-start', flex: i < steps.length - 1 ? 1 : 'none' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
             <StepCircle step={step} index={i} />
-            <p style={{
-              margin: 0,
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: step.status === 'active' ? 600 : 400,
-              fontSize: 12,
-              lineHeight: '18px',
-              color: step.status === 'active' || step.status === 'completed'
-                ? 'var(--color-text-primary, #14141E)'
-                : 'var(--color-text-tertiary, #828282)',
-              letterSpacing: '-0.01px',
-              textAlign: 'center',
-              maxWidth: 80,
-            }}>
-              {step.label}
-            </p>
+            <StepLabel
+              step={step}
+              clickable={!!onStepClick}
+              onClick={() => onStepClick?.(i)}
+              style={{ fontSize: 12, lineHeight: '18px', textAlign: 'center', maxWidth: 80 }}
+            />
           </div>
           {i < steps.length - 1 && (
             <div style={{ flex: 1, paddingTop: 15, paddingLeft: 8, paddingRight: 8 }}>
