@@ -119,6 +119,22 @@ export function Bar({ varName, value, divisor = 1 }: { label?: string; varName: 
   );
 }
 
+/** Icon reference card — name + rendered glyph, for the Icons foundation page. */
+export function IconSwatch({ name, Icon }: { name: string; Icon: React.ComponentType<{ size?: number | string }> }) {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+      width: 96, padding: '16px 8px', borderRadius: 8,
+      border: '1px solid var(--color-stroke-subtle)',
+    }}>
+      <Icon size={22} />
+      <div style={{ fontSize: 11, fontFamily: 'monospace', color: 'var(--color-text-secondary)', textAlign: 'center', wordBreak: 'break-word' }}>
+        {name}
+      </div>
+    </div>
+  );
+}
+
 export function RadiusBox({ label, varName, value }: { label: string; varName: string; value: string }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, width: 108 }}>

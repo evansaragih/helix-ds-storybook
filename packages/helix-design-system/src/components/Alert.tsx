@@ -1,5 +1,9 @@
 import { forwardRef } from 'react';
-import { Info, CheckCircle2, AlertTriangle, XCircle, X } from 'lucide-react';
+import { CircleCheck, X } from 'lucide-react';
+// Figma specs these two literally (react-icons), not generic lucide placeholders — see node
+// 855:23508-23512 ("Alert / Default|Info|Warning|Success|Error").
+import { RiErrorWarningLine } from 'react-icons/ri';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 import { Badge } from './Badge';
 import type { BadgeVariant } from './Badge';
 
@@ -34,7 +38,7 @@ interface VariantTokens {
   actionBg: string;
   actionText: string;
   badgeVariant: BadgeVariant;
-  DefaultIcon: React.ComponentType<{ size?: number }>;
+  DefaultIcon: React.ComponentType<{ size?: number | string }>;
 }
 
 const VARIANTS: Record<AlertVariant, VariantTokens> = {
@@ -45,7 +49,7 @@ const VARIANTS: Record<AlertVariant, VariantTokens> = {
     actionBg:    'var(--color-brand-primary, #F57E20)',
     actionText:  'var(--color-text-on-primary, #FFFFFF)',
     badgeVariant: 'brand-subtle',
-    DefaultIcon: Info,
+    DefaultIcon: CircleCheck,
   },
   info: {
     bg:          'var(--color-status-info-bg, #EBF2FE)',
@@ -54,7 +58,7 @@ const VARIANTS: Record<AlertVariant, VariantTokens> = {
     actionBg:    'var(--color-stroke-info, #3B82F6)',
     actionText:  '#FFFFFF',
     badgeVariant: 'blue',
-    DefaultIcon: Info,
+    DefaultIcon: RiErrorWarningLine,
   },
   success: {
     bg:          'var(--color-status-success-bg, #E9F9EF)',
@@ -63,7 +67,7 @@ const VARIANTS: Record<AlertVariant, VariantTokens> = {
     actionBg:    'var(--color-stroke-success, #22C55E)',
     actionText:  '#FFFFFF',
     badgeVariant: 'green',
-    DefaultIcon: CheckCircle2,
+    DefaultIcon: CircleCheck,
   },
   warning: {
     bg:          'var(--color-status-warning-bg, #FEF5E7)',
@@ -72,7 +76,7 @@ const VARIANTS: Record<AlertVariant, VariantTokens> = {
     actionBg:    'var(--primitive-yellow-50, #F59E0B)',
     actionText:  '#FFFFFF',
     badgeVariant: 'yellow',
-    DefaultIcon: AlertTriangle,
+    DefaultIcon: RiErrorWarningLine,
   },
   error: {
     bg:          'var(--color-status-error-bg, #FEE2E2)',
@@ -81,7 +85,7 @@ const VARIANTS: Record<AlertVariant, VariantTokens> = {
     actionBg:    'var(--color-destructive, #DC2626)',
     actionText:  '#FFFFFF',
     badgeVariant: 'red',
-    DefaultIcon: XCircle,
+    DefaultIcon: IoCloseCircleOutline,
   },
 };
 

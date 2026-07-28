@@ -1,10 +1,20 @@
 import { forwardRef, useRef, useState, useId } from 'react';
-import { UploadCloud, X, FileText, AlertCircle, Files, FileSpreadsheet, FileImage, FileArchive, FileBarChart2 } from 'lucide-react';
+import { X, FileText, AlertCircle } from 'lucide-react';
+// The decorative illustration below is specced in Figma with react-icons glyphs specifically
+// (IoMdCloudUpload / IoDocuments / IoDocumentText / IoDocumentAttach / BsFileEarmarkMedicalFill /
+// BsFileEarmarkPdfFill / HiDocumentReport) — use those exact icons here instead of lucide
+// substitutes, per node 2346:7574.
+import { IoMdCloudUpload } from 'react-icons/io';
+import { IoDocuments, IoDocumentText, IoDocumentAttach } from 'react-icons/io5';
+import { BsFileEarmarkMedicalFill, BsFileEarmarkPdfFill } from 'react-icons/bs';
+import { HiDocumentReport } from 'react-icons/hi';
 
 export interface DropzoneFile {
   file: File;
   id: string;
 }
+
+export type DropzoneSize = 'md' | 'lg';
 
 export interface DropzoneProps {
   /** Accepted MIME types or extensions, e.g. "image/*,.pdf" */
@@ -12,6 +22,8 @@ export interface DropzoneProps {
   multiple?: boolean;
   /** Max file size in bytes */
   maxSize?: number;
+  /** 'md' = horizontal icon+text (default), 'lg' = taller, centered vertical layout */
+  size?: DropzoneSize;
   disabled?: boolean;
   error?: boolean;
   errorText?: string;
@@ -97,19 +109,31 @@ function FileRow({ df, onRemove, disabled }: { df: DropzoneFile; onRemove: () =>
   );
 }
 
-const RING_SIZES = [90, 140, 190, 240, 290];
-
-const ICON_CHIPS = [
-  { Icon: Files,          x: 160,  y: 70,  rotate: 15 },
-  { Icon: FileText,       x: -155, y: -10, rotate: -15 },
-  { Icon: FileArchive,    x: -190, y: 65,  rotate: -37 },
-  { Icon: FileBarChart2,  x: 135,  y: -60, rotate: 5 },
-  { Icon: FileSpreadsheet, x: 210, y: 5,   rotate: 16 },
-  { Icon: FileImage,      x: -225, y: -50, rotate: -29 },
+// Normalized 100×100 coordinate space (percent of the zone's own width/height), derived from
+// Figma's unclipped reference instance (node 2346:7574) — the one showing all 6 file-type icon
+// chips arranged tidily around the center, not the small Medium/Large frames that clip almost
+// everything out. Rendered as an SVG with preserveAspectRatio="none", these percentages stretch
+// to exactly fill the zone in both width and height, the same way Figma's Scale constraints do,
+// while keeping the same tidy arrangement regardless of the zone's actual aspect ratio.
+const RING_RADII_PCT = [
+  6.9, 9.9, 12.6, 15.5, 18.5, 21.4, 24.3, 27.2, 30.1, 33, 35.9,
+  38.8, 41.8, 44.7, 47.6, 50.5, 53.4, 56.3, 59.2, 62.1, 65,
 ];
 
-/** Decorative background layer behind the drop zone content — concentric rings, scattered
- * file-type icon chips, and edge fade gradients — matching Figma's "Input / Upload-file". */
+const ICON_CHIPS = [
+  { Icon: IoDocuments,             xPct: 28.8,  yPct: 40.1,  sizePct: 6.1, rotate: 14.73 },
+  { Icon: IoDocumentText,          xPct: -32,   yPct: 13.3,  sizePct: 6.1, rotate: -15 },
+  { Icon: IoDocumentAttach,        xPct: -26.1, yPct: 48,    sizePct: 7.0, rotate: -37.26 },
+  { Icon: BsFileEarmarkMedicalFill, xPct: 25.5, yPct: -23.4, sizePct: 5.5, rotate: 5.38 },
+  { Icon: BsFileEarmarkPdfFill,    xPct: 34.5,  yPct: 6.6,   sizePct: 6.2, rotate: 15.92 },
+  { Icon: HiDocumentReport,        xPct: -26.2, yPct: -21.3, sizePct: 6.8, rotate: -29.1 },
+];
+
+/** Decorative background layer behind the drop zone content — faint concentric rings and 6
+ * scattered file-type icon chips arranged around the center, matching Figma's unclipped
+ * "Input / Upload-file" illustration (node 2346:7574). A normalized viewBox with
+ * preserveAspectRatio="none" keeps the same tidy layout while stretching precisely with
+ * the zone's actual rendered width and height. */
 function DropzoneBackground({ active, disabled }: { active: boolean; disabled: boolean }) {
   const ringColor = disabled ? 'transparent' : active ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-stroke-subtle, #EEEEEE)';
   const chipBg = active ? '#FFFFFF' : 'var(--color-container-secondary, #F7F7F7)';
@@ -117,33 +141,44 @@ function DropzoneBackground({ active, disabled }: { active: boolean; disabled: b
   const fadeColor = active ? '#FEF2E9' : '#FFFFFF';
 
   return (
-    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 'inherit', pointerEvents: 'none', zIndex: 0 }}>
-      {RING_SIZES.map((size) => (
-        <div key={size} style={{
-          position: 'absolute', top: '50%', left: '50%',
-          width: size, height: size,
-          transform: 'translate(-50%, -50%)',
-          borderRadius: '50%',
-          border: `1px solid ${ringColor}`,
-          opacity: 0.25,
-        }} />
+    <svg
+      viewBox="0 0 100 100"
+      // xMidYMid slice: uniform scale (shapes stay undistorted — square chips stay square,
+      // circles stay circular) sized to fully cover the zone, centered, cropping overflow —
+      // like CSS background-size:cover. Scales precisely as the zone is resized either way.
+      preserveAspectRatio="xMidYMid slice"
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: 'inherit', pointerEvents: 'none' }}
+    >
+      <defs>
+        <linearGradient id="dz-fade-l" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor={fadeColor} />
+          <stop offset="100%" stopColor={fadeColor} stopOpacity={0} />
+        </linearGradient>
+        <linearGradient id="dz-fade-r" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor={fadeColor} stopOpacity={0} />
+          <stop offset="100%" stopColor={fadeColor} />
+        </linearGradient>
+        {/* Approximates Figma's two-layer chip shadow (0px 2px 4px rgba(0,0,0,.04), 0px 4px 8px rgba(0,0,0,.08)) */}
+        <filter id="dz-chip-shadow" x="-75%" y="-75%" width="250%" height="250%">
+          <feDropShadow dx="0" dy="0.35" stdDeviation="0.35" floodColor="#000000" floodOpacity="0.08" />
+          <feDropShadow dx="0" dy="0.7" stdDeviation="0.7" floodColor="#000000" floodOpacity="0.1" />
+        </filter>
+      </defs>
+      {RING_RADII_PCT.map((r) => (
+        <circle key={r} cx={50} cy={50} r={r} fill="none" stroke={ringColor} strokeWidth={0.3} opacity={0.12} />
       ))}
-      {ICON_CHIPS.map(({ Icon, x, y, rotate }, i) => (
-        <div key={i} style={{
-          position: 'absolute', top: '50%', left: '50%',
-          transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotate}deg)`,
-          width: 32, height: 32,
-          borderRadius: 6,
-          backgroundColor: chipBg,
-          boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.04), 0px 4px 8px 0px rgba(0,0,0,0.08)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: chipColor,
-        }}>
-          <Icon size={16} />
-        </div>
+      {ICON_CHIPS.map(({ Icon, xPct, yPct, sizePct, rotate }, i) => (
+        <g key={i} transform={`translate(${50 + xPct}, ${50 + yPct}) rotate(${rotate})`}>
+          <rect x={-sizePct / 2} y={-sizePct / 2} width={sizePct} height={sizePct} rx={sizePct * 0.104} fill={chipBg} filter="url(#dz-chip-shadow)" />
+          {/* react-icons ignores width/height props and always sizes via `size` (defaults to
+              "1em" otherwise) — must use `size` here, not width/height, or icons render at a
+              stray ~16 user-units, which blows up hugely once the whole SVG is scaled up. */}
+          <Icon size={sizePct * 0.63} color={chipColor} x={-sizePct * 0.315} y={-sizePct * 0.315} />
+        </g>
       ))}
-      <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${fadeColor}, transparent 20%, transparent 80%, ${fadeColor})` }} />
-    </div>
+      <rect x={0} y={0} width={20} height={100} fill="url(#dz-fade-l)" />
+      <rect x={80} y={0} width={20} height={100} fill="url(#dz-fade-r)" />
+    </svg>
   );
 }
 
@@ -151,6 +186,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
   accept,
   multiple = false,
   maxSize,
+  size = 'md',
   disabled = false,
   error = false,
   errorText,
@@ -246,8 +282,10 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
     ? accept.split(',').map(s => s.trim().replace('image/', '').replace('.', '').toUpperCase()).join(', ')
     : null;
 
+  const isLarge = size === 'lg';
+
   return (
-    <div ref={ref} className={className} style={{ display: 'flex', flexDirection: 'column', gap: 6, ...style }}>
+    <div ref={ref} className={className} style={{ display: 'flex', flexDirection: 'column', gap: 6, height: '100%', ...style }}>
       {/* External label */}
       {label && (
         <label
@@ -278,9 +316,16 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         style={{
           position: 'relative',
           display: 'flex',
+          flexDirection: isLarge ? 'column' : 'row',
           alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: isLarge ? 'center' : 'left',
           gap: 16,
+          width: '100%',
+          flex: '1 1 auto',
+          minHeight: 0,
           padding: 16,
+          boxSizing: 'border-box',
           borderRadius: 'var(--radius-lg, 8px)',
           border: `1.5px dashed ${zoneBorderColor}`,
           backgroundColor: zoneBg,
@@ -296,8 +341,8 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         {/* Icon well */}
         <div style={{
           position: 'relative',
-          width: 56,
-          height: 56,
+          width: isLarge ? 92 : 56,
+          height: isLarge ? 92 : 56,
           borderRadius: 'var(--radius-lg, 8px)',
           backgroundColor: isDragOver && !disabled ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-container-secondary, #F7F7F7)',
           boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.04), 0px 4px 8px 0px rgba(0,0,0,0.08)',
@@ -307,21 +352,30 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
           flexShrink: 0,
           transition: 'background-color 0.2s',
         }}>
-          <UploadCloud
-            size={24}
+          <IoMdCloudUpload
+            size={isLarge ? 40 : 24}
             color={disabled ? 'var(--color-text-disabled, #929292)' : isDragOver ? '#FFFFFF' : 'var(--color-text-secondary, #828282)'}
             style={{ transition: 'color 0.2s' }}
           />
         </div>
 
         {/* Text */}
-        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+        <div style={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: isLarge ? 8 : 2,
+          minWidth: 0,
+          flex: isLarge ? undefined : 1,
+          width: isLarge ? '100%' : undefined,
+          alignSelf: isLarge ? 'stretch' : undefined,
+        }}>
           <p style={{
             margin: 0,
-            fontFamily: 'var(--font-family-body)',
+            fontFamily: isLarge ? 'var(--font-family-heading, Rubik, sans-serif)' : 'var(--font-family-body)',
             fontWeight: 500,
-            fontSize: 13,
-            lineHeight: '19.2px',
+            fontSize: isLarge ? 20 : 13,
+            lineHeight: isLarge ? '30px' : '19.2px',
             color: disabled ? 'var(--color-text-disabled, #929292)' : 'var(--color-text-secondary, #49494A)',
           }}>
             {isDragOver ? 'Drop to upload' : 'Drag & drop your file here'}
@@ -330,8 +384,8 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
             margin: 0,
             fontFamily: 'var(--font-family-body)',
             fontWeight: 400,
-            fontSize: 10,
-            lineHeight: '15.6px',
+            fontSize: isLarge ? 13 : 10,
+            lineHeight: isLarge ? '19.2px' : '15.6px',
             color: 'var(--color-text-tertiary, #828282)',
           }}>
             {!isDragOver && (

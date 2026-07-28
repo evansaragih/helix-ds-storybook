@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
-import { TrendingUp, TrendingDown, Minus, MoreHorizontal, ArrowRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, ArrowRight } from 'lucide-react';
+// Figma specs the overflow button literally as react-icons/bs/BsThreeDots (node 879:22567).
+import { BsThreeDots } from 'react-icons/bs';
 
 export type MetricTrend = 'up' | 'down' | 'neutral';
 
@@ -110,7 +112,7 @@ export const CardMetric = forwardRef<HTMLDivElement, CardMetricProps>(({
               color: 'var(--color-text-tertiary, #828282)',
             }}
           >
-            <MoreHorizontal size={14} />
+            <BsThreeDots size={14} />
           </button>
         )}
       </div>

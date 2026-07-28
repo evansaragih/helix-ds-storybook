@@ -331,11 +331,13 @@ props: variant='default', title (required), description, icon (override),
 
 | Variant | bg | border | icon | action bg | Default Icon |
 |---|---|---|---|---|---|
-| default | `--color-container-primary` (#FFFFFF) | `--color-stroke-subtle` (#EEEEEE) | `--color-brand-primary` | `--color-brand-primary` | Info |
-| info | `--color-status-info-bg` | `--color-stroke-info` (#3B82F6) | `--color-text-info` | `--color-stroke-info` | Info |
-| success | `--color-status-success-bg` | `--color-text-success` (#12843C) | `--color-text-success` | `--color-stroke-success` (#22C55E) | CheckCircle2 |
-| warning | `--color-status-warning-bg` | `--primitive-yellow-50` (#F59E0B) | `--color-text-warning` | `--primitive-yellow-50` (#F59E0B) | AlertTriangle |
-| error | `--color-status-error-bg` | `--color-stroke-error` (#DC2626) | `--color-destructive` | `--color-destructive` | XCircle |
+| default | `--color-container-primary` (#FFFFFF) | `--color-stroke-subtle` (#EEEEEE) | `--color-brand-primary` | `--color-brand-primary` | `CircleCheck` (lucide) |
+| info | `--color-status-info-bg` | `--color-stroke-info` (#3B82F6) | `--color-text-info` | `--color-stroke-info` | `RiErrorWarningLine` (react-icons/ri) |
+| success | `--color-status-success-bg` | `--color-text-success` (#12843C) | `--color-text-success` | `--color-stroke-success` (#22C55E) | `CircleCheck` (lucide) |
+| warning | `--color-status-warning-bg` | `--primitive-yellow-50` (#F59E0B) | `--color-text-warning` | `--primitive-yellow-50` (#F59E0B) | `RiErrorWarningLine` (react-icons/ri) |
+| error | `--color-status-error-bg` | `--color-stroke-error` (#DC2626) | `--color-destructive` | `--color-destructive` | `IoCloseCircleOutline` (react-icons/io5) |
+
+Default and success share the same icon in Figma (both "li:circle-check"); info and warning also share the same icon (both `RiErrorWarningLine`) — not a mistake, that's Figma's actual assignment (node 855:23508-23512).
 
 Layout: border-radius 8px, padding 16px, full width.
 Icon: 20×20px. Title: Rubik 500 14px. Description: Rubik 400 13px `--color-text-secondary`.
@@ -833,7 +835,7 @@ Rules:
 - Value: `--font-family-heading` 700 25px/30px `--color-text-primary`, `letter-spacing: -0.01px`; unit inline Rubik 400 16px `--color-text-secondary`
 - Trend pill: inline-flex, `padding: 2px 6px`, `border-radius: 9999px` (pill), bg per trend, icon 14px + Rubik 400 10px trendValue in trend color
 - `trendLabel` (or fallback `description`): Rubik 400 13px/19.2px `--color-text-tertiary`, rendered beside the trend pill
-- `onMoreClick`: renders a borderless 24×24px overflow button (`MoreHorizontal`, `--color-text-tertiary`) in the header, after the icon well
+- `onMoreClick`: renders a borderless 24×24px overflow button (`BsThreeDots` from react-icons/bs — Figma specs this literally, node 879:22567 — `--color-text-tertiary`) in the header, after the icon well
 - `chart`: bordered slot below the trend row — white bg, `0.5px solid --color-stroke-subtle`, `border-radius: 12px`, `height: 210px`
 - `footerAction`: renders a `1px dashed --color-stroke-subtle` divider then a full-width "label + `ArrowRight`" link row (Rubik 400 13px `--color-text-secondary`, `justify-content: space-between`)
 - `floatingIcon`: decorative 64×64px circular badge floating over the top-right corner (`top:-9px; right:-9px`), `rgba(255,255,255,0.2)` bg + `backdrop-filter: blur(2px)`, icon bottom-aligned inside 20px padding
@@ -892,19 +894,20 @@ Rules:
 
 ```tsx
 interface DropzoneFile { file: File; id: string }
+type DropzoneSize = 'md' | 'lg'
 
-props: accept, multiple=false, maxSize (bytes), disabled=false, error=false,
+props: accept, multiple=false, maxSize (bytes), size='md', disabled=false, error=false,
        errorText, label, helperText, onFilesChange
 ```
 
 Rules:
 - Label: Rubik 400 13px/19.2px, `--color-text-primary` (or `--color-text-disabled` `#929292` when disabled)
-- Drop zone: horizontal layout (icon well + text, `gap: 16px`), `padding: 16px`, `border-radius: var(--radius-lg, 8px)`, `border: 1.5px dashed`, matching Figma's "Input / Upload-file" (node 1666:24135)
+- Drop zone: `size='md'` → horizontal layout (icon well + text, `gap: 16px`); `size='lg'` → vertical, centered layout (matches Figma's "Input / Upload-file" `Size=Large`) — both `padding: 16px`, `border-radius: var(--radius-lg, 8px)`, `border: 1.5px dashed`, `width: 100%` so it fills its container and reflows responsively (node 1666:24135)
 - Border color: disabled → `--color-stroke-subtle`; error (prop or oversized file) → `--color-destructive`; drag-over → `--color-brand-primary`; default → `--color-stroke-default`
 - Background: disabled → `--color-container-secondary`; drag-over → `--color-status-brand-bg` (`#FEF2E9`); default → `#FFFFFF`
-- Icon well: 56×56px, `border-radius: var(--radius-lg, 8px)`, two-layer `box-shadow: 0px 2px 4px rgba(0,0,0,0.04), 0px 4px 8px rgba(0,0,0,0.08)`; bg `--color-container-secondary` (default) → `--color-brand-primary` on drag-over; `UploadCloud` 24px, `--color-text-secondary` (default) → white on drag-over
-- Text block: title "Drop to upload" (dragging) / "Drag & drop your file here" — Rubik 500 13px/19.2px `--color-text-secondary`; helper paragraph below (Rubik 400 10px/15.6px `--color-text-tertiary`) merges the "or **click to browse**" prompt (brand-colored) and the accept/maxSize constraints onto one two-line block instead of separate rows/pills
-- Decorative background (behind the content, `overflow: hidden`, `pointer-events: none`): 5 concentric ring outlines centered on the zone (`--color-stroke-subtle` default → `--color-brand-primary` on drag-over, 25% opacity) + 6 scattered 32px rotated file-type icon chips (white/`--color-container-secondary` bg, two-layer shadow) + a left/right edge gradient fading to the zone's own background color, so the pattern reads as a soft radiating illustration rather than hard-clipped shapes
+- Icon well: 56×56px (`md`) / 92×92px (`lg`), `border-radius: var(--radius-lg, 8px)`, two-layer `box-shadow: 0px 2px 4px rgba(0,0,0,0.04), 0px 4px 8px rgba(0,0,0,0.08)`; bg `--color-container-secondary` (default) → `--color-brand-primary` on drag-over; `UploadCloud` 24px (`md`) / 40px (`lg`), `--color-text-secondary` (default) → white on drag-over
+- Text block: title "Drop to upload" (dragging) / "Drag & drop your file here" — Rubik 500, 13px/19.2px (`md`) or 20px/30px heading font (`lg`), `--color-text-secondary`; helper paragraph below (Rubik 400, 10px/15.6px `md` or 13px/19.2px `lg`, `--color-text-tertiary`) merges the "or **click to browse**" prompt (brand-colored) and the accept/maxSize constraints onto one block instead of separate rows/pills; grows to fill the zone's width (`flex: 1` / `width: 100%`) so long copy wraps instead of leaving dead space when the zone is stretched
+- Decorative background: a single `<svg>` (`overflow: hidden`, `pointer-events: none`) with a normalized `viewBox="0 0 100 100"` and `preserveAspectRatio="xMidYMid slice"` — coordinates are percentages derived from Figma's *unclipped* "Input / Upload-file" instance (node 2346:7574, the one showing the full tidy arrangement, not the small Medium/Large frames that clip almost everything). Contains all 21 concentric rings (`--color-stroke-subtle` default → `--color-brand-primary` on drag-over, 12% opacity) and the 6 rotated file-type icon chips arranged around the center (white/`--color-container-secondary` bg, two-layer drop shadow via an SVG `feDropShadow` filter approximating `0px 2px 4px rgba(0,0,0,.04), 0px 4px 8px rgba(0,0,0,.08)`), plus a left/right edge fade gradient. The main upload glyph and all 6 chip icons use the exact `react-icons` icons Figma specs (`IoMdCloudUpload`, `IoDocuments`, `IoDocumentText`, `IoDocumentAttach`, `BsFileEarmarkMedicalFill`, `BsFileEarmarkPdfFill`, `HiDocumentReport`) rather than lucide substitutes — the one deliberate exception to this design system's lucide-react standard (see the `Foundations/Icons` page). `slice` mode uniformly scales the whole pattern (so chips/rings stay undistorted, never stretched into ellipses) to fully cover the zone as it's resized in either width or height, cropping overflow — like `background-size: cover`
 - File rows: `padding: 8px 12px`, `border-radius: 8px`, border `--color-stroke-subtle`, `FileText` icon `--color-brand-primary`, filename Rubik 500 13px, size Rubik 400 11px `--color-text-tertiary`; remove (×) button 24×24px `border-radius: 6px`, hover bg `#F5F5F5`
 - Error/helper text row: `AlertCircle` 12px + text 12px/18px, `--color-destructive` when erroring (oversized-file message takes priority over `errorText`) else `--color-text-tertiary`
 - `multiple=false` keeps only the first accepted file
