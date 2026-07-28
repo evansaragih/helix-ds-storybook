@@ -70,182 +70,112 @@ export function PrimitivesSection() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const nusanticsColors = {
-    'Lively Orange': [
-      { shade: '0', hex: '#FBFBFA' }, { shade: '5', hex: '#FEF2E9' },
-      { shade: '10', hex: '#EADFD6' }, { shade: '20', hex: '#E0C3AC' },
-      { shade: '30', hex: '#E3AA7D' }, { shade: '40', hex: '#EA9959' },
+    'Orange (Primary)': [
+      { shade: '0', hex: '#FEF2E9' }, { shade: '5', hex: '#FDE6D3' },
+      { shade: '10', hex: '#FCC9A3' }, { shade: '20', hex: '#F9AD72' },
+      { shade: '30', hex: '#F79449' }, { shade: '40', hex: '#F68A31' },
       { shade: '50', hex: '#F57E20' }, { shade: '60', hex: '#DF6505' },
-      { shade: '70', hex: '#B35001' }, { shade: '80', hex: '#743808' },
-      { shade: '90', hex: '#43230A' }, { shade: '100', hex: '#1F1208' }
+      { shade: '70', hex: '#B35001' }, { shade: '80', hex: '#8A3D00' },
+      { shade: '90', hex: '#5C2800' }, { shade: '100', hex: '#2E1400' }
     ],
-    'Cool Grey': [
-      { shade: '0', hex: '#F7F7F7' }, { shade: '5', hex: '#EEEEEE' },
-      { shade: '10', hex: '#D7D7D7' }, { shade: '20', hex: '#BABABA' },
-      { shade: '30', hex: '#9F9F9F' }, { shade: '40', hex: '#828282' },
-      { shade: '50', hex: '#58595B' }, { shade: '60', hex: '#48494B' },
-      { shade: '70', hex: '#393A3B' }, { shade: '80', hex: '#1C2434' },
-      { shade: '90', hex: '#14171E' }, { shade: '100', hex: '#0B0C0E' }
+    'Charcoal (Secondary)': [
+      { shade: '0', hex: '#EBEBEB' }, { shade: '10', hex: '#D0D0D1' },
+      { shade: '30', hex: '#848485' }, { shade: '50', hex: '#58595B' },
+      { shade: '60', hex: '#48494B' }, { shade: '70', hex: '#393A3B' },
+      { shade: '80', hex: '#2A2B2C' }, { shade: '90', hex: '#1A1B1C' }
     ],
-    'Sustainable Green': [
-      { shade: '0', hex: '#F6F7F6' }, { shade: '5', hex: '#ECEEEB' },
-      { shade: '10', hex: '#D2DBD1' }, { shade: '20', hex: '#AFC4AB' },
-      { shade: '30', hex: '#8BB583' }, { shade: '40', hex: '#5BAE4B' },
-      { shade: '50', hex: '#476142' }, { shade: '60', hex: '#3E5639' },
-      { shade: '70', hex: '#2E402A' }, { shade: '80', hex: '#1D301A' },
-      { shade: '90', hex: '#141B12' }, { shade: '100', hex: '#0A0D0A' }
-    ],
-    'Navy Blue': [
-      { shade: '0', hex: '#F5F5F6' }, { shade: '5', hex: '#E9EBED' },
-      { shade: '10', hex: '#CED4D9' }, { shade: '20', hex: '#A6B6C2' },
-      { shade: '30', hex: '#7C9BB2' }, { shade: '40', hex: '#467AA2' },
-      { shade: '50', hex: '#2B485E' }, { shade: '60', hex: '#254054' },
-      { shade: '70', hex: '#1D3445' }, { shade: '80', hex: '#14202A' },
-      { shade: '90', hex: '#0D1419' }, { shade: '100', hex: '#070A0C' }
-    ],
-    'Pale Green': [
-      { shade: '0', hex: '#FEFEFE' }, { shade: '5', hex: '#FAFAF9' },
-      { shade: '10', hex: '#EDEEEA' }, { shade: '20', hex: '#D9DED0' },
-      { shade: '30', hex: '#C6D1B2' }, { shade: '40', hex: '#AFC982' },
-      { shade: '50', hex: '#D2DBC3' }, { shade: '60', hex: '#AFC093' },
-      { shade: '70', hex: '#8FA766' }, { shade: '80', hex: '#647941' },
-      { shade: '90', hex: '#3D462E' }, { shade: '100', hex: '#1E2218' }
-    ],
-    'Dusty Blue': [
-      { shade: '0', hex: '#FEFEFE' }, { shade: '5', hex: '#F9FAFA' },
-      { shade: '10', hex: '#E4E7EA' }, { shade: '20', hex: '#C8CED9' },
-      { shade: '30', hex: '#AEBACF' }, { shade: '40', hex: '#829DC9' },
-      { shade: '50', hex: '#A8B1C0' }, { shade: '60', hex: '#828FA6' },
-      { shade: '70', hex: '#617089' }, { shade: '80', hex: '#394B69' },
-      { shade: '90', hex: '#28303C' }, { shade: '100', hex: '#15181D' }
+    'Olive Green (Tertiary)': [
+      { shade: '0', hex: '#EBF0EA' }, { shade: '10', hex: '#C8D5C6' },
+      { shade: '30', hex: '#6D8E68' }, { shade: '50', hex: '#476142' },
+      { shade: '60', hex: '#3E5639' }, { shade: '70', hex: '#2E402A' },
+      { shade: '80', hex: '#1E2B1B' }, { shade: '90', hex: '#10160F' }
     ]
   };
 
   const cekolamColors = {
-    'Pumkin Orange': [
-      { shade: '0', hex: '#F9F7F5' }, { shade: '5', hex: '#FDF1E9' },
-      { shade: '10', hex: '#EEDED3' }, { shade: '20', hex: '#EBC0A2' },
-      { shade: '30', hex: '#EE9D68' }, { shade: '40', hex: '#E8803B' },
-      { shade: '50', hex: '#EB7323' }, { shade: '60', hex: '#B2571A' },
-      { shade: '70', hex: '#7C431D' }, { shade: '80', hex: '#4D2E1A' },
-      { shade: '90', hex: '#2A1C13' }, { shade: '100', hex: '#120F0C' }
+    'Tangerine (Primary)': [
+      { shade: '0', hex: '#FEF3EC' }, { shade: '10', hex: '#FDD5B8' },
+      { shade: '30', hex: '#F39B5F' }, { shade: '50', hex: '#EB7323' },
+      { shade: '60', hex: '#D4611A' }, { shade: '70', hex: '#A84E14' },
+      { shade: '80', hex: '#7C3A0E' }, { shade: '90', hex: '#502608' }
     ],
-    'Blue Green': [
-      { shade: '0', hex: '#E0F5F7' }, { shade: '5', hex: '#C8EAEE' },
-      { shade: '10', hex: '#99DCE3' }, { shade: '20', hex: '#62C5D1' },
-      { shade: '30', hex: '#2BACC0' }, { shade: '40', hex: '#1195B0' },
-      { shade: '50', hex: '#089AAA' }, { shade: '60', hex: '#078597' },
-      { shade: '70', hex: '#066F84' }, { shade: '80', hex: '#2A4C51' },
-      { shade: '90', hex: '#12383E' }, { shade: '100', hex: '#0B2428' }
+    'Teal (Secondary)': [
+      { shade: '0', hex: '#E6F7F9' }, { shade: '10', hex: '#B3E6EB' },
+      { shade: '30', hex: '#3EC4D1' }, { shade: '50', hex: '#089AAA' },
+      { shade: '60', hex: '#077E8C' }, { shade: '70', hex: '#056570' },
+      { shade: '80', hex: '#034B54' }, { shade: '90', hex: '#023238' }
     ],
-    'Rhino': [
-      { shade: '0', hex: '#F7F7F8' }, { shade: '5', hex: '#EBEDEF' },
-      { shade: '10', hex: '#D8DFE4' }, { shade: '20', hex: '#B6C6D3' },
-      { shade: '30', hex: '#8BA9C0' }, { shade: '40', hex: '#6592B4' },
-      { shade: '50', hex: '#2B485E' }, { shade: '60', hex: '#446B88' },
-      { shade: '70', hex: '#374F62' }, { shade: '80', hex: '#28353E' },
-      { shade: '90', hex: '#1A1F23' }, { shade: '100', hex: '#0E0F11' }
-    ],
-    'Atomic Grey': [
-      { shade: '0', hex: '#F7F7F7' }, { shade: '5', hex: '#EDEDED' },
-      { shade: '10', hex: '#DEDEDE' }, { shade: '20', hex: '#C5C5C4' },
-      { shade: '30', hex: '#A6A6A5' }, { shade: '40', hex: '#8D8D8C' },
-      { shade: '50', hex: '#575756' }, { shade: '60', hex: '#676765' },
-      { shade: '70', hex: '#4D4D4C' }, { shade: '80', hex: '#333333' },
-      { shade: '90', hex: '#1F1F1F' }, { shade: '100', hex: '#0F0F0F' }
-    ],
-    'Authentic Grey': [
-      { shade: '0', hex: '#F7F7F7' }, { shade: '5', hex: '#EDEDED' },
-      { shade: '10', hex: '#DEDEDE' }, { shade: '20', hex: '#C5C5C4' },
-      { shade: '30', hex: '#A6A6A5' }, { shade: '40', hex: '#8D8D8C' },
-      { shade: '50', hex: '#9C9C9B' }, { shade: '60', hex: '#666666' },
-      { shade: '70', hex: '#4D4D4C' }, { shade: '80', hex: '#333333' },
-      { shade: '90', hex: '#1F1F1F' }, { shade: '100', hex: '#0F0F0F' }
+    'Denim (Tertiary)': [
+      { shade: '0', hex: '#E8EEF2' }, { shade: '10', hex: '#C0CED8' },
+      { shade: '30', hex: '#5B7D96' }, { shade: '50', hex: '#2B485E' },
+      { shade: '60', hex: '#243E50' }, { shade: '70', hex: '#1A2E3C' },
+      { shade: '80', hex: '#112028' }, { shade: '90', hex: '#081014' }
     ]
   };
 
   const causaColors = {
-    'Safety Orange': [
-      { shade: '0', hex: '#FBFBFA' }, { shade: '5', hex: '#FEF2E9' },
-      { shade: '10', hex: '#EADFD6' }, { shade: '20', hex: '#E0C3AC' },
-      { shade: '30', hex: '#E3AA7D' }, { shade: '40', hex: '#EA9959' },
+    'Orange (Primary)': [
+      { shade: '0', hex: '#FEF2E9' }, { shade: '5', hex: '#FDE6D3' },
+      { shade: '10', hex: '#FCC9A3' }, { shade: '20', hex: '#F9AD72' },
+      { shade: '30', hex: '#F79449' }, { shade: '40', hex: '#F68A31' },
       { shade: '50', hex: '#F57E20' }, { shade: '60', hex: '#DF6505' },
-      { shade: '70', hex: '#B35001' }, { shade: '80', hex: '#743808' },
-      { shade: '90', hex: '#43230A' }, { shade: '100', hex: '#1F1208' }
+      { shade: '70', hex: '#B35001' }, { shade: '80', hex: '#8A3D00' },
+      { shade: '90', hex: '#5C2800' }, { shade: '100', hex: '#2E1400' }
     ],
-    'YlnMn Blue': [
-      { shade: '0', hex: '#F6F7F9' }, { shade: '5', hex: '#ECEDF0' },
-      { shade: '10', hex: '#D7DDEA' }, { shade: '20', hex: '#B0BEDD' },
-      { shade: '30', hex: '#7E96CE' }, { shade: '40', hex: '#5577C3' },
-      { shade: '50', hex: '#434F6A' }, { shade: '60', hex: '#343D50' },
-      { shade: '70', hex: '#292F3D' }, { shade: '80', hex: '#1E212A' },
-      { shade: '90', hex: '#14161A' }, { shade: '100', hex: '#0C0C0E' }
+    'Slate (Secondary)': [
+      { shade: '0', hex: '#ECEEF3' }, { shade: '10', hex: '#CBD1DE' },
+      { shade: '30', hex: '#6B7BA0' }, { shade: '50', hex: '#434F6A' },
+      { shade: '60', hex: '#38435A' }, { shade: '70', hex: '#2C3649' },
+      { shade: '80', hex: '#202738' }, { shade: '90', hex: '#141827' }
     ],
-    'Powder Blue': [
-      { shade: '0', hex: '#F7F7F8' }, { shade: '5', hex: '#ECEDEE' },
-      { shade: '10', hex: '#DADFE1' }, { shade: '20', hex: '#BCC6CC' },
-      { shade: '30', hex: '#97AAB5' }, { shade: '40', hex: '#7692A3' },
-      { shade: '50', hex: '#A4B8C4' }, { shade: '60', hex: '#526B7A' },
-      { shade: '70', hex: '#405059' }, { shade: '80', hex: '#2D3539' },
-      { shade: '90', hex: '#1C1F21' }, { shade: '100', hex: '#0F0F10' }
-    ],
-    'Azure': [
-      { shade: '0', hex: '#F4FAFC' }, { shade: '5', hex: '#E8F4F8' },
-      { shade: '10', hex: '#D5EAEF' }, { shade: '20', hex: '#BFE0EB' },
-      { shade: '30', hex: '#A8D6E8' }, { shade: '40', hex: '#91CDE5' },
-      { shade: '50', hex: '#E3EEF0' }, { shade: '60', hex: '#63BADF' },
-      { shade: '70', hex: '#4CB0DC' }, { shade: '80', hex: '#35A6D9' },
-      { shade: '90', hex: '#1E9CD6' }, { shade: '100', hex: '#0793D3' }
-    ],
-    'Dim Gray': [
-      { shade: '0', hex: '#F7F7F7' }, { shade: '5', hex: '#EDEDED' },
-      { shade: '10', hex: '#DFDDDD' }, { shade: '20', hex: '#C6C3C3' },
-      { shade: '30', hex: '#A9A3A3' }, { shade: '40', hex: '#918888' },
-      { shade: '50', hex: '#786E6E' }, { shade: '60', hex: '#6A6262' },
-      { shade: '70', hex: '#4F4A4A' }, { shade: '80', hex: '#343232' },
-      { shade: '90', hex: '#1F1E1E' }, { shade: '100', hex: '#0F0F0F' }
+    'Steel Blue (Tertiary)': [
+      { shade: '0', hex: '#F1F5F8' }, { shade: '10', hex: '#DCE5EC' },
+      { shade: '30', hex: '#BACBD5' }, { shade: '50', hex: '#A4B8C4' },
+      { shade: '60', hex: '#8C9EAC' }, { shade: '70', hex: '#6E8290' },
+      { shade: '80', hex: '#526270' }, { shade: '90', hex: '#374350' }
     ]
   };
 
   const systemColors = {
-    'Red': [
-      { shade: '0', hex: '#FEF2F2' }, { shade: '5', hex: '#FEE2E2' },
-      { shade: '10', hex: '#FECACA' }, { shade: '20', hex: '#FCA5A5' },
-      { shade: '30', hex: '#F87171' }, { shade: '40', hex: '#EF4444' },
+    'Neutral (Grayscale)': [
+      { shade: '0', hex: '#FFFFFF' }, { shade: '5', hex: '#F7F7F7' },
+      { shade: '10', hex: '#EEEEEE' }, { shade: '20', hex: '#D7D7D7' },
+      { shade: '30', hex: '#C2C2C2' }, { shade: '40', hex: '#9F9F9F' },
+      { shade: '50', hex: '#828282' }, { shade: '60', hex: '#656565' },
+      { shade: '70', hex: '#49494A' }, { shade: '80', hex: '#2F2F2F' },
+      { shade: '90', hex: '#14141E' }, { shade: '100', hex: '#000000' }
+    ],
+    'Green (Success)': [
+      { shade: '0', hex: '#E9F9EF' }, { shade: '5', hex: '#D3F3DF' },
+      { shade: '10', hex: '#AAEBBF' }, { shade: '20', hex: '#7FDE9E' },
+      { shade: '30', hex: '#54D17E' }, { shade: '40', hex: '#34C468' },
+      { shade: '50', hex: '#22C55E' }, { shade: '60', hex: '#19A54C' },
+      { shade: '70', hex: '#12843C' }, { shade: '80', hex: '#0C632C' },
+      { shade: '90', hex: '#07421D' }, { shade: '100', hex: '#03210E' }
+    ],
+    'Red (Error)': [
+      { shade: '0', hex: '#FEE2E2' }, { shade: '5', hex: '#FECACA' },
+      { shade: '10', hex: '#FCA5A5' }, { shade: '20', hex: '#F87171' },
+      { shade: '30', hex: '#F35353' }, { shade: '40', hex: '#EF4444' },
       { shade: '50', hex: '#DC2626' }, { shade: '60', hex: '#B91C1C' },
       { shade: '70', hex: '#991B1B' }, { shade: '80', hex: '#7F1D1D' },
-      { shade: '90', hex: '#450A0A' }, { shade: '100', hex: '#211010' }
+      { shade: '90', hex: '#5C1414' }, { shade: '100', hex: '#3B0000' }
     ],
-    'Green': [
-      { shade: '0', hex: '#F8F9F9' }, { shade: '5', hex: '#E9F9EF' },
-      { shade: '10', hex: '#D3E4D9' }, { shade: '20', hex: '#AAD6BA' },
-      { shade: '30', hex: '#7DD39D' }, { shade: '40', hex: '#51D481' },
-      { shade: '50', hex: '#22C55E' }, { shade: '60', hex: '#19A54C' },
-      { shade: '70', hex: '#12843C' }, { shade: '80', hex: '#11572B' },
-      { shade: '90', hex: '#0E331C' }, { shade: '100', hex: '#09180E' }
+    'Blue (Info)': [
+      { shade: '0', hex: '#EBF2FE' }, { shade: '5', hex: '#DBEAFE' },
+      { shade: '10', hex: '#BFDBFE' }, { shade: '20', hex: '#93C5FD' },
+      { shade: '30', hex: '#60A5FA' }, { shade: '40', hex: '#3B82F6' },
+      { shade: '50', hex: '#2563EB' }, { shade: '60', hex: '#0560F5' },
+      { shade: '70', hex: '#014CC5' }, { shade: '80', hex: '#013899' },
+      { shade: '90', hex: '#012570' }, { shade: '100', hex: '#001247' }
     ],
-    'Blue': [
-      { shade: '0', hex: '#FCFCFC' }, { shade: '5', hex: '#EBF2FE' },
-      { shade: '10', hex: '#D9E0EB' }, { shade: '20', hex: '#B1C3E2' },
-      { shade: '30', hex: '#86A9E4' }, { shade: '40', hex: '#6195EB' },
-      { shade: '50', hex: '#3B82F6' }, { shade: '60', hex: '#0560F5' },
-      { shade: '70', hex: '#014CC5' }, { shade: '80', hex: '#093680' },
-      { shade: '90', hex: '#0C234A' }, { shade: '100', hex: '#091222' }
-    ],
-    'Yellow': [
-      { shade: '0', hex: '#FAFAF9' }, { shade: '5', hex: '#FEF5E7' },
-      { shade: '10', hex: '#E9E1D3' }, { shade: '20', hex: '#DFCAA8' },
-      { shade: '30', hex: '#E2BA77' }, { shade: '40', hex: '#E9AF4C' },
+    'Yellow (Warning)': [
+      { shade: '0', hex: '#FEF5E7' }, { shade: '5', hex: '#FEF0D9' },
+      { shade: '10', hex: '#FDE8BC' }, { shade: '20', hex: '#FBDA8E' },
+      { shade: '30', hex: '#FACB60' }, { shade: '40', hex: '#F8BC32' },
       { shade: '50', hex: '#F59E0B' }, { shade: '60', hex: '#CE8303' },
-      { shade: '70', hex: '#A66800' }, { shade: '80', hex: '#6C4707' },
-      { shade: '90', hex: '#3E2B09' }, { shade: '100', hex: '#1D1507' }
-    ],
-    'Neutral': [
-      { shade: '0', hex: '#F7F7F7' }, { shade: '5', hex: '#EEEEEE' },
-      { shade: '10', hex: '#D7D7D7' }, { shade: '20', hex: '#BABABA' },
-      { shade: '30', hex: '#9F9F9F' }, { shade: '40', hex: '#828282' },
-      { shade: '50', hex: '#59595A' }, { shade: '60', hex: '#49494A' },
-      { shade: '70', hex: '#3A3A3B' }, { shade: '80', hex: '#1C1C34' },
-      { shade: '90', hex: '#14141E' }, { shade: '100', hex: '#0B0B0E' }
+      { shade: '70', hex: '#A66800' }, { shade: '80', hex: '#7F4E00' },
+      { shade: '90', hex: '#593600' }, { shade: '100', hex: '#331F00' }
     ]
   };
 

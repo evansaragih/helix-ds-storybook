@@ -4,6 +4,8 @@ import { SemanticsSection } from './SemanticsSection';
 import { TypographySection } from './TypographySection';
 import { UtilitiesSection } from './UtilitiesSection';
 import { ElevationSection } from './ElevationSection';
+import { IconsSection } from './IconsSection';
+import { BrandIdentitySection } from './BrandIdentitySection';
 import { InputSection } from './InputSection';
 import { InputOTPSection } from './InputOTPSection';
 import { ListContainerSection } from './ListContainerSection';
@@ -45,6 +47,8 @@ import { ContentContainerSection } from './ContentContainerSection';
 import { CarouselSection } from './CarouselSection';
 import { ToolbarFilterSection } from './ToolbarFilterSection';
 import { DropzoneSection } from './DropzoneSection';
+import { CommandSection } from './CommandSection';
+import { UploadProgressDrawerSection } from './UploadProgressDrawerSection';
 
 interface MainContentProps {
   activeSection: string;
@@ -60,6 +64,8 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
       case 'typography':        return <TypographySection />;
       case 'utilities':         return <UtilitiesSection />;
       case 'elevation':         return <ElevationSection />;
+      case 'icons':             return <IconsSection />;
+      case 'brand-identity':    return <BrandIdentitySection />;
       case 'input':             return <InputSection />;
       case 'input-otp':         return <InputOTPSection />;
       case 'list-container':    return <ListContainerSection />;
@@ -101,6 +107,8 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
       case 'carousel':          return <CarouselSection />;
       case 'toolbar-filter':    return <ToolbarFilterSection />;
       case 'dropzone':          return <DropzoneSection />;
+      case 'command':           return <CommandSection />;
+      case 'upload-progress-drawer': return <UploadProgressDrawerSection />;
       case 'components-overview':
         return (
           <div style={{ padding: '40px 48px' }}>

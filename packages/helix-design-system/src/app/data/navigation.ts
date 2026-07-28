@@ -8,6 +8,8 @@ export const foundationItems: NavItem[] = [
   { label: 'Typography', id: 'typography' },
   { label: 'Spacing Layout', id: 'utilities' },
   { label: 'Elevation', id: 'elevation' },
+  { label: 'Icons', id: 'icons' },
+  { label: 'Brand Identity', id: 'brand-identity' },
 ];
 
 export const componentItems: NavItem[] = [
@@ -25,6 +27,7 @@ export const componentItems: NavItem[] = [
   { label: 'Card Metric', id: 'card-metric' },
   { label: 'Carousel', id: 'carousel' },
   { label: 'Checkbox', id: 'checkbox' },
+  { label: 'Command', id: 'command' },
   { label: 'Comparison Table', id: 'comparison-table' },
   { label: 'Content Container', id: 'content-container' },
   { label: 'Date Picker', id: 'date-picker' },
@@ -53,4 +56,5 @@ export const componentItems: NavItem[] = [
   { label: 'Toast', id: 'toast' },
   { label: 'Toolbar Filter', id: 'toolbar-filter' },
   { label: 'Tooltip', id: 'tooltip' },
+  { label: 'Upload Progress Drawer', id: 'upload-progress-drawer' },
 ];

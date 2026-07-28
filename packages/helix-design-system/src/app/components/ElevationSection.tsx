@@ -54,23 +54,23 @@ const ElevationCard = ({ level, shadow, description }: { level: string; shadow: 
 export function ElevationSection() {
   const levels = [
     {
-      level: 'Elevation 1',
-      shadow: 'var(--elevation-1)',
+      level: 'Small',
+      shadow: 'var(--shadow-sm)',
       description: 'The lowest level of elevation, used for standard cards, buttons, and small interactive elements.'
     },
     {
-      level: 'Elevation 2',
-      shadow: 'var(--elevation-2)',
+      level: 'Default',
+      shadow: 'var(--shadow)',
       description: 'Used for elements that require more prominence, such as hover states or slightly elevated containers.'
     },
     {
-      level: 'Elevation 3',
-      shadow: 'var(--elevation-3)',
+      level: 'Medium',
+      shadow: 'var(--shadow-md)',
       description: 'High elevation for navigation elements like dropdowns, popovers, and sticky headers.'
     },
     {
-      level: 'Elevation 4',
-      shadow: 'var(--elevation-4)',
+      level: 'Large',
+      shadow: 'var(--shadow-lg)',
       description: 'The highest level of elevation, reserved for critical overlays like modals and system dialogs.'
     }
   ];
