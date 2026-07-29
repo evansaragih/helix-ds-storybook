@@ -109,31 +109,30 @@ function FileRow({ df, onRemove, disabled }: { df: DropzoneFile; onRemove: () =>
   );
 }
 
-// Normalized 100×100 coordinate space (percent of the zone's own width/height), derived from
-// Figma's unclipped reference instance (node 2346:7574) — the one showing all 6 file-type icon
-// chips arranged tidily around the center, not the small Medium/Large frames that clip almost
-// everything out. Rendered as an SVG with preserveAspectRatio="none", these percentages stretch
-// to exactly fill the zone in both width and height, the same way Figma's Scale constraints do,
-// while keeping the same tidy arrangement regardless of the zone's actual aspect ratio.
-const RING_RADII_PCT = [
-  6.9, 9.9, 12.6, 15.5, 18.5, 21.4, 24.3, 27.2, 30.1, 33, 35.9,
-  38.8, 41.8, 44.7, 47.6, 50.5, 53.4, 56.3, 59.2, 62.1, 65,
+// Fixed CSS pixels, centered on the content block, copied straight from Figma's *unclipped*
+// "Input / Upload-file" instance (node 2346:7574). In Figma this pattern does NOT scale with
+// the frame — it's a fixed-size illustration; resizing the component just reveals or clips
+// more of the same fixed pattern (like a window over a mural), never stretching it. So these
+// are plain absolute-positioned/sized elements, not SVG-viewBox-scaled ones.
+const RING_DIAMETERS = [
+  142, 203, 260, 320, 380, 440, 500, 560, 620, 680, 740,
+  800, 860, 920, 980, 1040, 1100, 1160, 1220, 1280, 1340,
 ];
 
 const ICON_CHIPS = [
-  { Icon: IoDocuments,             xPct: 28.8,  yPct: 40.1,  sizePct: 6.1, rotate: 14.73 },
-  { Icon: IoDocumentText,          xPct: -32,   yPct: 13.3,  sizePct: 6.1, rotate: -15 },
-  { Icon: IoDocumentAttach,        xPct: -26.1, yPct: 48,    sizePct: 7.0, rotate: -37.26 },
-  { Icon: BsFileEarmarkMedicalFill, xPct: 25.5, yPct: -23.4, sizePct: 5.5, rotate: 5.38 },
-  { Icon: BsFileEarmarkPdfFill,    xPct: 34.5,  yPct: 6.6,   sizePct: 6.2, rotate: 15.92 },
-  { Icon: HiDocumentReport,        xPct: -26.2, yPct: -21.3, sizePct: 6.8, rotate: -29.1 },
+  { Icon: IoDocuments,              x: 296.99,  y: 250.54,  size: 63.07, rotate: 14.73 },
+  { Icon: IoDocumentText,           x: -329.98, y: 82.91,   size: 63.24, rotate: -15 },
+  { Icon: IoDocumentAttach,         x: -269.18, y: 299.81,  size: 72.36, rotate: -37.26 },
+  { Icon: BsFileEarmarkMedicalFill, x: 262.97,  y: -146.45, size: 56.25, rotate: 5.38 },
+  { Icon: BsFileEarmarkPdfFill,     x: 355.33,  y: 41.54,   size: 63.82, rotate: 15.92 },
+  { Icon: HiDocumentReport,         x: -269.88, y: -133.34, size: 70.23, rotate: -29.1 },
 ];
 
 /** Decorative background layer behind the drop zone content — faint concentric rings and 6
- * scattered file-type icon chips arranged around the center, matching Figma's unclipped
- * "Input / Upload-file" illustration (node 2346:7574). A normalized viewBox with
- * preserveAspectRatio="none" keeps the same tidy layout while stretching precisely with
- * the zone's actual rendered width and height. */
+ * scattered file-type icon chips, fixed size and centered on the content block, matching
+ * Figma's unclipped "Input / Upload-file" illustration (node 2346:7574) exactly. Resizing the
+ * zone only changes how much of this fixed pattern is visible (clipped by the zone's own
+ * `overflow: hidden`) — it never stretches, same as in Figma. */
 function DropzoneBackground({ active, disabled }: { active: boolean; disabled: boolean }) {
   const ringColor = disabled ? 'transparent' : active ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-stroke-subtle, #EEEEEE)';
   const chipBg = active ? '#FFFFFF' : 'var(--color-container-secondary, #F7F7F7)';
@@ -141,44 +140,34 @@ function DropzoneBackground({ active, disabled }: { active: boolean; disabled: b
   const fadeColor = active ? '#FEF2E9' : '#FFFFFF';
 
   return (
-    <svg
-      viewBox="0 0 100 100"
-      // xMidYMid slice: uniform scale (shapes stay undistorted — square chips stay square,
-      // circles stay circular) sized to fully cover the zone, centered, cropping overflow —
-      // like CSS background-size:cover. Scales precisely as the zone is resized either way.
-      preserveAspectRatio="xMidYMid slice"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: 'inherit', pointerEvents: 'none' }}
-    >
-      <defs>
-        <linearGradient id="dz-fade-l" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor={fadeColor} />
-          <stop offset="100%" stopColor={fadeColor} stopOpacity={0} />
-        </linearGradient>
-        <linearGradient id="dz-fade-r" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor={fadeColor} stopOpacity={0} />
-          <stop offset="100%" stopColor={fadeColor} />
-        </linearGradient>
-        {/* Approximates Figma's two-layer chip shadow (0px 2px 4px rgba(0,0,0,.04), 0px 4px 8px rgba(0,0,0,.08)) */}
-        <filter id="dz-chip-shadow" x="-75%" y="-75%" width="250%" height="250%">
-          <feDropShadow dx="0" dy="0.35" stdDeviation="0.35" floodColor="#000000" floodOpacity="0.08" />
-          <feDropShadow dx="0" dy="0.7" stdDeviation="0.7" floodColor="#000000" floodOpacity="0.1" />
-        </filter>
-      </defs>
-      {RING_RADII_PCT.map((r) => (
-        <circle key={r} cx={50} cy={50} r={r} fill="none" stroke={ringColor} strokeWidth={0.3} opacity={0.12} />
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: 'inherit', pointerEvents: 'none' }}>
+      {RING_DIAMETERS.map((d) => (
+        <div key={d} style={{
+          position: 'absolute', top: '50%', left: '50%',
+          width: d, height: d,
+          transform: 'translate(-50%, -50%)',
+          borderRadius: '50%',
+          border: `1px solid ${ringColor}`,
+          opacity: 0.12,
+        }} />
       ))}
-      {ICON_CHIPS.map(({ Icon, xPct, yPct, sizePct, rotate }, i) => (
-        <g key={i} transform={`translate(${50 + xPct}, ${50 + yPct}) rotate(${rotate})`}>
-          <rect x={-sizePct / 2} y={-sizePct / 2} width={sizePct} height={sizePct} rx={sizePct * 0.104} fill={chipBg} filter="url(#dz-chip-shadow)" />
-          {/* react-icons ignores width/height props and always sizes via `size` (defaults to
-              "1em" otherwise) — must use `size` here, not width/height, or icons render at a
-              stray ~16 user-units, which blows up hugely once the whole SVG is scaled up. */}
-          <Icon size={sizePct * 0.63} color={chipColor} x={-sizePct * 0.315} y={-sizePct * 0.315} />
-        </g>
+      {ICON_CHIPS.map(({ Icon, x, y, size, rotate }, i) => (
+        <div key={i} style={{
+          position: 'absolute', top: '50%', left: '50%',
+          transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotate}deg)`,
+          width: size, height: size,
+          borderRadius: size * 0.104,
+          backgroundColor: chipBg,
+          boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.04), 0px 4px 8px 0px rgba(0,0,0,0.08)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: chipColor,
+        }}>
+          <Icon size={size * 0.63} />
+        </div>
       ))}
-      <rect x={0} y={0} width={20} height={100} fill="url(#dz-fade-l)" />
-      <rect x={80} y={0} width={20} height={100} fill="url(#dz-fade-r)" />
-    </svg>
+      <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 180, background: `linear-gradient(to right, ${fadeColor}, transparent)` }} />
+      <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 180, background: `linear-gradient(to left, ${fadeColor}, transparent)` }} />
+    </div>
   );
 }
 
@@ -359,14 +348,16 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
           />
         </div>
 
-        {/* Text */}
+        {/* Text — sized to content (up to a readable max-width) so the icon+text group sits
+            centered as a unit via the zone's justifyContent:'center', instead of stretching
+            edge-to-edge and pinning everything to the left. */}
         <div style={{
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
           gap: isLarge ? 8 : 2,
           minWidth: 0,
-          flex: isLarge ? undefined : 1,
+          maxWidth: isLarge ? undefined : 420,
           width: isLarge ? '100%' : undefined,
           alignSelf: isLarge ? 'stretch' : undefined,
         }}>

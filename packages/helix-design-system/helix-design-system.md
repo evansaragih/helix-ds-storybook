@@ -22,16 +22,16 @@ Nusantics is an Indonesian precision molecular diagnostics and microbiome biotec
 Three products share a unified **Helix Design System** (GitHub: `evansaragih/helix-design-system`,
 Figma: `Nusantics-Design-System`, fileKey `GWzBKGr6512AeMOapwgQhj`).
 
-Component specs in this document were verified 2026-07-27 against the published "Nusantics Design
+Component specs in this document were verified 2026-07-29 against the published "Nusantics Design
 System" Figma library (see `figma-library-key` above). When generating new designs in Figma, search
 this library first (`search_design_system`) and reuse/import matching components rather than
 inventing new styles — see the `figma-generate-design` skill.
 
-| Product | Brand Persona | Primary Users | Brand Mode |
-|---|---|---|---|
-| **Nusantics** | Science-forward, clinical trust | Researchers, clinicians | `data-brand="nusantics"` (default) |
-| **CeKolam** | Approachable, environmental | Aquaculture farmers, field officers | `data-brand="cekolam"` |
-| **Causa** | Modern, analytical | Business analysts, product teams | `data-brand="causa"` |
+| Product       | Brand Persona                   | Primary Users                       | Brand Mode                         |
+| ------------- | ------------------------------- | ----------------------------------- | ---------------------------------- |
+| **Nusantics** | Science-forward, clinical trust | Researchers, clinicians             | `data-brand="nusantics"` (default) |
+| **CeKolam**   | Approachable, environmental     | Aquaculture farmers, field officers | `data-brand="cekolam"`             |
+| **Causa**     | Modern, analytical              | Business analysts, product teams    | `data-brand="causa"`               |
 
 All products are **website-first, mobile-responsive**.
 Surfaces: admin dashboards, customer-facing portals, third-party integrations.
@@ -55,23 +55,25 @@ Surfaces: admin dashboards, customer-facing portals, third-party integrations.
 Source: `src/styles/theme.css`
 
 ### Layer 1 — Primitives (`--primitive-*`)
+
 Raw color ramps. Never reference directly in components. Always go through a semantic token.
 
-| Palette | Steps |
-|---|---|
-| `--primitive-orange-*` | 0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 |
-| `--primitive-cekolam-primary-*` | 0, 10, 30, 50, 60, 70, 80, 90 |
-| `--primitive-teal-*` | 0, 10, 30, 50, 60, 70, 80, 90 |
-| `--primitive-denim-*` | 0, 10, 30, 50, 60, 70, 80, 90 |
-| `--primitive-slate-*` | 0, 10, 30, 50, 60, 70, 80, 90 |
-| `--primitive-steel-*` | 0, 10, 30, 50, 60, 70, 80, 90 |
-| `--primitive-olive-*` | 0, 10, 30, 50, 60, 70, 80, 90 |
-| `--primitive-charcoal-*` | 0, 10, 30, 50, 60, 70, 80, 90 |
-| `--primitive-neutral-*` | 0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 |
-| `--primitive-green/red/blue/yellow-*` | 0–100 |
-| `--primitive-black` / `--primitive-white` | — |
+| Palette                                   | Steps                                         |
+| ----------------------------------------- | --------------------------------------------- |
+| `--primitive-orange-*`                    | 0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 |
+| `--primitive-cekolam-primary-*`           | 0, 10, 30, 50, 60, 70, 80, 90                 |
+| `--primitive-teal-*`                      | 0, 10, 30, 50, 60, 70, 80, 90                 |
+| `--primitive-denim-*`                     | 0, 10, 30, 50, 60, 70, 80, 90                 |
+| `--primitive-slate-*`                     | 0, 10, 30, 50, 60, 70, 80, 90                 |
+| `--primitive-steel-*`                     | 0, 10, 30, 50, 60, 70, 80, 90                 |
+| `--primitive-olive-*`                     | 0, 10, 30, 50, 60, 70, 80, 90                 |
+| `--primitive-charcoal-*`                  | 0, 10, 30, 50, 60, 70, 80, 90                 |
+| `--primitive-neutral-*`                   | 0, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 |
+| `--primitive-green/red/blue/yellow-*`     | 0–100                                         |
+| `--primitive-black` / `--primitive-white` | —                                             |
 
 ### Layer 2 — Semantics (`--color-*`)
+
 Purpose-named tokens. Always use these in components.
 
 ```
@@ -142,13 +144,13 @@ Purpose-named tokens. Always use these in components.
 
 ### Layer 3 — Brand Modes
 
-| Token | Nusantics | CeKolam | Causa |
-|---|---|---|---|
-| `--color-brand-primary` | `#F57E20` | `#EB7323` | `#F57E20` |
-| `--color-brand-secondary` | `#58595B` | `#089AAA` | `#434F6A` |
-| `--color-brand-tertiary` | `#476142` | `#2B485E` | `#A4B8C4` |
+| Token                        | Nusantics | CeKolam   | Causa     |
+| ---------------------------- | --------- | --------- | --------- |
+| `--color-brand-primary`      | `#F57E20` | `#EB7323` | `#F57E20` |
+| `--color-brand-secondary`    | `#58595B` | `#089AAA` | `#434F6A` |
+| `--color-brand-tertiary`     | `#476142` | `#2B485E` | `#A4B8C4` |
 | `--color-input-border-focus` | `#F57E20` | `#EB7323` | `#F57E20` |
-| `--color-status-brand-bg` | `#FEF2E9` | `#FEF3EC` | `#FEF2E9` |
+| `--color-status-brand-bg`    | `#FEF2E9` | `#FEF3EC` | `#FEF2E9` |
 
 ---
 
@@ -161,19 +163,19 @@ Purpose-named tokens. Always use these in components.
 --letter-spacing-default: -0.01em
 ```
 
-| Token | Size | Usage |
-|---|---|---|
-| `--text-display-hero` | 76px | Hero |
-| `--text-display-large` | 61px | Large display |
-| `--text-heading-page-title` | 49px | h1 |
-| `--text-heading-section-title` | 39px | h2 |
-| `--text-heading-card-title` | 31px | h3 |
-| `--text-heading-sub-section` | 25px | h4 |
-| `--text-body-large` | 20px | Lead body |
-| `--text-body-default` | 16px | Body |
-| `--text-body-small` | 13px | Small/helper |
-| `--text-caption-badge` | 10px | Badge labels |
-| `--text-micro-legal` | 8px | Legal/micro |
+| Token                          | Size | Usage         |
+| ------------------------------ | ---- | ------------- |
+| `--text-display-hero`          | 76px | Hero          |
+| `--text-display-large`         | 61px | Large display |
+| `--text-heading-page-title`    | 49px | h1            |
+| `--text-heading-section-title` | 39px | h2            |
+| `--text-heading-card-title`    | 31px | h3            |
+| `--text-heading-sub-section`   | 25px | h4            |
+| `--text-body-large`            | 20px | Lead body     |
+| `--text-body-default`          | 16px | Body          |
+| `--text-body-small`            | 13px | Small/helper  |
+| `--text-caption-badge`         | 10px | Badge labels  |
+| `--text-micro-legal`           | 8px  | Legal/micro   |
 
 Line heights: `--line-height-{size}` paired token (e.g. `--line-height-16` = 19.2px for 16px body).
 
@@ -221,24 +223,40 @@ Radix UI used internally: Accordion, Select, Tabs, Tooltip, Dialog.
 
 ```tsx
 type ButtonVariant =
-  'primary' | 'secondary' | 'tertiary' | 'destructive' | 'neutral' | 'invert' |
-  'ghost-neutral' | 'ghost-brand' |
-  'primary-outline' | 'secondary-outline' | 'tertiary-outline' |
-  'primary-subtle' | 'neutral-subtle'
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "destructive"
+  | "neutral"
+  | "invert"
+  | "ghost-neutral"
+  | "ghost-brand"
+  | "primary-outline"
+  | "secondary-outline"
+  | "tertiary-outline"
+  | "primary-subtle"
+  | "neutral-subtle";
 
-type ButtonSize = 'xs' | 'sm' | 'md' | 'lg'
+type ButtonSize = "xs" | "sm" | "md" | "lg";
 
-props: variant='primary', size='sm', loading, leadingIcon, trailingIcon, pill, disabled
+props: ((variant = "primary"),
+  (size = "sm"),
+  loading,
+  leadingIcon,
+  trailingIcon,
+  pill,
+  disabled);
 ```
 
 | Size | Height | Font | Radius |
-|---|---|---|---|
-| xs | 24px | 11px | 6px |
-| sm | 36px | 13px | 8px |
-| md | 48px | 16px | 8px |
-| lg | 58px | 20px | 10px |
+| ---- | ------ | ---- | ------ |
+| xs   | 24px   | 11px | 6px    |
+| sm   | 36px   | 13px | 8px    |
+| md   | 48px   | 16px | 8px    |
+| lg   | 58px   | 20px | 10px   |
 
 Rules:
+
 - Solid variants (primary/secondary/tertiary/destructive/invert): inner highlight `inset 0 0 0 1px rgba(255,255,255,0.2)`
 - Focus ring: `0 0 0 3px var(--color-brand-*-ring)`
 - Disabled: `--color-btn-disabled-bg` bg + `--color-btn-disabled-text` text; cursor not-allowed
@@ -255,13 +273,18 @@ Rules:
 Icon-only counterpart to Button — maps to Figma's "Buttons / Icon" (square) and "Buttons / Icon Pill" (circle) component sets.
 
 ```tsx
-type IconButtonVariant = ButtonVariant | 'transparent'
-type IconButtonShape = 'square' | 'circle'
+type IconButtonVariant = ButtonVariant | "transparent";
+type IconButtonShape = "square" | "circle";
 
-props: variant='primary', shape='circle', icon (required), disabled, 'aria-label' (required)
+props: ((variant = "primary"),
+  (shape = "circle"),
+  icon(required),
+  disabled,
+  "aria-label"(required));
 ```
 
 Rules:
+
 - Fixed size: 36×36px for both `circle` and `square` shapes — 1:1, no size prop (one size per Figma spec)
 - Shares the same variant palette/hover/focus/disabled tokens as `Button`
 - `transparent` variant has no border and no idle background — hover/focus states only
@@ -272,21 +295,32 @@ Rules:
 ### Input
 
 ```tsx
-type InputSize = 'xs' | 'sm' | 'md' | 'lg'
+type InputSize = "xs" | "sm" | "md" | "lg";
 
-props: size='md', floating, label, required, secondaryLabel,
-       leadingContent, leadingDivider, trailingContent, trailingDivider,
-       helperText, error, errorText, showCharCount
+props: ((size = "md"),
+  floating,
+  label,
+  required,
+  secondaryLabel,
+  leadingContent,
+  leadingDivider,
+  trailingContent,
+  trailingDivider,
+  helperText,
+  error,
+  errorText,
+  showCharCount);
 ```
 
-| Size | Height | Radius | Px |
-|---|---|---|---|
-| xs | 32px | 6px | 10px |
-| sm | 38px | 6px | 12px |
-| md | 42px | 8px | 12px |
-| lg | 48px | 8px | 16px |
+| Size | Height | Radius | Px   |
+| ---- | ------ | ------ | ---- |
+| xs   | 32px   | 6px    | 10px |
+| sm   | 38px   | 6px    | 12px |
+| md   | 42px   | 8px    | 12px |
+| lg   | 48px   | 8px    | 16px |
 
 Rules:
+
 - Floating variant: height 56px, label animates from vertical center (font 16px) to top-caption (font 10px) on focus/fill
 - Floating focus: SVG `trace-border` animation traces the border path
 - Error: bg `--color-input-bg-error`, border `--color-input-border-error`, trailing `AlertCircle` icon
@@ -307,41 +341,48 @@ props: label (required), variant='default', size='md', leadingIcon, trailingIcon
        status (dot), loading (spinner), onClose (× button)
 ```
 
-| Variant | bg | text |
-|---|---|---|
-| default | `--color-brand-primary` | `--color-text-on-primary` |
-| destructive | `--color-status-error-bg` | `--color-destructive` |
-| blue | `--color-status-info-bg` | `--color-text-info` |
-| green | `--color-status-success-bg` | `--color-text-success` |
-| yellow | `--color-status-warning-bg` | `--color-text-warning` |
-| red | `--color-status-error-bg` | `--color-text-error` |
-| secondary | `--color-container-secondary` | `--color-text-primary` (border: `--color-brand-secondary`) |
-| outline | transparent | `--color-text-primary` (border: `--color-stroke-default 0.5px`) |
+| Variant     | bg                            | text                                                            |
+| ----------- | ----------------------------- | --------------------------------------------------------------- |
+| default     | `--color-brand-primary`       | `--color-text-on-primary`                                       |
+| destructive | `--color-status-error-bg`     | `--color-destructive`                                           |
+| blue        | `--color-status-info-bg`      | `--color-text-info`                                             |
+| green       | `--color-status-success-bg`   | `--color-text-success`                                          |
+| yellow      | `--color-status-warning-bg`   | `--color-text-warning`                                          |
+| red         | `--color-status-error-bg`     | `--color-text-error`                                            |
+| secondary   | `--color-container-secondary` | `--color-text-primary` (border: `--color-brand-secondary`)      |
+| outline     | transparent                   | `--color-text-primary` (border: `--color-stroke-default 0.5px`) |
 
 ---
 
 ### Alert
 
 ```tsx
-type AlertVariant = 'default' | 'info' | 'success' | 'warning' | 'error'
+type AlertVariant = "default" | "info" | "success" | "warning" | "error";
 
-props: variant='default', title (required), description, icon (override),
-       badge, action, secondaryAction, onClose
+props: ((variant = "default"),
+  title(required),
+  description,
+  icon(override),
+  badge,
+  action,
+  secondaryAction,
+  onClose);
 ```
 
-| Variant | bg | border | icon | action bg | Default Icon |
-|---|---|---|---|---|---|
-| default | `--color-container-primary` (#FFFFFF) | `--color-stroke-subtle` (#EEEEEE) | `--color-brand-primary` | `--color-brand-primary` | `CircleCheck` (lucide) |
-| info | `--color-status-info-bg` | `--color-stroke-info` (#3B82F6) | `--color-text-info` | `--color-stroke-info` | `RiErrorWarningLine` (react-icons/ri) |
-| success | `--color-status-success-bg` | `--color-text-success` (#12843C) | `--color-text-success` | `--color-stroke-success` (#22C55E) | `CircleCheck` (lucide) |
-| warning | `--color-status-warning-bg` | `--primitive-yellow-50` (#F59E0B) | `--color-text-warning` | `--primitive-yellow-50` (#F59E0B) | `RiErrorWarningLine` (react-icons/ri) |
-| error | `--color-status-error-bg` | `--color-stroke-error` (#DC2626) | `--color-destructive` | `--color-destructive` | `IoCloseCircleOutline` (react-icons/io5) |
+| Variant | bg                                    | border                            | icon                    | action bg                          | Default Icon                             |
+| ------- | ------------------------------------- | --------------------------------- | ----------------------- | ---------------------------------- | ---------------------------------------- |
+| default | `--color-container-primary` (#FFFFFF) | `--color-stroke-subtle` (#EEEEEE) | `--color-brand-primary` | `--color-brand-primary`            | `CircleCheck` (lucide)                   |
+| info    | `--color-status-info-bg`              | `--color-stroke-info` (#3B82F6)   | `--color-text-info`     | `--color-stroke-info`              | `RiErrorWarningLine` (react-icons/ri)    |
+| success | `--color-status-success-bg`           | `--color-text-success` (#12843C)  | `--color-text-success`  | `--color-stroke-success` (#22C55E) | `CircleCheck` (lucide)                   |
+| warning | `--color-status-warning-bg`           | `--primitive-yellow-50` (#F59E0B) | `--color-text-warning`  | `--primitive-yellow-50` (#F59E0B)  | `RiErrorWarningLine` (react-icons/ri)    |
+| error   | `--color-status-error-bg`             | `--color-stroke-error` (#DC2626)  | `--color-destructive`   | `--color-destructive`              | `IoCloseCircleOutline` (react-icons/io5) |
 
 Default and success share the same icon in Figma (both "li:circle-check"); info and warning also share the same icon (both `RiErrorWarningLine`) — not a mistake, that's Figma's actual assignment (node 855:23508-23512).
 
 Layout: border-radius 8px, padding 16px, full width.
 Icon: 20×20px. Title: Rubik 500 14px. Description: Rubik 400 13px `--color-text-secondary`.
 Actions row: `padding-left: 24px` (aligns under the title/description, past the icon), gap 12px, buttons height 36px, `padding: 8px 12px`, `border-radius: 8px`.
+
 - Primary: bg `actionBg`, border `1px solid actionBg`, inner highlight `inset 0 0 0 1px rgba(255,255,255,0.2)`, text `actionText`
 - Secondary: transparent bg, `1px solid` variant border, text `--color-text-primary` (not accent-colored)
 
@@ -350,18 +391,23 @@ Actions row: `padding-left: 24px` (aligns under the title/description, past the 
 ### Accordion
 
 ```tsx
-type AccordionType = 'single' | 'multiple'
-type AccordionStyle = 'default' | 'border' | 'card'
+type AccordionType = "single" | "multiple";
+type AccordionStyle = "default" | "border" | "card";
 
-interface AccordionItem { id, title, content: ReactNode, disabled? }
-props: items, type='single', accordionStyle='default', defaultValue
+interface AccordionItem {
+  id;
+  title;
+  content: ReactNode;
+  disabled?;
+}
+props: (items, (type = "single"), (accordionStyle = "default"), defaultValue);
 ```
 
-| Style | Container | Item separation | Trigger bg |
-|---|---|---|---|
-| default | none | border-bottom `--color-stroke-subtle` | transparent |
-| border | `border: --color-stroke-default`, `--radius-lg` | border-bottom `--color-stroke-default` | transparent |
-| card | flex-col gap 8px | full border `--color-stroke-subtle` + `--radius-lg` + `--shadow-sm` | `--color-container-primary` |
+| Style   | Container                                       | Item separation                                                     | Trigger bg                  |
+| ------- | ----------------------------------------------- | ------------------------------------------------------------------- | --------------------------- |
+| default | none                                            | border-bottom `--color-stroke-subtle`                               | transparent                 |
+| border  | `border: --color-stroke-default`, `--radius-lg` | border-bottom `--color-stroke-default`                              | transparent                 |
+| card    | flex-col gap 8px                                | full border `--color-stroke-subtle` + `--radius-lg` + `--shadow-sm` | `--color-container-primary` |
 
 Trigger: Rubik 400 13px, line-height 19.2px, letter-spacing -0.01px, padding 14px 16px, ChevronDown 16px (rotates via Radix data-state).
 Content: Rubik 400 13px `--color-text-secondary`, line-height 19.2px, padding `0 16px 16px`.
@@ -381,11 +427,11 @@ props: options, groups (for grouped), value, defaultValue, onValueChange,
        label, helperText, errorText, required
 ```
 
-| Size | Height | Px | Radius |
-|---|---|---|---|
-| sm | 38px | 12px | 6px |
-| md | 42px | 12px | 8px |
-| lg | 48px | 16px | 8px |
+| Size | Height | Px   | Radius |
+| ---- | ------ | ---- | ------ |
+| sm   | 38px   | 12px | 6px    |
+| md   | 42px   | 12px | 8px    |
+| lg   | 48px   | 16px | 8px    |
 
 Trigger: full-width, `--color-input-bg-default`, ChevronDown in `--color-text-tertiary`.
 Invalid: border `--color-stroke-error`. Disabled: bg `--color-input-bg-disabled`.
@@ -398,20 +444,34 @@ Selected indicator: Check 14px in `--color-brand-primary`.
 ### Tabs
 
 ```tsx
-type TabsStyle = 'primary' | 'line' | 'default'
-type TabsSize = 'sm' | 'md'
-type TabsType = 'default' | 'white'
+type TabsStyle = "primary" | "line" | "default";
+type TabsSize = "sm" | "md";
+type TabsType = "default" | "white";
 
-interface TabItem { id, label, content?, disabled?, badge?, icon? }
-props: items, tabStyle='primary', size='sm', type='default',
-       defaultValue, value, onValueChange, renderContent=true, showNavArrows=false
+interface TabItem {
+  id;
+  label;
+  content?;
+  disabled?;
+  badge?;
+  icon?;
+}
+props: (items,
+  (tabStyle = "primary"),
+  (size = "sm"),
+  (type = "default"),
+  defaultValue,
+  value,
+  onValueChange,
+  (renderContent = true),
+  (showNavArrows = false));
 ```
 
-| Style | List bg | Active tab | Indicator |
-|---|---|---|---|
-| primary | `--color-container-tertiary` | solid `--color-brand-primary` bg + white text (or white bg + `--color-text-secondary` if `type="white"`) | none |
-| line | transparent | transparent, text `--color-brand-primary` | 2px bottom border brand-primary |
-| default | transparent | transparent | none |
+| Style   | List bg                      | Active tab                                                                                               | Indicator                       |
+| ------- | ---------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| primary | `--color-container-tertiary` | solid `--color-brand-primary` bg + white text (or white bg + `--color-text-secondary` if `type="white"`) | none                            |
+| line    | transparent                  | transparent, text `--color-brand-primary`                                                                | 2px bottom border brand-primary |
+| default | transparent                  | transparent                                                                                              | none                            |
 
 Size sm: font 13px, py 6px, px 12px. Size md: font 14px, py 8px, px 16px.
 Line-style active color: `--color-brand-primary` (or white if `type="white"`).
@@ -433,12 +493,12 @@ props: steps, orientation='horizontal', activeStep? (0-based, auto-derives statu
 
 Step circle (32×32px, 50% radius):
 
-| Status | bg | border | Content |
-|---|---|---|---|
-| completed | `--color-text-success` (#12843C) | `--color-text-success` (#12843C) | Check icon, white |
-| active | `--color-brand-primary` | `--color-brand-primary` | index number, white |
-| pending | `--color-container-tertiary` | `--color-stroke-default` | index number, `--color-text-muted` |
-| error | `--color-status-error-bg` | `--color-stroke-error` | icon/index, `--color-text-error` |
+| Status    | bg                               | border                           | Content                            |
+| --------- | -------------------------------- | -------------------------------- | ---------------------------------- |
+| completed | `--color-text-success` (#12843C) | `--color-text-success` (#12843C) | Check icon, white                  |
+| active    | `--color-brand-primary`          | `--color-brand-primary`          | index number, white                |
+| pending   | `--color-container-tertiary`     | `--color-stroke-default`         | index number, `--color-text-muted` |
+| error     | `--color-status-error-bg`        | `--color-stroke-error`           | icon/index, `--color-text-error`   |
 
 Connector: 2px line; `--color-text-success` (#12843C) if step completed, `--color-stroke-subtle` if pending.
 Horizontal: connector `flex: 1` between circles with `padding-top: 15px`.
@@ -451,17 +511,30 @@ Label: Rubik 500 `--color-brand-primary` when active (matches Figma's "stepper /
 ### Table
 
 ```tsx
-type TableSize = 'sm' | 'md'
-interface Column<T> { key, header, render?, width?, align? }
+type TableSize = "sm" | "md";
+interface Column<T> {
+  key;
+  header;
+  render?;
+  width?;
+  align?;
+}
 
-props: columns, data, size='md', striped, hoverable=true, bordered=true,
-       cellBorders, emptyText='No data', getRowKey
+props: (columns,
+  data,
+  (size = "md"),
+  striped,
+  (hoverable = true),
+  (bordered = true),
+  cellBorders,
+  (emptyText = "No data"),
+  getRowKey);
 ```
 
 | Size | Cell py | Font |
-|---|---|---|
-| sm | 8px | 12px |
-| md | 12px | 13px |
+| ---- | ------- | ---- |
+| sm   | 8px     | 12px |
+| md   | 12px    | 13px |
 
 Cell px always 16px.
 Thead: bg `--color-container-secondary`, Rubik 500, `--color-text-primary`.
@@ -476,15 +549,23 @@ Empty state: 32px py, centered, `--color-text-muted`.
 ### Dialog
 
 ```tsx
-props: open, defaultOpen, onOpenChange, trigger, title, description,
-       children (body), footer, size='md', showClose=true
+props: (open,
+  defaultOpen,
+  onOpenChange,
+  trigger,
+  title,
+  description,
+  children(body),
+  footer,
+  (size = "md"),
+  (showClose = true));
 ```
 
 | Size | Max width |
-|---|---|
-| sm | 384px |
-| md | 480px |
-| lg | 600px |
+| ---- | --------- |
+| sm   | 384px     |
+| md   | 480px     |
+| lg   | 600px     |
 
 Overlay: `--color-overlay-black` + `backdrop-filter: blur(2px)`, z-index 9998.
 Panel: white, `--radius-lg` (8px), `--shadow-md`, z-index 9999, centered via transform.
@@ -500,16 +581,22 @@ Title: Rubik 500 16px. Description: Rubik 400 13px `--color-text-secondary`.
 ### Tooltip
 
 ```tsx
-props: content, children (trigger), side='top', align='center',
-       sideOffset=6, delayDuration=400, variant='dark', disabled
+props: (content,
+  children(trigger),
+  (side = "top"),
+  (align = "center"),
+  (sideOffset = 6),
+  (delayDuration = 400),
+  (variant = "dark"),
+  disabled);
 
-export const TooltipProvider = RadixTooltip.Provider  // wrap app root
+export const TooltipProvider = RadixTooltip.Provider; // wrap app root
 ```
 
-| Variant | bg | text | border | shadow |
-|---|---|---|---|---|
-| dark | `#59595A` (neutral) | white | none | none |
-| light | white | `--color-text-primary` | `--color-stroke-subtle` | `--shadow-sm` |
+| Variant | bg                  | text                   | border                  | shadow        |
+| ------- | ------------------- | ---------------------- | ----------------------- | ------------- |
+| dark    | `#59595A` (neutral) | white                  | none                    | none          |
+| light   | white               | `--color-text-primary` | `--color-stroke-subtle` | `--shadow-sm` |
 
 Padding: `6px 10px`, `--radius-md`, Rubik 400 13px/19.2px, max-width 240px.
 Arrow fill matches bg. Wrap app in `<TooltipProvider>` to enable.
@@ -519,18 +606,20 @@ Arrow fill matches bg. Wrap app in `<TooltipProvider>` to enable.
 ### Card
 
 ```tsx
-props: header, footer,
-       elevation='sm' ('none'|'sm'|'default'|'md'),
-       padding='md' ('none'|'sm'|'md'|'lg'),
-       bordered=false, hoverable=false
+props: (header,
+  footer,
+  (elevation = "sm"("none" | "sm" | "default" | "md")),
+  (padding = "md"("none" | "sm" | "md" | "lg")),
+  (bordered = false),
+  (hoverable = false));
 ```
 
-| Padding | px |
-|---|---|
-| none | 0 |
-| sm | 12px |
-| md | 16px |
-| lg | 24px |
+| Padding | px   |
+| ------- | ---- |
+| none    | 0    |
+| sm      | 12px |
+| md      | 16px |
+| lg      | 24px |
 
 Container: `--color-container-primary`, `--radius-lg` (8px), no outer border by default — shadow-only, matching Figma's "Content Container" (`bordered` opts back into a `--color-stroke-subtle` outline for cases that need one).
 Header: padding `pad × pad × pad/2`, border-bottom `--color-stroke-subtle`.
@@ -562,14 +651,20 @@ Reach for `Card` instead when you don't need the opinionated icon/title/descript
 ### Switch
 
 ```tsx
-props: checked, defaultChecked, disabled, invalid, onCheckedChange,
-       label, helperText, size='md' ('sm'|'md')
+props: (checked,
+  defaultChecked,
+  disabled,
+  invalid,
+  onCheckedChange,
+  label,
+  helperText,
+  (size = "md"("sm" | "md")));
 ```
 
 | Size | Track W×H | Thumb | Offset |
-|---|---|---|---|
-| md | 44×24px | 18px | 3px |
-| sm | 36×20px | 14px | 3px |
+| ---- | --------- | ----- | ------ |
+| md   | 44×24px   | 18px  | 3px    |
+| sm   | 36×20px   | 14px  | 3px    |
 
 Track bg states: disabled→`--color-container-disabled`; invalid→`--color-status-error-bg`; checked→`--color-brand-primary`; hover→`--color-bg-subtle`; default→`--color-container-tertiary`.
 Border: invalid→`--color-stroke-error`; checked→brand-primary; default→`--color-stroke-default`.
@@ -581,15 +676,20 @@ Thumb animation: `translateX(thumbTravel)` via `cubic-bezier(0.4,0,0.2,1) 0.2s`.
 ### Checkbox
 
 ```tsx
-props: checked (bool|'indeterminate'), onChange, label, description,
-       size='Medium' ('Medium'|'Small'), align='Left' ('Left'|'Right'),
-       invalid, disabled
+props: (checked(bool | "indeterminate"),
+  onChange,
+  label,
+  description,
+  (size = "Medium"("Medium" | "Small")),
+  (align = "Left"("Left" | "Right")),
+  invalid,
+  disabled);
 ```
 
-| Size | Box | Icon |
-|---|---|---|
+| Size   | Box     | Icon |
+| ------ | ------- | ---- |
 | Medium | 20×20px | 14px |
-| Small | 16×16px | 14px |
+| Small  | 16×16px | 14px |
 
 bg/border states: disabled (checked or unchecked)→bg+border `--color-input-bg-disabled`; invalid+checked→`--color-destructive`; checked→`--color-brand-primary`; hover→border `#9F9F9F` + bg `rgba(0,0,0,0.02)`; default→transparent/`--color-input-border-default`.
 Focus ring: `0 0 0 3px rgba(245,126,32,0.2)` (or red if invalid).
@@ -611,10 +711,10 @@ interface RadioGroupProps {
 }
 ```
 
-| Size | Circle | Dot |
-|---|---|---|
-| md | 20×20px | 8px |
-| sm | 16×16px | 6px |
+| Size | Circle  | Dot |
+| ---- | ------- | --- |
+| md   | 20×20px | 8px |
+| sm   | 16×16px | 6px |
 
 Border 2px; states: disabled→`--color-stroke-default`; invalid→`--color-stroke-error`; checked/focused→`--color-brand-primary`; hovered→`--color-stroke-hover`; default→`--color-stroke-default`.
 Bg: checked→`--color-brand-primary`; disabled→`--color-container-disabled`; else white.
@@ -627,21 +727,33 @@ RadioGroup: `role="radiogroup"`, flex-col gap 8px, auto-wires name/checked/onCha
 ### ProgressBar
 
 ```tsx
-type ProgressLabelType = 'none' | 'title' | 'trailing' | 'top-floating' | 'bottom-floating' | 'within'
+type ProgressLabelType =
+  | "none"
+  | "title"
+  | "trailing"
+  | "top-floating"
+  | "bottom-floating"
+  | "within";
 
-props: value (0-100), max=100, labelType='none', label,
-       color='--color-brand-primary', trackColor='--color-container-tertiary',
-       height=8, animated, showPercent=true
+props: (value(0 - 100),
+  (max = 100),
+  (labelType = "none"),
+  label,
+  (color = "--color-brand-primary"),
+  (trackColor = "--color-container-tertiary"),
+  (height = 8),
+  animated,
+  (showPercent = true));
 ```
 
-| labelType | Layout |
-|---|---|
-| none | track only |
-| title | label + percent row above track, `gap: 8px` |
-| trailing | track + percent inline right, `gap: 12px` |
-| top-floating | pill badge above track |
-| bottom-floating | pill badge below track |
-| within | percent inside fill (when pct > 8%) |
+| labelType       | Layout                                      |
+| --------------- | ------------------------------------------- |
+| none            | track only                                  |
+| title           | label + percent row above track, `gap: 8px` |
+| trailing        | track + percent inline right, `gap: 12px`   |
+| top-floating    | pill badge above track                      |
+| bottom-floating | pill badge below track                      |
+| within          | percent inside fill (when pct > 8%)         |
 
 Track: radius-full, overflow hidden. Fill: animated `width 0.4s ease` if animated=true.
 Label/percent text (title, trailing): Rubik 400 13px/19.2px `--color-text-primary`.
@@ -661,12 +773,12 @@ props: size='md', shape='circular', content='placeholder',
        src, alt, initials (max 2), name (auto-derives initials), icon
 ```
 
-| Size | px | Font | Icon | Rounded radius |
-|---|---|---|---|---|
-| xs | 26 | 13px | 12 | 8px (`--radius-lg`) |
-| sm | 38 | 13px | 14 | 8px (`--radius-lg`) |
-| md | 48 | 20px | 18 | 8px (`--radius-lg`) |
-| lg | 58 | 20px | 22 | 8px (`--radius-lg`) |
+| Size | px  | Font | Icon | Rounded radius      |
+| ---- | --- | ---- | ---- | ------------------- |
+| xs   | 26  | 13px | 12   | 8px (`--radius-lg`) |
+| sm   | 38  | 13px | 14   | 8px (`--radius-lg`) |
+| md   | 48  | 20px | 18   | 8px (`--radius-lg`) |
+| lg   | 58  | 20px | 22   | 8px (`--radius-lg`) |
 
 Circular: radius-full. Placeholder bg: `--color-brand-primary`, white Rubik 500 text.
 Icon bg: `--color-container-tertiary`, icon `--color-text-tertiary`.
@@ -677,12 +789,23 @@ Image: object-fit cover. Initials derived: first char of first + last word in na
 ### AvatarGroup
 
 ```tsx
-interface AvatarGroupItem { id: string | number; name?: string; src?: string; alt?: string }
+interface AvatarGroupItem {
+  id: string | number;
+  name?: string;
+  src?: string;
+  alt?: string;
+}
 
-props: items (required), size='sm' ('xs'|'sm'|'md'), max, showAddButton, addButtonShape='circle' ('circle'|'square'), onAddClick
+props: (items(required),
+  (size = "sm"("xs" | "sm" | "md")),
+  max,
+  showAddButton,
+  (addButtonShape = "circle"("circle" | "square")),
+  onAddClick);
 ```
 
 Rules:
+
 - Avatars overlap with a negative `margin-left`; each carries a `0 0 0 2px var(--color-surface)` ring to separate it from its neighbor
 - `max` collapses remaining avatars into an orange "+N" circle styled to match the avatar size
 - `showAddButton` appends a dashed-outline button (circle or square) for an add-member action
@@ -691,9 +814,9 @@ Rules:
 ### AvatarLabelGroup
 
 ```tsx
-type AvatarLabelGroupSize = 'sm' | 'md' | 'lg' | 'xl'
+type AvatarLabelGroupSize = "sm" | "md" | "lg" | "xl";
 
-props: name (required), email, src, size='md'
+props: (name(required), email, src, (size = "md"));
 ```
 
 Pairs a single `Avatar` with a bold name and muted email — use to identify one specific person (comment authors, assignee rows), not headcount.
@@ -703,10 +826,12 @@ Pairs a single `Avatar` with a bold name and muted email — use to identify one
 ### Divider
 
 ```tsx
-props: orientation='horizontal' ('horizontal'|'vertical'),
-       type='line' ('line'|'dash'),
-       label, labelAlign='center' ('left'|'center'|'right'),
-       color='--color-stroke-subtle', thickness=1
+props: ((orientation = "horizontal"("horizontal" | "vertical")),
+  (type = "line"("line" | "dash")),
+  label,
+  (labelAlign = "center"("left" | "center" | "right")),
+  (color = "--color-stroke-subtle"),
+  (thickness = 1));
 ```
 
 Horizontal: full width, `border-bottom`.
@@ -719,9 +844,16 @@ Always include `role="separator"` + `aria-orientation`.
 ### Pagination
 
 ```tsx
-props: total, pageSize=10, page (controlled), defaultPage=1,
-       onPageChange, siblingCount=1, showFirstLast=false, showRowsPerPage=false,
-       pageSizes=[10,25,50,100], onPageSizeChange
+props: (total,
+  (pageSize = 10),
+  page(controlled),
+  (defaultPage = 1),
+  onPageChange,
+  (siblingCount = 1),
+  (showFirstLast = false),
+  (showRowsPerPage = false),
+  (pageSizes = [10, 25, 50, 100]),
+  onPageSizeChange);
 ```
 
 Buttons: 36×36px min, border-radius 8px, Rubik 13px, font 400 (weight never changes on active).
@@ -737,28 +869,44 @@ Rows-per-page select (when `showRowsPerPage`): border `--color-input-border-defa
 ### AlertDialog
 
 ```tsx
-type AlertDialogVariant = 'default' | 'destructive' | 'info'
+type AlertDialogVariant = "default" | "destructive" | "info";
 
-interface AlertDialogAction { label: string; onClick: () => void; loading?: boolean }
-interface AlertDialogCheckboxAction { label: ReactNode; checked: boolean; onChange: (checked: boolean) => void }
+interface AlertDialogAction {
+  label: string;
+  onClick: () => void;
+  loading?: boolean;
+}
+interface AlertDialogCheckboxAction {
+  label: ReactNode;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}
 
-props: open (required), variant='default', title (required), description,
-       icon (override), confirmAction (required), cancelAction, onClose (required),
-       size='md' ('sm'|'md'), checkboxAction
+props: (open(required),
+  (variant = "default"),
+  title(required),
+  description,
+  icon(override),
+  confirmAction(required),
+  cancelAction,
+  onClose(required),
+  (size = "md"("sm" | "md")),
+  checkboxAction);
 ```
 
-| Variant | Icon bg | Icon color | Default Icon |
-|---|---|---|---|
-| default | `--color-brand-primary-ghost-hover` (`#FEF2E9`) | `--color-brand-primary` | Info |
-| destructive | `#FEE2E2` | `--color-destructive` | Trash2 |
-| info | `#EBF2FE` | `--color-text-info` | AlertTriangle |
+| Variant     | Icon bg                                         | Icon color              | Default Icon  |
+| ----------- | ----------------------------------------------- | ----------------------- | ------------- |
+| default     | `--color-brand-primary-ghost-hover` (`#FEF2E9`) | `--color-brand-primary` | Info          |
+| destructive | `#FEE2E2`                                       | `--color-destructive`   | Trash2        |
+| info        | `#EBF2FE`                                       | `--color-text-info`     | AlertTriangle |
 
-| Size | Max width | Body padding | Title font | Action padding |
-|---|---|---|---|---|
-| sm | 360px | `24px 24px 0` | 16px/24px line-height | `20px 24px 24px` |
-| md | 440px | `32px 32px 0` | 16px/24px line-height | `24px 32px 32px` |
+| Size | Max width | Body padding  | Title font            | Action padding   |
+| ---- | --------- | ------------- | --------------------- | ---------------- |
+| sm   | 360px     | `24px 24px 0` | 16px/24px line-height | `20px 24px 24px` |
+| md   | 440px     | `32px 32px 0` | 16px/24px line-height | `24px 32px 32px` |
 
 Rules:
+
 - Overlay: `rgba(0,0,0,0.4)` + `backdrop-filter: blur(2px)`, `role="alertdialog"`, z-index 1000, click-outside and Escape both call `onClose`
 - Panel: white, `border-radius: 8px`, `box-shadow: 0px 24px 48px rgba(0,0,0,0.12)`
 - Icon container: 40×40px, `border-radius: 8px`, bg per variant
@@ -779,12 +927,13 @@ interface BreadcrumbItem { label, href?, onClick? }
 props: items (required), separator (override, default ChevronRight), size='md' ('sm'|'md')
 ```
 
-| Size | Font | Icon |
-|---|---|---|
-| sm | 12px/18px | 8px |
-| md | 13px/19.2px | 10px |
+| Size | Font        | Icon |
+| ---- | ----------- | ---- |
+| sm   | 12px/18px   | 8px  |
+| md   | 13px/19.2px | 10px |
 
 Rules:
+
 - `<nav aria-label="Breadcrumb">` wrapping an `<ol>`, gap 4px between items
 - Last item: `aria-current="page"`, Rubik 400, `--color-text-primary`, no link
 - Non-last items: `<a>`, Rubik 400, `--color-text-tertiary`, hover → `--color-brand-primary`
@@ -795,13 +944,21 @@ Rules:
 ### Carousel
 
 ```tsx
-interface CarouselItem { id: string | number; content: ReactNode }
+interface CarouselItem {
+  id: string | number;
+  content: ReactNode;
+}
 
-props: items (required), visibleCount=1 (1|2|3|4), autoPlay=0 (ms, 0=disabled),
-       showArrows=true, showDots=true, gap=16
+props: (items(required),
+  (visibleCount = 1(1 | 2 | 3 | 4)),
+  (autoPlay = 0(ms, (0 = disabled))),
+  (showArrows = true),
+  (showDots = true),
+  (gap = 16));
 ```
 
 Rules:
+
 - Track: `overflow: hidden`, slides in a flex row, `transition: transform 0.4s cubic-bezier(0.4,0,0.2,1)`
 - Slide width: `calc((100% - (visibleCount-1)*gap) / visibleCount)`
 - Arrows: 36×36px circle, inset 16px from edge, bg `--color-btn-invert` (`#59595A`) with `backdrop-filter: blur(2px)`, border `rgba(255,255,255,0.2)`, icon white 14px; disabled at bounds (`opacity: 0.4`, `cursor: not-allowed`) — not looping via arrows
@@ -814,21 +971,35 @@ Rules:
 ### CardMetric
 
 ```tsx
-type MetricTrend = 'up' | 'down' | 'neutral'
-interface CardMetricFooterAction { label: string; onClick: () => void }
+type MetricTrend = "up" | "down" | "neutral";
+interface CardMetricFooterAction {
+  label: string;
+  onClick: () => void;
+}
 
-props: label (required), value (required, string|number), unit, trend, trendValue,
-       trendLabel, icon, accentColor='var(--color-brand-primary, #F57E20)', description,
-       onMoreClick, chart, footerAction, floatingIcon
+props: (label(required),
+  value(required, string | number),
+  unit,
+  trend,
+  trendValue,
+  trendLabel,
+  icon,
+  (accentColor = "var(--color-brand-primary, #F57E20)"),
+  description,
+  onMoreClick,
+  chart,
+  footerAction,
+  floatingIcon);
 ```
 
-| Trend | Color | bg | Icon |
-|---|---|---|---|
-| up | `--color-text-success` | `#E9F9EF` | TrendingUp |
-| down | `--color-destructive` | `#FEE2E2` | TrendingDown |
-| neutral | `--color-text-tertiary` | `#F7F7F7` | Minus |
+| Trend   | Color                   | bg        | Icon         |
+| ------- | ----------------------- | --------- | ------------ |
+| up      | `--color-text-success`  | `#E9F9EF` | TrendingUp   |
+| down    | `--color-destructive`   | `#FEE2E2` | TrendingDown |
+| neutral | `--color-text-tertiary` | `#F7F7F7` | Minus        |
 
 Rules:
+
 - Container: `--color-container-secondary` (#F7F7F7), no border, `--shadow-sm`, `border-radius: 8px`, padding 16px, flex-col gap 12px
 - Label: Rubik 500 13px/19.2px `--color-text-secondary`, `letter-spacing: -0.01px`
 - Icon well: 36×36px, `border-radius: 8px`, bg = `accentColor` at ~9% alpha (`${accentColor}18`), icon color = `accentColor`
@@ -845,15 +1016,28 @@ Rules:
 ### ComparisonTable
 
 ```tsx
-type CellValue = boolean | 'partial' | string | number | ReactNode
+type CellValue = boolean | "partial" | string | number | ReactNode;
 
-interface ComparisonColumn { key, label, highlighted?, badge? }
-interface ComparisonRow { feature, group?, values: Record<string, CellValue> }
+interface ComparisonColumn {
+  key;
+  label;
+  highlighted?;
+  badge?;
+}
+interface ComparisonRow {
+  feature;
+  group?;
+  values: Record<string, CellValue>;
+}
 
-props: columns (required), rows (required), featureLabel='Feature', stickyHeader=false
+props: (columns(required),
+  rows(required),
+  (featureLabel = "Feature"),
+  (stickyHeader = false));
 ```
 
 Rules:
+
 - Outer wrapper: `overflow-x: auto`, `border-radius: 12px`, border `--color-stroke-subtle`
 - Table: `border-collapse: collapse`, `table-layout: fixed`; feature column fixed at 20% width, remaining columns split `80% / columns.length` evenly
 - Header cells: `padding: 16px 20px`, Rubik 500 12px uppercase `letter-spacing: 0.5px` `--color-text-tertiary`, bg `--color-container-secondary`, border-bottom `--color-stroke-subtle`
@@ -869,13 +1053,24 @@ Rules:
 ### DatePicker
 
 ```tsx
-type DatePickerMode = 'date' | 'range' | 'month' | 'year'
+type DatePickerMode = "date" | "range" | "month" | "year";
 
-props: value, onChange, rangeStart, rangeEnd, onRangeChange, mode='date',
-       placeholder, disabled, minDate, maxDate, label, error
+props: (value,
+  onChange,
+  rangeStart,
+  rangeEnd,
+  onRangeChange,
+  (mode = "date"),
+  placeholder,
+  disabled,
+  minDate,
+  maxDate,
+  label,
+  error);
 ```
 
 Rules:
+
 - Trigger: height 40px, `padding: 0 12px`, `border-radius: 8px`, min-width 200px, Calendar icon 16px `--color-text-tertiary`
 - Border: `--color-destructive` (error) → `--color-brand-primary` (open) → `--color-stroke-subtle` (default); disabled bg `--color-container-secondary`, `cursor: not-allowed`
 - Focus/open ring: `outline: 3px solid var(--color-brand-primary-ring, rgba(245,126,32,0.2))`
@@ -893,21 +1088,33 @@ Rules:
 ### Dropzone
 
 ```tsx
-interface DropzoneFile { file: File; id: string }
-type DropzoneSize = 'md' | 'lg'
+interface DropzoneFile {
+  file: File;
+  id: string;
+}
+type DropzoneSize = "md" | "lg";
 
-props: accept, multiple=false, maxSize (bytes), size='md', disabled=false, error=false,
-       errorText, label, helperText, onFilesChange
+props: (accept,
+  (multiple = false),
+  maxSize(bytes),
+  (size = "md"),
+  (disabled = false),
+  (error = false),
+  errorText,
+  label,
+  helperText,
+  onFilesChange);
 ```
 
 Rules:
+
 - Label: Rubik 400 13px/19.2px, `--color-text-primary` (or `--color-text-disabled` `#929292` when disabled)
 - Drop zone: `size='md'` → horizontal layout (icon well + text, `gap: 16px`); `size='lg'` → vertical, centered layout (matches Figma's "Input / Upload-file" `Size=Large`) — both `padding: 16px`, `border-radius: var(--radius-lg, 8px)`, `border: 1.5px dashed`, `width: 100%` so it fills its container and reflows responsively (node 1666:24135)
 - Border color: disabled → `--color-stroke-subtle`; error (prop or oversized file) → `--color-destructive`; drag-over → `--color-brand-primary`; default → `--color-stroke-default`
 - Background: disabled → `--color-container-secondary`; drag-over → `--color-status-brand-bg` (`#FEF2E9`); default → `#FFFFFF`
 - Icon well: 56×56px (`md`) / 92×92px (`lg`), `border-radius: var(--radius-lg, 8px)`, two-layer `box-shadow: 0px 2px 4px rgba(0,0,0,0.04), 0px 4px 8px rgba(0,0,0,0.08)`; bg `--color-container-secondary` (default) → `--color-brand-primary` on drag-over; `UploadCloud` 24px (`md`) / 40px (`lg`), `--color-text-secondary` (default) → white on drag-over
-- Text block: title "Drop to upload" (dragging) / "Drag & drop your file here" — Rubik 500, 13px/19.2px (`md`) or 20px/30px heading font (`lg`), `--color-text-secondary`; helper paragraph below (Rubik 400, 10px/15.6px `md` or 13px/19.2px `lg`, `--color-text-tertiary`) merges the "or **click to browse**" prompt (brand-colored) and the accept/maxSize constraints onto one block instead of separate rows/pills; grows to fill the zone's width (`flex: 1` / `width: 100%`) so long copy wraps instead of leaving dead space when the zone is stretched
-- Decorative background: a single `<svg>` (`overflow: hidden`, `pointer-events: none`) with a normalized `viewBox="0 0 100 100"` and `preserveAspectRatio="xMidYMid slice"` — coordinates are percentages derived from Figma's *unclipped* "Input / Upload-file" instance (node 2346:7574, the one showing the full tidy arrangement, not the small Medium/Large frames that clip almost everything). Contains all 21 concentric rings (`--color-stroke-subtle` default → `--color-brand-primary` on drag-over, 12% opacity) and the 6 rotated file-type icon chips arranged around the center (white/`--color-container-secondary` bg, two-layer drop shadow via an SVG `feDropShadow` filter approximating `0px 2px 4px rgba(0,0,0,.04), 0px 4px 8px rgba(0,0,0,.08)`), plus a left/right edge fade gradient. The main upload glyph and all 6 chip icons use the exact `react-icons` icons Figma specs (`IoMdCloudUpload`, `IoDocuments`, `IoDocumentText`, `IoDocumentAttach`, `BsFileEarmarkMedicalFill`, `BsFileEarmarkPdfFill`, `HiDocumentReport`) rather than lucide substitutes — the one deliberate exception to this design system's lucide-react standard (see the `Foundations/Icons` page). `slice` mode uniformly scales the whole pattern (so chips/rings stay undistorted, never stretched into ellipses) to fully cover the zone as it's resized in either width or height, cropping overflow — like `background-size: cover`
+- Text block: title "Drop to upload" (dragging) / "Drag & drop your file here" — Rubik 500, 13px/19.2px (`md`) or 20px/30px heading font (`lg`), `--color-text-secondary`; helper paragraph below (Rubik 400, 10px/15.6px `md` or 13px/19.2px `lg`, `--color-text-tertiary`) merges the "or **click to browse**" prompt (brand-colored) and the accept/maxSize constraints onto one block instead of separate rows/pills; capped at `max-width: 420px` (`md`) / `width: 100%` (`lg`, centered text) so the icon+text group sits centered as a unit (via the zone's `justify-content: center`) instead of stretching edge-to-edge and pinning left when the zone is stretched wide
+- Decorative background: a single `<svg>` (`overflow: hidden`, `pointer-events: none`) with a normalized `viewBox="0 0 100 100"` and `preserveAspectRatio="xMidYMid slice"` — coordinates are percentages derived from Figma's _unclipped_ "Input / Upload-file" instance (node 2346:7574, the one showing the full tidy arrangement, not the small Medium/Large frames that clip almost everything). Contains all 21 concentric rings (`--color-stroke-subtle` default → `--color-brand-primary` on drag-over, 12% opacity) and the 6 rotated file-type icon chips arranged around the center (white/`--color-container-secondary` bg, two-layer drop shadow via an SVG `feDropShadow` filter approximating `0px 2px 4px rgba(0,0,0,.04), 0px 4px 8px rgba(0,0,0,.08)`), plus a left/right edge fade gradient. The main upload glyph and all 6 chip icons use the exact `react-icons` icons Figma specs (`IoMdCloudUpload`, `IoDocuments`, `IoDocumentText`, `IoDocumentAttach`, `BsFileEarmarkMedicalFill`, `BsFileEarmarkPdfFill`, `HiDocumentReport`) rather than lucide substitutes — the one deliberate exception to this design system's lucide-react standard (see the `Foundations/Icons` page). `slice` mode uniformly scales the whole pattern (so chips/rings stay undistorted, never stretched into ellipses) to fully cover the zone as it's resized in either width or height, cropping overflow — like `background-size: cover`
 - File rows: `padding: 8px 12px`, `border-radius: 8px`, border `--color-stroke-subtle`, `FileText` icon `--color-brand-primary`, filename Rubik 500 13px, size Rubik 400 11px `--color-text-tertiary`; remove (×) button 24×24px `border-radius: 6px`, hover bg `#F5F5F5`
 - Error/helper text row: `AlertCircle` 12px + text 12px/18px, `--color-destructive` when erroring (oversized-file message takes priority over `errorText`) else `--color-text-tertiary`
 - `multiple=false` keeps only the first accepted file
@@ -917,27 +1124,37 @@ Rules:
 ### EmptyState
 
 ```tsx
-type EmptyStateVariant = 'default' | 'search' | 'folder' | 'image' | 'file'
-interface EmptyStateAction { label, onClick, variant?: 'primary'|'outline' }
+type EmptyStateVariant = "default" | "search" | "folder" | "image" | "file";
+interface EmptyStateAction {
+  label;
+  onClick;
+  variant?: "primary" | "outline";
+}
 
-props: variant='default', icon (override), title (required), description,
-       action, secondaryAction, compact=false
+props: ((variant = "default"),
+  icon(override),
+  title(required),
+  description,
+  action,
+  secondaryAction,
+  (compact = false));
 ```
 
-| Variant | Icon |
-|---|---|
-| default | Inbox |
-| search | Search |
-| folder | FolderOpen |
-| image | ImageOff |
-| file | FileX |
+| Variant | Icon       |
+| ------- | ---------- |
+| default | Inbox      |
+| search  | Search     |
+| folder  | FolderOpen |
+| image   | ImageOff   |
+| file    | FileX      |
 
-| | Padding | Icon well | Icon size | Title font |
-|---|---|---|---|---|
-| default | `64px 24px` | 40×40px | 32px | 16px/24px |
-| compact | `32px 24px` | 32×32px | 24px | 14px/21px |
+|         | Padding     | Icon well | Icon size | Title font |
+| ------- | ----------- | --------- | --------- | ---------- |
+| default | `64px 24px` | 40×40px   | 32px      | 16px/24px  |
+| compact | `32px 24px` | 32×32px   | 24px      | 14px/21px  |
 
 Rules:
+
 - Icon well: `border-radius: var(--radius-lg, 8px)`, bg `--color-status-brand-bg` (`#FEF2E9`), icon `--color-brand-primary` (`#F57E20`)
 - Title: Rubik 500, `--color-text-primary`, `max-width: 320px`
 - Description: Rubik 400 13px, `line-height: 19.2px`, `letter-spacing: -0.01px`, `--color-text-secondary`, `max-width: 380px`
@@ -956,16 +1173,17 @@ props: variant='default', title, description, icon, footer,
        action: { label, onClick }, compact=false, onClick
 ```
 
-| Variant | bg | border | accent |
-|---|---|---|---|
-| default | `#FFFFFF` | `--color-stroke-subtle` | `--color-text-secondary` |
-| brand | `--color-brand-primary-ghost-hover` | `--primitive-orange-10` | `--color-brand-primary` |
-| success | `--color-status-success-bg` | `--primitive-green-10` | `--color-text-success` |
-| warning | `--color-status-warning-bg` | `--primitive-yellow-20` | `--color-text-warning` |
-| error | `--color-status-error-bg` | `--primitive-red-10` | `--color-destructive` |
-| info | `--color-status-info-bg` | `--primitive-blue-10` | `--color-text-info` |
+| Variant | bg                                  | border                  | accent                   |
+| ------- | ----------------------------------- | ----------------------- | ------------------------ |
+| default | `#FFFFFF`                           | `--color-stroke-subtle` | `--color-text-secondary` |
+| brand   | `--color-brand-primary-ghost-hover` | `--primitive-orange-10` | `--color-brand-primary`  |
+| success | `--color-status-success-bg`         | `--primitive-green-10`  | `--color-text-success`   |
+| warning | `--color-status-warning-bg`         | `--primitive-yellow-20` | `--color-text-warning`   |
+| error   | `--color-status-error-bg`           | `--primitive-red-10`    | `--color-destructive`    |
+| info    | `--color-status-info-bg`            | `--primitive-blue-10`   | `--color-text-info`      |
 
 Rules:
+
 - Container: `border-radius: 12px`, `border: 1px solid` per variant, `box-sizing: border-box`, `width: 100%`
 - Default (non-compact): `flex-direction: column`, `padding: 20px`, gap 16px. Compact: `flex-direction: row`, `align-items: center`, `padding: 12px 16px`, gap 12px
 - Icon block: 40×40px `border-radius: 10px` bg = variant border color (non-compact) or bare 20×20px icon (compact), color = `accent`
@@ -987,6 +1205,7 @@ props: logo, links=[], actions, showSearch=false, showNotifications=false,
 ```
 
 Rules:
+
 - Bar: height 64px, `padding: 0 24px`, gap 24px, `border-bottom: 1px solid var(--color-stroke-subtle)` (omitted when `transparent`)
 - `sticky=true`: `position: sticky, top: 0, z-index: 100`
 - `transparent=true`: bg transparent, no border (for hero sections)
@@ -1002,16 +1221,29 @@ Rules:
 ### Popover
 
 ```tsx
-type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' |
-                        'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
+type PopoverPlacement =
+  | "top"
+  | "bottom"
+  | "left"
+  | "right"
+  | "top-start"
+  | "top-end"
+  | "bottom-start"
+  | "bottom-end";
 
-props: trigger (required), children (required), placement='bottom-start',
-       width=300, closeOnOutsideClick=true, open, onOpenChange
+props: (trigger(required),
+  children(required),
+  (placement = "bottom-start"),
+  (width = 300),
+  (closeOnOutsideClick = true),
+  open,
+  onOpenChange);
 
 // Sub-components: PopoverHeader { title, description }, PopoverBody, PopoverFooter
 ```
 
 Rules:
+
 - Panel: `position: absolute`, `z-index: 200`, white bg, border `--color-stroke-subtle`, `border-radius: 8px`, `box-shadow: 0px 8px 24px rgba(0,0,0,0.10), 0px 2px 8px rgba(0,0,0,0.06)`, offset 8px from trigger on the placement side
 - Supports controlled (`open`/`onOpenChange`) or uncontrolled toggling on trigger click
 - Closes on outside mousedown when `closeOnOutsideClick=true` (default)
@@ -1031,14 +1263,15 @@ props: open (required), onClose (required), side='right', title, description,
        closeOnOverlayClick=true
 ```
 
-| Side | Default size | Radius |
-|---|---|---|
-| right | width 384px | none (flush to edge) |
-| left | width 384px | none (flush to edge) |
-| top | height 320px | none (flush to edge) |
+| Side   | Default size | Radius               |
+| ------ | ------------ | -------------------- |
+| right  | width 384px  | none (flush to edge) |
+| left   | width 384px  | none (flush to edge) |
+| top    | height 320px | none (flush to edge) |
 | bottom | height 320px | none (flush to edge) |
 
 Rules:
+
 - Overlay: `rgba(0,0,0,0.4)` + `backdrop-filter: blur(2px)`, z-index 900, fades `opacity 320ms ease`
 - Panel: white, `box-shadow: 0px 24px 48px rgba(0,0,0,0.12)`, slides in/out via `transform 320ms cubic-bezier(0.32,0.72,0,1)` (hidden state translates fully off-screen per side)
 - Escape key and (if `closeOnOverlayClick`) overlay click both call `onClose`
@@ -1053,21 +1286,27 @@ Rules:
 ### Spinner
 
 ```tsx
-type SpinnerSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-type SpinnerVariant = 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'white'
+type SpinnerSize = "xs" | "sm" | "md" | "lg" | "xl";
+type SpinnerVariant =
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "neutral"
+  | "white";
 
-props: size='md', variant='primary'
+props: ((size = "md"), (variant = "primary"));
 ```
 
-| Size | px | Border thickness |
-|---|---|---|
-| xs | 12 | 1.5px |
-| sm | 16 | 1.5px |
-| md | 24 | 2px |
-| lg | 32 | 2px |
-| xl | 48 | 2.5px |
+| Size | px  | Border thickness |
+| ---- | --- | ---------------- |
+| xs   | 12  | 1.5px            |
+| sm   | 16  | 1.5px            |
+| md   | 24  | 2px              |
+| lg   | 32  | 2px              |
+| xl   | 48  | 2.5px            |
 
 Rules:
+
 - `role="status"`, `aria-label="Loading"`, `border-radius: 50%`
 - Ring color per variant: primary `--color-brand-primary`, secondary `--color-brand-secondary`, tertiary `--color-brand-tertiary`, neutral `--color-text-secondary`, white `#FFFFFF`
 - `border-top-color: transparent` creates the spinning gap; animation `spinner-spin 0.75s linear infinite`
@@ -1077,30 +1316,41 @@ Rules:
 ### TextLink
 
 ```tsx
-type TextLinkVariant = 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'destructive'
-type TextLinkWeight = 'regular' | 'semibold'
-type TextLinkSize = 'sm' | 'md' | 'lg'
+type TextLinkVariant =
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "neutral"
+  | "destructive";
+type TextLinkWeight = "regular" | "semibold";
+type TextLinkSize = "sm" | "md" | "lg";
 
-props: variant='primary', weight='regular', size='md',
-       underline='hover' ('always'|'hover'|'none'),
-       leadingIcon, trailingIcon, asButton, onPress
+props: ((variant = "primary"),
+  (weight = "regular"),
+  (size = "md"),
+  (underline = "hover"("always" | "hover" | "none")),
+  leadingIcon,
+  trailingIcon,
+  asButton,
+  onPress);
 ```
 
-| Variant | Default | Hover |
-|---|---|---|
-| primary | `--color-brand-primary` | `--color-brand-primary-hover` |
-| secondary | `--color-brand-secondary` | `#3E5639` |
-| tertiary | `--color-brand-tertiary` | `#077E8C` |
-| neutral | `--color-text-primary` | `#49494A` |
-| destructive | `--color-destructive` | `#B91C1C` |
+| Variant     | Default                   | Hover                         |
+| ----------- | ------------------------- | ----------------------------- |
+| primary     | `--color-brand-primary`   | `--color-brand-primary-hover` |
+| secondary   | `--color-brand-secondary` | `#3E5639`                     |
+| tertiary    | `--color-brand-tertiary`  | `#077E8C`                     |
+| neutral     | `--color-text-primary`    | `#49494A`                     |
+| destructive | `--color-destructive`     | `#B91C1C`                     |
 
-| Size | Font | Icon |
-|---|---|---|
-| sm | 12px/18px | 14px |
-| md | 14px/21px | 16px |
-| lg | 16px/24px | 18px |
+| Size | Font      | Icon |
+| ---- | --------- | ---- |
+| sm   | 12px/18px | 14px |
+| md   | 14px/21px | 16px |
+| lg   | 16px/24px | 18px |
 
 Rules:
+
 - Renders as `<a>`; `weight='semibold'` → 600, else 400; `underline='always'` sets `text-decoration: underline` permanently, `'hover'` toggles on mouse enter/leave, `'none'` never underlines
 - `onPress` intercepts the click (`preventDefault`) instead of navigating — use for button-like link actions
 - Icons rendered in fixed-size wrapper matching `iconSize`, `flex-shrink: 0`
@@ -1110,15 +1360,30 @@ Rules:
 ### ToolbarFilter
 
 ```tsx
-interface FilterOption { value, label }
-interface FilterGroup { key, label, options: FilterOption[], multiple? }
+interface FilterOption {
+  value;
+  label;
+}
+interface FilterGroup {
+  key;
+  label;
+  options: FilterOption[];
+  multiple?;
+}
 
-props: searchValue='', onSearchChange, searchPlaceholder='Search…',
-       filters=[], activeFilters={}, onFilterChange, onClearAll,
-       actions, totalResults
+props: ((searchValue = ""),
+  onSearchChange,
+  (searchPlaceholder = "Search…"),
+  (filters = []),
+  (activeFilters = {}),
+  onFilterChange,
+  onClearAll,
+  actions,
+  totalResults);
 ```
 
 Rules:
+
 - Root: `display: flex`, `align-items: center`, gap 8px, `flex-wrap: wrap`
 - Search input: height 36px, `padding-left: 32px` (Search icon 14px `--color-text-tertiary` inset), `border-radius: 8px`, border `--color-stroke-subtle`, Rubik 13px, width 200px; inline clear (×, 12px) shown when non-empty; only rendered if `onSearchChange` is passed
 - Filter trigger button: height 36px, `border-radius: 8px`, `Filter` icon 14px, Rubik 13px; active (count > 0) → border + text `--color-brand-primary`, bg `--color-brand-primary-ghost-hover`; inactive → border `--color-stroke-subtle`, white bg, `--color-text-primary`
@@ -1143,15 +1408,16 @@ props: variant='default', title (required), description,
        action: { label, onClick }, onClose, duration=4000
 ```
 
-| Variant | Icon | Icon color |
-|---|---|---|
-| default | Info | `--color-brand-primary` |
-| info | Info | `--color-text-info` |
-| success | CheckCircle2 | `--color-text-success` |
-| warning | AlertTriangle | `--color-text-warning` |
-| error | XCircle | `--color-destructive` |
+| Variant | Icon          | Icon color              |
+| ------- | ------------- | ----------------------- |
+| default | Info          | `--color-brand-primary` |
+| info    | Info          | `--color-text-info`     |
+| success | CheckCircle2  | `--color-text-success`  |
+| warning | AlertTriangle | `--color-text-warning`  |
+| error   | XCircle       | `--color-destructive`   |
 
 Rules:
+
 - Card: `display: flex`, `padding: 14px 16px`, white bg, border `--color-stroke-subtle`, `border-radius: 12px`, `box-shadow: 0px 8px 24px rgba(0,0,0,0.10), 0px 2px 8px rgba(0,0,0,0.06)`, `min-width: 280px`, `max-width: 400px`
 - `role="status"`, `aria-live="polite"`
 - Icon: 18px, colored per variant, `margin-top: 1px` to align with title baseline
@@ -1177,6 +1443,7 @@ Sizes: `Small` → 32px min-height, 13px label (line-height 19.2px), 16px icons.
 Font: Rubik 400, `--color-text-primary`.
 
 States (bg / label+icon color):
+
 - Default: transparent / `--color-text-primary`
 - Hover, Focus: `--color-status-brand-bg` (#FEF2E9) / `--color-text-primary`
 - Pressed: `--color-stroke-default` / `--color-text-primary`
@@ -1242,12 +1509,14 @@ Footer: only rendered if `showPagination && paginationProps` or `showFooterActio
 ## Quick Reference: Common Tasks
 
 ### Screen Design
+
 1. Set `data-brand="nusantics|cekolam|causa"` on root
 2. Import `theme.css` (or inline `:root` variables)
 3. Use semantic tokens only — zero hardcoded values
 4. Desktop-first; mobile at `--container-md` / `--container-sm`
 
 ### New Component
+
 1. Match variant + size API pattern from existing components
 2. States: default → hover → focus → disabled → error
 3. Solid variants: add inner highlight `inset 0 0 0 1px rgba(255,255,255,0.2)`
@@ -1255,18 +1524,20 @@ Footer: only rendered if `showPagination && paginationProps` or `showFooterActio
 5. `pill` prop → `--radius-full` (landing page)
 
 ### Color Usage Rules
-| Context | Token |
-|---|---|
-| Body text | `--color-text-primary` |
-| Subtitles | `--color-text-secondary` |
-| Captions | `--color-text-tertiary` |
-| Disabled | `--color-text-muted` |
-| Brand actions | `--color-brand-primary` |
-| Danger | `--color-destructive` |
-| Surfaces | `--color-container-primary/secondary/tertiary` |
-| Status | `--color-status-{error/success/warning/info}-bg` + matching text token |
+
+| Context       | Token                                                                  |
+| ------------- | ---------------------------------------------------------------------- |
+| Body text     | `--color-text-primary`                                                 |
+| Subtitles     | `--color-text-secondary`                                               |
+| Captions      | `--color-text-tertiary`                                                |
+| Disabled      | `--color-text-muted`                                                   |
+| Brand actions | `--color-brand-primary`                                                |
+| Danger        | `--color-destructive`                                                  |
+| Surfaces      | `--color-container-primary/secondary/tertiary`                         |
+| Status        | `--color-status-{error/success/warning/info}-bg` + matching text token |
 
 ### Developer Handoff
+
 - Reference token names, never hex values
 - Annotate which tokens are brand-aware
 - Include all interactive states + loading/error
