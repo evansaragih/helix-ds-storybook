@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/sync-design-docs-reminder.sh 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
