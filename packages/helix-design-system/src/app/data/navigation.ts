@@ -1,6 +1,9 @@
+export type ComponentLevel = 'Atomic' | 'Molecule' | 'Organism' | 'Template';
+
 export interface NavItem {
   label: string;
   id: string;
+  level?: ComponentLevel;
 }
 
 export const foundationItems: NavItem[] = [
@@ -12,8 +15,7 @@ export const foundationItems: NavItem[] = [
   { label: 'Brand Identity', id: 'brand-identity' },
 ];
 
-export const componentItems: NavItem[] = [
-  { label: 'Overview', id: 'components-overview' },
+const components: NavItem[] = [
   { label: 'Button', id: 'button' },
   { label: 'Icon Button', id: 'icon-button' },
   { label: 'Checkbox', id: 'checkbox' },
@@ -71,3 +73,47 @@ export const componentItems: NavItem[] = [
   { label: 'Comparison Tables', id: 'comparison-table' },
   { label: 'Dashboard Layout', id: 'dashboard-layout' },
 ];
+
+/** Atomic design level per Figma page / Storybook group; anything not listed is a Molecule. */
+const levelById: Record<string, ComponentLevel> = {
+  'button': 'Atomic',
+  'icon-button': 'Atomic',
+  'checkbox': 'Atomic',
+  'radio-button': 'Atomic',
+  'progress-bar': 'Atomic',
+  'slider': 'Atomic',
+  'spinner': 'Atomic',
+  'divider': 'Atomic',
+  'icon-tile': 'Atomic',
+  'dot': 'Atomic',
+  'switch': 'Atomic',
+  'navbar': 'Organism',
+  'sidebar': 'Organism',
+  'dropzone': 'Organism',
+  'upload-progress-drawer': 'Organism',
+  'info-badge': 'Organism',
+  'metric-tile': 'Organism',
+  'date-picker': 'Organism',
+  'comparison-table': 'Organism',
+  'dashboard-layout': 'Template',
+};
+
+export const componentItems: NavItem[] = components.map((c) => ({ ...c, level: levelById[c.id] ?? 'Molecule' }));
+
+export const componentLevels: ComponentLevel[] = ['Atomic', 'Molecule', 'Organism', 'Template'];
+
+export interface NavGroup {
+  id: string;
+  label: string;
+  items: NavItem[];
+}
+
+/** Groups shown on the sidebar rail; each opens a second panel listing its pages. */
+export const navGroups: NavGroup[] = [
+  { id: 'foundations', label: 'Foundations', items: foundationItems },
+  ...componentLevels.map((level) => ({ id: level, label: level, items: componentItems.filter((i) => i.level === level) })),
+];
+
+/** The rail group a page belongs to, or null for pages outside any group (Overview). */
+export const groupOfSection = (sectionId: string): string | null =>
+  navGroups.find((g) => g.items.some((i) => i.id === sectionId))?.id ?? null;

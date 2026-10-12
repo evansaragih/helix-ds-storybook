@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 import { Button } from './Button';
-import { ILLUSTRATIONS } from './illustrations';
+import { Illustration } from './Illustration';
 import type { IllustrationName } from './illustrations';
 
 /** Figma Type — picks the scenario, its default illustration and default text */
@@ -22,6 +22,8 @@ export interface EmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   description?: React.ReactNode;
   /** Show the illustration (Figma Illustration, default true), or pick another from the Figma Illustration set */
   illustration?: boolean | IllustrationName;
+  /** Idle animation on the illustration. Default true; always still under prefers-reduced-motion. */
+  animated?: boolean;
   /** Show a 48px Icon Tile above the illustration (Figma Icon Tile) — pass the icon node */
   icon?: React.ReactNode;
   primaryAction?: EmptyStateAction;
@@ -46,6 +48,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
   title,
   description,
   illustration = true,
+  animated = true,
   icon,
   primaryAction,
   secondaryAction,
@@ -54,7 +57,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
 }, ref) => {
   const copy = COPY[type];
   const compact = size === 'compact';
-  const art = illustration === false ? null : ILLUSTRATIONS[illustration === true ? copy.illustration : illustration];
+  const artName = illustration === false ? null : illustration === true ? copy.illustration : illustration;
   const artSize = compact ? 64 : 160;
 
   const text = (
@@ -69,7 +72,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
       {primaryAction && <Button size={compact ? 'xs' : 'sm'} onClick={primaryAction.onClick}>{primaryAction.label}</Button>}
     </div>
   );
-  const artEl = art && <span aria-hidden="true" style={{ display: 'flex', flexShrink: 0, width: artSize, height: artSize }} dangerouslySetInnerHTML={{ __html: art.replace('width="160" height="160"', `width="${artSize}" height="${artSize}"`) }} />;
+  const artEl = artName && <Illustration name={artName} size={artSize} animated={animated} />;
   const tile = icon && <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 48, height: 48, borderRadius: 8, backgroundColor: 'var(--color-status-brand-bg, #FEF2E9)', color: 'var(--color-brand-primary, #F57E20)' }}>{icon}</span>;
 
   return (

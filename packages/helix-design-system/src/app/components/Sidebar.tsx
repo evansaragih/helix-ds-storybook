@@ -1,81 +1,77 @@
-import { useState } from 'react';
-import { ChevronDown, Palette, Boxes } from 'lucide-react';
+import { LayoutGrid, Palette, Atom, Boxes, Network, LayoutTemplate } from 'lucide-react';
 import helixMarkSvg from '../../assets/logo/helix-mark.svg';
 import { Badge } from '../../components/Badge';
-import { IconButton } from '../../components/IconButton';
-import { foundationItems, componentItems, type NavItem } from '../data/navigation';
+import { navGroups } from '../data/navigation';
 
 interface SidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
-  isCollapsed: boolean;
+  /** Group whose pages are shown in the second panel, or null when it is closed */
+  openGroup: string | null;
+  onOpenGroupChange: (group: string | null) => void;
 }
 
-const groups: { id: string; label: string; items: NavItem[]; icon: typeof Palette }[] = [
-  { id: 'foundations', label: 'Foundations', items: foundationItems, icon: Palette },
-  { id: 'components', label: 'Components', items: componentItems, icon: Boxes },
-];
+export const RAIL_WIDTH = 72;
+export const PANEL_WIDTH = 232;
 
-export function Sidebar({ activeSection, onSectionChange, isCollapsed }: SidebarProps) {
-  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
+const groupIcons: Record<string, typeof Palette> = {
+  foundations: Palette,
+  Atomic: Atom,
+  Molecule: Boxes,
+  Organism: Network,
+  Template: LayoutTemplate,
+};
 
-  const toggleGroup = (id: string) =>
-    setCollapsedGroups((prev) => {
-      const next = new Set(prev);
-      if (!next.delete(id)) next.add(id);
-      return next;
-    });
+export function Sidebar({ activeSection, onSectionChange, openGroup, onOpenGroupChange }: SidebarProps) {
+  const group = navGroups.find((g) => g.id === openGroup);
+  const activeGroup = navGroups.find((g) => g.items.some((i) => i.id === activeSection))?.id;
 
   return (
-    <aside className="dx-sidebar" style={{ width: isCollapsed ? 64 : 248 }}>
-      <button className="dx-brand" onClick={() => onSectionChange('overview')} aria-label="Helix Design System home" style={{ justifyContent: isCollapsed ? 'center' : 'flex-start', padding: isCollapsed ? 0 : undefined }}>
-        <img src={helixMarkSvg} alt="" />
-        {!isCollapsed && <span className="dx-brand-name">helix</span>}
-      </button>
-
-      {isCollapsed ? (
-        <div className="dx-collapsed-rail">
-          {groups.map(({ id, label, items, icon: Icon }) => (
-            <IconButton
+    <>
+      <aside className="dx-rail" aria-label="Sections">
+        <button className="dx-brand" onClick={() => { onSectionChange('overview'); onOpenGroupChange(null); }} aria-label="Helix Design System home">
+          <img src={helixMarkSvg} alt="" />
+        </button>
+        <button
+          className="dx-rail-btn"
+          aria-current={activeSection === 'overview' ? 'page' : undefined}
+          onClick={() => { onSectionChange('overview'); onOpenGroupChange(null); }}
+        >
+          <LayoutGrid size={20} />
+          <span>Overview</span>
+        </button>
+        {navGroups.map(({ id, label }) => {
+          const Icon = groupIcons[id] ?? Boxes;
+          return (
+            <button
               key={id}
-              hierarchy="secondary"
-              appearance={items.some((i) => i.id === activeSection) ? 'subtle' : 'ghost'}
-              size="sm"
-              aria-label={label}
-              title={label}
-              icon={<Icon size={18} />}
-              onClick={() => onSectionChange(items[0].id)}
-            />
-          ))}
-        </div>
-      ) : (
-        <nav className="dx-nav" aria-label="Documentation">
-          {groups.map(({ id, label, items }) => {
-            const open = !collapsedGroups.has(id);
-            return (
-              <div key={id} className="dx-group">
-                <button className="dx-group-label" aria-expanded={open} onClick={() => toggleGroup(id)}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {label}
-                    <Badge label={String(items.filter((i) => i.id !== 'components-overview').length)} color="neutral" appearance="subtle" size="xs" />
-                  </span>
-                  <ChevronDown size={14} />
-                </button>
-                {open && items.map((item) => (
-                  <button
-                    key={item.id}
-                    className="dx-item"
-                    aria-current={activeSection === item.id ? 'page' : undefined}
-                    onClick={() => onSectionChange(item.id)}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            );
-          })}
+              className="dx-rail-btn"
+              aria-expanded={openGroup === id}
+              aria-current={openGroup === null && activeGroup === id ? 'true' : undefined}
+              onClick={() => onOpenGroupChange(openGroup === id ? null : id)}
+            >
+              <Icon size={20} />
+              <span>{label}</span>
+            </button>
+          );
+        })}
+      </aside>
+
+      {group && (
+        <nav className="dx-panel" aria-label={group.label}>
+          <div className="dx-panel-head">
+            <h2>{group.label}</h2>
+            <Badge label={String(group.items.length)} color="neutral" appearance="subtle" size="xs" />
+          </div>
+          <div className="dx-panel-list">
+            {group.items.map((item) => (
+              <button key={item.id} className="dx-item" aria-current={activeSection === item.id ? 'page' : undefined} onClick={() => onSectionChange(item.id)}>
+                {item.label}
+              </button>
+            ))}
+          </div>
         </nav>
       )}
-    </aside>
+    </>
   );
 }
