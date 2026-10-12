@@ -1,3 +1,4 @@
+import { PageLayout } from './PageLayout';
 import { OverviewSection } from './OverviewSection';
 import { PrimitivesSection } from './PrimitivesSection';
 import { SemanticsSection } from './SemanticsSection';
@@ -67,9 +68,10 @@ import { TagSection } from './TagSection';
 interface MainContentProps {
   activeSection: string;
   isCollapsed: boolean;
+  onSectionChange: (section: string) => void;
 }
 
-export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
+export function MainContent({ activeSection, isCollapsed, onSectionChange }: MainContentProps) {
   const renderSection = () => {
     switch (activeSection) {
       case 'overview':          return <OverviewSection />;
@@ -138,42 +140,20 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
       case 'tag': return <TagSection />;
       case 'components-overview':
         return (
-          <div style={{ padding: '40px 48px' }}>
-            <h1 style={{
-              fontFamily: 'var(--font-family-heading)',
-              fontSize: 'var(--text-heading-page-title)',
-              color: 'var(--color-text-primary)',
-              marginBottom: 'var(--spacing-16)',
-              fontWeight: 'var(--font-weight-semibold)',
-            }}>
-              Components
-            </h1>
-            <p style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--text-body-large)',
-              color: 'var(--color-text-secondary)',
-              lineHeight: '1.6',
-              marginBottom: 32,
-            }}>
-              The Helix design system follows the Figma component sets, grouped by page. Select any component from the sidebar to view its documentation and interactive examples.
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
-              {componentItems.filter(i => i.id !== 'components-overview').map(i => i.label).map(name => (
-                <div key={name} style={{
-                  padding: '12px 16px',
-                  backgroundColor: '#F7F7F7',
-                  borderRadius: 8,
-                  border: '1px solid #EEEEEE',
-                  fontFamily: 'var(--font-family-body)',
-                  fontSize: 13,
-                  color: '#14141E',
-                  fontWeight: 500,
-                }}>
-                  {name}
-                </div>
+          <PageLayout
+            category="Components"
+            title="Components"
+            description="The Helix design system follows the Figma component sets. Pick any component to see usage guidance and interactive examples."
+            tocItems={[]}
+          >
+            <div className="dx-usage" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12 }}>
+              {componentItems.filter((i) => i.id !== 'components-overview').map((i) => (
+                <button key={i.id} className="dx-tile" onClick={() => onSectionChange(i.id)}>
+                  {i.label}
+                </button>
               ))}
             </div>
-          </div>
+          </PageLayout>
         );
       default:
         return <OverviewSection />;
@@ -181,30 +161,8 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
   };
 
   return (
-    <main
-      className="min-h-screen"
-      style={{
-        marginLeft: isCollapsed ? '64px' : '240px',
-        marginTop: '64px',
-        padding: 'var(--spacing-32)',
-        backgroundColor: 'var(--color-bg-secondary)',
-        transition: 'margin-left 0.3s ease'
-      }}
-    >
-      <div className="mx-auto" style={{ width: '100%' }}>
-        <div className="min-h-screen">
-          <div
-            className="bg-white"
-            style={{
-              padding: 'var(--spacing-32)',
-              borderRadius: 'var(--radius-2xl)',
-              border: '1px solid var(--color-stroke-subtle)'
-            }}
-          >
-            {renderSection()}
-          </div>
-        </div>
-      </div>
+    <main className="dx-main" style={{ marginLeft: isCollapsed ? 64 : 248 }}>
+      <div className="dx-container">{renderSection()}</div>
     </main>
   );
 }

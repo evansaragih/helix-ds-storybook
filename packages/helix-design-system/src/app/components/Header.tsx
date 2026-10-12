@@ -1,6 +1,7 @@
-import { Search, Sun, Moon, Monitor } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { Search, PanelLeft } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { Input } from '../../components/Input';
+import { IconButton } from '../../components/IconButton';
 import { foundationItems, componentItems } from '../data/navigation';
 
 interface HeaderProps {
@@ -10,189 +11,92 @@ interface HeaderProps {
 }
 
 const searchItems = [
-  ...foundationItems.map(item => ({ ...item, group: 'Foundations' })),
-  ...componentItems.map(item => ({ ...item, group: 'Components' })),
+  ...foundationItems.map((item) => ({ ...item, group: 'Foundations' })),
+  ...componentItems.map((item) => ({ ...item, group: 'Components' })),
 ];
 
 export function Header({ isCollapsed, onToggleCollapse, onSectionChange }: HeaderProps) {
-  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('light');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const searchContainerRef = useRef<HTMLDivElement>(null);
+  const [highlight, setHighlight] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isMac = typeof navigator !== 'undefined' && /Mac/i.test(navigator.platform);
 
-  const themes = [
-    { value: 'light' as const, label: 'Light', icon: Sun },
-    { value: 'dark' as const, label: 'Dark', icon: Moon },
-    { value: 'system' as const, label: 'System', icon: Monitor },
-  ];
+  const results = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return searchItems.filter((item) => item.label.toLowerCase().includes(q));
+  }, [searchQuery]);
 
-  const currentTheme = themes.find(t => t.value === theme)!;
-  const CurrentIcon = currentTheme.icon;
+  const close = () => { setIsSearchOpen(false); setSearchQuery(''); setHighlight(0); };
+  const choose = (id: string) => { onSectionChange(id); close(); };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        containerRef.current?.querySelector('input')?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
 
   useEffect(() => {
     if (!isSearchOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
-        setIsSearchOpen(false);
-        setSearchQuery('');
-      }
+    const onDown = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) close();
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
   }, [isSearchOpen]);
 
+  const onInputKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setHighlight((h) => Math.min(h + 1, results.length - 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlight((h) => Math.max(h - 1, 0)); }
+    else if (e.key === 'Enter' && results[highlight]) choose(results[highlight].id);
+    else if (e.key === 'Escape') { close(); (e.target as HTMLElement).blur(); }
+  };
+
   return (
-    <header
-      className="fixed top-0 right-0 bg-white flex items-center z-10"
-      style={{
-        left: isCollapsed ? '64px' : '240px',
-        height: '64px',
-        borderBottom: '1px solid var(--color-stroke-subtle)',
-        padding: '0 var(--spacing-32)',
-        gap: 'var(--spacing-16)',
-        transition: 'left 0.3s ease'
-      }}
-    >
-      <button
+    <header className="dx-header" style={{ left: isCollapsed ? 64 : 248 }}>
+      <IconButton
+        hierarchy="secondary"
+        appearance="ghost"
+        size="sm"
+        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        icon={<PanelLeft size={18} />}
         onClick={onToggleCollapse}
-        className="flex items-center justify-center transition-colors"
-        style={{
-          width: '32px',
-          height: '32px',
-          borderRadius: 'var(--radius-md)',
-          backgroundColor: 'transparent',
-          border: '1px solid var(--color-stroke-subtle)',
-          cursor: 'pointer',
-          color: 'var(--color-text-secondary)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = 'var(--color-bg-secondary)';
-          e.currentTarget.style.color = 'var(--color-text-primary)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.color = 'var(--color-text-secondary)';
-        }}
-      >
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="3.5" y="3.5" width="13" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
-          <path d="M12.5 3.5V16.5" stroke="currentColor" strokeWidth="1.5"/>
-          {isCollapsed ? (
-            <path d="M7 7.5L9.5 10L7 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          ) : (
-            <path d="M9.5 7.5L7 10L9.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          )}
-        </svg>
-      </button>
+      />
 
-      {/* Search with Command dropdown */}
-      <div className="flex-1" style={{ maxWidth: '448px', position: 'relative' }} ref={searchContainerRef}>
+      <div ref={containerRef} style={{ flex: 1, maxWidth: 480, position: 'relative' }}>
         <Input
-          placeholder="Search documentation..."
+          placeholder="Search documentation…"
+          aria-label="Search documentation"
           leading={<Search size={16} />}
+          trailing={<span className="dx-kbd">{isMac ? '⌘' : 'Ctrl'} K</span>}
           value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
+          onChange={(e) => { setSearchQuery(e.target.value); setHighlight(0); }}
           onFocus={() => setIsSearchOpen(true)}
+          onKeyDown={onInputKey}
         />
-
         {isSearchOpen && (
-          <div style={{ position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 50 }}>
-            <div style={{ maxHeight: 360, overflowY: 'auto', padding: 4, backgroundColor: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: 10, boxShadow: '0 4px 16px rgba(0,0,0,0.10)' }}>
-              {searchItems
-                .filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
-                .map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => { onSectionChange(item.id); setIsSearchOpen(false); setSearchQuery(''); }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', border: 'none', borderRadius: 6, background: 'transparent', cursor: 'pointer', fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#14141E' }}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="relative">
-        <button
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="flex items-center transition-colors"
-          style={{
-            gap: 'var(--spacing-8)',
-            padding: 'var(--spacing-8) var(--spacing-12)',
-            border: '1px solid var(--color-stroke-subtle)',
-            borderRadius: 'var(--radius-lg)',
-            fontSize: 'var(--text-body-default)',
-            fontFamily: 'var(--font-family-body)',
-            color: 'var(--color-text-primary)',
-            backgroundColor: 'transparent',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = 'var(--color-bg-secondary)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
-        >
-          <CurrentIcon className="w-4 h-4" />
-          <span>{currentTheme.label}</span>
-        </button>
-
-        {isDropdownOpen && (
-          <div
-            className="absolute right-0 bg-white overflow-hidden"
-            style={{
-              marginTop: 'var(--spacing-8)',
-              width: '160px',
-              border: '1px solid var(--color-stroke-subtle)',
-              borderRadius: 'var(--radius-lg)',
-              boxShadow: 'var(--shadow-sm)'
-            }}
-          >
-            {themes.map((t) => {
-              const Icon = t.icon;
-              const isActive = theme === t.value;
-              return (
+          <div className="dx-results" role="listbox">
+            {results.length === 0 && <div className="dx-result-group">No results</div>}
+            {results.map((item, i) => (
+              <div key={item.id}>
+                {(i === 0 || results[i - 1].group !== item.group) && <div className="dx-result-group">{item.group}</div>}
                 <button
-                  key={t.value}
-                  onClick={() => {
-                    setTheme(t.value);
-                    setIsDropdownOpen(false);
-                  }}
-                  className="w-full flex items-center transition-colors"
-                  style={{
-                    gap: 'var(--spacing-8)',
-                    padding: 'var(--spacing-8) var(--spacing-16)',
-                    fontSize: 'var(--text-body-default)',
-                    fontFamily: 'var(--font-family-body)',
-                    backgroundColor: isActive ? 'rgba(245, 126, 32, 0.1)' : 'transparent',
-                    color: isActive ? 'var(--color-brand-primary)' : 'var(--color-text-primary)',
-                    border: 'none',
-                    cursor: 'pointer',
-                    textAlign: 'left'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'var(--color-bg-secondary)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }
-                  }}
+                  className="dx-result"
+                  role="option"
+                  aria-selected={i === highlight}
+                  data-active={i === highlight}
+                  onMouseEnter={() => setHighlight(i)}
+                  onClick={() => choose(item.id)}
                 >
-                  <Icon className="w-4 h-4" />
-                  <span>{t.label}</span>
+                  {item.label}
                 </button>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
       </div>

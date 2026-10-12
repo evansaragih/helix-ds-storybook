@@ -10,7 +10,7 @@ export default function App() {
 
   return (
     <>
-      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-secondary)' }}>
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg-page)' }}>
         <Sidebar
           activeSection={activeSection}
           onSectionChange={setActiveSection}
@@ -24,6 +24,7 @@ export default function App() {
         <MainContent
           activeSection={activeSection}
           isCollapsed={isCollapsed}
+          onSectionChange={setActiveSection}
         />
       </div>
       {import.meta.env.DEV && <Agentation />}
