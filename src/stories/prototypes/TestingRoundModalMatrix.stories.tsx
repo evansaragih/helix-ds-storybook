@@ -148,8 +148,7 @@ function Chip({
   return (
     <Button
       size="xs"
-      pill
-      variant={active ? 'primary-subtle' : 'ghost-neutral'}
+      hierarchy={active ? 'primary' : 'secondary'} appearance={active ? 'subtle' : 'ghost'}
       disabled={disabled}
       onClick={onClick}
       style={
@@ -242,7 +241,7 @@ function TestingRoundModal() {
               </span>
               <Badge
                 size="sm"
-                variant={on ? 'brand-subtle' : 'gray'}
+                color={on ? 'brand' : 'neutral'}
                 label={on ? 'Diuji ulang' : 'Dilewati'}
               />
             </div>
@@ -266,7 +265,7 @@ function TestingRoundModal() {
               {row.target.label}
             </span>
             {row.target.ic && (
-              <Badge size="sm" variant="outline" label="IC" />
+              <Badge size="sm" color="neutral" appearance="outline" label="IC" />
             )}
           </div>
         ),
@@ -331,7 +330,7 @@ function TestingRoundModal() {
             return (
               <Badge
                 size="md"
-                variant={txt ? 'green' : 'gray'}
+                color={txt ? 'success' : 'neutral'}
                 label={txt ?? '—'}
               />
             );
@@ -356,14 +355,13 @@ function TestingRoundModal() {
               {cell.mode === 'num' && (
                 <div style={{ width: 92, flexShrink: 0 }}>
                   <Input
-                    size="xs"
                     value={cell.num}
                     onChange={(e) =>
                       setCell(row.key, { mode: 'num', num: e.target.value })
                     }
                     placeholder="Ct"
                     inputMode="decimal"
-                    trailingContent={<span style={{ fontSize: 11 }}>Ct</span>}
+                    trailing={<span style={{ fontSize: 11 }}>Ct</span>}
                   />
                 </div>
               )}
@@ -405,12 +403,11 @@ function TestingRoundModal() {
       <Dialog
         open={open}
         onOpenChange={setOpen}
-        size="lg"
         title={`Testing Round 2 — ${SAMPLE_ID}`}
         description="Panel AHPND · EHP · WSSV — Round 2 dari maks. 2 round"
         footer={
           saved ? (
-            <Button size="sm" onClick={() => setOpen(false)}>
+            <Button onClick={() => setOpen(false)}>
               Tutup
             </Button>
           ) : (
@@ -429,14 +426,12 @@ function TestingRoundModal() {
                   : `${filledCount}/${activeRows.length} target terisi`}
               </span>
               <Button
-                variant="neutral"
-                size="sm"
+                hierarchy="secondary" appearance="solid"
                 onClick={() => setOpen(false)}
               >
                 Batal
               </Button>
               <Button
-                size="sm"
                 disabled={!valid}
                 onClick={() => {
                   setAck(false);
@@ -463,11 +458,11 @@ function TestingRoundModal() {
           {/* Progress: Round 1 done → Round 2 */}
           <Stepper
             steps={[
-              { id: 'r1', label: 'Round 1', description: 'Tersimpan' },
+              { id: 'r1', step: 'Round 1', title: 'Tersimpan' },
               {
                 id: 'r2',
-                label: 'Round 2',
-                description: saved ? 'Tersimpan' : 'Sedang diisi',
+                step: 'Round 2',
+                title: saved ? 'Tersimpan' : 'Sedang diisi',
               },
             ]}
             activeStep={stepStatus}
@@ -476,13 +471,13 @@ function TestingRoundModal() {
           {/* Single merged notice */}
           {saved ? (
             <Alert
-              variant="success"
+              status="success"
               title="Round 2 tersimpan & terkunci"
               description="Sample tercatat sebagai retest (bukan First Time Right) di Lab KPI PathoCheck. Round yang tersimpan tidak bisa diedit maupun dihapus."
             />
           ) : (
             <Alert
-              variant="warning"
+              status="warning"
               title="Retest — sample tidak First Time Right (FTR)"
               description="Menambah Round 2 menandai sample ini bukan FTR. Retest menurunkan skor FTR lab & tercatat di Lab KPI PathoCheck. Maks. 2 round per sample."
             />
@@ -522,7 +517,6 @@ function TestingRoundModal() {
                 <Select
                   label="Petugas lab"
                   required
-                  size="sm"
                   placeholder="Pilih analis…"
                   options={ANALYSTS}
                   value={petugas}
@@ -531,7 +525,6 @@ function TestingRoundModal() {
                 <Select
                   label="Alasan retest"
                   required
-                  size="sm"
                   placeholder="Pilih alasan…"
                   options={REASONS}
                   value={alasan}
@@ -556,15 +549,10 @@ function TestingRoundModal() {
                   <Tag
                     key={d.id}
                     label={d.label}
-                    checkbox={!saved}
-                    checked={active[d.id]}
-                    status={saved}
-                    statusColor={
-                      active[d.id]
-                        ? 'var(--color-text-success, #12843C)'
-                        : 'var(--color-text-muted, #9F9F9F)'
-                    }
-                    onCheckedChange={
+                    leadingCheckbox={!saved}
+                    selected={active[d.id]}
+                    leadingDot={saved}
+                    onSelectedChange={
                       saved
                         ? undefined
                         : (c) =>
@@ -596,7 +584,7 @@ function TestingRoundModal() {
               </span>
               <Button
                 size="xs"
-                variant="secondary-outline"
+                hierarchy="tertiary" appearance="outline"
                 disabled={activeRows.length === 0}
                 onClick={() => bulkFill('neg')}
               >
@@ -604,7 +592,7 @@ function TestingRoundModal() {
               </Button>
               <Button
                 size="xs"
-                variant="secondary-outline"
+                hierarchy="tertiary" appearance="outline"
                 disabled={activeRows.length === 0}
                 onClick={() => bulkFill('na')}
               >
@@ -612,7 +600,7 @@ function TestingRoundModal() {
               </Button>
               <Button
                 size="xs"
-                variant="ghost-neutral"
+                hierarchy="secondary" appearance="ghost"
                 leadingIcon={<Eraser size={12} />}
                 disabled={activeRows.length === 0}
                 onClick={() => bulkFill('')}
@@ -627,7 +615,6 @@ function TestingRoundModal() {
             columns={columns}
             data={ROWS}
             size="sm"
-            cellBorders
             hoverable={false}
             getRowKey={(r) => r.key}
           />
@@ -651,7 +638,6 @@ function TestingRoundModal() {
 
           {/* Data-entry policy tucked into an accordion */}
           <Accordion
-            accordionStyle="border"
             items={[
               {
                 id: 'kebijakan',
@@ -689,10 +675,10 @@ function TestingRoundModal() {
       {/* Irreversible-save confirmation */}
       <AlertDialog
         open={confirmOpen}
-        variant="default"
+        iconStatus="default"
         title="Simpan Round 2?"
         description="Round yang tersimpan tidak bisa diedit atau dihapus. Pastikan semua nilai Round 2 sudah benar."
-        icon={<TriangleAlert size={22} />}
+        icon={<TriangleAlert />}
         checkboxAction={{
           label: 'Saya sudah memeriksa ulang semua nilai',
           checked: ack,

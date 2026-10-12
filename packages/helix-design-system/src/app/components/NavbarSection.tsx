@@ -1,104 +1,34 @@
-import { PageLayout, Section } from './PageLayout';
-import { Navbar } from '../../components/Navbar';
-import { Button } from '../../components';
-import helixMarkSvg from '../../assets/logo/helix-mark.svg';
+import { ComponentDocPage } from './ComponentDocPage';
+import { Navbar, NavLink, DashboardNavbar, DashboardFooter, Breadcrumb, Button } from '../../components';
+import { ChevronDown } from 'lucide-react';
 
-const toc = [
-  { id: 'navbar-usage', label: 'Usage Guidelines' },
-  { id: 'navbar-basic', label: 'Basic' },
-  { id: 'navbar-with-links', label: 'With Nav Links' },
-  { id: 'navbar-examples', label: 'Examples' },
-];
-
-function Card({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div style={{ padding: '0 0 0', backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE', overflow: 'hidden' }}>
-      <p style={{ margin: '0', padding: '14px 20px 12px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E', borderBottom: '1px solid #EEEEEE' }}>{title}</p>
-      <div style={{ padding: 0 }}>{children}</div>
-    </div>
-  );
-}
-
-const logo = (
-  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-    <img src={helixMarkSvg} alt="Helix" style={{ width: 28, height: 28 }} />
-    <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 700, fontSize: 15, color: '#14141E' }}>Helix</span>
-  </div>
+const right = (
+  <>
+    <NavLink label="Products" href="#" active />
+    <NavLink label="Solutions" href="#" />
+    <NavLink label="Resources" href="#" trailingIcon={<ChevronDown size={16} />} />
+    <Button hierarchy="secondary" appearance="outline" size="sm">Log in</Button>
+    <Button size="sm">Get started</Button>
+  </>
 );
-
-const navLinks = [
-  { label: 'Dashboard', active: true },
-  { label: 'Projects' },
-  { label: 'Analytics' },
-  { label: 'Settings' },
-];
 
 export function NavbarSection() {
   return (
-    <PageLayout
-      category="Components"
-      title="Navbar"
-      description="The Navbar is the top-level navigation container. It provides branding, nav links, utility controls, and user context across all authenticated pages."
-      tocItems={toc}
-    >
-      <Section id="navbar-usage" title="Usage Guidelines">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-          {[
-            { heading: 'Sticky by default', body: 'Set sticky to keep the navbar anchored at the top as users scroll. This provides persistent orientation and access to global controls.' },
-            { heading: 'Consistent across pages', body: 'The navbar should look the same across all pages. Avoid per-page changes to the logo, user area, or nav item set.' },
-            { heading: 'Limit nav items', body: 'Keep top-level navigation to 5–7 items maximum. More than this creates decision fatigue. Move less-used items to a sidebar or user menu.' },
-          ].map(g => (
-            <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="navbar-basic" title="Basic">
-        <Card title="Logo only">
-          <Navbar logo={logo} showSearch showNotifications user={{ name: 'Evan Himawan', initials: 'E' }} />
-        </Card>
-        <div style={{ marginTop: 12 }} />
-        <Card title="With actions slot">
-          <Navbar
-            logo={logo}
-            actions={<><Button variant="neutral" size="sm">Sign in</Button><Button variant="primary" size="sm">Get started</Button></>}
-          />
-        </Card>
-      </Section>
-
-      <Section id="navbar-with-links" title="With Nav Links">
-        <Card title="Full navigation">
-          <Navbar
-            logo={logo}
-            links={navLinks}
-            showSearch
-            showNotifications
-            user={{ name: 'Evan Himawan', initials: 'E' }}
-          />
-        </Card>
-      </Section>
-
-      <Section id="navbar-examples" title="Examples">
-        <Card title="Marketing navbar">
-          <Navbar
-            logo={logo}
-            links={[{ label: 'Product' }, { label: 'Pricing' }, { label: 'Blog' }, { label: 'Docs' }]}
-            actions={<><Button variant="neutral" size="sm">Log in</Button><Button variant="primary" size="sm">Start free trial</Button></>}
-          />
-        </Card>
-        <div style={{ marginTop: 12 }} />
-        <Card title="App navbar">
-          <Navbar
-            logo={logo}
-            links={navLinks}
-            showNotifications
-            user={{ name: 'Evan Himawan', initials: 'E' }}
-          />
-        </Card>
-      </Section>
-    </PageLayout>
+    <ComponentDocPage
+      slug="navbar"
+      title="Navbars"
+      description="Page-level navigation bars: the marketing site header (Marketing Navbar), and the dashboard top bar and footer."
+      usage={[
+        { heading: 'Slots, not props', body: 'Put the logo in the left slot and links and actions in the right slot.' },
+        { heading: 'One active link', body: 'The active NavLink is a solid brand pill — keep a single one active.' },
+        { heading: 'Dashboard bars', body: 'In app screens use the Dashboard Navbar for context and the Dashboard Footer for page actions.' },
+      ]}
+      demos={[
+        { id: 'marketing', title: 'Marketing Navbar', description: 'onTop is solid white; onScroll is translucent with a blur.',
+          node: <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 900 }}><Navbar state="onTop" leftContent={<strong style={{ fontFamily: 'var(--font-family-body)' }}>Helix</strong>} rightContent={right} /><div style={{ background: 'linear-gradient(135deg, #FCC9A3, #EBF2FE)' }}><Navbar state="onScroll" leftContent={<strong style={{ fontFamily: 'var(--font-family-body)' }}>Helix</strong>} rightContent={right} /></div></div> },
+        { id: 'dashboard', title: 'Dashboard Navbar and Footer',
+          node: <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 900 }}><DashboardNavbar leftContent={<Breadcrumb items={[{ label: 'Lab' }, { label: 'Processing' }]} />} rightContent={<Button size="sm">New sample</Button>} /><DashboardFooter leftContent={<Button hierarchy="secondary" appearance="ghost" size="sm">Back</Button>} rightContent={<Button size="sm">Save</Button>} /></div> },
+      ]}
+    />
   );
 }

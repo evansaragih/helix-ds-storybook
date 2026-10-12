@@ -1,23 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Badge } from 'helix-design-system/components';
+import { Badge, BadgeGroup } from 'helix-design-system/components';
 import { Star } from 'lucide-react';
 
+const COLORS = ['brand', 'info', 'success', 'warning', 'error', 'neutral'] as const;
+const APPEARANCES = ['solid', 'outline', 'subtle'] as const;
+
 const meta = {
-  title: 'Components/Data Display/Badge',
+  title: 'Molecule/Badge/Badge',
   component: Badge,
   tags: ['autodocs'],
   argTypes: {
-    variant: {
-      control: 'select',
-      options: ['default', 'secondary', 'outline', 'destructive', 'ghost', 'blue', 'green', 'yellow', 'red', 'brand-subtle', 'gray'],
-    },
-    size: { control: 'select', options: ['sm', 'md', 'lg', 'xl'] },
+    color: { control: 'select', options: COLORS },
+    appearance: { control: 'select', options: APPEARANCES },
+    size: { control: 'select', options: ['xs', 'sm', 'md', 'lg'] },
+    status: { control: 'boolean' },
+    loading: { control: 'boolean' },
   },
-  args: {
-    label: 'Badge',
-    variant: 'default',
-    size: 'md',
-  },
+  args: { label: 'Badge', color: 'brand', appearance: 'subtle', size: 'md' },
 } satisfies Meta<typeof Badge>;
 
 export default meta;
@@ -25,11 +24,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Variants: Story = {
+/** Figma Color × Appearance. */
+export const ColorAppearance: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-      {['default', 'secondary', 'outline', 'destructive', 'ghost', 'blue', 'green', 'yellow', 'red', 'brand-subtle', 'gray'].map((variant) => (
-        <Badge key={variant} {...args} variant={variant as any} label={variant} />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {APPEARANCES.map((appearance) => (
+        <div key={appearance} style={{ display: 'flex', gap: 8 }}>
+          {COLORS.map((color) => <Badge key={color} {...args} color={color} appearance={appearance} label={color} />)}
+        </div>
       ))}
     </div>
   ),
@@ -38,25 +40,18 @@ export const Variants: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-      {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
-        <Badge key={size} {...args} size={size} label={size} />
-      ))}
+      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => <Badge key={size} {...args} size={size} label={size} />)}
     </div>
   ),
 };
 
-export const WithIcon: Story = {
-  args: { leadingIcon: <Star size={12} /> },
-};
-
-export const WithStatusDot: Story = {
-  args: { status: true, variant: 'green', label: 'Active' },
-};
-
-export const Loading: Story = {
-  args: { loading: true, label: 'Syncing' },
-};
-
-export const Closable: Story = {
-  args: { onClose: () => {} },
+export const WithIcons: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', gap: 8 }}>
+      <Badge {...args} leadingIcon={<Star size={12} />} label="Leading" />
+      <Badge {...args} trailingIcon={<Star size={12} />} label="Trailing" />
+      <Badge {...args} status label="Status" />
+      <Badge {...args} loading label="Loading" />
+    </div>
+  ),
 };

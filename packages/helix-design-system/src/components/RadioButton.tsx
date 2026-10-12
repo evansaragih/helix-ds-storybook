@@ -1,141 +1,97 @@
-import { forwardRef, useState } from 'react';
+import { forwardRef, useId, useState } from 'react';
+
+/** Figma Size — sm 16 · md 20 */
+export type RadioButtonSize = 'sm' | 'md';
 
 export interface RadioButtonProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
+  /** Figma Label */
   label?: string;
-  helperText?: string;
+  /** Figma Supporting text */
+  supportingText?: string;
+  size?: RadioButtonSize;
+  /** Figma State=Invalid */
   invalid?: boolean;
-  size?: 'sm' | 'md';
 }
 
+const D: Record<RadioButtonSize, { box: number; dot: number; font: number; line: string }> = {
+  sm: { box: 16, dot: 6, font: 13, line: '19.2px' },
+  md: { box: 20, dot: 8, font: 16, line: '24px' },
+};
+const BRAND = 'var(--color-brand-primary, #F57E20)';
+const BRAND_HOVER = 'var(--color-brand-primary-hover, #DF6505)';
+
+/** A labeled radio button row (control + label + optional supporting text). Use for choosing exactly one option from a small set. */
 export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(({
   label,
-  helperText,
-  invalid = false,
+  supportingText,
   size = 'md',
+  invalid = false,
   disabled,
   checked,
-  defaultChecked,
-  onChange,
   id,
   style,
   className,
+  onFocus,
+  onBlur,
   ...props
 }, ref) => {
-  const [focused, setFocused] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const generated = useId();
+  const inputId = id ?? generated;
+  const d = D[size];
 
-  const radioSize = size === 'md' ? 20 : 16;
-  const dotSize = size === 'md' ? 8 : 6;
-  const genId = id ?? `radio-${Math.random().toString(36).slice(2)}`;
-
-  const getBorder = () => {
-    if (disabled) return `2px solid var(--color-stroke-default, #D7D7D7)`;
-    if (invalid) return `2px solid var(--color-stroke-error, #DC2626)`;
-    if (checked) return `2px solid var(--color-brand-primary, #F57E20)`;
-    if (focused) return `2px solid var(--color-brand-primary, #F57E20)`;
-    if (hovered) return `2px solid var(--color-stroke-hover, #9F9F9F)`;
-    return `2px solid var(--color-stroke-default, #D7D7D7)`;
-  };
-
-  const getBg = () => {
-    if (disabled) return 'var(--color-container-disabled, #D7D7D7)';
-    if (checked) return 'var(--color-brand-primary, #F57E20)';
-    return '#FFFFFF';
-  };
-
-  const getBoxShadow = () => {
-    if (disabled || !focused) return 'none';
-    return `0 0 0 3px var(--color-brand-primary-ring, rgba(245,126,32,0.7))`;
-  };
+  // Figma State × Checked
+  let bg = 'var(--color-container-primary, #FFFFFF)';
+  let border = checked ? BRAND : 'var(--color-stroke-default, #BABABA)';
+  if (disabled) { bg = 'var(--color-stroke-disabled, #D7D7D7)'; border = bg; }
+  else if (invalid) border = 'var(--primitive-red-70, #991B1B)';
+  else if (hovered) border = checked ? BRAND_HOVER : '#828282';
+  const ring = focused && !disabled;
 
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'flex-start', gap: 8, ...style }} className={className}>
-      {/* Hidden native input for a11y */}
-      <input
-        ref={ref}
-        type="radio"
-        id={genId}
-        disabled={disabled}
-        checked={checked}
-        defaultChecked={defaultChecked}
-        onChange={onChange}
-        style={{ position: 'absolute', opacity: 0, width: 0, height: 0, pointerEvents: 'none' }}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        {...props}
-      />
-      {/* Custom radio visual */}
-      <label
-        htmlFor={genId}
-        onMouseEnter={() => !disabled && setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'flex-start',
-          gap: 8,
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          userSelect: 'none',
-        }}
-      >
-        <span style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: radioSize,
-          height: radioSize,
-          borderRadius: '50%',
-          backgroundColor: getBg(),
-          border: getBorder(),
-          boxShadow: getBoxShadow(),
-          flexShrink: 0,
-          transition: 'background-color 0.15s, border-color 0.15s, box-shadow 0.15s',
-          marginTop: size === 'md' ? 2 : 1,
-        }}>
-          {checked && (
-            <span style={{
-              display: 'block',
-              width: dotSize,
-              height: dotSize,
-              borderRadius: '50%',
-              backgroundColor: disabled ? 'var(--color-text-muted, #9F9F9F)' : '#FFFFFF',
-            }} />
-          )}
+    <label
+      htmlFor={inputId}
+      className={className}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ display: 'inline-flex', alignItems: 'flex-start', gap: 8, cursor: disabled ? 'not-allowed' : 'pointer', ...style }}
+    >
+      <span style={{
+        position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        width: d.box, height: d.box, borderRadius: '50%', boxSizing: 'border-box',
+        backgroundColor: bg, border: `${ring ? 2 : 1}px solid ${ring ? BRAND_HOVER : border}`,
+        boxShadow: ring ? `0 0 0 3px ${BRAND}` : undefined, transition: 'border-color 0.15s',
+      }}>
+        {checked && !disabled && <span style={{ width: d.dot, height: d.dot, borderRadius: '50%', backgroundColor: BRAND }} />}
+        <input
+          ref={ref}
+          id={inputId}
+          type="radio"
+          checked={checked}
+          disabled={disabled}
+          aria-invalid={invalid || undefined}
+          onFocus={(e) => { setFocused(e.currentTarget.matches(':focus-visible')); onFocus?.(e); }}
+          onBlur={(e) => { setFocused(false); onBlur?.(e); }}
+          style={{ position: 'absolute', inset: 0, margin: 0, opacity: 0, cursor: 'inherit' }}
+          {...props}
+        />
+      </span>
+      {(label || supportingText) && (
+        <span style={{ display: 'flex', flexDirection: 'column', gap: 2, fontFamily: 'var(--font-family-body)', letterSpacing: '-0.01px', opacity: disabled ? 0.5 : 1 }}>
+          {label && <span style={{ fontSize: d.font, lineHeight: d.line, color: 'var(--color-text-primary, #14141E)' }}>{label}</span>}
+          {supportingText && <span style={{ fontSize: 13, lineHeight: '19.2px', color: 'var(--color-text-tertiary, #828282)' }}>{supportingText}</span>}
         </span>
-        {(label || helperText) && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {label && (
-              <span style={{
-                fontFamily: 'var(--font-family-body)',
-                fontWeight: 400,
-                fontSize: size === 'md' ? 13 : 12,
-                lineHeight: '19.2px',
-                color: disabled ? 'var(--color-text-muted, #9F9F9F)' : 'var(--color-text-primary, #14141E)',
-                letterSpacing: '-0.01px',
-              }}>
-                {label}
-              </span>
-            )}
-            {helperText && (
-              <span style={{
-                fontFamily: 'var(--font-family-body)',
-                fontSize: 12,
-                lineHeight: '18px',
-                color: invalid ? 'var(--color-text-error, #EF4444)' : 'var(--color-text-tertiary, #828282)',
-              }}>
-                {helperText}
-              </span>
-            )}
-          </div>
-        )}
-      </label>
-    </div>
+      )}
+    </label>
   );
 });
 
 RadioButton.displayName = 'RadioButton';
 
-/* ──────────────────────────────────────────────────────────────── */
-
+/* ─── RadioGroup ───────────────────────────────────────────────────────
+ * Not a separate Figma set — the minimal wrapper that makes a list of RadioButtons behave as one
+ * single-choice group (shared name, controlled / uncontrolled value). */
 export interface RadioGroupProps {
   name: string;
   value?: string;
@@ -155,25 +111,16 @@ export function RadioGroup({ name, value, defaultValue, onChange, children, styl
     onChange?.(e.target.value);
   };
 
+  const items = (Array.isArray(children) ? children : [children]).flat();
   return (
     <div role="radiogroup" style={{ display: 'flex', flexDirection: 'column', gap: 8, ...style }} className={className}>
-      {Array.isArray(children)
-        ? children.map((child) => {
-            if (!child) return null;
-            const el = child as React.ReactElement<RadioButtonProps & { value?: string }>;
-            return el.props?.value
-              ? ({
-                  ...el,
-                  props: {
-                    ...el.props,
-                    name,
-                    checked: current === el.props.value,
-                    onChange: handleChange,
-                  },
-                } as React.ReactElement)
-              : el;
-          })
-        : children}
+      {items.map((child, i) => {
+        if (!child) return null;
+        const el = child as React.ReactElement<RadioButtonProps>;
+        return el.props?.value !== undefined
+          ? { ...el, key: el.key ?? i, props: { ...el.props, name, checked: current === el.props.value, onChange: handleChange } } as React.ReactElement
+          : el;
+      })}
     </div>
   );
 }

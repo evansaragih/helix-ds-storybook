@@ -1,124 +1,86 @@
 import { forwardRef } from 'react';
-import { SquareDashed, ListFilter } from 'lucide-react';
-import { Badge, type BadgeVariant } from './Badge';
-import { IconButton } from './IconButton';
 
-export interface ContentContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  title?: string;
-  description?: string;
-  /** Leading icon shown in a 32x32 brand-subtle tile. Defaults to a generic icon. */
-  leadingIcon?: React.ReactNode;
-  badgeLabel?: string;
-  badgeVariant?: BadgeVariant;
-  /** Full override of the header's content area — replaces icon/title/description/badge entirely */
-  headerContent?: React.ReactNode;
-  /** Show the header's trailing action icon button (default: a filter icon) */
-  showActionButton?: boolean;
-  actionIcon?: React.ReactNode;
-  onActionClick?: () => void;
-  /** Body padding preset */
-  padding?: 'none' | 'sm' | 'md' | 'lg';
+/** Figma Surface */
+export type ContentContainerSurface = 'white' | 'gray';
+/** Figma Intent — tints the container for destructive / brand callouts */
+export type ContentContainerIntent = 'neutral' | 'destructive' | 'brand';
+/** Figma Content Style — flush runs the body to the header and footer edges; floating rounds it fully */
+export type ContentContainerStyle = 'flush' | 'floating';
+/** Figma Content Surface — subtle is a grey inset with a border; default is white */
+export type ContentContainerContentSurface = 'subtle' | 'default';
+
+export interface ContentContainerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** Header slot (Figma Header Content Slot). Omit to hide the header. */
+  header?: React.ReactNode;
+  /** Footer slot (Figma Footer Content). Omit to hide the footer. */
+  footer?: React.ReactNode;
+  /** Body content (Figma Container Content) */
+  children?: React.ReactNode;
+  surface?: ContentContainerSurface;
+  intent?: ContentContainerIntent;
+  contentStyle?: ContentContainerStyle;
+  contentSurface?: ContentContainerContentSurface;
+  /** Show the divider under the header (Figma Header Divider) */
+  headerDivider?: boolean;
+  /** Draw dividers between header, body and footer (Figma Section Split=Divided). Default true. */
+  divided?: boolean;
+  /** Outer border (Figma Border). Default true. */
+  border?: boolean;
 }
 
-const PADDING = { none: 0, sm: 12, md: 16, lg: 24 };
+const LINE = '1px solid var(--color-stroke-subtle, #EEEEEE)';
+const INTENT_BG: Record<ContentContainerIntent, string | undefined> = {
+  neutral: undefined,
+  destructive: 'var(--color-status-error-bg, #FEE2E2)',
+  brand: 'var(--color-status-brand-bg, #FEF2E9)',
+};
 
+/** The shared shell behind Dialog, Sheet and dashboard section cards, built from Header, Body and Footer slots. Use it to give arbitrary content a consistent surface, border and padding. */
 export const ContentContainer = forwardRef<HTMLDivElement, ContentContainerProps>(({
-  title,
-  description,
-  leadingIcon,
-  badgeLabel,
-  badgeVariant = 'blue',
-  headerContent,
-  showActionButton = true,
-  actionIcon,
-  onActionClick,
-  padding = 'md',
+  header,
+  footer,
   children,
+  surface = 'white',
+  intent = 'neutral',
+  contentStyle = 'flush',
+  contentSurface = 'subtle',
+  headerDivider = true,
+  divided = true,
+  border = true,
   style,
-  className,
   ...props
 }, ref) => {
-  const pad = PADDING[padding];
-  const hasHeader = headerContent || title || description || badgeLabel;
+  const bg = INTENT_BG[intent] ?? (surface === 'gray' ? 'var(--color-container-secondary, #F7F7F7)' : 'var(--color-container-primary, #FFFFFF)');
+  const floating = contentStyle === 'floating';
+  const top = !floating && header ? 0 : 10;
+  const bottom = !floating && footer ? 0 : 10;
 
   return (
     <div
       ref={ref}
-      className={className}
       style={{
-        backgroundColor: 'var(--color-container-primary, #FFFFFF)',
-        borderRadius: 'var(--radius-lg, 8px)',
-        boxShadow: '0px 1px 2px 0px rgba(0,0,0,0.04), 0px 1px 3px 0px rgba(0,0,0,0.08)',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        ...style,
+        display: 'flex', flexDirection: 'column', boxSizing: 'border-box', borderRadius: 12, overflow: 'hidden', backgroundColor: bg,
+        border: border ? LINE : 'none', boxShadow: '0 1px 2px rgba(89,89,90,0.15)', ...style,
       }}
       {...props}
     >
-      {hasHeader && (
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          gap: 8,
-          padding: 16,
-          borderBottom: '1px solid var(--color-stroke-subtle, #D7D7D7)',
-        }}>
-          <div style={{ display: 'flex', flex: 1, alignItems: 'center', gap: 12, minWidth: 0 }}>
-            {headerContent || (
-              <>
-                <div style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  width: 32, height: 32, flexShrink: 0,
-                  borderRadius: 'var(--radius-lg, 8px)',
-                  backgroundColor: 'var(--color-status-brand-bg, #FEF2E9)',
-                  color: 'var(--color-brand-primary, #F57E20)',
-                }}>
-                  <span style={{ display: 'flex', width: 24, height: 24 }}>
-                    {leadingIcon ?? <SquareDashed size={20} />}
-                  </span>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minWidth: 0 }}>
-                  {title && (
-                    <p style={{
-                      margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 500,
-                      fontSize: 16, lineHeight: '24px', letterSpacing: '-0.16px',
-                      color: 'var(--color-text-primary, #14141E)',
-                    }}>
-                      {title}
-                    </p>
-                  )}
-                  {description && (
-                    <p style={{
-                      margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 400,
-                      fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px',
-                      color: 'var(--color-text-secondary, #49494A)',
-                    }}>
-                      {description}
-                    </p>
-                  )}
-                </div>
-                {badgeLabel && <Badge variant={badgeVariant} label={badgeLabel} />}
-              </>
-            )}
+      {header && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 12px 8px', borderBottom: headerDivider && divided ? LINE : 'none' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>{header}</div>
+        </div>
+      )}
+      {children !== undefined && (
+        <div style={{ padding: 2 }}>
+          <div style={{
+            padding: 12, boxSizing: 'border-box', borderRadius: `${top}px ${top}px ${bottom}px ${bottom}px`,
+            backgroundColor: contentSurface === 'subtle' ? 'var(--color-container-secondary, #F7F7F7)' : 'var(--color-container-primary, #FFFFFF)',
+            border: contentSurface === 'subtle' ? LINE : 'none',
+          }}>
+            {children}
           </div>
-          {showActionButton && (
-            <IconButton
-              shape="square"
-              variant="primary-outline"
-              icon={actionIcon ?? <ListFilter size={14} />}
-              onClick={onActionClick}
-              aria-label="Container actions"
-            />
-          )}
         </div>
       )}
-      {children && (
-        <div style={{ padding: pad, display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {children}
-        </div>
-      )}
+      {footer && <div style={{ padding: 12, borderTop: divided ? LINE : 'none' }}>{footer}</div>}
     </div>
   );
 });

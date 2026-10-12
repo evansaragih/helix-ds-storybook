@@ -1,97 +1,39 @@
 import { forwardRef, useState } from 'react';
-import type { ButtonVariant } from './Button';
+import { resolveButtonStyle } from './Button';
+import type { ButtonHierarchy, ButtonAppearance, ButtonSize } from './Button';
 
-export type IconButtonVariant = ButtonVariant | 'transparent';
-export type IconButtonShape = 'square' | 'circle';
+/** Figma Shape */
+export type IconButtonShape = 'rounded' | 'pill';
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: IconButtonVariant;
-  /** 'square' = "Buttons / Icon", 'circle' = "Buttons / Icon Pill" */
+  hierarchy?: ButtonHierarchy;
+  /** Link is not available on Icon Button */
+  appearance?: Exclude<ButtonAppearance, 'link'>;
+  /** xs 24 · sm 36 · md 44 · lg 52 */
+  size?: ButtonSize;
   shape?: IconButtonShape;
+  /** Figma Notification Badge — red count bubble on the top-right corner */
+  notificationCount?: number | string;
+  loading?: boolean;
   icon: React.ReactNode;
   'aria-label': string;
 }
 
-type VariantState = 'default' | 'hover' | 'focus';
-
-interface VariantStyles {
-  bg: string;
-  border: string;
-  color: string;
-  bgHover: string;
-  bgFocus: string;
-  ring?: string;
-}
-
-const VARIANTS: Record<IconButtonVariant, VariantStyles> = {
-  primary: {
-    bg: 'var(--color-brand-primary)', border: 'var(--color-brand-primary)', color: '#FFFFFF',
-    bgHover: 'var(--color-brand-primary-hover)', bgFocus: 'var(--color-brand-primary)',
-    ring: 'var(--color-brand-primary-ring)',
-  },
-  secondary: {
-    bg: 'var(--color-brand-secondary)', border: 'var(--color-brand-secondary)', color: '#FFFFFF',
-    bgHover: 'var(--color-brand-secondary-hover)', bgFocus: 'var(--color-brand-secondary)',
-    ring: 'var(--color-brand-secondary-ring)',
-  },
-  tertiary: {
-    bg: 'var(--color-brand-tertiary)', border: 'var(--color-brand-tertiary)', color: '#FFFFFF',
-    bgHover: 'var(--color-brand-tertiary-hover)', bgFocus: 'var(--color-brand-tertiary)',
-    ring: 'var(--color-brand-tertiary-ring)',
-  },
-  destructive: {
-    bg: '#DC2626', border: '#DC2626', color: '#FFFFFF',
-    bgHover: '#B91C1C', bgFocus: '#DC2626', ring: 'rgba(220,38,38,0.7)',
-  },
-  neutral: {
-    bg: 'var(--color-btn-neutral)', border: 'var(--color-btn-neutral-border)', color: 'var(--color-btn-neutral-text)',
-    bgHover: 'var(--color-btn-neutral-hover)', bgFocus: 'var(--color-btn-neutral)', ring: '#D7D7D7',
-  },
-  invert: {
-    bg: 'var(--color-btn-invert)', border: 'var(--color-btn-invert-border)', color: '#FFFFFF',
-    bgHover: 'var(--color-btn-invert-hover)', bgFocus: 'var(--color-btn-invert)', ring: '#D7D7D7',
-  },
-  'ghost-neutral': {
-    bg: 'transparent', border: 'var(--color-stroke-neutral, #D7D7D7)', color: 'var(--color-text-primary)',
-    bgHover: '#F7F7F7', bgFocus: '#EEEEEE', ring: '#D7D7D7',
-  },
-  'ghost-brand': {
-    bg: 'transparent', border: 'transparent', color: 'var(--color-brand-primary)',
-    bgHover: 'var(--color-brand-primary-ghost-hover)', bgFocus: 'var(--color-brand-primary-ghost-focus)',
-    ring: 'var(--color-brand-primary-ring)',
-  },
-  'primary-outline': {
-    bg: 'transparent', border: 'var(--color-brand-primary)', color: 'var(--color-brand-primary)',
-    bgHover: 'var(--color-brand-primary-ghost-hover)', bgFocus: 'var(--color-brand-primary-ghost-focus)',
-    ring: 'var(--color-brand-primary-ring)',
-  },
-  'secondary-outline': {
-    bg: 'transparent', border: 'var(--color-brand-secondary)', color: 'var(--color-brand-secondary)',
-    bgHover: 'var(--color-brand-secondary-ghost-hover)', bgFocus: 'var(--color-brand-secondary-ghost-focus)',
-    ring: 'var(--color-brand-secondary-ring)',
-  },
-  'tertiary-outline': {
-    bg: 'transparent', border: 'var(--color-brand-tertiary)', color: 'var(--color-brand-tertiary)',
-    bgHover: 'var(--color-brand-tertiary-ghost-hover)', bgFocus: 'var(--color-brand-tertiary-ghost-focus)',
-    ring: 'var(--color-brand-tertiary-ring)',
-  },
-  transparent: {
-    bg: 'transparent', border: 'transparent', color: 'var(--color-text-secondary, #49494A)',
-    bgHover: '#F7F7F7', bgFocus: '#EEEEEE', ring: '#D7D7D7',
-  },
-  'primary-subtle': {
-    bg: 'var(--color-status-brand-bg)', border: 'transparent', color: 'var(--color-brand-primary)',
-    bgHover: '#EADFD6', bgFocus: 'var(--color-status-brand-bg)', ring: 'var(--color-brand-primary-ring)',
-  },
-  'neutral-subtle': {
-    bg: 'rgba(255,255,255,0.1)', border: 'rgba(255,255,255,1)', color: 'var(--color-text-secondary)',
-    bgHover: 'rgba(255,255,255,0.3)', bgFocus: 'rgba(255,255,255,0.1)', ring: '#D7D7D7',
-  },
+const BOX: Record<ButtonSize, number> = { xs: 24, sm: 36, md: 44, lg: 52 };
+const ICON: Record<ButtonSize, number> = { xs: 12, sm: 14, md: 20, lg: 24 };
+const BADGE: Record<ButtonSize, { box: number; font: number; weight: number }> = {
+  xs: { box: 16, font: 8, weight: 500 }, sm: { box: 16, font: 8, weight: 500 },
+  md: { box: 20, font: 10, weight: 400 }, lg: { box: 24, font: 10, weight: 400 },
 };
 
+/** A button that shows only an icon, no label. Use for compact actions in toolbars, headers or table rows. For actions that need a text label use Button. */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
-  variant = 'primary',
-  shape = 'circle',
+  hierarchy = 'primary',
+  appearance = 'solid',
+  size = 'sm',
+  shape = 'rounded',
+  notificationCount,
+  loading = false,
   icon,
   disabled,
   style,
@@ -103,43 +45,34 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
 }, ref) => {
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
-  const v = VARIANTS[variant];
-
-  const getVS = (): VariantState => {
-    if (focused) return 'focus';
-    if (hovered) return 'hover';
-    return 'default';
-  };
-  const vs = getVS();
-
-  const bg = disabled ? 'var(--color-btn-disabled-bg)' :
-    vs === 'hover' ? v.bgHover :
-    vs === 'focus' ? v.bgFocus :
-    v.bg;
-
-  const borderColor = disabled ? 'var(--color-btn-disabled-bg)' : v.border;
-  const color = disabled ? 'var(--color-btn-disabled-text)' : v.color;
-  const boxShadow = !disabled && focused && v.ring ? `0 0 0 3px ${v.ring}` : 'none';
+  const v = resolveButtonStyle(hierarchy, appearance);
+  const box = BOX[size];
+  const blocked = disabled || loading;
+  const active = !blocked && hovered;
 
   return (
     <button
       ref={ref}
-      disabled={disabled}
+      disabled={blocked}
       style={{
+        position: 'relative',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 36,
-        height: 36,
+        width: box,
+        height: box,
         flexShrink: 0,
-        borderRadius: shape === 'circle' ? 9999 : 8,
-        border: `1px solid ${borderColor}`,
-        backgroundColor: bg,
-        color,
-        boxShadow,
-        cursor: disabled ? 'not-allowed' : 'pointer',
+        padding: 0,
+        borderRadius: shape === 'pill' ? 9999 : size === 'xs' ? 6 : 8,
+        border: `1px solid ${active && v.borderHover ? v.borderHover : v.border}`,
+        backgroundColor: active ? v.bgHover : v.bg,
+        color: active && v.colorHover ? v.colorHover : v.color,
+        boxShadow: blocked ? 'none' : focused && v.ring ? `0 0 0 3px ${v.ring}` : v.shadow ?? 'none',
+        opacity: disabled ? 0.5 : 1,
+        backdropFilter: v.backdropBlur ? 'blur(2px)' : undefined,
+        cursor: blocked ? 'not-allowed' : 'pointer',
         outline: 'none',
-        transition: 'background-color 0.15s, box-shadow 0.15s',
+        transition: 'background-color 0.15s, border-color 0.15s, box-shadow 0.15s',
         ...style,
       }}
       onMouseEnter={(e) => { setHovered(true); onMouseEnter?.(e); }}
@@ -148,11 +81,26 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
       onBlur={(e) => { setFocused(false); onBlur?.(e); }}
       {...props}
     >
-      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 16, height: 16 }}>
-        {icon}
+      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: ICON[size], height: ICON[size] }}>
+        {loading
+          ? <span style={{ width: ICON[size], height: ICON[size], borderRadius: '50%', border: '1.5px solid currentColor', borderTopColor: 'transparent', animation: 'badge-spin 0.75s linear infinite' }} />
+          : icon}
       </span>
+      {notificationCount !== undefined && (
+        <span style={{
+          position: 'absolute', top: -BADGE[size].box / 2, right: -BADGE[size].box * 0.6,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', boxSizing: 'border-box',
+          minWidth: BADGE[size].box, height: BADGE[size].box, padding: '0 4px', borderRadius: 9999,
+          backgroundColor: DESTRUCTIVE_BG, border: '1px solid #FFFFFF', color: '#FFFFFF',
+          fontFamily: 'var(--font-family-body)', fontSize: BADGE[size].font, fontWeight: BADGE[size].weight, lineHeight: 1,
+        }}>
+          {notificationCount}
+        </span>
+      )}
     </button>
   );
 });
+
+const DESTRUCTIVE_BG = 'var(--color-destructive, #DC2626)';
 
 IconButton.displayName = 'IconButton';

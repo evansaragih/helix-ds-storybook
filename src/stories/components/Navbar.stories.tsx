@@ -1,59 +1,55 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Navbar, Button, Logo } from 'helix-design-system/components';
-import { AVATAR_USERS } from '../../data/avatarUsers';
-
-const LINKS = [
-  { label: 'Dashboard', active: true },
-  { label: 'Samples' },
-  { label: 'Reports' },
-  { label: 'Settings' },
-];
+import { Navbar, NavLink, Button, Logo } from 'helix-design-system/components';
+import { ChevronDown, LayoutDashboard } from 'lucide-react';
 
 const meta = {
-  title: 'Components/Navigation/Navbar',
+  title: 'Organism/Navbars/Marketing Navbar',
   component: Navbar,
   tags: ['autodocs'],
+  argTypes: { state: { control: 'select', options: ['onTop', 'onScroll'] } },
   args: {
-    logo: <Logo variant="wordmark" height={20} />,
-    links: LINKS,
-    showSearch: true,
-    showNotifications: true,
-    user: { name: 'Sari Dewi' },
+    state: 'onTop',
+    leftContent: <Logo variant="wordmark" height={20} />,
+    rightContent: (
+      <>
+        <NavLink label="Products" href="#" active />
+        <NavLink label="Solutions" href="#" />
+        <NavLink label="Resources" href="#" trailingIcon={<ChevronDown size={16} />} />
+        <NavLink label="Pricing" href="#" />
+        <Button hierarchy="secondary" appearance="outline" size="sm">Log in</Button>
+        <Button size="sm">Get started</Button>
+      </>
+    ),
   },
+  parameters: { layout: 'fullscreen' },
 } satisfies Meta<typeof Navbar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
-  render: (args) => <div style={{ width: 960 }}><Navbar {...args} /></div>,
-};
+export const Playground: Story = {};
 
-export const NoLinks: Story = {
-  args: { links: [] },
-  render: (args) => <div style={{ width: 960 }}><Navbar {...args} /></div>,
-};
-
-export const WithActions: Story = {
-  args: { actions: <Button size="sm">New sample</Button> },
-  render: (args) => <div style={{ width: 960 }}><Navbar {...args} /></div>,
-};
-
-export const WithMobileMenu: Story = {
-  args: { onMenuClick: () => {} },
-  render: (args) => <div style={{ width: 960 }}><Navbar {...args} /></div>,
-};
-
-export const WithAvatarImage: Story = {
-  args: { user: { name: AVATAR_USERS[1].name, avatar: AVATAR_USERS[1].src } },
-  render: (args) => <div style={{ width: 960 }}><Navbar {...args} /></div>,
-};
-
-export const Transparent: Story = {
-  args: { transparent: true, logo: <Logo variant="wordmark" tone="white" height={20} /> },
+export const OnScroll: Story = {
+  args: { state: 'onScroll' },
   render: (args) => (
-    <div style={{ width: 960, background: 'linear-gradient(135deg, #F57E20, #089AAA)', padding: 8, borderRadius: 12 }}>
-      <Navbar {...args} />
+    <div style={{ height: 160, background: 'linear-gradient(135deg, #FCC9A3, #EBF2FE)' }}><Navbar {...args} /></div>
+  ),
+};
+
+/** Figma _nav-link — Leading / Trailing icon, State and Surface. */
+export const NavLinks: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: 24 }}>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <NavLink label="Default" href="#" />
+        <NavLink label="Active" href="#" active />
+        <NavLink label="With icon" href="#" icon={<LayoutDashboard size={16} />} />
+        <NavLink label="Trailing" href="#" trailingIcon={<ChevronDown size={16} />} />
+      </div>
+      <div style={{ display: 'flex', gap: 8, background: '#14141E', padding: 12, borderRadius: 8 }}>
+        <NavLink surface="dark" label="Default" href="#" />
+        <NavLink surface="dark" label="Active" href="#" active />
+      </div>
     </div>
   ),
 };

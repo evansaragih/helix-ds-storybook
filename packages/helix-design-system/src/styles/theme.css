@@ -229,10 +229,11 @@
   --color-container-primary-10:  rgba(255, 255, 255, 0.1);
 
   /* --- Stroke / Border ----------------------------------------- */
-  --color-stroke-default:       #D7D7D7;
-  --color-stroke-subtle:        #D7D7D7;
-  --color-stroke-hover:         #9F9F9F;
-  --color-stroke-strong:        #49494A;
+  --color-stroke-default:       #BABABA;   /* Figma Colors/Stroke/Default (Neutral/20) */
+  --color-stroke-subtle:        #EEEEEE;   /* Neutral-10 — matches Figma Colors/Stroke/Subtle (Default stays Neutral-20) */
+  --color-stroke-hover:         #828282;   /* Figma Colors/Stroke/Hover (Neutral/40) */
+  --color-stroke-strong:        #9F9F9F;   /* Figma Colors/Stroke/Strong (Neutral/30) */
+  --color-stroke-disabled:      #D7D7D7;   /* Figma Colors/Stroke/Disabled (Neutral/10) */
   --color-stroke-error:         #DC2626;
   --color-stroke-success:       #22C55E;
   --color-stroke-info:          #3B82F6;

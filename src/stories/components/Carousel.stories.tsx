@@ -1,68 +1,41 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Carousel } from 'helix-design-system/components';
 
-function Slide({ label, color }: { label: string; color: string }) {
-  return (
-    <div
-      style={{
-        height: 180,
-        borderRadius: 12,
-        backgroundColor: color,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: 'Rubik, sans-serif',
-        fontWeight: 500,
-        fontSize: 16,
-        color: '#FFFFFF',
-      }}
-    >
-      {label}
-    </div>
-  );
-}
-
-const COLORS = ['#F57E20', '#476142', '#089AAA', '#014CC5', '#A66800'];
-
-const ITEMS = Array.from({ length: 5 }, (_, i) => ({
-  id: i,
-  content: <Slide label={`Slide ${i + 1}`} color={COLORS[i % COLORS.length]} />,
-}));
+const IMG = (id: string) => `https://images.unsplash.com/${id}?w=1200&q=70`;
+const SLIDES = [
+  { id: 's1', image: IMG('photo-1532094349884-543bc11b234d'), title: 'Sample prep', description: 'Samples are prepared and labelled before sequencing.', label: 'Step 1', bullets: ['Logged on arrival', 'Barcoded', 'Stored at 4°C'] },
+  { id: 's2', image: IMG('photo-1582719471384-894fbb16e074'), title: 'Microscopy', description: 'Quality check under the microscope.', label: 'Step 2', bullets: ['Visual QC', 'Contamination check'] },
+  { id: 's3', image: IMG('photo-1576086213369-97a306d36557'), title: 'Analysis', description: 'Results are reviewed by the analyst.', label: 'Step 3', bullets: ['Automated pipeline', 'Analyst sign-off'] },
+  { id: 's4', image: IMG('photo-1579154204601-01588f351e67'), title: 'Reporting', description: 'A report is issued to the customer.', label: 'Step 4', bullets: ['PDF report', 'Shared securely'] },
+];
 
 const meta = {
-  title: 'Components/Layout/Carousel',
+  title: 'Molecule/Carousel',
   component: Carousel,
   tags: ['autodocs'],
   argTypes: {
-    visibleCount: { control: 'select', options: [1, 2, 3, 4] },
+    layout: { control: 'select', options: ['single', 'center-peek', 'row-cards', 'stack-peek', 'split-feature'] },
+    indicator: { control: 'select', options: ['dots', 'dots-inverse', 'progress', 'bar', 'track', false] },
+    showNavigation: { control: 'boolean' },
   },
-  args: {
-    items: ITEMS,
-    visibleCount: 1,
-    showArrows: true,
-    showDots: true,
-    gap: 16,
-  },
+  args: { slides: SLIDES, layout: 'single', indicator: 'dots', showNavigation: true },
+  parameters: { layout: 'centered' },
 } satisfies Meta<typeof Carousel>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
-  render: (args) => <div style={{ width: 480 }}><Carousel {...args} /></div>,
-};
+export const Playground: Story = {};
+export const CenterPeek: Story = { args: { layout: 'center-peek' } };
+export const RowCards: Story = { args: { layout: 'row-cards' } };
+export const StackPeek: Story = { args: { layout: 'stack-peek' } };
+export const SplitFeature: Story = { args: { layout: 'split-feature' }, decorators: [(Story) => <div style={{ width: 1000 }}><Story /></div>] };
 
-export const MultipleVisible: Story = {
-  args: { visibleCount: 3 },
-  render: (args) => <div style={{ width: 640 }}><Carousel {...args} /></div>,
-};
-
-export const AutoPlay: Story = {
-  args: { autoPlay: 2500 },
-  render: (args) => <div style={{ width: 480 }}><Carousel {...args} /></div>,
-};
-
-export const NoArrowsOrDots: Story = {
-  args: { showArrows: false, showDots: false },
-  render: (args) => <div style={{ width: 480 }}><Carousel {...args} /></div>,
+/** Figma _page-indicator appearances. */
+export const Indicators: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      {(['dots', 'dots-inverse', 'progress', 'bar', 'track'] as const).map((indicator) => <Carousel key={indicator} {...args} indicator={indicator} />)}
+    </div>
+  ),
 };

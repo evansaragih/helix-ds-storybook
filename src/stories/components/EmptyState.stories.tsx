@@ -1,63 +1,39 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState } from 'helix-design-system/components';
+import { Search } from 'lucide-react';
+
+const TYPES = ['search', 'users', 'files', 'integrations', 'no-data', 'no-lab-results', 'error', 'no-permission'] as const;
 
 const meta = {
-  title: 'Components/Feedback & Status/EmptyState',
+  title: 'Molecule/Empty States',
   component: EmptyState,
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: 'select', options: ['default', 'search', 'folder', 'image', 'file'] },
+    type: { control: 'select', options: TYPES },
+    size: { control: 'select', options: ['default', 'compact'] },
+    illustration: { control: 'select', options: [true, false, 'dna', 'rna', 'lab-flask', 'microscope'] },
   },
-  args: {
-    variant: 'default',
-    title: 'No samples yet',
-    description: 'Once you submit a sample, it will show up here.',
-    action: { label: 'Submit a sample', onClick: () => {} },
-  },
+  args: { type: 'search', size: 'default', primaryAction: { label: 'New item' }, secondaryAction: { label: 'Clear search' } },
+  decorators: [(Story) => <div style={{ width: 384, border: '1px solid #EEEEEE', borderRadius: 12 }}><Story /></div>],
 } satisfies Meta<typeof EmptyState>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
-  render: (args) => <div style={{ width: 420 }}><EmptyState {...args} /></div>,
-};
+export const Playground: Story = {};
 
-export const Variants: Story = {
+/** Figma Type — each scenario with its illustration and default text. */
+export const Types: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-      {(['default', 'search', 'folder', 'image', 'file'] as const).map((variant) => (
-        <div key={variant} style={{ width: 260, border: '1px solid var(--color-stroke-subtle)', borderRadius: 8 }}>
-          <EmptyState {...args} variant={variant} action={undefined} compact />
-        </div>
-      ))}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 384px)', gap: 16 }}>
+      {TYPES.map((type) => <div key={type} style={{ border: '1px solid #EEEEEE', borderRadius: 12 }}><EmptyState {...args} type={type} /></div>)}
     </div>
   ),
+  decorators: [],
 };
 
-export const WithSecondaryAction: Story = {
-  args: {
-    secondaryAction: { label: 'Learn more', onClick: () => {}, variant: 'outline' },
-  },
-  render: (args) => <div style={{ width: 420 }}><EmptyState {...args} /></div>,
-};
-
-export const NoAction: Story = {
-  args: { action: undefined },
-  render: (args) => <div style={{ width: 420 }}><EmptyState {...args} /></div>,
-};
-
-export const Compact: Story = {
-  args: { compact: true },
-  render: (args) => <div style={{ width: 320, border: '1px solid var(--color-stroke-subtle)', borderRadius: 8 }}><EmptyState {...args} /></div>,
-};
-
-export const SearchNoResults: Story = {
-  args: {
-    variant: 'search',
-    title: 'No results found',
-    description: 'Try adjusting your search or filters.',
-    action: undefined,
-  },
-  render: (args) => <div style={{ width: 420 }}><EmptyState {...args} /></div>,
-};
+/** Figma Size=Compact — horizontal layout for tight spaces. */
+export const Compact: Story = { args: { size: 'compact' }, decorators: [(Story) => <div style={{ width: 352, border: '1px solid #EEEEEE', borderRadius: 12 }}><Story /></div>] };
+export const WithIconTile: Story = { args: { icon: <Search size={24} />, illustration: false } };
+export const BiotechIllustration: Story = { args: { type: 'no-lab-results', illustration: 'dna' } };
+export const NoActions: Story = { args: { primaryAction: undefined, secondaryAction: undefined } };

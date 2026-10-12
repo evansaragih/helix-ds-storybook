@@ -7,17 +7,13 @@ import { ElevationSection } from './ElevationSection';
 import { IconsSection } from './IconsSection';
 import { BrandIdentitySection } from './BrandIdentitySection';
 import { InputSection } from './InputSection';
-import { InputOTPSection } from './InputOTPSection';
-import { ListContainerSection } from './ListContainerSection';
 import { CheckboxSection } from './CheckboxSection';
 import { ButtonSection } from './ButtonSection';
-import { MenuItemSection } from './MenuItemSection';
 import { BadgeSection } from './BadgeSection';
 import { AlertSection } from './AlertSection';
 import { AvatarSection } from './AvatarSection';
 import { AvatarGroupSection } from './AvatarGroupSection';
 import { IconButtonSection } from './IconButtonSection';
-import { CardSection } from './CardSection';
 import { AccordionSection } from './AccordionSection';
 import { DividerSection } from './DividerSection';
 import { SwitchSection } from './SwitchSection';
@@ -26,29 +22,47 @@ import { SelectSection } from './SelectSection';
 import { TabsSection } from './TabsSection';
 import { TooltipSection } from './TooltipSection';
 import { ProgressBarSection } from './ProgressBarSection';
+import { SliderSection } from './SliderSection';
 import { PaginationSection } from './PaginationSection';
 import { DialogSection } from './DialogSection';
 import { StepperSection } from './StepperSection';
 import { TableSection } from './TableSection';
 import { SpinnerSection } from './SpinnerSection';
-import { TextLinkSection } from './TextLinkSection';
 import { BreadcrumbSection } from './BreadcrumbSection';
-import { ToastSection } from './ToastSection';
+import { ToastrSection } from './ToastrSection';
 import { AlertDialogSection } from './AlertDialogSection';
 import { PopoverSection } from './PopoverSection';
 import { SheetSection } from './SheetSection';
 import { EmptyStateSection } from './EmptyStateSection';
 import { NavbarSection } from './NavbarSection';
 import { DatePickerSection } from './DatePickerSection';
-import { CardMetricSection } from './CardMetricSection';
-import { InfoCardSection } from './InfoCardSection';
 import { ComparisonTableSection } from './ComparisonTableSection';
 import { ContentContainerSection } from './ContentContainerSection';
+import { componentItems } from '../data/navigation';
 import { CarouselSection } from './CarouselSection';
 import { ToolbarFilterSection } from './ToolbarFilterSection';
 import { DropzoneSection } from './DropzoneSection';
-import { CommandSection } from './CommandSection';
 import { UploadProgressDrawerSection } from './UploadProgressDrawerSection';
+import { DotSection } from './DotSection';
+import { IconTileSection } from './IconTileSection';
+import { CalloutSection } from './CalloutSection';
+import { SkeletonSection } from './SkeletonSection';
+import { LoadingStateSection } from './LoadingStateSection';
+import { LabelValueSection } from './LabelValueSection';
+import { ContentDividerSection } from './ContentDividerSection';
+import { FieldSection } from './FieldSection';
+import { FooterActionsSection } from './FooterActionsSection';
+import { GroupItemSection } from './GroupItemSection';
+import { ListItemSection } from './ListItemSection';
+import { SortableListItemSection } from './SortableListItemSection';
+import { SectionHeaderSection } from './SectionHeaderSection';
+import { SidebarSection } from './SidebarSection';
+import { DropdownMenuSection } from './DropdownMenuSection';
+import { MetricTileSection } from './MetricTileSection';
+import { InfoBadgeSection } from './InfoBadgeSection';
+import { LightboxSection } from './LightboxSection';
+import { DashboardLayoutSection } from './DashboardLayoutSection';
+import { TagSection } from './TagSection';
 
 interface MainContentProps {
   activeSection: string;
@@ -67,17 +81,13 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
       case 'icons':             return <IconsSection />;
       case 'brand-identity':    return <BrandIdentitySection />;
       case 'input':             return <InputSection />;
-      case 'input-otp':         return <InputOTPSection />;
-      case 'list-container':    return <ListContainerSection />;
       case 'checkbox':          return <CheckboxSection />;
       case 'button':            return <ButtonSection />;
-      case 'menu-item':         return <MenuItemSection />;
       case 'badge':             return <BadgeSection />;
       case 'alert':             return <AlertSection />;
       case 'avatar':            return <AvatarSection />;
       case 'avatar-group':      return <AvatarGroupSection />;
       case 'icon-button':       return <IconButtonSection />;
-      case 'card':              return <CardSection />;
       case 'accordion':         return <AccordionSection />;
       case 'divider':           return <DividerSection />;
       case 'switch':            return <SwitchSection />;
@@ -86,29 +96,46 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
       case 'tabs':              return <TabsSection />;
       case 'tooltip':           return <TooltipSection />;
       case 'progress-bar':      return <ProgressBarSection />;
+      case 'slider':            return <SliderSection />;
       case 'pagination':        return <PaginationSection />;
       case 'dialog':            return <DialogSection />;
       case 'stepper':           return <StepperSection />;
       case 'table':             return <TableSection />;
       case 'spinner':           return <SpinnerSection />;
-      case 'text-link':         return <TextLinkSection />;
       case 'breadcrumb':        return <BreadcrumbSection />;
-      case 'toast':             return <ToastSection />;
+      case 'toast':             return <ToastrSection />;
       case 'alert-dialog':      return <AlertDialogSection />;
       case 'popover':           return <PopoverSection />;
       case 'sheet':             return <SheetSection />;
       case 'empty-state':       return <EmptyStateSection />;
       case 'navbar':            return <NavbarSection />;
       case 'date-picker':       return <DatePickerSection />;
-      case 'card-metric':       return <CardMetricSection />;
-      case 'info-card':         return <InfoCardSection />;
       case 'comparison-table':  return <ComparisonTableSection />;
       case 'content-container': return <ContentContainerSection />;
       case 'carousel':          return <CarouselSection />;
       case 'toolbar-filter':    return <ToolbarFilterSection />;
       case 'dropzone':          return <DropzoneSection />;
-      case 'command':           return <CommandSection />;
       case 'upload-progress-drawer': return <UploadProgressDrawerSection />;
+      case 'dot': return <DotSection />;
+      case 'icon-tile': return <IconTileSection />;
+      case 'callout': return <CalloutSection />;
+      case 'skeleton': return <SkeletonSection />;
+      case 'loading-state': return <LoadingStateSection />;
+      case 'label-value': return <LabelValueSection />;
+      case 'content-divider': return <ContentDividerSection />;
+      case 'field': return <FieldSection />;
+      case 'footer-actions': return <FooterActionsSection />;
+      case 'group-item': return <GroupItemSection />;
+      case 'list-item': return <ListItemSection />;
+      case 'sortable-list-item': return <SortableListItemSection />;
+      case 'section-header': return <SectionHeaderSection />;
+      case 'sidebar': return <SidebarSection />;
+      case 'dropdown-menu': return <DropdownMenuSection />;
+      case 'metric-tile': return <MetricTileSection />;
+      case 'info-badge': return <InfoBadgeSection />;
+      case 'lightbox': return <LightboxSection />;
+      case 'dashboard-layout': return <DashboardLayoutSection />;
+      case 'tag': return <TagSection />;
       case 'components-overview':
         return (
           <div style={{ padding: '40px 48px' }}>
@@ -128,17 +155,10 @@ export function MainContent({ activeSection, isCollapsed }: MainContentProps) {
               lineHeight: '1.6',
               marginBottom: 32,
             }}>
-              The Helix design system includes 43 production-ready components. Select any component from the sidebar to view its documentation and interactive examples.
+              The Helix design system follows the Figma component sets, grouped by page. Select any component from the sidebar to view its documentation and interactive examples.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
-              {[
-                'Accordion', 'Alert', 'Alert Dialog', 'Avatar', 'Avatar Group', 'Badge', 'Breadcrumb',
-                'Button', 'Card', 'Card Metric', 'Carousel', 'Checkbox', 'Comparison Table', 'Content Container',
-                'Date Picker', 'Dialog', 'Divider', 'Empty State', 'Icon Button', 'Info Card', 'Input',
-                'Input OTP', 'List Container', 'Menu', 'Navbar', 'Pagination', 'Popover', 'Progress Bar',
-                'Radio Button', 'Select', 'Sheet', 'Spinner', 'Stepper', 'Switch',
-                'Table', 'Tabs', 'Text Link', 'Toast', 'Toolbar Filter', 'Tooltip',
-              ].map(name => (
+              {componentItems.filter(i => i.id !== 'components-overview').map(i => i.label).map(name => (
                 <div key={name} style={{
                   padding: '12px 16px',
                   backgroundColor: '#F7F7F7',

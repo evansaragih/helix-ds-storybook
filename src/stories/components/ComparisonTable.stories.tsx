@@ -17,7 +17,7 @@ const ROWS = [
 ];
 
 const meta = {
-  title: 'Components/Data Display/ComparisonTable',
+  title: 'Organism/Comparison Tables',
   component: ComparisonTable,
   tags: ['autodocs'],
   args: {

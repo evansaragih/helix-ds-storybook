@@ -1,15 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from 'helix-design-system/components';
 
+const CONTENT = ['numbered', 'simple', 'simple-reversed', 'simple-split', 'grouped', 'pagination-right', 'pagination-left', 'page-count', 'showing'] as const;
+
 const meta = {
-  title: 'Components/Navigation/Pagination',
+  title: 'Molecule/Pagination',
   component: Pagination,
   tags: ['autodocs'],
-  args: {
-    total: 240,
-    pageSize: 10,
-    defaultPage: 3,
+  argTypes: {
+    content: { control: 'select', options: CONTENT },
+    density: { control: 'select', options: ['full', 'compact'] },
+    showRowsPerPage: { control: 'boolean' },
   },
+  args: { total: 100, pageSize: 10, defaultPage: 2, content: 'numbered', density: 'full' },
+  decorators: [(Story) => <div style={{ width: 800 }}><Story /></div>],
+  parameters: { layout: 'centered' },
 } satisfies Meta<typeof Pagination>;
 
 export default meta;
@@ -17,22 +22,24 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const FewPages: Story = {
-  args: { total: 40, pageSize: 10, defaultPage: 2 },
+/** Figma Content × Density. */
+export const AllContent: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      {CONTENT.map((content) => (
+        <div key={content} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 11, color: '#828282' }}>{content}</span>
+          <Pagination {...args} content={content} />
+        </div>
+      ))}
+    </div>
+  ),
 };
 
-export const ManyPagesWithSiblings: Story = {
-  args: { total: 500, pageSize: 10, defaultPage: 25, siblingCount: 2 },
-};
-
-export const WithRowsPerPage: Story = {
-  args: { showRowsPerPage: true, pageSizes: [10, 25, 50, 100] },
-};
-
-export const FirstPage: Story = {
-  args: { defaultPage: 1 },
-};
-
-export const LastPage: Story = {
-  args: { total: 240, pageSize: 10, defaultPage: 24 },
+export const Compact: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'flex-start' }}>
+      {(['numbered', 'simple', 'grouped'] as const).map((content) => <Pagination key={content} {...args} content={content} density="compact" style={{ width: 'auto' }} />)}
+    </div>
+  ),
 };

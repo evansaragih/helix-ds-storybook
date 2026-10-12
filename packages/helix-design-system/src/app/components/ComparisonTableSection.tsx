@@ -45,7 +45,7 @@ export function ComparisonTableSection() {
   return (
     <PageLayout
       category="Components"
-      title="Comparison Table"
+      title="Comparison Tables"
       description="Comparison tables present feature availability across plans or tiers. They use boolean, partial, and custom cell values to help users evaluate options side by side."
       tocItems={toc}
     >

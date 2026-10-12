@@ -74,13 +74,13 @@ export function AvatarGroupSection() {
 
       <Section id="avatar-group-overflow" title="Overflow & Add Button">
         <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Pass <code>max</code> to collapse extra avatars into a count badge. Enable <code>showAddButton</code> for team-management surfaces, with a circular or square shape via <code>addButtonShape</code>.
+          Pass <code>max</code> to collapse extra avatars into a count badge. Enable <code>addUserButton</code> for team-management surfaces, with a circular or square shape via <code>addUserButtonShape</code>.
         </p>
         <DemoCard title="Overflow + add button combinations">
           <Row label="No overflow"><AvatarGroup items={users.slice(0, 3)} size="sm" /></Row>
           <Row label="With overflow"><AvatarGroup items={users} size="sm" max={4} /></Row>
-          <Row label="+ Add button (circle)"><AvatarGroup items={users} size="sm" max={4} showAddButton addButtonShape="circle" /></Row>
-          <Row label="+ Add button (square)"><AvatarGroup items={users} size="sm" max={4} showAddButton addButtonShape="square" /></Row>
+          <Row label="+ Add button (circle)"><AvatarGroup items={users} size="sm" max={4} addUserButton addUserButtonShape="circle" /></Row>
+          <Row label="+ Add button (square)"><AvatarGroup items={users} size="sm" max={4} addUserButton addUserButtonShape="square" /></Row>
         </DemoCard>
       </Section>
 

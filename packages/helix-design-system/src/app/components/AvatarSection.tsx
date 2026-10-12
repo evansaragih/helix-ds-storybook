@@ -1,4 +1,5 @@
 import { PageLayout, Section } from './PageLayout';
+import * as Helix from '../../components';
 import { Avatar } from '../../components';
 import { User, Star } from 'lucide-react';
 
@@ -7,6 +8,7 @@ const toc = [
   { id: 'avatar-sizes',   label: 'Sizes' },
   { id: 'avatar-shapes',  label: 'Shapes' },
   { id: 'avatar-content', label: 'Content Types' },
+  { id: 'avatar-figma-border', label: 'XXS size and Border' },
 ];
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -68,7 +70,7 @@ export function AvatarSection() {
 
       <Section id="avatar-shapes" title="Shapes">
         <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Use <code>circular</code> (default) for people and <code>rounded</code> for teams, bots, or entities.
+          Figma’s default is <code>rounded</code>; use <code>circular</code> for people. Status (presence dot) and Company logo overlays sit on the bottom-right corner — use one or the other.
         </p>
         <DemoCard title="Shape comparison">
           <Row label="circular">
@@ -101,6 +103,12 @@ export function AvatarSection() {
             <Avatar size="md" icon={<Star size={16} />} />
           </Row>
         </DemoCard>
+      </Section>
+      <Section id="avatar-figma-border" title="XXS size and Border">
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+          The XXS size (13px) and a Border ring for use over busy surfaces. Avatar sizes follow Figma: 24 / 36 / 48 / 58px.
+        </p>
+        <div style={{ padding: 24, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE', overflowX: 'auto' }}><div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>{(['xxs','xs','sm','md','lg'] as const).map(s => <Helix.Avatar key={s} size={s} name="Sari Dewi" border />)}</div></div>
       </Section>
     </PageLayout>
   );

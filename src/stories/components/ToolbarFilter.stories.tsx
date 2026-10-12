@@ -1,97 +1,39 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ToolbarFilter, Button } from 'helix-design-system/components';
+import { useState } from 'react';
+import { ToolbarFilter } from 'helix-design-system/components';
 
-const FILTERS = [
-  {
-    key: 'status',
-    label: 'Status',
-    multiple: true,
-    options: [
-      { value: 'completed', label: 'Completed' },
-      { value: 'processing', label: 'Processing' },
-      { value: 'failed', label: 'Failed' },
-    ],
-  },
-  {
-    key: 'type',
-    label: 'Sample type',
-    options: [
-      { value: 'stool', label: 'Stool' },
-      { value: 'swab', label: 'Swab' },
-      { value: 'water', label: 'Water' },
-    ],
-  },
-];
+const SORT = [{ value: 'date', label: 'Date' }, { value: 'name', label: 'Name' }, { value: 'status', label: 'Status' }];
+const STATUS = [{ value: 'completed', label: 'Completed' }, { value: 'processing', label: 'Processing' }, { value: 'failed', label: 'Failed' }];
+const TYPE = [{ value: 'stool', label: 'Stool' }, { value: 'swab', label: 'Swab' }, { value: 'water', label: 'Water' }];
 
 const meta = {
-  title: 'Components/Navigation/ToolbarFilter',
+  title: 'Molecule/Filter',
   component: ToolbarFilter,
   tags: ['autodocs'],
-  args: {
-    filters: FILTERS,
-    searchPlaceholder: 'Search samples…',
-    totalResults: 128,
-  },
+  decorators: [(Story) => <div style={{ width: 640, minHeight: 260 }}><Story /></div>],
 } satisfies Meta<typeof ToolbarFilter>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function ToolbarDemo(args: React.ComponentProps<typeof ToolbarFilter>) {
-  const [search, setSearch] = useState('');
-  const [active, setActive] = useState<Record<string, string | string[]>>({ status: ['completed'] });
-
-  return (
-    <ToolbarFilter
-      {...args}
-      searchValue={search}
-      onSearchChange={setSearch}
-      activeFilters={active}
-      onFilterChange={(key, value) => setActive((prev) => ({ ...prev, [key]: value }))}
-      onClearAll={() => setActive({})}
-    />
-  );
-}
-
 export const Playground: Story = {
-  render: (args) => <div style={{ width: 720 }}><ToolbarDemo {...args} /></div>,
-};
-
-export const NoActiveFilters: Story = {
-  render: (args) => {
-    function Demo() {
-      const [search, setSearch] = useState('');
-      return (
-        <ToolbarFilter
-          {...args}
-          searchValue={search}
-          onSearchChange={setSearch}
-          activeFilters={{}}
-          onFilterChange={() => {}}
-        />
-      );
-    }
-    return <div style={{ width: 720 }}><Demo /></div>;
+  render: () => {
+    const [sort, setSort] = useState('date');
+    const [status, setStatus] = useState<string>();
+    const [type, setType] = useState<string>();
+    return (
+      <ToolbarFilter
+        sort={[{ id: 'sort', label: `Sort: ${SORT.find((s) => s.value === sort)?.label}`, options: SORT, value: sort, onValueChange: setSort }]}
+        filters={[
+          { id: 'status', label: 'Status', options: STATUS, value: status, onValueChange: setStatus },
+          { id: 'type', label: 'Type', options: TYPE, value: type, onValueChange: setType },
+        ]}
+        onReset={() => { setSort('date'); setStatus(undefined); setType(undefined); }}
+      />
+    );
   },
 };
 
-export const WithActions: Story = {
-  render: (args) => <div style={{ width: 720 }}><ToolbarDemo {...args} actions={<Button size="sm">Export</Button>} /></div>,
-};
-
-export const NoSearch: Story = {
-  render: (args) => {
-    function Demo() {
-      const [active, setActive] = useState<Record<string, string | string[]>>({});
-      return (
-        <ToolbarFilter
-          {...args}
-          activeFilters={active}
-          onFilterChange={(key, value) => setActive((prev) => ({ ...prev, [key]: value }))}
-        />
-      );
-    }
-    return <div style={{ width: 720 }}><Demo /></div>;
-  },
+export const WithoutReset: Story = {
+  args: { filters: [{ id: 'status', label: 'Status', options: STATUS }] },
 };

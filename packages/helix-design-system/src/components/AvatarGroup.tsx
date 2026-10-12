@@ -11,27 +11,27 @@ export interface AvatarGroupItem {
 
 export interface AvatarGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   items: AvatarGroupItem[];
-  size?: AvatarSize;
+  /** Figma Size — xs / sm / md */
+  size?: Extract<AvatarSize, 'xs' | 'sm' | 'md'>;
   /** Max avatars to render before collapsing the rest into a "+N" badge */
   max?: number;
-  showAddButton?: boolean;
-  addButtonShape?: 'circle' | 'square';
+  addUserButton?: boolean;
+  addUserButtonShape?: 'circle' | 'square';
   onAddClick?: () => void;
 }
 
-const SIZES: Record<AvatarSize, { diameter: number; overlap: number; fontSize: number }> = {
-  xs: { diameter: 26, overlap: 10, fontSize: 11 },
-  sm: { diameter: 38, overlap: 14, fontSize: 13 },
+const SIZES: Record<Extract<AvatarSize, 'xs' | 'sm' | 'md'>, { diameter: number; overlap: number; fontSize: number }> = {
+  xs: { diameter: 24, overlap: 10, fontSize: 11 },
+  sm: { diameter: 36, overlap: 14, fontSize: 13 },
   md: { diameter: 48, overlap: 18, fontSize: 14 },
-  lg: { diameter: 58, overlap: 22, fontSize: 16 },
 };
 
 export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(({
   items,
   size = 'sm',
   max,
-  showAddButton = false,
-  addButtonShape = 'circle',
+  addUserButton = false,
+  addUserButtonShape = 'circle',
   onAddClick,
   style,
   ...props
@@ -59,7 +59,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(({
             zIndex: visible.length - i,
           }}
         >
-          <Avatar size={size} src={item.src} alt={item.alt} name={item.name} content={item.src ? 'image' : 'placeholder'} />
+          <Avatar size={size} shape="circular" src={item.src} alt={item.alt} name={item.name} content={item.src ? 'image' : 'placeholder'} />
         </div>
       ))}
 
@@ -87,7 +87,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(({
         </div>
       )}
 
-      {showAddButton && (
+      {addUserButton && (
         <button
           type="button"
           onClick={onAddClick}
@@ -96,7 +96,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(({
             marginLeft: (visible.length > 0 || overflow > 0) ? -cfg.overlap : 0,
             width: cfg.diameter,
             height: cfg.diameter,
-            borderRadius: addButtonShape === 'circle' ? '50%' : 8,
+            borderRadius: addUserButtonShape === 'circle' ? '50%' : 8,
             border: '1.5px dashed var(--color-stroke-neutral, #D7D7D7)',
             backgroundColor: 'transparent',
             display: 'flex',

@@ -11,7 +11,7 @@ const SAMPLE_FILES: UploadDrawerFile[] = [
 ];
 
 const meta = {
-  title: 'Components/Overlays/Upload Progress Drawer',
+  title: 'Organism/Dropzone/Upload Progress Drawer',
   component: UploadProgressDrawer,
   tags: ['autodocs'],
   parameters: {
@@ -132,7 +132,7 @@ function LiveDemo() {
   return (
     <Frame>
       <div style={{ width: 420 }}>
-        <Dropzone label="Sample data files" helperText="Drop files to see the upload drawer track them." multiple onFilesChange={handleFilesChange} />
+        <Dropzone description="Drop files to see the upload drawer track them." multiple onFilesChange={handleFilesChange} />
       </div>
       <UploadProgressDrawer
         open={open}

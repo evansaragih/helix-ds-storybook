@@ -1,74 +1,25 @@
-import { PageLayout, Section } from './PageLayout';
-import { Dropzone } from '../../components/Dropzone';
+import { ComponentDocPage } from './ComponentDocPage';
+import { Dropzone, FileUploadField } from '../../components';
 
-const toc = [
-  { id: 'dropzone-default',   label: 'Default' },
-  { id: 'dropzone-variants',  label: 'Variants' },
-  { id: 'dropzone-states',    label: 'States' },
-];
-
-function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div style={{ padding: 24, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE', display: 'flex', flexDirection: 'column', gap: 20 }}>
-      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
-      {children}
-    </div>
-  );
-}
+const col = (n: React.ReactNode, w = 400) => <div style={{ width: w, display: 'flex', flexDirection: 'column', gap: 16 }}>{n}</div>;
 
 export function DropzoneSection() {
   return (
-    <PageLayout
-      category="Components"
+    <ComponentDocPage
+      slug="dropzone"
       title="Dropzone"
-      description="A file upload area that supports drag & drop and click-to-browse. Accepts single or multiple files with optional type and size constraints."
-      tocItems={toc}
-    >
-      <Section id="dropzone-default" title="Default">
-        <DemoCard title="Basic upload">
-          <Dropzone
-            label="Upload file"
-            helperText="Drag & drop or click to select a file."
-          />
-        </DemoCard>
-      </Section>
-
-      <Section id="dropzone-variants" title="Variants">
-        <DemoCard title="With file type & size constraints">
-          <Dropzone
-            label="Profile image"
-            accept="image/png,image/jpeg,image/webp"
-            maxSize={5 * 1024 * 1024}
-            helperText="Accepted: PNG, JPG, WEBP · Max 5 MB"
-          />
-        </DemoCard>
-        <DemoCard title="Multiple files">
-          <Dropzone
-            label="Attachments"
-            multiple
-            accept=".pdf,.docx,.xlsx"
-            maxSize={10 * 1024 * 1024}
-            helperText="PDF, DOCX, XLSX · Max 10 MB per file"
-          />
-        </DemoCard>
-      </Section>
-
-      <Section id="dropzone-states" title="States">
-        <DemoCard title="Error state">
-          <Dropzone
-            label="Required document"
-            error
-            errorText="Please upload a valid document to continue."
-          />
-        </DemoCard>
-        <DemoCard title="Disabled state">
-          <Dropzone
-            label="Upload (disabled)"
-            disabled
-            helperText="Uploads are disabled."
-          />
-        </DemoCard>
-      </Section>
-    </PageLayout>
+      description="File-upload controls: a drag-and-drop Dropzone with a click-to-browse fallback, a compact File Upload Field, and the Upload Progress Drawer that tracks uploads."
+      usage={[
+        { heading: 'Dropzone for primary uploads', body: 'Use the Dropzone when uploading files is the main task on the screen.' },
+        { heading: 'Field for forms', body: 'Use File Upload Field for a single attachment inside a form.' },
+        { heading: 'Say what is accepted', body: 'Put the accepted types and size limit in the supporting text.' },
+      ]}
+      demos={[
+        { id: 'sizes', title: 'Sizes', description: 'Medium and large.', node: col(<><Dropzone description="PDF, CSV up to 10MB" /><Dropzone size="lg" description="PDF, CSV up to 10MB" /></>, 480) },
+        { id: 'states', title: 'States', description: 'Hover and drag over the first one to see its states.', node: col(<><Dropzone description="PDF, CSV up to 10MB" /><Dropzone disabled description="PDF, CSV up to 10MB" /><Dropzone error="This file type is not supported." description="PDF, CSV up to 10MB" /></>) },
+        { id: 'container', title: 'Container appearance', node: col(<Dropzone appearance="container" hint="Files are uploaded when you save." description="PDF, CSV up to 10MB" />) },
+        { id: 'field', title: 'File Upload Field', node: col(<><FileUploadField label="Attachment" hint="PDF up to 10MB" /><FileUploadField floating label="Attachment" /></>, 320) },
+      ]}
+    />
   );
 }

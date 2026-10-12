@@ -1,106 +1,42 @@
-import { useState } from 'react';
-import { PageLayout, Section } from './PageLayout';
+import { ComponentDocPage } from './ComponentDocPage';
 import { Select } from '../../components';
 
-const toc = [
-  { id: 'select-usage',  label: 'Usage Guidelines' },
-  { id: 'select-sizes',  label: 'Sizes' },
-  { id: 'select-states', label: 'States' },
-  { id: 'select-groups', label: 'Option Groups' },
+const OPTIONS = [
+  { value: 'jakarta', label: 'Jakarta' },
+  { value: 'bandung', label: 'Bandung' },
+  { value: 'surabaya', label: 'Surabaya' },
+  { value: 'medan', label: 'Medan' },
+  { value: 'bali', label: 'Bali', disabled: true },
 ];
 
-const countryOptions = [
-  { value: 'id', label: 'Indonesia' },
-  { value: 'sg', label: 'Singapore' },
-  { value: 'my', label: 'Malaysia' },
-  { value: 'th', label: 'Thailand' },
-  { value: 'ph', label: 'Philippines' },
-];
-
-const roleGroups = [
-  {
-    label: 'Admin',
-    options: [
-      { value: 'super-admin', label: 'Super Admin' },
-      { value: 'admin', label: 'Admin' },
-    ],
-  },
-  {
-    label: 'User',
-    options: [
-      { value: 'editor', label: 'Editor' },
-      { value: 'viewer', label: 'Viewer' },
-      { value: 'guest', label: 'Guest' },
-    ],
-  },
-];
-
-function DemoCard({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-      <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{title}</p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>{children}</div>
-    </div>
-  );
-}
+const col = (children: React.ReactNode, width = 320) => <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width, minHeight: 80 }}>{children}</div>;
 
 export function SelectSection() {
-  const [country, setCountry] = useState('');
-  const [role, setRole] = useState('');
-
   return (
-    <PageLayout
-      category="Components"
+    <ComponentDocPage
+      slug="select"
       title="Select"
-      description="Select provides a dropdown for choosing one option from a list. It supports flat options and grouped options, three sizes, and optional label/helper/error text."
-      tocItems={toc}
-    >
-      <Section id="select-usage" title="Usage Guidelines">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-          {[
-            { heading: 'Use for 5+ options', body: 'For fewer than 5 mutually exclusive options, consider radio buttons instead — they show all choices at a glance.' },
-            { heading: 'Write clear labels', body: 'The placeholder and label together should tell the user exactly what they\'re selecting. Avoid generic placeholders like "Select...".' },
-            { heading: 'Group related options', body: 'Use option groups when your list has natural categories. It helps users scan and find the right option faster.' },
-          ].map(g => (
-            <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="select-sizes" title="Sizes">
-        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Three heights: <code>sm</code> (32 px), <code>md</code> (40 px, default), <code>lg</code> (48 px).
-        </p>
-        <DemoCard title="Size comparison">
-          <Select size="sm" options={countryOptions} placeholder="Small — pick country" label="Country (sm)" />
-          <Select size="md" options={countryOptions} placeholder="Medium — pick country" label="Country (md)" />
-          <Select size="lg" options={countryOptions} placeholder="Large — pick country" label="Country (lg)" />
-        </DemoCard>
-      </Section>
-
-      <Section id="select-states" title="States">
-        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Default, disabled, and error states.
-        </p>
-        <DemoCard title="All states">
-          <Select options={countryOptions} label="Default" placeholder="Pick a country" value={country} onChange={setCountry} />
-          <Select options={countryOptions} label="Disabled" placeholder="Unavailable" disabled />
-          <Select options={countryOptions} label="Error" placeholder="Pick a country" errorText="Please select a country to continue." />
-          <Select options={countryOptions} label="With helper" placeholder="Pick a country" helperText="Used for shipping calculations." />
-        </DemoCard>
-      </Section>
-
-      <Section id="select-groups" title="Option Groups">
-        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Pass <code>groups</code> instead of <code>options</code> to render labelled option groups in the dropdown.
-        </p>
-        <DemoCard title="Grouped options">
-          <Select groups={roleGroups} label="Role" placeholder="Assign a role" value={role} onChange={setRole} />
-        </DemoCard>
-      </Section>
-    </PageLayout>
+      description="A form field: an Input-style trigger that opens a list of selectable options. Single selection closes on pick; multi selection adds search and Apply / Clear. For command menus use Dropdown."
+      usage={[
+        { heading: 'Choosing a value', body: 'Use Select to pick a value for a field. For running commands use Dropdown.' },
+        { heading: 'Multi for filters', body: 'Multi selection commits on Apply, so the form does not change while the user is still choosing.' },
+        { heading: 'Few options → Radio', body: 'Under about five options, Radio Buttons are faster to scan.' },
+      ]}
+      demos={[
+        { id: 'triggers', title: 'Triggers', description: 'Input, Input + Label, Input-Floating and Input Horizontal. Click a trigger to open it.',
+          node: col(<>
+            <Select options={OPTIONS} placeholder="Select a city" />
+            <Select options={OPTIONS} label="City" placeholder="Select a city" />
+            <Select options={OPTIONS} label="City" floating />
+            <Select options={OPTIONS} label="City" layout="horizontal" placeholder="Select a city" />
+          </>, 360) },
+        { id: 'multi', title: 'Multi selection', node: col(<Select options={OPTIONS} label="Cities" selection="multi" defaultValues={['jakarta', 'bandung']} placeholder="Select cities" />) },
+        { id: 'states', title: 'Hint, error and disabled', node: col(<>
+          <Select options={OPTIONS} label="City" hint="Choose the lab nearest to you." />
+          <Select options={OPTIONS} label="City" error="Select a city to continue." />
+          <Select options={OPTIONS} label="City" disabled />
+        </>) },
+      ]}
+    />
   );
 }

@@ -1,19 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Input } from 'helix-design-system/components';
-import { Search, Mail } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 
 const meta = {
-  title: 'Components/Inputs & Forms/Input',
+  title: 'Molecule/Input/Input',
   component: Input,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['xs', 'sm', 'md', 'lg'] },
+    layout: { control: 'select', options: ['vertical', 'horizontal'] },
+    floating: { control: 'boolean' },
+    required: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
   },
-  args: {
-    label: 'Email address',
-    placeholder: 'you@example.com',
-    size: 'md',
-  },
+  args: { label: 'Label', placeholder: 'Placeholder', hint: 'This is a hint text to help user.' },
+  decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
 } satisfies Meta<typeof Input>;
 
 export default meta;
@@ -21,44 +22,36 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Sizes: Story = {
+/** Figma State — Default, Hovered, Focused, Error, Disabled. Hover and focus are interactive. */
+export const States: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 320 }}>
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-        <Input key={size} {...args} size={size} label={`Size ${size}`} />
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Input {...args} />
+      <Input {...args} defaultValue="Filled text" />
+      <Input {...args} error="This is an error message." hint={undefined} />
+      <Input {...args} disabled />
     </div>
   ),
 };
 
 export const Floating: Story = {
-  args: { floating: true, label: 'Email address' },
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Input {...args} floating />
+      <Input {...args} floating defaultValue="Filled text" />
+      <Input {...args} floating error="This is an error message." hint={undefined} />
+    </div>
+  ),
 };
 
-export const WithLeadingIcon: Story = {
-  args: { leadingContent: <Search size={16} />, placeholder: 'Search…', label: undefined },
-};
+export const Horizontal: Story = { args: { layout: 'horizontal' }, decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>] };
 
-export const WithDividerContent: Story = {
-  args: { leadingContent: <Mail size={16} />, leadingDivider: true, label: 'Email' },
-};
-
-export const HelperText: Story = {
-  args: { helperText: 'We’ll never share your email.' },
-};
-
-export const Invalid: Story = {
-  args: { error: true, errorText: 'Please enter a valid email address.' },
-};
-
-export const CharCount: Story = {
-  args: { showCharCount: true, maxLength: 120, label: 'Bio', helperText: undefined },
-};
-
-export const Disabled: Story = {
-  args: { disabled: true, value: 'disabled@example.com' },
-};
-
-export const Filled: Story = {
-  args: { defaultValue: 'you@example.com' },
+export const LeadingAndTrailing: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Input {...args} label="Search" leading={<Search size={16} />} hint={undefined} />
+      <Input {...args} label="Country" leading="+62" leadingDivider trailing={<ChevronDown size={16} />} hint={undefined} />
+      <Input {...args} label="Website" leading="https://" leadingDivider required hint={undefined} />
+    </div>
+  ),
 };

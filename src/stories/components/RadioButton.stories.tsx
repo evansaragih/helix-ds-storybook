@@ -2,16 +2,16 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RadioButton, RadioGroup } from 'helix-design-system/components';
 
 const meta = {
-  title: 'Components/Inputs & Forms/RadioButton',
+  title: 'Atomic/Radio Button',
   component: RadioButton,
   tags: ['autodocs'],
   argTypes: {
     size: { control: 'select', options: ['sm', 'md'] },
+    checked: { control: 'boolean' },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
   },
-  args: {
-    label: 'Option A',
-    size: 'md',
-  },
+  args: { label: 'Label', supportingText: 'Supporting text', size: 'md', checked: false },
 } satisfies Meta<typeof RadioButton>;
 
 export default meta;
@@ -19,42 +19,24 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Checked: Story = {
-  args: { checked: true },
-};
-
-export const Sizes: Story = {
+export const CheckedAndStates: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      {(['sm', 'md'] as const).map((size) => (
-        <RadioButton key={size} {...args} size={size} checked label={`Size ${size}`} />
-      ))}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, max-content)', gap: 16 }}>
+      {[false, true].flatMap((checked) => [
+        <RadioButton key={`${checked}-d`} {...args} checked={checked} readOnly label="Default" supportingText={undefined} />,
+        <RadioButton key={`${checked}-i`} {...args} checked={checked} readOnly invalid label="Invalid" supportingText={undefined} />,
+        <RadioButton key={`${checked}-x`} {...args} checked={checked} readOnly disabled label="Disabled" supportingText={undefined} />,
+      ])}
     </div>
   ),
 };
 
-export const WithHelperText: Story = {
-  args: { helperText: 'Recommended for most users', checked: true },
-};
-
-export const Invalid: Story = {
-  args: { invalid: true, helperText: 'Please select an option.' },
-};
-
-export const Disabled: Story = {
-  args: { disabled: true },
-};
-
-export const DisabledChecked: Story = {
-  args: { disabled: true, checked: true },
-};
-
 export const Group: Story = {
-  render: () => (
+  render: (args) => (
     <RadioGroup name="plan" defaultValue="pro">
-      <RadioButton value="starter" label="Starter" helperText="For individuals getting started" />
-      <RadioButton value="pro" label="Pro" helperText="For growing teams" />
-      <RadioButton value="enterprise" label="Enterprise" helperText="For large organizations" />
+      <RadioButton {...args} value="basic" label="Basic" supportingText="Up to 10 samples" />
+      <RadioButton {...args} value="pro" label="Pro" supportingText="Up to 100 samples" />
+      <RadioButton {...args} value="team" label="Team" supportingText="Unlimited samples" />
     </RadioGroup>
   ),
 };

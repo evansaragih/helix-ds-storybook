@@ -1,150 +1,141 @@
-import { forwardRef, useState, useRef, useEffect, useCallback } from 'react';
-import { MOTION_DURATION_BASE } from './motion';
-
-export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end';
+import * as RadixPopover from '@radix-ui/react-popover';
+import { forwardRef } from 'react';
+import { Search } from 'lucide-react';
 
 export interface PopoverProps {
-  /** The trigger element */
-  trigger: React.ReactNode;
-  /** Content rendered inside the popover */
+  /** The element that opens the popover (Button, Icon Button, Input, Tag), rendered as-is (asChild) */
+  trigger: React.ReactElement;
+  /** Body Item List — the main content, on a white inset */
   children: React.ReactNode;
-  placement?: PopoverPlacement;
-  /** Width of the popover panel */
-  width?: number | string;
-  /** Close when clicking outside */
-  closeOnOutsideClick?: boolean;
+  /** Header Content slot (Figma Header=True) — e.g. a PopoverListHeader */
+  header?: React.ReactNode;
+  /** Footer Content slot (Figma Footer=True) — e.g. FooterActions */
+  footer?: React.ReactNode;
   open?: boolean;
+  defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  align?: 'start' | 'center' | 'end';
+  /** Panel width in px (default 240, as in Figma) */
+  width?: number;
+  /** Caps the body height and scrolls the rest (Figma Vertical Scrollbar) */
+  maxHeight?: number;
 }
 
-const OFFSET = 8;
+const BORDER = '1px solid var(--color-stroke-subtle, #EEEEEE)';
 
-function getPlacementStyle(placement: PopoverPlacement): React.CSSProperties {
-  switch (placement) {
-    case 'top':         return { bottom: '100%', left: '50%', transform: 'translateX(-50%)', marginBottom: OFFSET };
-    case 'top-start':   return { bottom: '100%', left: 0, marginBottom: OFFSET };
-    case 'top-end':     return { bottom: '100%', right: 0, marginBottom: OFFSET };
-    case 'bottom':      return { top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: OFFSET };
-    case 'bottom-start':return { top: '100%', left: 0, marginTop: OFFSET };
-    case 'bottom-end':  return { top: '100%', right: 0, marginTop: OFFSET };
-    case 'left':        return { right: '100%', top: '50%', transform: 'translateY(-50%)', marginRight: OFFSET };
-    case 'right':       return { left: '100%', top: '50%', transform: 'translateY(-50%)', marginLeft: OFFSET };
-    default:            return { top: '100%', left: 0, marginTop: OFFSET };
-  }
-}
-
+/** The base floating panel: a trigger plus a shell with Header, Body and Footer slots. Use it to build a trigger-and-panel from scratch; for finished patterns use Dropdown (actions) or Select (form field). */
 export const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
   trigger,
   children,
-  placement = 'bottom-start',
-  width = 300,
-  closeOnOutsideClick = true,
-  open: controlledOpen,
+  header,
+  footer,
+  open,
+  defaultOpen,
   onOpenChange,
-}, ref) => {
-  const [internalOpen, setInternalOpen] = useState(false);
-  const isControlled = controlledOpen !== undefined;
-  const isOpen = isControlled ? controlledOpen : internalOpen;
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const [isMounted, setIsMounted] = useState(isOpen);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    if (isOpen) {
-      setIsMounted(true);
-      requestAnimationFrame(() => requestAnimationFrame(() => setIsVisible(true)));
-    } else {
-      setIsVisible(false);
-      const t = setTimeout(() => setIsMounted(false), MOTION_DURATION_BASE);
-      return () => clearTimeout(t);
-    }
-  }, [isOpen]);
-
-  const setOpen = useCallback((v: boolean) => {
-    if (!isControlled) setInternalOpen(v);
-    onOpenChange?.(v);
-  }, [isControlled, onOpenChange]);
-
-  useEffect(() => {
-    if (!closeOnOutsideClick || !isOpen) return;
-    const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [isOpen, closeOnOutsideClick, setOpen]);
-
-  const { transform: placementTransform, ...placementRest } = getPlacementStyle(placement);
-
-  return (
-    <div ref={containerRef} style={{ position: 'relative', display: 'inline-block' }}>
-      <div onClick={() => setOpen(!isOpen)} style={{ cursor: 'pointer' }}>
-        {trigger}
-      </div>
-
-      {isMounted && (
-        <div
-          ref={ref}
-          role="dialog"
-          style={{
-            position: 'absolute',
-            zIndex: 200,
-            width,
-            backgroundColor: '#FFFFFF',
-            border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-            borderRadius: 'var(--radius-lg, 8px)',
-            boxShadow: '0px 8px 24px rgba(0,0,0,0.10), 0px 2px 8px rgba(0,0,0,0.06)',
-            overflow: 'hidden',
-            opacity: isVisible ? 1 : 0,
-            transform: [placementTransform, isVisible ? 'scale(1)' : 'scale(0.96)'].filter(Boolean).join(' '),
-            transition: `opacity var(--motion-duration-base, ${MOTION_DURATION_BASE}ms) var(--motion-easing-standard, ease), transform var(--motion-duration-base, ${MOTION_DURATION_BASE}ms) var(--motion-easing-standard, ease)`,
-            ...placementRest,
-          }}
-        >
+  side = 'bottom',
+  align = 'start',
+  width = 240,
+  maxHeight,
+}, ref) => (
+  <RadixPopover.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
+    <RadixPopover.Trigger asChild>{trigger}</RadixPopover.Trigger>
+    <RadixPopover.Portal>
+      <RadixPopover.Content
+        ref={ref}
+        side={side}
+        align={align}
+        sideOffset={8}
+        style={{
+          width, boxSizing: 'border-box', padding: 4, borderRadius: 12, zIndex: 1000,
+          backgroundColor: 'var(--color-container-secondary, #F7F7F7)', border: BORDER,
+          boxShadow: '0 1px 3px rgba(89,89,90,0.15), 0 1px 2px rgba(89,89,90,0.15)',
+        }}
+      >
+        {header}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 8, borderRadius: 8, backgroundColor: '#FFFFFF', border: BORDER, maxHeight, overflowY: maxHeight ? 'auto' : undefined }}>
           {children}
         </div>
-      )}
+        {footer}
+      </RadixPopover.Content>
+    </RadixPopover.Portal>
+  </RadixPopover.Root>
+));
+
+Popover.displayName = 'Popover';
+
+/* ─── PopoverListHeader (Figma: popover-list-header) ───────────────── */
+export interface PopoverListHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** text = muted caption · text-primary = brand caption · user = avatar + name + action · search = search field */
+  type?: 'text' | 'text-primary' | 'user' | 'search';
+  label?: React.ReactNode;
+  supportingText?: React.ReactNode;
+  /** Trailing control — an Icon Button (text types) or Button (user) */
+  action?: React.ReactNode;
+  /** Leading node for type 'user' — an Avatar */
+  avatar?: React.ReactNode;
+  /** Search value, placeholder and handler for type 'search' */
+  searchValue?: string;
+  searchPlaceholder?: string;
+  onSearchChange?: (value: string) => void;
+}
+
+/** The header row of a Popover: a caption, a user block, or a search field. */
+export const PopoverListHeader = forwardRef<HTMLDivElement, PopoverListHeaderProps>(({
+  type = 'text',
+  label,
+  supportingText,
+  action,
+  avatar,
+  searchValue,
+  searchPlaceholder = 'Search',
+  onSearchChange,
+  style,
+  ...props
+}, ref) => {
+  if (type === 'search') {
+    return (
+      <div ref={ref} style={{ paddingBottom: 4, ...style }} {...props}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, height: 36, padding: '0 8px', boxSizing: 'border-box', borderRadius: 8, backgroundColor: '#FFFFFF', border: BORDER }}>
+          <Search size={16} style={{ color: 'var(--color-text-tertiary, #828282)', flexShrink: 0 }} />
+          <input
+            value={searchValue}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            placeholder={searchPlaceholder}
+            aria-label={searchPlaceholder}
+            style={{ flex: 1, minWidth: 0, border: 'none', outline: 'none', background: 'transparent', fontFamily: 'var(--font-family-body)', fontSize: 13 }}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  if (type === 'user') {
+    return (
+      <div ref={ref} style={{ paddingBottom: 4, ...style }} {...props}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, padding: 12, borderRadius: 8, backgroundColor: '#FFFFFF', border: BORDER }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+            {avatar}
+            <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+              <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13, lineHeight: '19.2px', color: 'var(--color-text-secondary, #49494A)' }}>{label}</span>
+              {supportingText && <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '19.2px', color: 'var(--color-text-tertiary, #828282)' }}>{supportingText}</span>}
+            </div>
+          </div>
+          {action}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={ref} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: type === 'text' ? '4px 10px' : '4px 6px 4px 12px', ...style }} {...props}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, minWidth: 0 }}>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13, lineHeight: '20px', color: type === 'text' ? 'var(--color-text-tertiary, #828282)' : 'var(--color-brand-primary, #F57E20)' }}>{label}</span>
+        {supportingText && <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 12, lineHeight: '14px', color: 'var(--color-text-tertiary, #828282)' }}>{supportingText}</span>}
+      </div>
+      {action}
     </div>
   );
 });
 
-Popover.displayName = 'Popover';
-
-export interface PopoverHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  title: string;
-  description?: string;
-}
-
-export function PopoverHeader({ title, description, style, ...props }: PopoverHeaderProps) {
-  return (
-    <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid var(--color-stroke-subtle, #EEEEEE)', ...style }} {...props}>
-      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13, color: 'var(--color-text-primary, #14141E)', lineHeight: '19.2px' }}>
-        {title}
-      </p>
-      {description && (
-        <p style={{ margin: '2px 0 0', fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 12, color: 'var(--color-text-tertiary, #828282)', lineHeight: '18px' }}>
-          {description}
-        </p>
-      )}
-    </div>
-  );
-}
-
-export function PopoverBody({ children, style, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div style={{ padding: '12px 16px', ...style }} {...props}>
-      {children}
-    </div>
-  );
-}
-
-export function PopoverFooter({ children, style, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div style={{ padding: '12px 16px', borderTop: '1px solid var(--color-stroke-subtle, #EEEEEE)', display: 'flex', gap: 8, justifyContent: 'flex-end', ...style }} {...props}>
-      {children}
-    </div>
-  );
-}
+PopoverListHeader.displayName = 'PopoverListHeader';

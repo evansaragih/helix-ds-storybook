@@ -1,241 +1,182 @@
 import * as RadixTabs from '@radix-ui/react-tabs';
-import { forwardRef, useRef } from 'react';
+import { forwardRef, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Badge } from './Badge';
 
-export type TabsStyle = 'primary' | 'line' | 'default';
-export type TabsSize = 'sm' | 'md';
-export type TabsType = 'default' | 'white';
+/** Figma Appearance — horizontal: Line · Filled · Contained; vertical: Bordered · Filled · Contained */
+export type TabsAppearance = 'line' | 'filled' | 'contained' | 'bordered';
+/** Figma Size — Small · Medium · Large */
+export type TabsSize = 'sm' | 'md' | 'lg';
+export type TabsOrientation = 'horizontal' | 'vertical';
 
 export interface TabItem {
   id: string;
   label: string;
-  content?: React.ReactNode;
-  disabled?: boolean;
-  badge?: string | number;
+  /** Figma Icon */
   icon?: React.ReactNode;
+  /** Figma Badge — a count or short text */
+  badge?: string | number;
+  disabled?: boolean;
+  /** Panel content, shown when the tab is selected */
+  content?: React.ReactNode;
 }
 
 export interface TabsProps {
   items: TabItem[];
-  tabStyle?: TabsStyle;
+  /** Defaults to 'line' (horizontal) or 'bordered' (vertical) */
+  appearance?: TabsAppearance;
+  orientation?: TabsOrientation;
   size?: TabsSize;
-  type?: TabsType;
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
+  /** Horizontal rows only: when the tabs are wider than the space, show Prev / Next buttons (Figma Nav Prev/Next) that scroll the row. They appear only on overflow and dim at either end. Default true. */
+  showNavigation?: boolean;
+  /** Render the content panels (set false to control content externally) */
+  renderContent?: boolean;
   style?: React.CSSProperties;
   className?: string;
-  /** Whether to render the content panels (set false to control externally) */
-  renderContent?: boolean;
-  /** Show prev/next scroll arrows over the tab list (for overflowing tab rows) */
-  showNavArrows?: boolean;
 }
 
-interface StyleConfig {
-  listBg: string;
-  listPadding: string;
-  listRadius: string;
-  listBorder: string;
-  triggerActive: React.CSSProperties;
-  triggerInactive: React.CSSProperties;
-  triggerHover: React.CSSProperties;
-}
+/* Figma item sizes: horizontal height 36 / 44 / 52 (font 13 / 13 / 16); vertical height 36 / 40 / 46 (font 13 / 16 / 20) */
+const H = { sm: { h: 36, py: 8, font: 13 }, md: { h: 44, py: 12, font: 13 }, lg: { h: 52, py: 12, font: 16 } } as const;
+const V = { sm: { h: 36, font: 13 }, md: { h: 40, font: 16 }, lg: { h: 46, font: 20 } } as const;
 
+const BRAND = 'var(--color-brand-primary, #F57E20)';
+const SUBTLE = 'var(--color-status-brand-bg, #FEF2E9)';
+const HOVER = 'var(--color-container-tertiary, #EEEEEE)';
+const TRACK = 'var(--color-container-secondary, #F7F7F7)';
+const LINE = 'var(--color-stroke-subtle, #EEEEEE)';
+
+/** A set of tabs that switch between panels of content — horizontal (Line, Filled, Contained) or vertical (Bordered, Filled, Contained). */
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
   items,
-  tabStyle = 'primary',
-  size = 'sm',
-  type = 'default',
+  appearance,
+  orientation = 'horizontal',
+  size = 'md',
   defaultValue,
   value,
   onValueChange,
+  showNavigation = true,
+  renderContent = true,
   style,
   className,
-  renderContent = true,
-  showNavArrows = false,
 }, ref) => {
-  const listScrollRef = useRef<HTMLDivElement>(null);
-  const defaultV = defaultValue ?? items.find(i => !i.disabled)?.id ?? '';
+  const vertical = orientation === 'vertical';
+  const look: TabsAppearance = appearance ?? (vertical ? 'bordered' : 'line');
+  const listRef = useRef<HTMLDivElement>(null);
+  const scope = `helix-tabs-${useId().replace(/:/g, '')}`;
+  const [edge, setEdge] = useState({ overflow: false, start: true, end: true });
+  const measure = useCallback(() => {
+    const el = listRef.current;
+    if (!el) return;
+    setEdge({ overflow: el.scrollWidth > el.clientWidth + 1, start: el.scrollLeft <= 1, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 1 });
+  }, []);
+  const first = defaultValue ?? items.find((i) => !i.disabled)?.id ?? '';
 
-  const fontSize = size === 'md' ? 14 : 13;
-  const lineH = size === 'md' ? '21px' : '19.2px';
-  const py = size === 'md' ? 8 : 6;
-  const px = size === 'md' ? 16 : 12;
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el || vertical || !showNavigation) return;
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    el.addEventListener('scroll', measure, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener('scroll', measure); };
+  }, [vertical, showNavigation, items, measure]);
 
-  const isWhite = type === 'white';
-  const brandColor = isWhite ? '#FFFFFF' : 'var(--color-brand-primary, #F57E20)';
-  const inactiveColor = isWhite ? 'rgba(255,255,255,0.7)' : 'var(--color-text-tertiary, #828282)';
-  const disabledColor = isWhite ? 'rgba(255,255,255,0.4)' : 'var(--color-text-muted, #9F9F9F)';
-  // Primary (filled) style: selected tab is a solid pill — inverted from the "line" style's colored text.
-  const primaryActiveBg = isWhite ? '#FFFFFF' : 'var(--color-brand-primary, #F57E20)';
-  const primaryActiveText = isWhite ? 'var(--color-text-secondary, #49494A)' : '#FFFFFF';
+  // keep the selected tab in view when it changes, e.g. from the keyboard
+  useEffect(() => {
+    if (vertical || !showNavigation) return;
+    listRef.current?.querySelector('[role="tab"][data-state="active"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }, [value, vertical, showNavigation]);
+
+  const itemH = vertical ? V[size].h : H[size].h;
+  const font = vertical ? V[size].font : H[size].font;
+  const pill = look === 'filled' || look === 'contained';
+  const radius = vertical ? 8 : 6;
+  const selectedBg = look === 'contained' ? 'var(--color-container-primary, #FFFFFF)' : SUBTLE;
+
+  const css = `
+    .${scope} [role="tab"] { color: ${vertical ? 'var(--color-text-secondary, #49494A)' : 'var(--color-text-tertiary, #828282)'}; background: transparent; }
+    .${scope} [role="tab"]:hover:not([disabled]):not([data-state="active"]) { background: ${look === 'line' ? 'transparent' : HOVER}; color: ${vertical ? 'var(--color-text-primary, #14141E)' : 'var(--color-text-tertiary, #828282)'}; ${look === 'line' ? `box-shadow: inset 0 -2px 0 ${LINE};` : ''} ${look === 'bordered' ? `box-shadow: none;` : ''} }
+    .${scope} [role="tab"][data-state="active"] { color: ${BRAND}; background: ${look === 'line' ? 'transparent' : selectedBg}; ${look === 'line' ? `box-shadow: inset 0 -2px 0 ${BRAND};` : ''} ${look === 'contained' ? 'box-shadow: 0 1px 1px rgba(0,0,0,0.05);' : ''} }
+    ${look === 'bordered' ? `.${scope} [role="tab"][data-state="active"] { border-left-color: ${BRAND} !important; }` : ''}
+    .${scope} [role="tab"][disabled] { color: var(--color-text-tertiary, #828282); opacity: 0.5; cursor: not-allowed; }
+    .${scope} [role="tab"]:focus-visible { outline: 2px solid ${BRAND}; outline-offset: -2px; }
+  `;
+
+  const nav = (dir: -1 | 1) => (
+    <button
+      type="button"
+      aria-label={dir === -1 ? 'Scroll tabs back' : 'Scroll tabs forward'}
+      disabled={dir === -1 ? edge.start : edge.end}
+      onClick={() => { const el = listRef.current; if (el) el.scrollBy({ left: dir * Math.max(120, el.clientWidth * 0.6), behavior: 'smooth' }); }}
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, width: itemH, height: itemH, padding: 0, border: 'none', borderRadius: 8, background: 'transparent',
+        color: 'var(--color-text-secondary, #49494A)', cursor: (dir === -1 ? edge.start : edge.end) ? 'default' : 'pointer', opacity: (dir === -1 ? edge.start : edge.end) ? 0.4 : 1, transition: 'opacity 0.15s',
+      }}
+    >
+      {dir === -1 ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+    </button>
+  );
+
+  const list = (
+    <RadixTabs.List
+      ref={listRef}
+      style={{
+        display: 'flex', flexDirection: vertical ? 'column' : 'row', gap: vertical ? 4 : 0, flex: vertical ? undefined : 1, minWidth: 0,
+        overflowX: showNavigation && !vertical ? 'auto' : undefined, scrollBehavior: 'smooth', scrollbarWidth: 'none',
+        ...(vertical ? { width: 240 } : {}),
+        ...(vertical && pill ? { padding: 4, borderRadius: radius + 4, backgroundColor: TRACK, border: look === 'contained' ? `1px solid ${LINE}` : undefined } : {}),
+      }}
+    >
+      {items.map((tab) => (
+        <RadixTabs.Trigger
+          key={tab.id}
+          value={tab.id}
+          disabled={tab.disabled}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: vertical ? 8 : 6, flexShrink: 0, boxSizing: 'border-box', height: itemH,
+            padding: vertical ? '8px 12px' : `${H[size].py}px 12px`, border: 'none', borderLeft: look === 'bordered' ? '3px solid transparent' : 'none', borderRadius: look === 'line' ? 0 : radius,
+            fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: font, lineHeight: 1.3, letterSpacing: '-0.01px', whiteSpace: 'nowrap',
+            cursor: 'pointer', outline: 'none', transition: 'color 0.15s, background-color 0.15s, box-shadow 0.15s',
+          }}
+        >
+          {tab.icon && <span style={{ display: 'flex', width: 16, height: 16, flexShrink: 0 }}>{tab.icon}</span>}
+          {tab.label}
+          {tab.badge !== undefined && <Badge size="xs" color="brand" appearance="solid" label={String(tab.badge)} />}
+        </RadixTabs.Trigger>
+      ))}
+    </RadixTabs.List>
+  );
+
+  const row = vertical ? list : (
+    <div style={{
+      display: 'flex', alignItems: 'center', boxSizing: 'border-box',
+      ...(look === 'line' ? { borderBottom: `1px solid ${LINE}` } : { padding: 4, borderRadius: radius + 2, backgroundColor: TRACK, border: look === 'contained' ? `1px solid ${LINE}` : undefined }),
+    }}>
+      {showNavigation && edge.overflow && nav(-1)}
+      {list}
+      {showNavigation && edge.overflow && nav(1)}
+    </div>
+  );
 
   return (
     <RadixTabs.Root
       ref={ref}
-      defaultValue={defaultV}
+      defaultValue={first}
       value={value}
       onValueChange={onValueChange}
-      style={{ display: 'flex', flexDirection: 'column', ...style }}
-      className={className}
+      orientation={orientation}
+      className={className ? `${scope} ${className}` : scope}
+      style={{ display: 'flex', flexDirection: vertical ? 'row' : 'column', gap: vertical ? 16 : 0, ...style }}
     >
-      <div style={{ position: 'relative', flexShrink: 0 }}>
-      <RadixTabs.List
-        ref={listScrollRef}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: tabStyle === 'primary' ? '4px' : '0',
-          borderRadius: tabStyle === 'primary' ? 8 : 0,
-          backgroundColor: tabStyle === 'primary'
-            ? (isWhite ? 'rgba(255,255,255,0.15)' : 'var(--color-container-tertiary, #EEEEEE)')
-            : 'transparent',
-          borderBottom: tabStyle === 'line'
-            ? `2px solid ${isWhite ? 'rgba(255,255,255,0.2)' : 'var(--color-stroke-subtle, #EEEEEE)'}`
-            : 'none',
-          gap: tabStyle === 'primary' ? 0 : 0,
-          overflowX: showNavArrows ? 'auto' : undefined,
-          scrollbarWidth: showNavArrows ? 'none' : undefined,
-        }}
-      >
-        {items.map((tab) => (
-          <RadixTabs.Trigger
-            key={tab.id}
-            value={tab.id}
-            disabled={tab.disabled}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              paddingTop: py,
-              paddingBottom: tabStyle === 'line' ? py - 2 : py,
-              paddingLeft: px,
-              paddingRight: px,
-              border: 'none',
-              cursor: tab.disabled ? 'not-allowed' : 'pointer',
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: 500,
-              fontSize,
-              lineHeight: lineH,
-              letterSpacing: '-0.01px',
-              borderRadius: tabStyle === 'primary' ? 6 : 0,
-              outline: 'none',
-              position: 'relative',
-              whiteSpace: 'nowrap',
-              transition: 'color 0.15s, background-color 0.15s',
-            }}
-            // Data-state is used to toggle active/inactive styles
-            // We can't use CSS here directly with inline styles, so we apply via data attribute check
-            asChild={false}
-          >
-            {tab.icon && (
-              <span style={{ display: 'flex', alignItems: 'center', width: 16, height: 16, flexShrink: 0 }}>
-                {tab.icon}
-              </span>
-            )}
-            {tab.label}
-            {tab.badge !== undefined && (
-              <span style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: 18,
-                height: 18,
-                padding: '0 5px',
-                borderRadius: 9999,
-                fontSize: 10,
-                fontWeight: 500,
-                backgroundColor: brandColor,
-                color: isWhite ? 'var(--color-brand-primary, #F57E20)' : '#FFFFFF',
-              }}>
-                {tab.badge}
-              </span>
-            )}
-          </RadixTabs.Trigger>
-        ))}
-      </RadixTabs.List>
-      {showNavArrows && (
-        <>
-          <button
-            type="button"
-            aria-label="Scroll tabs left"
-            onClick={() => listScrollRef.current?.scrollBy({ left: -120, behavior: 'smooth' })}
-            style={{
-              position: 'absolute', top: '50%', left: -12, transform: 'translateY(-50%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 24, height: 24, borderRadius: 9999, flexShrink: 0,
-              backgroundColor: 'var(--color-btn-neutral, #F7F7F7)',
-              border: '1px solid var(--color-stroke-default, #D7D7D7)',
-              backdropFilter: 'blur(2px)', cursor: 'pointer', padding: 0,
-              color: 'var(--color-text-secondary, #49494A)',
-            }}
-          >
-            <ChevronLeft size={12} />
-          </button>
-          <button
-            type="button"
-            aria-label="Scroll tabs right"
-            onClick={() => listScrollRef.current?.scrollBy({ left: 120, behavior: 'smooth' })}
-            style={{
-              position: 'absolute', top: '50%', right: -11, transform: 'translateY(-50%)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 24, height: 24, borderRadius: 9999, flexShrink: 0,
-              backgroundColor: 'var(--color-btn-neutral, #F7F7F7)',
-              border: '1px solid var(--color-stroke-default, #D7D7D7)',
-              backdropFilter: 'blur(2px)', cursor: 'pointer', padding: 0,
-              color: 'var(--color-text-secondary, #49494A)',
-            }}
-          >
-            <ChevronRight size={12} />
-          </button>
-        </>
-      )}
-      </div>
-
-      {/* Inject active/inactive styles via a style tag pattern is not ideal;
-          instead wrap content with Radix which applies data-state */}
-      <style>{`
-        [data-radix-tabs-trigger][data-state="active"] {
-          color: ${tabStyle === 'primary' ? primaryActiveText : brandColor} !important;
-          background-color: ${tabStyle === 'primary' ? primaryActiveBg : 'transparent'} !important;
-          box-shadow: ${tabStyle === 'primary' ? '0 1px 1px rgba(0,0,0,0.05)' : 'none'} !important;
-        }
-        [data-radix-tabs-trigger][data-state="active"]::after {
-          content: ${tabStyle === 'line' ? '""' : 'none'};
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background-color: ${brandColor};
-          border-radius: 2px 2px 0 0;
-        }
-        [data-radix-tabs-trigger][data-state="inactive"] {
-          color: ${inactiveColor} !important;
-          background-color: transparent !important;
-        }
-        [data-radix-tabs-trigger][data-state="inactive"]:hover:not([disabled]) {
-          color: ${isWhite ? 'rgba(255,255,255,0.9)' : 'var(--color-text-secondary, #49494A)'} !important;
-          background-color: ${tabStyle === 'primary' ? (isWhite ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)') : 'transparent'} !important;
-        }
-        [data-radix-tabs-trigger][disabled] {
-          color: ${disabledColor} !important;
-        }
-      `}</style>
-
-      {renderContent && items.map((tab) => (
-        tab.content && (
-          <RadixTabs.Content
-            key={tab.id}
-            value={tab.id}
-            style={{
-              paddingTop: 16,
-              outline: 'none',
-            }}
-          >
-            {tab.content}
-          </RadixTabs.Content>
-        )
+      <style>{css}</style>
+      {row}
+      {renderContent && items.map((tab) => tab.content && (
+        <RadixTabs.Content key={tab.id} value={tab.id} style={{ flex: vertical ? 1 : undefined, paddingTop: vertical ? 0 : 16, outline: 'none' }}>
+          {tab.content}
+        </RadixTabs.Content>
       ))}
     </RadixTabs.Root>
   );

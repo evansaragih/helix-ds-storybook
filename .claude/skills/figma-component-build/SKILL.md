@@ -13,6 +13,114 @@ Nusantics Design System Figma file (`GWzBKGr6512AeMOapwgQhj`) via
 
 **Always load `figma-use` before calling `use_figma`.**
 
+## Icon/visual content: slot vs instance-swap — ask before building
+
+Before wiring up any leading/decorative visual element (icon, avatar,
+illustration, thumbnail) in a new or edited component, **ask the user
+whether it should be an `INSTANCE_SWAP` property or a `SLOT` property** —
+don't default to either silently. The two solve different problems and
+picking wrong means redoing the wiring later (happened on `Dropzone`'s
+leading icon, Oct 2026 — built as `Icon Swap` INSTANCE_SWAP first, then
+had to be torn down and rebuilt as a `Leading Visual` SLOT once the need
+for non-icon content, like illustrations, came up).
+
+**Decision heuristic to present when asking:**
+- **`INSTANCE_SWAP`** — content is always the same *kind* of thing from a
+  bounded, same-shape family (icon-for-icon, avatar-for-avatar). Figma
+  shows a constrained picker (scope it with `preferredValues` to the
+  relevant icon set, not every component in the file). Translates to a
+  simple enum-ish prop in code (e.g. `icon: IconName`).
+- **`SLOT`** — content can differ in *kind*, not just identity (icon one
+  day, a full illustration or image the next; possibly multiple elements).
+  Accepts arbitrary node content, layout adapts (hug/fill). Translates to
+  a `children`/`ReactNode`-style prop in code.
+- **Hybrid default (usually the right call when unsure):** build it as a
+  `SLOT` but pre-fill the slot's default content with the obvious/common
+  case (e.g. the icon instance) — the common path keeps working out of
+  the box, while the door stays open for an illustration or custom
+  content later without rebuilding.
+
+Only skip asking when the user has already stated the content is strictly
+one bounded family with no foreseeable need for anything else — otherwise
+this is a fork worth a quick check-in, not a silent default.
+
+### Slot build mechanics (hard-won, Oct 2026 — `Dropzone`'s `Leading Visual` slot)
+
+**Manual binding (`addComponentProperty(name, 'SLOT', '')` + setting
+`componentPropertyReferences = { slotContentId: key }` on a plain `FRAME`)
+does NOT produce a real, working slot — don't use this path even though
+it's documented as "Option 2" in the `figma-use` component-patterns
+reference.** It only looked like it worked once (no thrown error, icon
+rendered) — reading the reference back a moment later showed
+`componentPropertyReferences: {}`, empty, never actually persisted. The
+node stays a plain `FRAME`, never becomes a real slot. Always use
+`component.createSlot()` instead (creates a genuine `SlotNode`, type
+`'SLOT'`) — confirm with `node.findAllWithCriteria({types:['SLOT']})`
+after building, not just by screenshot, since a fake slot renders
+identically to a real one until someone tries to actually swap its
+content.
+
+**Getting ONE shared slot property across every variant of an existing
+component set is the hard part — three approaches that do NOT work:**
+1. **Calling `createSlot()` separately on each already-combined variant.**
+   Each call mints its own unique key (`Leading Visual#7153:0`,
+   `Leading Visual#7153:11`, …) — Figma does **not** merge same-named
+   slots added this way. Result: N separate properties in the picker
+   (visible in Figma's UI as duplicate rows, each flagged with a ⚠️), not
+   one.
+2. **Rebinding an existing slot's reference to a different, already-valid
+   slot key** (`existingSlot.componentPropertyReferences = { slotContentId:
+   otherKey }`) — throws `"Could not create a new component property
+   reference."` Slot↔key binding is fixed at creation time, not
+   reassignable after the fact.
+3. **Cloning a working slot node** (`workingSlot.clone()`) to propagate it
+   to sibling variants — the clone **demotes to a plain `FRAME`**, losing
+   its `SLOT` type and its property reference entirely. Looks identical
+   in a screenshot; structurally dead.
+
+**What actually works:** normalize every variant to the *same* starting
+structure first (no slot anywhere, just the loose content node), call
+`createSlot()` on **all** of them in one pass, *then* make a single
+`figma.combineAsVariants(allChildren, parent)` call — that merge step is
+what unifies same-named slots (and other same-named properties) into one
+shared definition. Confirmed with a throwaway 2-component test before
+touching the real component: build both with `createSlot()` under the
+same name, combine, check `componentPropertyDefinitions` has exactly one
+entry for that name.
+
+**Side effects of that re-combine to watch for, every time:**
+- **Any existing property with no *live* `componentPropertyReferences` on
+  a child node gets silently dropped** by the combine, even if it was a
+  real, working property moments before. `addComponentProperty` alone
+  (without a node actively referencing the returned key via `characters`/
+  `visible`/`mainComponent`/`slotContentId`) does not survive a recombine.
+  Before recombining, inventory every existing property and re-bind it to
+  its node(s) as part of the same pass — don't assume unrelated
+  properties are safe just because you didn't touch their nodes.
+- **Variant names can get corrupted** — `Property=Value, Property2=Value2`
+  turned into `=Value, =Value2` (property-name prefixes stripped) on one
+  pass. Re-verify every child's `.name` immediately after combining, not
+  just the property list. If corrupted, you generally still know the
+  correct values from your own build order — rename directly rather than
+  trying to recover them from the broken string.
+- **`componentPropertyDefinitions` throwing `"Component set has existing
+  errors"` after a recombine is a real, diagnosable structural
+  inconsistency** (stray/orphan slot nodes with no valid reference,
+  mismatched variant anatomy across siblings) — not a dead end. Switch to
+  `findAllWithCriteria({types:['SLOT']})` per variant (which still works
+  even while `componentPropertyDefinitions` throws) to find the orphan,
+  remove it, and re-check.
+- **`createSlot()`'s default fill is opaque white**, not transparent —
+  set `slot.fills = []` after creating or every variant renders with an
+  unwanted white box behind the slot's content.
+
+**If a recombine goes wrong and compounds across 2-3 fix attempts, stop
+script-editing in place and ask the user to use Figma's own Undo
+(Cmd+Z) to return to a known-clean state before trying again** — this
+file does not expose enough read/write granularity to safely untangle a
+multi-step corrupted combine purely through scripted patches, and each
+patch attempt risks adding a new failure mode on top of the last.
+
 ## Reply style — mandatory
 
 User said: answer caveman style, minimal token, always. No fluff, short

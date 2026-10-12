@@ -1,0 +1,3320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiomeInsight - Viewer</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+<script src="mock-data.js"></script>
+<style>
+  /* ── Nusantics brand tokens ──────────────────────────────────────────────
+     Sourced from libs/ui-kit/ui-tokens/nusantics/src/generated/nusantics.css
+     and libs/ui-kit/ui-tokens/shared/src/generated/shared.css. Names here are
+     kept as the original mockup's --bg/--surface/etc. so the rest of this
+     file's CSS/JS didn't need a full rewrite — only the values changed. */
+  :root {
+    --bg:       #f7f7f7;   /* --colors-background-subtle */
+    --surface:  #ffffff;   /* --colors-surface-components-default */
+    --surface2: #fef2e9;   /* --colors-surface-components-brand-subtle (soft brand tint) */
+    --border:   #e4e4e7;   /* --border (feature-nusantics uses border-stroke-subtle) */
+    --border2:  #d7d7d7;   /* --colors-stroke-subtle */
+    --text:     #14141e;   /* --colors-text-primary */
+    --muted:    #828282;   /* --colors-text-tertiary */
+    --accent:   #f57e20;   /* --colors-action-primary-default (Nusantics Lively Orange 50) */
+    --accent-hover: #df6505;
+    --accent-pressed: #b35001;
+    --success:  #12843c;   /* --colors-text-success */
+    --warn:     #a66800;   /* --colors-text-warning */
+    --danger:   #dc2626;   /* --colors-stroke-error */
+    --radius:   8px;       /* --border-radius-lg (inputs/buttons) */
+    --radius-lg:16px;      /* --border-radius-2-xl (cards) */
+    --shadow-sm: 0px 1px 2px 0px rgba(0,0,0,0.05);
+    --shadow-md: 0px 2px 4px -2px rgba(0,0,0,0.10), 0px 4px 6px -1px rgba(0,0,0,0.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Rubik', 'Helvetica Neue', sans-serif; font-size: 14px; line-height: 1.6; }
+
+  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Quicksand:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap');
+  h1, h2, h3, .logo, .rank-badge { font-family: 'Quicksand', 'Rubik', sans-serif; }
+
+  /* ── page shell ──────────────────────────────────────────────────────────
+     Mirrors feature-nusantics' PlotlyWorkspaceClient: a `p-6` page padding
+     around a single `rounded-xl border border-stroke-subtle bg-surface
+     overflow-hidden flex flex-col` card (see plotly-workspace-client.tsx /
+     operations-plotly-workspace-client.tsx). Everything below — tab bar,
+     per-tab filter sidebar, chart column — lives inside that one card. */
+  .page-shell { min-height: 100vh; display: flex; flex-direction: column; padding: 24px; }
+  .workspace-card {
+    flex: 1; min-height: 0; display: flex; flex-direction: column;
+    border: 1px solid var(--border2); border-radius: var(--radius-lg);
+    background: var(--surface); overflow: hidden;
+  }
+
+  .page-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 16px; }
+  .page-heading .pill { flex-shrink: 0; }
+
+  .section { display: flex; flex-direction: column; gap: 10px; }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+  /* ── per-tab body: filter sidebar + chart column ──────────────────────────
+     Mirrors PlotlyWorkspaceLayout (libs/ui-kit/charts-plotly): a flex row of
+     [PlotlyFilterSidebar][chart column], only rendered for the active tab. */
+  .workspace-body { display: none; flex: 1; min-height: 0; overflow: hidden; }
+  .tab-content.active .workspace-body { display: flex; }
+
+  /* filter sidebar — mirrors PlotlyFilterSidebar: `w-80 shrink-0 border-r
+     flex flex-col px-4 py-4`, scrollable filter stack + pinned download row. */
+  .filter-sidebar { width: 320px; flex-shrink: 0; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 16px; }
+  .filter-scroll { display: flex; flex-direction: column; gap: 16px; flex: 1; min-height: 0; overflow-y: auto; }
+  .filter-downloads { border-top: 1px solid var(--border); padding-top: 16px; margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .filter-downloads-row { display: flex; gap: 8px; }
+  .filter-downloads-row .btn { flex: 1; }
+  .filter-demo-error { border: 1px dashed var(--border2); background: transparent; color: var(--muted); }
+  .filter-demo-error:hover { border-color: var(--danger); color: var(--danger); }
+  .filter-demo-error.active { border-style: solid; border-color: var(--danger); color: var(--danger); background: rgba(220,38,38,0.08); }
+  #topbarErrorBtn { font-size: 11px; padding: 6px 12px; white-space: nowrap; flex-shrink: 0; }
+
+  label.field-label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; }
+  select, input[type=number], input[type=text] {
+    width: 100%; padding: 8px 10px; border-radius: var(--radius);
+    border: 1px solid var(--border2); background: var(--surface2);
+    color: var(--text); font-size: 13px; font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  select:focus, input:focus { outline: none; border-color: var(--accent); }
+  select option { background: var(--surface); }
+
+  /* multi-level sort rows (taxa bar plot) */
+  .sort-header { display: flex; align-items: center; justify-content: space-between; }
+  .sort-add-btn {
+    width: 20px; height: 20px; border-radius: 50%; border: none;
+    background: var(--accent); color: #fff; font-size: 14px; line-height: 1;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.15s;
+  }
+  .sort-add-btn:hover { opacity: 0.85; }
+  .sort-add-btn:disabled { background: var(--border2); cursor: not-allowed; opacity: 0.6; }
+  .sort-row { display: flex; gap: 6px; align-items: center; }
+  .sort-row select { flex: 1; min-width: 0; }
+  .sort-row-remove {
+    flex: 0 0 auto; width: 26px; height: 34px; border-radius: var(--radius);
+    border: 1px solid var(--border2); background: var(--surface2); color: var(--muted);
+    font-size: 13px; cursor: pointer; transition: all 0.15s;
+  }
+  .sort-row-remove:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* metadata sample filter (Excel-style stacked field + checkbox-values) */
+  .meta-filter-block { border: 1px solid var(--border2); border-radius: var(--radius); padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .meta-filter-block .sort-row select { flex: 1; }
+  .filter-value-actions { font-size: 11px; display: flex; gap: 8px; }
+  .filter-value-actions a { color: var(--accent); cursor: pointer; text-decoration: none; }
+  .filter-value-actions a:hover { text-decoration: underline; }
+  .filter-value-list { display: flex; flex-direction: column; gap: 2px; max-height: 160px; overflow-y: auto; padding-right: 2px; }
+  .filter-value-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text); cursor: pointer; padding: 1px 0; }
+  .filter-value-row input { width: auto; margin: 0; }
+  .filter-value-row span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .meta-filter-empty { font-size: 11px; color: var(--muted); font-style: italic; }
+  .filter-numeric-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .filter-numeric-row select { flex: 1 1 100%; min-width: 0; }
+  .filter-numeric-row input { flex: 1; min-width: 0; }
+  .filter-between-sep { font-size: 11px; color: var(--muted); flex: 0 0 auto; }
+  .filter-numeric-hint { font-size: 11px; color: var(--muted); }
+
+  /* drag-and-drop custom sort order */
+  .custom-order-hint { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .custom-order-list { display: flex; flex-direction: column; gap: 3px; margin-top: 4px; }
+  .custom-order-item {
+    display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text);
+    background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius);
+    padding: 5px 8px; cursor: grab; user-select: none;
+  }
+  .custom-order-item:active { cursor: grabbing; }
+  .custom-order-item:hover { border-color: var(--accent); }
+  .custom-order-item .drag-handle { color: var(--muted); font-size: 11px; letter-spacing: -2px; flex: 0 0 auto; }
+  .custom-order-item span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .toggle-group { display: flex; gap: 0; border: 1px solid var(--border2); border-radius: var(--radius); overflow: hidden; }
+  .toggle-group button {
+    flex: 1; padding: 7px 10px; border: none; background: transparent;
+    color: var(--muted); font-size: 12px; font-family: inherit; cursor: pointer;
+    transition: all 0.15s; border-right: 1px solid var(--border2);
+  }
+  .toggle-group button:last-child { border-right: none; }
+  .toggle-group button.active { background: var(--accent); color: #fff; font-weight: 500; }
+  .toggle-group button:not(.active):hover { background: var(--surface2); color: var(--text); }
+
+  .btn {
+    padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border2);
+    background: var(--surface2); color: var(--text); font-size: 12px;
+    font-family: inherit; cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { opacity: 0.88; }
+
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 8px; border-radius: 99px; font-weight: 500; }
+  .pill.ok { background: rgba(62,207,142,0.15); color: var(--success); }
+  .pill.err { background: rgba(240,96,112,0.15); color: var(--danger); }
+  .pill.warn { background: rgba(240,167,66,0.15); color: var(--warn); }
+  .pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .file-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: var(--radius); border: 1px dashed var(--border2); cursor: pointer; font-size: 12px; color: var(--muted); transition: all 0.15s; }
+  .file-label:hover { border-color: var(--accent); color: var(--accent); }
+  .file-label.has-file { border-style: solid; border-color: var(--success); color: var(--success); }
+  .file-name { font-family: 'DM Mono', monospace; font-size: 11px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ── tab bar — mirrors TabsList (tabStyle="line") in plotly-workspace-client:
+     shrink-0 justify-start, a back button stretched full-height, per-tab
+     triggers with icon+label, and a right-aligned metadata info block behind
+     a left border. ── */
+  .tab-bar { display: flex; align-items: stretch; gap: 0; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+  .tab-back {
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    padding: 0 16px; border: none; border-right: 1px solid var(--border2);
+    background: var(--surface2); color: var(--text); cursor: pointer; font-size: 16px;
+    transition: background 0.15s;
+  }
+  .tab-back:hover { background: var(--border); }
+  .tab-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 20px; font-size: 13px; font-family: inherit; font-weight: 500;
+    color: var(--muted); background: transparent; border: none; cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-icon { width: 16px; height: 16px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+
+  .tab-meta { margin-left: auto; display: flex; align-items: center; gap: 12px; border-left: 1px solid var(--border); padding: 0 16px; white-space: nowrap; }
+  .tab-meta-rank { font-size: 11px; font-family: 'DM Mono', monospace; padding: 3px 10px; border-radius: 99px; background: rgba(245,126,32,0.10); color: var(--accent-pressed); border: 1px solid rgba(245,126,32,0.25); }
+  .tab-meta-text { text-align: left; }
+  .tab-meta-text p { line-height: 1.2; }
+  .tab-meta-version { font-size: 12px; color: var(--text); }
+  .tab-meta-run { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .tab-content { display: none; flex: 1; min-height: 0; flex-direction: column; }
+  .tab-content.active { display: flex; }
+
+  /* ── chart column — mirrors PlotlyWorkspaceLayout's content pane: a header
+     row (title/subtitle + icon actions) over a divider, then a scrollable
+     content area holding the chart / empty-state / error-state. ── */
+  .chart-column { display: flex; flex-direction: column; flex: 1; min-width: 0; overflow: hidden; background: var(--surface); }
+  .chart-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 12px 16px; flex-shrink: 0; }
+  .chart-header-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .chart-header-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .chart-header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .icon-btn {
+    width: 28px; height: 28px; border-radius: var(--radius); border: 1px solid transparent;
+    background: transparent; color: var(--muted); cursor: pointer; font-size: 13px;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+  }
+  .icon-btn:hover { background: var(--surface2); color: var(--text); }
+  .chart-header-divider { height: 1px; background: var(--border); flex-shrink: 0; }
+
+  .chart-area { flex: 1; padding: 16px; overflow-y: auto; }
+  .chart-wrap { position: relative; width: 100%; }
+
+  .legend-area { padding: 0 16px 16px; display: flex; flex-wrap: wrap; gap: 8px 16px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 400px; gap: 12px; color: var(--muted); }
+  .empty-icon { font-size: 40px; opacity: 0.3; }
+  .empty-label { font-size: 14px; }
+  .empty-sub { font-size: 12px; opacity: 0.7; }
+
+  /* ── error state — mirrors DefaultErrorState in
+     libs/ui-kit/charts-plotly/src/lib/plotly-workspace/plotly-workspace-layout.tsx:
+     concentric-circle icon badge, title + description, a mono error-detail
+     box, and two actions ("Pilih Metadata Lain" / "Generate Ulang"). ── */
+  .workspace-error { display: none; align-items: flex-start; justify-content: center; width: 100%; padding: 32px 0; }
+  .workspace-error.visible { display: flex; }
+  .workspace-error-card { background: var(--surface2); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; width: 100%; max-width: 480px; }
+  .workspace-error-body { display: flex; flex-direction: column; gap: 24px; align-items: center; padding: 16px; }
+  .workspace-error-badge { position: relative; width: 96px; height: 96px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .workspace-error-badge i { position: absolute; inset: 0; border-radius: 50%; background: rgba(220,38,38,0.12); }
+  .workspace-error-badge i:nth-child(2) { inset: 10.5px; background: rgba(220,38,38,0.20); }
+  .workspace-error-badge i:nth-child(3) { inset: 21.6px; background: rgba(220,38,38,0.30); }
+  .workspace-error-badge span { position: relative; z-index: 1; font-size: 28px; color: var(--danger); }
+  .workspace-error-text { display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center; }
+  .workspace-error-title { font-size: 14px; font-weight: 500; color: var(--danger); }
+  .workspace-error-desc { font-size: 12px; color: var(--muted); }
+  .workspace-error-detail { background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.3); border-radius: var(--radius); padding: 12px; display: flex; gap: 8px; align-items: flex-start; width: 100%; }
+  .workspace-error-detail span { flex-shrink: 0; color: var(--danger); font-size: 13px; line-height: 1; margin-top: 1px; }
+  .workspace-error-detail pre { white-space: pre-wrap; word-break: break-word; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); max-height: 200px; overflow-y: auto; }
+  .workspace-error-actions { display: flex; gap: 8px; padding: 16px; width: 100%; }
+  .workspace-error-actions .btn { flex: 1; }
+
+  /* ── species-group info popup ── shown from an info icon in every analysis
+     tab's chart-header, explaining what a genus-level "group" contains when
+     species-level results are rolled up. Uses the same tokens as the rest of
+     the page: Quicksand for the title, Rubik for body/table text. */
+  .species-modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(20,20,30,0.45);
+    z-index: 1000; align-items: center; justify-content: center; padding: 24px;
+  }
+  .species-modal-overlay.visible { display: flex; }
+  .species-modal {
+    background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md); width: 100%; max-width: 620px; max-height: 80vh;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .species-modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .species-modal-title { font-family: 'Quicksand', 'Rubik', sans-serif; font-size: 16px; font-weight: 600; color: var(--text); }
+  .species-modal-subtitle { font-size: 12px; color: var(--muted); margin-top: 4px; font-family: 'Rubik', sans-serif; line-height: 1.5; }
+  .species-modal-close {
+    width: 28px; height: 28px; border-radius: var(--radius); border: 1px solid transparent;
+    background: transparent; color: var(--muted); cursor: pointer; font-size: 15px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+  }
+  .species-modal-close:hover { background: var(--surface2); color: var(--text); }
+  .species-modal-body { padding: 16px 20px 20px; overflow-y: auto; flex: 1; min-height: 0; }
+  .species-modal-search { margin-bottom: 12px; }
+  .species-group-table { width: 100%; border-collapse: collapse; font-family: 'Rubik', sans-serif; font-size: 12px; }
+  .species-group-table th {
+    position: sticky; top: 0; background: var(--surface); padding: 8px 10px; text-align: left;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--border2);
+  }
+  .species-group-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .species-group-table tr:hover td { background: var(--surface2); }
+  .species-group-table .sg-genus { font-weight: 500; white-space: nowrap; }
+  .species-group-table .sg-group { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent-pressed); white-space: nowrap; }
+  .species-group-table .sg-members { color: var(--muted); }
+  .species-modal-empty { font-size: 12px; color: var(--muted); text-align: center; padding: 24px 0; }
+
+  /* ── alpha tab specific ── */
+  #alphaPlot { width: 100%; min-height: 720px; } /* was 480px — enlarged to fill the space the stats table used to take */
+
+  /* stats table */
+  .stats-table-wrap { margin-top: 20px; overflow-x: auto; }
+  .stats-table { width: 100%; border-collapse: collapse; font-size: 12px; font-family: 'DM Mono', monospace; }
+  .stats-table th { padding: 8px 12px; text-align: left; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border2); }
+  .stats-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text); }
+  .stats-table tr:hover td { background: var(--surface2); }
+  .p-sig { color: var(--success); font-weight: 500; }
+  .p-ns  { color: var(--muted); }
+  .test-badge { display: inline-flex; padding: 2px 7px; border-radius: 99px; font-size: 10px; font-weight: 500; }
+  .test-t    { background: rgba(245,126,32,0.15); color: var(--accent-pressed); }
+  .test-wilc { background: rgba(240,167,66,0.15); color: var(--warn); }
+  .test-note { font-size: 10px; color: var(--muted); font-style: italic; }
+
+  .stats-loading { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); padding: 16px 0; }
+  .spinner { width: 14px; height: 14px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── PCoA tab specific ── */
+  #pcoaPlot { width: 100%; min-height: 520px; }
+  .pcoa-legend { display: flex; flex-direction: column; gap: 6px; padding: 0 0 12px; }
+  .pcoa-legend-section { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; }
+  .pcoa-legend-title { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); width: 100%; margin-bottom: 2px; }
+  .pcoa-legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text); cursor: default; }
+  .pcoa-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .pcoa-legend-shape { width: 12px; height: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+  /* ── Rarefaction tab specific ── */
+  #rarefactionPlot { width: 100%; min-height: 520px; }
+
+  /* ── UPGMA tab specific ── */
+  #upgmaPlot { width: 100%; min-height: 560px; }
+  .upgma-loading { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); padding: 16px 0; }
+</style>
+</head>
+<body>
+
+<div class="page-shell">
+
+  <!-- ── page-level demo chrome ──────────────────────────────────────────────
+       Deliberately OUTSIDE the workspace card below: the card (tab bar, filter
+       sidebar, chart header, metadata block) is meant to be a pixel-faithful
+       emulation of the real feature-nusantics plotly-workspace component, so
+       nothing demo-only lives inside it. This slim page-level bar exists only
+       to host the "Simulate error" control. -->
+  <div class="page-heading">
+    <span class="pill ok">demo dataset loaded — 22 samples · 11 subjects · mock data for preview</span>
+    <!-- DEMO-ONLY: single control that previews the currently active tab's
+         DefaultErrorState. Replaces the six per-sidebar "Simulate error"
+         buttons this mockup used to have — see toggleErrorDemo(). -->
+    <button type="button" class="btn filter-demo-error" id="topbarErrorBtn" onclick="toggleErrorDemo(activeTab)" title="Preview the error state for the currently active tab">Simulate error</button>
+  </div>
+
+  <!-- ── WORKSPACE CARD ──────────────────────────────────────────────────────
+       Mirrors the single `rounded-xl border border-stroke-subtle bg-surface
+       overflow-hidden flex flex-col` card in plotly-workspace-client.tsx /
+       operations-plotly-workspace-client.tsx: a `TabsList` header (back
+       button + tab triggers + right-aligned metadata block), then one
+       `TabsContent` per tab holding [PlotlyFilterSidebar][chart column]. -->
+  <div class="workspace-card">
+
+    <!-- tab bar (TabsList tabStyle="line") -->
+    <div class="tab-bar">
+      <button class="tab-back" title="Back to analysis">&#8592;</button>
+      <button class="tab-btn active" id="tabBtnRarefaction" onclick="switchTab('rarefaction')"><span class="tab-icon">&#x223F;</span>Rarefaction Curve</button>
+      <button class="tab-btn"        id="tabBtnTaxa"         onclick="switchTab('taxa')"><span class="tab-icon">&#x25A4;</span>Taxa Bar Plot</button>
+      <button class="tab-btn"        id="tabBtnAlpha"     onclick="switchTab('alpha')"><span class="tab-icon">&#x2637;</span>Alpha Diversity</button>
+      <button class="tab-btn"        id="tabBtnPcoa"      onclick="switchTab('pcoa')"><span class="tab-icon">&#x2716;</span>PCoA</button>
+      <button class="tab-btn"        id="tabBtnUpgma"     onclick="switchTab('upgma')"><span class="tab-icon">&#x2B21;</span>UPGMA</button>
+      <button class="tab-btn"        id="tabBtnPermanova" onclick="switchTab('permanova')"><span class="tab-icon">&#x25C8;</span>PERMANOVA</button>
+
+      <div class="tab-meta">
+        <span class="tab-meta-rank" id="rankBadge">Phylum</span>
+        <div class="tab-meta-text">
+          <p class="tab-meta-version" id="infoText">Loading demo dataset…</p>
+          <p class="tab-meta-run" id="sampleCount"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- tab: rarefaction curve -->
+    <div class="tab-content active" id="tabRarefaction">
+      <div class="workspace-body">
+        <aside class="filter-sidebar" id="sidebarRarefaction">
+          <div class="filter-scroll">
+            <div class="section">
+              <div class="section-label">Rarefaction curve</div>
+              <div>
+                <label class="field-label">Metric</label>
+                <select id="rarefactionMetric" onchange="renderRarefaction()">
+                  <option value="richness" selected>Richness</option>
+                  <option value="shannon">Shannon</option>
+                  <option value="simpson">Simpson</option>
+                </select>
+              </div>
+              <div style="font-size:11px; color:var(--muted); line-height:1.5;">
+                Each line represents one sample. Colors are assigned per sample automatically.
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div class="chart-column">
+          <div class="chart-header">
+            <div>
+              <div class="chart-header-title">Rarefaction Curve</div>
+              <div class="chart-header-subtitle">Sequencing depth vs. diversity, per sample</div>
+            </div>
+            <div class="chart-header-actions">
+              <button class="icon-btn" title="What are species groups?" onclick="openSpeciesInfo()">&#x24D8;</button>
+              <button class="icon-btn" title="Fullscreen">&#x26F6;</button>
+            </div>
+          </div>
+          <div class="chart-header-divider"></div>
+          <div class="chart-area">
+            <div class="empty-state" id="rarefactionEmptyState">
+              <div class="empty-icon">&#x223F;</div>
+              <div class="empty-label">No rarefaction data</div>
+              <div class="empty-sub">Preparing chart…</div>
+            </div>
+            <div id="rarefactionPlotWrap" style="display:none;">
+              <div id="rarefactionPlot"></div>
+            </div>
+            <div class="workspace-error" id="rarefactionErrorState">
+              <div class="workspace-error-card">
+                <div class="workspace-error-body">
+                  <div class="workspace-error-badge"><i></i><i></i><i></i><span>&#9888;</span></div>
+                  <div class="workspace-error-text">
+                    <p class="workspace-error-title">Couldn't build Rarefaction Curve</p>
+                    <p class="workspace-error-desc">One or more samples have no reads to rarefy at any subsampling depth.</p>
+                  </div>
+                  <div class="workspace-error-detail">
+                    <span>&#9587;</span>
+                    <pre>Error: request to /alphadepths failed — sample "EXTRA02" has 0 total reads in the OTU table; rarefaction curve is undefined at every depth for this sample (mock demo error)</pre>
+                  </div>
+                </div>
+                <div class="workspace-error-actions">
+                  <button class="btn">Select Other Metadata</button>
+                  <button class="btn primary" onclick="toggleErrorDemo('rarefaction')">Retry</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- tab: taxa bar plot (original chart logic, untouched) -->
+    <div class="tab-content" id="tabTaxa">
+      <div class="workspace-body">
+        <aside class="filter-sidebar" id="sidebarTaxa">
+          <div class="filter-scroll">
+            <div class="section">
+              <div class="section-label">Taxonomic rank</div>
+              <select id="rankSel" onchange="fetchRank()">
+                <option value="Kingdom">Kingdom</option>
+                <option value="Phylum" selected>Phylum</option>
+                <option value="Class">Class</option>
+                <option value="Order">Order</option>
+                <option value="Family">Family</option>
+                <option value="Genus">Genus</option>
+                <option value="Species">Species</option>
+                <option value="taxon_name">Last Taxa Identified</option>
+              </select>
+            </div>
+            <div class="section">
+              <div class="section-label">Filter</div>
+              <div class="toggle-group">
+                <button id="btnTopN" class="active" onclick="setMode('topn')">Top N</button>
+                <button id="btnAbund" onclick="setMode('abund')">&ge; N%</button>
+              </div>
+              <div id="fieldTopN">
+                <label class="field-label">N taxa to show</label>
+                <input type="number" id="topNInput" value="10" min="1" max="50" oninput="render()">
+              </div>
+              <div id="fieldAbund" style="display:none">
+                <label class="field-label">Minimum abundance (%)</label>
+                <input type="number" id="abundInput" value="1" min="0.01" max="50" step="0.1" oninput="render()">
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-label">Display</div>
+              <div>
+                <label class="field-label">Color sample labels by</label>
+                <select id="colorBySel" onchange="render()">
+                  <option value="none">— none —</option>
+                </select>
+              </div>
+            </div>
+            <div class="section">
+              <div class="sort-header">
+                <label class="field-label" style="margin-bottom:0;">Filter samples by metadata</label>
+                <button type="button" class="sort-add-btn" id="metaFilterAddBtn_taxa" onclick="addMetadataFilter('taxa')" title="Add filter">+</button>
+              </div>
+              <div id="metaFilterRows_taxa" style="display:flex; flex-direction:column; gap:10px; margin-top:6px;"></div>
+            </div>
+            <div class="section">
+              <div class="sort-header">
+                <label class="field-label" style="margin-bottom:0;">Sort samples by</label>
+                <button type="button" class="sort-add-btn" id="sortAddBtn" onclick="addSortRow()" title="Add sort level">+</button>
+              </div>
+              <div id="sortRows" style="display:flex; flex-direction:column; gap:6px; margin-top:6px;"></div>
+            </div>
+          </div>
+          <div class="filter-downloads">
+            <div class="filter-downloads-row">
+              <button type="button" class="btn">Gambar</button>
+              <button type="button" class="btn">Data (TSV)</button>
+            </div>
+          </div>
+        </aside>
+        <div class="chart-column">
+          <div class="chart-header">
+            <div>
+              <div class="chart-header-title">Taxa Bar Plot</div>
+              <div class="chart-header-subtitle">Relative taxon abundance per sample</div>
+            </div>
+            <div class="chart-header-actions">
+              <button class="icon-btn" title="What are species groups?" onclick="openSpeciesInfo()">&#x24D8;</button>
+              <button class="icon-btn" title="Refresh">&#x21BB;</button>
+              <button class="icon-btn" title="Fullscreen">&#x26F6;</button>
+            </div>
+          </div>
+          <div class="chart-header-divider"></div>
+          <div class="chart-area" id="chartArea">
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">⬡</div>
+              <div class="empty-label">No data loaded</div>
+              <div class="empty-sub">Preparing chart…</div>
+            </div>
+            <div class="chart-wrap" id="chartWrap" style="display:none;">
+              <canvas id="chart" role="img" aria-label="Stacked bar chart showing relative taxon abundance per sample at selected taxonomic rank"></canvas>
+            </div>
+            <div class="workspace-error" id="taxaErrorState">
+              <div class="workspace-error-card">
+                <div class="workspace-error-body">
+                  <div class="workspace-error-badge"><i></i><i></i><i></i><span>&#9888;</span></div>
+                  <div class="workspace-error-text">
+                    <p class="workspace-error-title">Couldn't load Taxa Bar Plot</p>
+                    <p class="workspace-error-desc">No taxa have non-zero abundance at this rank after the current metadata filter is applied.</p>
+                  </div>
+                  <div class="workspace-error-detail">
+                    <span>&#9587;</span>
+                    <pre>Error: request to /taxabarplot returned an empty matrix — the active metadata filter excludes every sample (or every remaining taxon collapses into "Other" at this rank) (mock demo error)</pre>
+                  </div>
+                </div>
+                <div class="workspace-error-actions">
+                  <button class="btn">Select Other Metadata</button>
+                  <button class="btn primary" onclick="toggleErrorDemo('taxa')">Retry</button>
+                </div>
+              </div>
+            </div>
+            <div class="legend-area" id="legendArea"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- tab: alpha diversity -->
+    <div class="tab-content" id="tabAlpha">
+      <div class="workspace-body">
+        <aside class="filter-sidebar" id="sidebarAlpha">
+          <div class="filter-scroll">
+            <div class="section">
+              <div class="section-label">Alpha diversity</div>
+              <div>
+                <label class="field-label">Taxonomic rank</label>
+                <select id="alphaRank" onchange="fetchAlpha()">
+                  <option value="phylum" selected>Phylum</option>
+                  <option value="class">Class</option>
+                  <option value="order">Order</option>
+                  <option value="family">Family</option>
+                  <option value="genus">Genus</option>
+                  <option value="species">Species</option>
+                  <option value="taxon_name">Last Taxa Identified</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Metric</label>
+                <!-- FIX: onchange now calls fetchAlpha() not renderAlpha() — the backend
+                /alphaboxplot endpoint now filters by BOTH rank AND metrics server-side
+                (see inject_alpha in main_serve.R), so changing metric requires a new
+                request rather than a client-side re-filter of already-fetched data. -->
+                <select id="alphaMetric" onchange="fetchAlpha()">
+                  <option value="shannon">Shannon</option>
+                  <option value="richness">Richness</option>
+                  <option value="simpson">Simpson</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Group by (x-axis)</label>
+                <select id="alphaGroupVar" onchange="renderAlpha()">
+                  <option value="">— select column —</option>
+                </select>
+                <div class="custom-order-hint" id="alphaGroupOrderHint" style="display:none;">Drag to set the x-axis order</div>
+                <div class="custom-order-list" id="alphaGroupOrderList"></div>
+              </div>
+              <div>
+                <label class="field-label">Color by</label>
+                <select id="alphaColorBy" onchange="renderAlpha()">
+                  <option value="">— same as group —</option>
+                </select>
+              </div>
+              <div class="section">
+                <div class="sort-header">
+                  <label class="field-label" style="margin-bottom:0;">Filter samples by metadata</label>
+                  <button type="button" class="sort-add-btn" id="metaFilterAddBtn_alpha" onclick="addMetadataFilter('alpha')" title="Add filter">+</button>
+                </div>
+                <div id="metaFilterRows_alpha" style="display:flex; flex-direction:column; gap:10px; margin-top:6px;"></div>
+              </div>
+              <div>
+                <label class="field-label">Test type</label>
+                <div style="font-size:11px; color:var(--muted); line-height:1.6; margin-bottom:8px;">
+                  Considering the nature of microbiome data, which often departs from normality
+                  [<a href="https://doi.org/10.1016/j.gendis.2017.06.001" target="_blank" rel="noopener" style="color:var(--accent);">1</a>],
+                  the Wilcoxon rank-sum test (for independent comparisons) and the Wilcoxon signed-rank test
+                  (for paired comparisons, such as longitudinal studies) — both non-parametric, consistent with
+                  established practice in microbiome studies
+                  [<a href="https://doi.org/10.1128/msphere.00354-23" target="_blank" rel="noopener" style="color:var(--accent);">2</a>] —
+                  are applied for comparing your alpha diversity results on this platform. Prior to running the test,
+                  ensure your data is set up correctly.
+                  <div style="margin-top:4px;">
+                    [1] <a href="https://doi.org/10.1016/j.gendis.2017.06.001" target="_blank" rel="noopener" style="color:var(--accent);">https://doi.org/10.1016/j.gendis.2017.06.001</a><br>
+                    [2] <a href="https://doi.org/10.1128/msphere.00354-23" target="_blank" rel="noopener" style="color:var(--accent);">https://doi.org/10.1128/msphere.00354-23</a>
+                  </div>
+                </div>
+                <div class="toggle-group">
+                  <button type="button" id="btnWilcoxIndep" class="active" onclick="setAlphaWilcoxType('independent')">Independent</button>
+                  <button type="button" id="btnWilcoxPaired" onclick="setAlphaWilcoxType('paired')">Paired</button>
+                </div>
+              </div>
+              <div id="alphaSubjectIdSection" style="display:none;">
+                <label class="field-label">Subject/patient ID column <span style="color:#e05a5a;">*</span></label>
+                <select id="alphaSubjectVar" onchange="changeAlphaSubjectVar(this.value)">
+                  <option value="">— select column —</option>
+                </select>
+                <div style="font-size:11px; color:var(--muted); margin-top:4px; line-height:1.5;">
+                  Required for a paired test — matches samples across groups by this column
+                  (e.g. patient_id) so each pair is the correct subject's before/after values,
+                  not just whatever row order happens to line up.
+                </div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn primary" id="runStatsBtn" onclick="runStats()" style="flex:1;">Run hypothesis test</button>
+                <button class="btn" id="resetStatsBtn" onclick="resetAlphaStats()" title="Clear test results and restore the plain boxplot">Reset</button>
+              </div>
+              <div>
+                <label class="field-label">Bracket label</label>
+                <select id="alphaBracketLabelMode" onchange="renderStatsAnnotations(lastStatsResults)">
+                  <option value="pvalue" selected>Adjusted p-value</option>
+                  <option value="stars">Asterisks (*)</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Export format</label>
+                <select id="alphaExportFormat">
+                  <option value="svg" selected>SVG (vector)</option>
+                  <option value="png">PNG</option>
+                  <option value="jpeg">JPG</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div class="chart-column">
+          <div class="chart-header">
+            <div>
+              <div class="chart-header-title">Alpha Diversity</div>
+              <div class="chart-header-subtitle">Within-sample diversity, grouped by metadata</div>
+            </div>
+            <div class="chart-header-actions">
+              <button class="icon-btn" title="What are species groups?" onclick="openSpeciesInfo()">&#x24D8;</button>
+              <button class="icon-btn" title="Refresh">&#x21BB;</button>
+              <button class="icon-btn" title="Fullscreen">&#x26F6;</button>
+            </div>
+          </div>
+          <div class="chart-header-divider"></div>
+          <div class="chart-area">
+            <div class="empty-state" id="alphaEmptyState">
+              <div class="empty-icon">◈</div>
+              <div class="empty-label">No alpha diversity data</div>
+              <div class="empty-sub">Preparing chart…</div>
+            </div>
+            <div id="alphaPlotWrap" style="display:none;">
+              <div id="alphaPlot"></div>
+              <div id="statsSection" style="margin-top:8px;">
+                <div id="statsLoading" class="stats-loading" style="display:none;">
+                  <div class="spinner"></div> Running hypothesis tests…
+                </div>
+              </div>
+            </div>
+            <div class="workspace-error" id="alphaErrorState">
+              <div class="workspace-error-card">
+                <div class="workspace-error-body">
+                  <div class="workspace-error-badge"><i></i><i></i><i></i><span>&#9888;</span></div>
+                  <div class="workspace-error-text">
+                    <p class="workspace-error-title">Couldn't run hypothesis test</p>
+                    <p class="workspace-error-desc">The paired Wilcoxon signed-rank test couldn't align samples across groups for this subject ID column.</p>
+                  </div>
+                  <div class="workspace-error-detail">
+                    <span>&#9587;</span>
+                    <pre>Error: paired=TRUE but subject_id has duplicate values within at least one group ("SUBJ04" appears 2x in Control) — fewer than 2 unique, unambiguous matched pairs remain between groups after deduplication (mock demo error)</pre>
+                  </div>
+                </div>
+                <div class="workspace-error-actions">
+                  <button class="btn">Select Other Metadata</button>
+                  <button class="btn primary" onclick="toggleErrorDemo('alpha')">Retry</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- tab: PCoA -->
+    <div class="tab-content" id="tabPcoa">
+      <div class="workspace-body">
+        <aside class="filter-sidebar" id="sidebarPcoa">
+          <div class="filter-scroll">
+            <div class="section">
+              <div class="section-label">Beta diversity</div>
+              <div>
+                <label class="field-label">Taxonomic rank</label>
+                <select id="pcoaRank" onchange="fetchPcoa()">
+                  <option value="phylum" selected>Phylum</option>
+                  <option value="class">Class</option>
+                  <option value="order">Order</option>
+                  <option value="family">Family</option>
+                  <option value="genus">Genus</option>
+                  <option value="species">Species</option>
+                  <option value="taxon_name">Last Taxa Identified</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Distance metric</label>
+                <select id="pcoaDistance" onchange="fetchPcoa()">
+                  <option value="bray">Bray-Curtis</option>
+                  <option value="jaccard">Jaccard</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Color by</label>
+                <select id="pcoaGroupVar" onchange="renderPcoa()">
+                  <option value="">— none —</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Shape by</label>
+                <select id="pcoaShapeVar" onchange="renderPcoa()">
+                  <option value="">— none —</option>
+                </select>
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-label">Ellipse</div>
+              <div class="toggle-group">
+                <button id="ellipseOff" class="active" onclick="setEllipse(false)">Off</button>
+                <button id="ellipseOn"  onclick="setEllipse(true)">95% CI</button>
+              </div>
+              <div style="font-size:11px; color:var(--muted); line-height:1.5;">
+                Confidence ellipse computed from group covariance — equivalent to <code style="font-family:'DM Mono',monospace;">stat_ellipse(type="norm")</code> in ggplot2.
+              </div>
+            </div>
+            <div class="section">
+              <div class="sort-header">
+                <label class="field-label" style="margin-bottom:0;">Filter samples by metadata</label>
+                <button type="button" class="sort-add-btn" id="metaFilterAddBtn_pcoa" onclick="addMetadataFilter('pcoa')" title="Add filter">+</button>
+              </div>
+              <div id="metaFilterRows_pcoa" style="display:flex; flex-direction:column; gap:10px; margin-top:6px;"></div>
+            </div>
+          </div>
+        </aside>
+        <div class="chart-column">
+          <div class="chart-header">
+            <div>
+              <div class="chart-header-title">PCoA</div>
+              <div class="chart-header-subtitle">Principal coordinates of sample beta diversity</div>
+            </div>
+            <div class="chart-header-actions">
+              <button class="icon-btn" title="What are species groups?" onclick="openSpeciesInfo()">&#x24D8;</button>
+              <button class="icon-btn" title="Refresh">&#x21BB;</button>
+              <button class="icon-btn" title="Fullscreen">&#x26F6;</button>
+            </div>
+          </div>
+          <div class="chart-header-divider"></div>
+          <div class="chart-area">
+            <div class="empty-state" id="pcoaEmptyState">
+              <div class="empty-icon">⬡</div>
+              <div class="empty-label">No beta diversity data</div>
+              <div class="empty-sub">Preparing chart…</div>
+            </div>
+            <div id="pcoaPlotWrap" style="display:none;">
+              <div id="pcoaLegend" class="pcoa-legend"></div>
+              <div id="pcoaPlot"></div>
+            </div>
+            <div class="workspace-error" id="pcoaErrorState">
+              <div class="workspace-error-card">
+                <div class="workspace-error-body">
+                  <div class="workspace-error-badge"><i></i><i></i><i></i><span>&#9888;</span></div>
+                  <div class="workspace-error-text">
+                    <p class="workspace-error-title">Couldn't load PCoA coordinates</p>
+                    <p class="workspace-error-desc">The sample distance matrix doesn't have enough rank to support a 2D ordination.</p>
+                  </div>
+                  <div class="workspace-error-detail">
+                    <span>&#9587;</span>
+                    <pre>Error: cmdscale() produced fewer than 2 usable eigenvectors — insufficient rank in the distance matrix at this filter (3 samples remaining after the metadata filter, with near-identical composition). At least 3 samples with non-identical composition are required for a 2D ordination (mock demo error)</pre>
+                  </div>
+                </div>
+                <div class="workspace-error-actions">
+                  <button class="btn">Select Other Metadata</button>
+                  <button class="btn primary" onclick="toggleErrorDemo('pcoa')">Retry</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- tab: UPGMA -->
+    <div class="tab-content" id="tabUpgma">
+      <div class="workspace-body">
+        <aside class="filter-sidebar" id="sidebarUpgma">
+          <div class="filter-scroll">
+            <div class="section">
+              <div class="section-label">Tree settings</div>
+              <div>
+                <label class="field-label">Distance metric</label>
+                <select id="upgmaDistance" onchange="fetchUpgma()">
+                  <option value="bray">Bray-Curtis</option>
+                  <option value="jaccard">Jaccard</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Taxonomic rank</label>
+                <select id="upgmaRank" onchange="fetchUpgma()">
+                  <option value="phylum" selected>Phylum</option>
+                  <option value="class">Class</option>
+                  <option value="order">Order</option>
+                  <option value="family">Family</option>
+                  <option value="genus">Genus</option>
+                  <option value="species">Species</option>
+                  <option value="taxon_name">Last Taxa Identified</option>
+                </select>
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-label">Taxa filter</div>
+              <div class="toggle-group">
+                <button id="upgmaBtnTopN" class="active" onclick="setUpgmaMode('topn')">Top N</button>
+                <button id="upgmaBtnAbund" onclick="setUpgmaMode('abund')">&ge; N%</button>
+              </div>
+              <div id="upgmaFieldTopN">
+                <label class="field-label">N taxa to show</label>
+                <input type="number" id="upgmaTopNInput" value="10" min="1" max="50" oninput="renderUpgma()">
+              </div>
+              <div id="upgmaFieldAbund" style="display:none">
+                <label class="field-label">Minimum abundance (%)</label>
+                <input type="number" id="upgmaAbundInput" value="1" min="0.01" max="50" step="0.1" oninput="renderUpgma()">
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div class="chart-column">
+          <div class="chart-header">
+            <div>
+              <div class="chart-header-title">UPGMA</div>
+              <div class="chart-header-subtitle">Hierarchical clustering dendrogram of samples</div>
+            </div>
+            <div class="chart-header-actions">
+              <button class="icon-btn" title="What are species groups?" onclick="openSpeciesInfo()">&#x24D8;</button>
+              <button class="icon-btn" title="Refresh">&#x21BB;</button>
+              <button class="icon-btn" title="Fullscreen">&#x26F6;</button>
+            </div>
+          </div>
+          <div class="chart-header-divider"></div>
+          <div class="chart-area">
+            <div class="empty-state" id="upgmaEmptyState">
+              <div class="empty-icon">&#x2B21;</div>
+              <div class="empty-label">No UPGMA data</div>
+              <div class="empty-sub">Preparing chart…</div>
+            </div>
+            <div id="upgmaPlotWrap" style="display:none;">
+              <div id="upgmaLoading" class="upgma-loading" style="display:none;">
+                <div class="spinner"></div> Building tree&hellip;
+              </div>
+              <div id="upgmaPlot"></div>
+            </div>
+            <div class="workspace-error" id="upgmaErrorState">
+              <div class="workspace-error-card">
+                <div class="workspace-error-body">
+                  <div class="workspace-error-badge"><i></i><i></i><i></i><span>&#9888;</span></div>
+                  <div class="workspace-error-text">
+                    <p class="workspace-error-title">Couldn't build UPGMA tree</p>
+                    <p class="workspace-error-desc">Every pairwise distance in this comparison is zero or identical, so hclust() has no structure to cluster.</p>
+                  </div>
+                  <div class="workspace-error-detail">
+                    <span>&#9587;</span>
+                    <pre>Error: hclust() failed — the distance matrix is degenerate (all off-diagonal distances are 0 after the current metadata filter, or fewer than 3 samples remain). At least 3 samples with distinct composition are required to build a dendrogram (mock demo error)</pre>
+                  </div>
+                </div>
+                <div class="workspace-error-actions">
+                  <button class="btn">Select Other Metadata</button>
+                  <button class="btn primary" onclick="toggleErrorDemo('upgma')">Retry</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- tab: PERMANOVA -->
+    <div class="tab-content" id="tabPermanova">
+      <div class="workspace-body">
+        <aside class="filter-sidebar" id="sidebarPermanova">
+          <div class="filter-scroll">
+            <div class="section">
+              <div class="section-label">Beta diversity</div>
+              <div>
+                <label class="field-label">Taxonomic rank</label>
+                <select id="permanovaRank" onchange="fetchPermanovaMeta()">
+                  <option value="phylum" selected>Phylum</option>
+                  <option value="class">Class</option>
+                  <option value="order">Order</option>
+                  <option value="family">Family</option>
+                  <option value="genus">Genus</option>
+                  <option value="species">Species</option>
+                  <option value="taxon_name">Last Taxa Identified</option>
+                </select>
+              </div>
+              <div>
+                <label class="field-label">Distance metric</label>
+                <select id="permanovaDistance">
+                  <option value="bray">Bray-Curtis</option>
+                  <option value="jaccard">Jaccard</option>
+                </select>
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-label">Covariates</div>
+              <div style="font-size:11px; color:var(--muted); line-height:1.5; margin-bottom:4px;">
+                Select metadata columns to test. Each tested after accounting for all others.
+              </div>
+              <div id="permanovaCovariates" style="display:flex; flex-direction:column; gap:6px;">
+                <span style="font-size:11px; color:var(--muted);">Connect to API first.</span>
+              </div>
+            </div>
+            <button class="btn primary" id="runPermanovaBtn" onclick="fetchPermanova()">Run PERMANOVA</button>
+            <div id="permanovaStatus" style="font-size:11px; color:var(--muted);"></div>
+          </div>
+        </aside>
+        <div class="chart-column">
+          <div class="chart-header">
+            <div>
+              <div class="chart-header-title">PERMANOVA</div>
+              <div class="chart-header-subtitle">Variance explained per covariate</div>
+            </div>
+            <div class="chart-header-actions">
+              <button class="icon-btn" title="What are species groups?" onclick="openSpeciesInfo()">&#x24D8;</button>
+              <button class="icon-btn" title="Fullscreen">&#x26F6;</button>
+            </div>
+          </div>
+          <div class="chart-header-divider"></div>
+          <div class="chart-area">
+            <div class="empty-state" id="permanovaEmptyState">
+              <div class="empty-icon">&#x25C8;</div>
+              <div class="empty-label">No PERMANOVA results</div>
+              <div class="empty-sub">Select covariates and click Run PERMANOVA</div>
+            </div>
+            <div id="permanovaPlotWrap" style="display:none;">
+              <div id="permanovaLoading" class="upgma-loading" style="display:none;">
+                <div class="spinner"></div> Running PERMANOVA (999 permutations)&hellip;
+              </div>
+              <div id="permanovaPlot"></div>
+            </div>
+            <div class="workspace-error" id="permanovaErrorState">
+              <div class="workspace-error-card">
+                <div class="workspace-error-body">
+                  <div class="workspace-error-badge"><i></i><i></i><i></i><span>&#9888;</span></div>
+                  <div class="workspace-error-text">
+                    <p class="workspace-error-title">Couldn't compute PERMANOVA</p>
+                    <p class="workspace-error-desc">One of the selected covariates has only a single level after the current metadata filter, so it has no variance to test.</p>
+                  </div>
+                  <div class="workspace-error-detail">
+                    <span>&#9587;</span>
+                    <pre>Error: adonis2() failed — covariate "site" has only 1 unique level in the filtered sample set (n=22); a covariate needs at least 2 levels, and each level needs enough samples to support 999 permutations, or the design matrix becomes singular (mock demo error)</pre>
+                  </div>
+                </div>
+                <div class="workspace-error-actions">
+                  <button class="btn">Select Other Metadata</button>
+                  <button class="btn primary" onclick="toggleErrorDemo('permanova')">Retry</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- species-group reference popup, opened from the (i) icon in every
+       analysis tab's chart-header (see openSpeciesInfo/closeSpeciesInfo). -->
+  <div class="species-modal-overlay" id="speciesModalOverlay" onclick="if (event.target === this) closeSpeciesInfo();">
+    <div class="species-modal" role="dialog" aria-modal="true" aria-labelledby="speciesModalTitle">
+      <div class="species-modal-header">
+        <div>
+          <div class="species-modal-title" id="speciesModalTitle">Species groups reference</div>
+          <div class="species-modal-subtitle">When results are shown at species level, closely related species that can't be reliably told apart are collapsed into a genus-level "group". This table shows which species each group contains.</div>
+        </div>
+        <button type="button" class="species-modal-close" title="Close" onclick="closeSpeciesInfo()">&#x2715;</button>
+      </div>
+      <div class="species-modal-body">
+        <table class="species-group-table">
+          <thead>
+            <tr><th>Genus</th><th>Species Group</th><th>Member</th></tr>
+          </thead>
+          <tbody id="speciesModalTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  SHARED
+// ═══════════════════════════════════════════════════════
+// Nusantics dataviz tokens (--colors-data-viz-chart-1..8) up front, extended
+// with additional shared-palette hues so up to ~18 taxa/series stay distinguishable.
+const PALETTE = [
+  '#f57e20','#59595a','#22c55e','#f59e0b','#3b82f6',
+  '#2b485e','#a855f7','#1da8b0','#dc2626','#476142',
+  '#829dc9','#e8803b','#089aaa','#7c9bb2','#e879f9',
+  '#60a5fa','#4ade80','#f472b6'
+];
+const OTHER_COLOR = '#bababa';
+
+let currentData       = null;
+let rarefactionData   = null;
+let chartInst     = null;
+let mode          = 'topn';
+let apiReady      = true; // this build is a self-contained demo — no backend to reach
+
+// multi-level sort state for the taxa bar plot (QIIME2-style "Sort samples by" stack)
+let sortRules   = [{ field: 'name', direction: 'asc' }];
+document.addEventListener('DOMContentLoaded', () => renderSortRows());
+let alphaData     = null;
+let lastStatsResults  = null;   // most recent /alphaboxplot/stats response, so brackets can redraw without refetching
+let lastStatsGroupVar = null;   // the groupVar those results were computed against; stale once groupVar changes
+let alphaGroupOrder    = null;  // user-defined x-axis order for the current groupVar's categories
+let alphaGroupOrderVar = null;  // which groupVar alphaGroupOrder belongs to; a different column means a different category universe
+let alphaWilcoxPaired  = false; // frontend-only toggle — see setAlphaWilcoxType()/runStats() for what's still needed server-side
+let alphaSubjectVar    = '';    // the metadata column chosen as the subject/patient identifier — required whenever alphaWilcoxPaired is true
+let alphaFilterVersion     = 0;    // bumped on every alpha-tab filter change
+let lastStatsFilterVersion = null; // alphaFilterVersion at the time lastStatsResults was computed
+
+// A cached result set is only still valid for redisplay if BOTH the grouping
+// column AND the filtered sample set are unchanged since it was computed —
+// previously this only checked groupVar, so unticking a sample (a filter
+// change, not a groupVar change) silently kept showing pre-untick p-values
+// instead of being treated as stale. This matters most for paired tests,
+// where removing one sample can break the length match the backend needs,
+// but it was quietly wrong for independent tests too.
+function isAlphaStatsCacheValid() {
+  const groupVar = document.getElementById('alphaGroupVar').value;
+  return !!lastStatsResults
+    && lastStatsGroupVar === groupVar
+    && lastStatsFilterVersion === alphaFilterVersion;
+}
+let pcoaData      = null;
+
+// per-tab "Filter samples by metadata" state — each of Taxa, Alpha, and PCoA
+// now keeps its own independent filter list, even though they describe the
+// same underlying samples. Previously this was a single shared array, so
+// setting a filter on one tab silently applied it to the others too.
+let metadataFilters = { taxa: [], alpha: [], pcoa: [] };
+document.addEventListener('DOMContentLoaded', () => renderAllMetadataFilterUIs());
+document.addEventListener('DOMContentLoaded', () => initDemo());
+
+// ── per-tab "Filter samples by metadata" engine (Excel-style stacked filters) ──
+// Used by Taxa Bar Plot, Alpha Diversity, and PCoA. Each tab exposes its own adapter
+// (fields+unique-values getter) since the three endpoints return differently-shaped
+// data, and each now keeps its own independent filter state and comparator.
+
+function taxaMetaFieldValues() {
+  if (!currentData?.metadata || !currentData?.samples) return {};
+  const first = Object.values(currentData.metadata)[0];
+  if (!first) return {};
+  const out = {};
+  Object.keys(first).forEach(col => {
+    out[col] = [...new Set(currentData.samples.map(s => String(getMetaVal(s, col))))].sort();
+  });
+  return out;
+}
+
+function alphaMetaFieldValues() {
+  if (!alphaData?.length) return {};
+  const exclude = new Set(['metrics', 'value', 'rank']);
+  const cols = Object.keys(alphaData[0]).filter(k => !exclude.has(k));
+  const out = {};
+  cols.forEach(col => out[col] = [...new Set(alphaData.map(r => String(r[col])))].sort());
+  return out;
+}
+
+function pcoaMetaFieldValues() {
+  if (!pcoaData?.meta_columns || !pcoaData?.coordinates) return {};
+  const out = {};
+  pcoaData.meta_columns.forEach(col => {
+    out[col] = [...new Set(pcoaData.coordinates.map(r => String(r[col])))].sort();
+  });
+  return out;
+}
+
+// merges whichever tabs currently have data loaded — same underlying metadata table,
+// so field names/values should already agree; first source that defines a field wins
+function getAvailableMetaFields() {
+  const merged = {};
+  [taxaMetaFieldValues(), alphaMetaFieldValues(), pcoaMetaFieldValues()].forEach(src => {
+    Object.keys(src).forEach(k => { if (!merged[k]) merged[k] = src[k]; });
+  });
+  return merged;
+}
+
+// getValueFn(field) -> this row/sample's value for that field.
+// - Categorical filter with nothing excluded -> no effect.
+// - Numeric filter with a blank/invalid threshold (still being typed) -> no effect on anyone.
+// - Numeric filter with a valid threshold, but THIS sample's own value is missing/non-numeric
+//   (e.g. "NA") -> that sample fails the comparison and is excluded, same as an unchecked
+//   category would be — it has no valid value to satisfy "≥ 40" with.
+const BETWEEN_OPERATORS = new Set(['between_exc', 'between_inc', 'between_inc_exc', 'between_exc_inc']);
+
+function passesMetadataFilters(tab, getValueFn) {
+  return metadataFilters[tab].every(f => {
+    const raw = getValueFn(f.field);
+    if (f.kind === 'numeric') {
+      const num = parseLocaleNumber(raw);
+
+      if (BETWEEN_OPERATORS.has(f.operator)) {
+        const lo = parseLocaleNumber(f.value);
+        const hi = parseLocaleNumber(f.value2);
+        if (isNaN(lo) || isNaN(hi)) return true; // range isn't fully specified yet — don't filter anyone
+        if (isNaN(num)) return false; // this sample has no usable value for this field
+        switch (f.operator) {
+          case 'between_exc':     return num >  lo && num <  hi; // n < x < m
+          case 'between_inc':     return num >= lo && num <= hi; // n <= x <= m
+          case 'between_inc_exc': return num >= lo && num <  hi; // n <= x < m
+          case 'between_exc_inc': return num >  lo && num <= hi; // n < x <= m
+          default: return true;
+        }
+      }
+
+      const threshold = parseLocaleNumber(f.value);
+      if (isNaN(threshold)) return true; // filter's own value is incomplete — don't filter anyone yet
+      if (isNaN(num)) return false; // this sample has no usable value for this field
+      switch (f.operator) {
+        case 'eq':  return num === threshold;
+        case 'lt':  return num <  threshold;
+        case 'lte': return num <= threshold;
+        case 'gt':  return num >  threshold;
+        case 'gte': return num >= threshold;
+        default:    return true;
+      }
+    }
+    return !f.excluded.has(String(raw));
+  });
+}
+
+// common placeholders for "missing" in real metadata tables — one of these showing up
+// in an otherwise-numeric column shouldn't disqualify the whole column from numeric mode
+const MISSING_VALUE_TOKENS = new Set(['', 'na', 'n/a', 'nan', 'null', 'none', 'unknown', '-', '--']);
+
+function isMissingToken(v) {
+  return MISSING_VALUE_TOKENS.has(String(v).trim().toLowerCase());
+}
+
+// parses a number tolerating the Indonesian/European decimal-comma style ("25,5" meaning
+// 25.5) in addition to plain JS number syntax. Only reinterprets the comma as a decimal
+// point when the string is a single comma-separated number with no dot already present.
+function parseLocaleNumber(v) {
+  const s = String(v).trim();
+  if (s === '') return NaN; // Number('') is 0, not NaN — must special-case or blank inputs silently become "compare against zero"
+  if (/^-?\d+,\d+$/.test(s)) return Number(s.replace(',', '.'));
+  return Number(s);
+}
+
+// a field is treated as numeric if every one of its NON-missing unique values parses as
+// a number. A single "NA"/blank/"unknown" entry (very common for one missing sample)
+// no longer disqualifies the whole column — only genuinely non-numeric categories do.
+function isNumericField(values) {
+  const real = values.filter(v => !isMissingToken(v));
+  return real.length > 0 && real.every(v => !isNaN(parseLocaleNumber(v)));
+}
+
+// builds the right default filter shape for a field once its type is known.
+// Numeric default (operator >=, value = field's own minimum) starts as a no-op, same
+// as the categorical default (nothing excluded) — adding a filter shouldn't immediately
+// hide anything until you actually change the operator or value.
+function makeFilterForField(field, available) {
+  const values = available[field] || [];
+  if (isNumericField(values)) {
+    const nums = values.filter(v => !isMissingToken(v)).map(parseLocaleNumber);
+    const min = Math.min(...nums);
+    return { field, kind: 'numeric', operator: 'gte', value: min };
+  }
+  return { field, kind: 'categorical', excluded: new Set() };
+}
+
+// diagnostic: run `debugMetaField('YourColumnName')` in the browser console to see
+// exactly why a column isn't being detected as numeric.
+window.debugMetaField = function(fieldName) {
+  const available = getAvailableMetaFields();
+  if (!(fieldName in available)) {
+    console.log(`Field "${fieldName}" not found. Available fields:`, Object.keys(available));
+    return;
+  }
+  const values = available[fieldName];
+  console.log(`Field "${fieldName}" — ${values.length} unique value(s):`);
+  console.table(values.map(v => ({
+    raw_value: v,
+    is_missing_token: isMissingToken(v),
+    parsed_number: isMissingToken(v) ? '(skipped)' : parseLocaleNumber(v),
+    counts_as_numeric: isMissingToken(v) ? '(skipped)' : !isNaN(parseLocaleNumber(v))
+  })));
+  console.log('Overall isNumericField result:', isNumericField(values),
+    isNumericField(values) ? '— should show the </> operator control' : '— falling back to checkboxes');
+};
+
+function renderAllMetadataFilterUIs() {
+  ['taxa', 'alpha', 'pcoa'].forEach(renderMetadataFilterUI);
+}
+
+function escapeHtmlAttr(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function renderMetadataFilterUI(tab) {
+  const container = document.getElementById('metaFilterRows_' + tab);
+  if (!container) return;
+  const available = getAvailableMetaFields();
+  const fieldNames = Object.keys(available);
+  const filters = metadataFilters[tab];
+  const usedFields = new Set(filters.map(f => f.field));
+
+  container.innerHTML = filters.length === 0
+    ? '<div class="meta-filter-empty">No filters — showing all samples</div>'
+    : filters.map((f, i) => {
+        const values = available[f.field] || [];
+
+        let bodyHtml;
+        if (f.kind === 'numeric') {
+          const nums = values.map(parseLocaleNumber).filter(n => !isNaN(n));
+          const min = nums.length ? Math.min(...nums) : 0;
+          const max = nums.length ? Math.max(...nums) : 0;
+          const isBetween = BETWEEN_OPERATORS.has(f.operator);
+          bodyHtml = `
+          <div class="filter-numeric-row">
+            <select onchange="updateFilterOperator('${tab}', ${i}, this.value)">
+              <option value="gte" ${f.operator === 'gte' ? 'selected' : ''}>&ge;</option>
+              <option value="gt"  ${f.operator === 'gt'  ? 'selected' : ''}>&gt;</option>
+              <option value="eq"  ${f.operator === 'eq'  ? 'selected' : ''}>=</option>
+              <option value="lte" ${f.operator === 'lte' ? 'selected' : ''}>&le;</option>
+              <option value="lt"  ${f.operator === 'lt'  ? 'selected' : ''}>&lt;</option>
+              <option value="between_exc"     ${f.operator === 'between_exc'     ? 'selected' : ''}>n &lt; x &lt; m</option>
+              <option value="between_inc"     ${f.operator === 'between_inc'     ? 'selected' : ''}>n &le; x &le; m</option>
+              <option value="between_inc_exc" ${f.operator === 'between_inc_exc' ? 'selected' : ''}>n &le; x &lt; m</option>
+              <option value="between_exc_inc" ${f.operator === 'between_exc_inc' ? 'selected' : ''}>n &lt; x &le; m</option>
+            </select>
+            ${isBetween ? `
+            <input type="number" step="any" value="${escapeHtmlAttr(f.value)}"  placeholder="n" oninput="updateFilterNumericValue('${tab}', ${i}, this.value)">
+            <span class="filter-between-sep">to</span>
+            <input type="number" step="any" value="${escapeHtmlAttr(f.value2 ?? '')}" placeholder="m" oninput="updateFilterNumericValue2('${tab}', ${i}, this.value)">
+            ` : `
+            <input type="number" step="any" value="${escapeHtmlAttr(f.value)}" oninput="updateFilterNumericValue('${tab}', ${i}, this.value)">
+            `}
+          </div>
+          <div class="filter-numeric-hint">Data range: ${min} – ${max}</div>`;
+        } else {
+          // value goes through a data-attribute (HTML-attribute-encoded via escapeHtmlAttr)
+          // rather than being embedded straight into the onchange JS string — a raw value
+          // containing a `"` would otherwise terminate the attribute early and corrupt the tag
+          const valueRows = values.map(v => `
+            <label class="filter-value-row">
+              <input type="checkbox" data-value="${escapeHtmlAttr(v)}" ${f.excluded.has(v) ? '' : 'checked'} onchange="toggleFilterValue('${tab}', ${i}, this.dataset.value, this.checked)">
+              <span title="${escapeHtmlAttr(v)}">${escapeHtmlAttr(v)}</span>
+            </label>`).join('');
+          bodyHtml = `
+          <div class="filter-value-actions">
+            <a onclick="setAllFilterValues('${tab}', ${i}, true)">All</a>
+            <a onclick="setAllFilterValues('${tab}', ${i}, false)">None</a>
+          </div>
+          <div class="filter-value-list">${valueRows}</div>`;
+        }
+
+        return `
+        <div class="meta-filter-block">
+          <div class="sort-row">
+            <select onchange="changeFilterField('${tab}', ${i}, this.value)">
+              ${fieldNames.map(fld =>
+                `<option value="${escapeHtmlAttr(fld)}" ${fld === f.field ? 'selected' : ''} ${usedFields.has(fld) && fld !== f.field ? 'disabled' : ''}>${escapeHtmlAttr(fld)}</option>`
+              ).join('')}
+            </select>
+            <button type="button" class="sort-row-remove" onclick="removeMetadataFilter('${tab}', ${i})" title="Remove filter">&times;</button>
+          </div>
+          ${bodyHtml}
+        </div>`;
+      }).join('');
+
+  const addBtn = document.getElementById('metaFilterAddBtn_' + tab);
+  if (addBtn) addBtn.disabled = filters.length >= fieldNames.length;
+}
+
+function addMetadataFilter(tab) {
+  const available = getAvailableMetaFields();
+  const used = new Set(metadataFilters[tab].map(f => f.field));
+  const nextField = Object.keys(available).find(f => !used.has(f));
+  if (!nextField) return; // every available field already has a filter row
+  metadataFilters[tab].push(makeFilterForField(nextField, available));
+  renderMetadataFilterUI(tab);
+  applyMetadataFilterChange(tab);
+}
+
+function removeMetadataFilter(tab, i) {
+  metadataFilters[tab].splice(i, 1);
+  renderMetadataFilterUI(tab);
+  applyMetadataFilterChange(tab);
+}
+
+function changeFilterField(tab, i, field) {
+  metadataFilters[tab][i] = makeFilterForField(field, getAvailableMetaFields());
+  renderMetadataFilterUI(tab);
+  applyMetadataFilterChange(tab);
+}
+
+function toggleFilterValue(tab, i, value, checked) {
+  const f = metadataFilters[tab][i];
+  if (checked) f.excluded.delete(value); else f.excluded.add(value);
+  renderMetadataFilterUI(tab); // this tab only — filters are independent now
+  applyMetadataFilterChange(tab);
+}
+
+function setAllFilterValues(tab, i, checked) {
+  const available = getAvailableMetaFields();
+  const values = available[metadataFilters[tab][i].field] || [];
+  metadataFilters[tab][i].excluded = checked ? new Set() : new Set(values);
+  renderMetadataFilterUI(tab);
+  applyMetadataFilterChange(tab);
+}
+
+function updateFilterOperator(tab, i, operator) {
+  metadataFilters[tab][i].operator = operator;
+  // switching into a "between" operator for the first time needs a second value —
+  // default it to the field's own max, same "starts as a no-op-ish sensible default" idea
+  if (BETWEEN_OPERATORS.has(operator) && metadataFilters[tab][i].value2 === undefined) {
+    const available = getAvailableMetaFields();
+    const values = available[metadataFilters[tab][i].field] || [];
+    const nums = values.map(parseLocaleNumber).filter(n => !isNaN(n));
+    metadataFilters[tab][i].value2 = nums.length ? Math.max(...nums) : '';
+  }
+  renderMetadataFilterUI(tab); // layout changes (one input vs. two) need a re-render
+  applyMetadataFilterChange(tab);
+}
+
+function updateFilterNumericValue(tab, i, rawValue) {
+  // stored as the raw string and parsed at evaluation time (see passesMetadataFilters) —
+  // parsing here would fight the user mid-keystroke on things like "-" or "3."
+  metadataFilters[tab][i].value = rawValue;
+  applyMetadataFilterChange(tab);
+}
+
+function updateFilterNumericValue2(tab, i, rawValue) {
+  metadataFilters[tab][i].value2 = rawValue;
+  applyMetadataFilterChange(tab);
+}
+
+// re-renders only the tab whose filter just changed — filters are independent
+// per tab now, so a Taxa filter change has no reason to touch Alpha or PCoA
+function applyMetadataFilterChange(tab) {
+  if (tab === 'taxa'  && currentData)                   render();
+  if (tab === 'alpha' && alphaData?.length) {
+    alphaFilterVersion++; // invalidates any cached stats — see isAlphaStatsCacheValid()
+    renderAlpha();
+  }
+  if (tab === 'pcoa'  && pcoaData?.coordinates?.length) renderPcoa();
+}
+
+let upgmaData     = null;
+let permanovaMeta = null;
+let permanovaData = null;
+let upgmaMode     = 'topn';
+let showEllipse   = false;
+let activeTab     = 'rarefaction';
+
+// ── tab switching ─────────────────────────────────────
+function switchTab(tab) {
+  activeTab = tab;
+  ['rarefaction','taxa','alpha','pcoa','upgma','permanova'].forEach(t => {
+    document.getElementById('tabBtn' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', tab === t);
+    document.getElementById('tab'    + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', tab === t);
+    document.getElementById('sidebar'+ t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('hidden', tab !== t);
+  });
+  if (tab === 'rarefaction') {
+    document.getElementById('rankBadge').textContent = 'ASV';
+    if (apiReady && !rarefactionData) fetchRarefaction();
+    else if (rarefactionData) renderRarefaction();
+  } else if (tab === 'taxa') {
+    document.getElementById('rankBadge').textContent = document.getElementById('rankSel').value;
+  } else if (tab === 'alpha') {
+    document.getElementById('rankBadge').textContent = document.getElementById('alphaRank').value;
+    if (apiReady && !alphaData) fetchAlpha();
+  } else if (tab === 'pcoa') {
+    document.getElementById('rankBadge').textContent = document.getElementById('pcoaRank').value;
+    if (apiReady && !pcoaData) fetchPcoa();
+  } else if (tab === 'upgma') {
+    document.getElementById('rankBadge').textContent = document.getElementById('upgmaRank').value;
+    if (apiReady && !upgmaData) fetchUpgma();
+  } else if (tab === 'permanova') {
+    document.getElementById('rankBadge').textContent = document.getElementById('permanovaRank').value;
+    if (apiReady && !permanovaMeta) fetchPermanovaMeta();
+    if (permanovaData) renderPermanova();
+  }
+  updateTopbarErrorBtn(tab);
+}
+
+// ═══════════════════════════════════════════════════════
+//  DEMO BOOTSTRAP — replaces the original API-connection / upload flow.
+//  Everything below reads from window.MOCK (mock-data.js) synchronously and
+//  loads all six tabs immediately on page load.
+// ═══════════════════════════════════════════════════════
+function initDemo() {
+  fetchRarefaction();
+  fetchRank();
+  fetchAlpha();
+  fetchPcoa();
+  fetchUpgma();
+  fetchPermanovaMeta();
+  document.getElementById('infoText').textContent = SAMPLES_LABEL();
+}
+function SAMPLES_LABEL() { return MOCK.SAMPLES.length + ' samples · demo dataset'; }
+
+// ═══════════════════════════════════════════════════════
+//  TAB 0 — RAREFACTION CURVE
+// ═══════════════════════════════════════════════════════
+async function fetchRarefaction() {
+  rarefactionData = MOCK.MOCK_RAREFACTION;
+  renderRarefaction();
+}
+
+function renderRarefaction() {
+  if (!rarefactionData || !rarefactionData.length) return;
+
+  const metric = document.getElementById('rarefactionMetric').value;
+
+  // ── filter rows to selected metric ──────────────────────────────────────
+  const rows = rarefactionData.filter(r => r.metrics === metric);
+  if (!rows.length) return;
+
+  // ── group rows by sample_id ──────────────────────────────────────────────
+  // Each sample becomes one Plotly trace (one line).
+  const bySample = {};
+  rows.forEach(r => {
+    if (!bySample[r.sample_id]) bySample[r.sample_id] = [];
+    bySample[r.sample_id].push(r);
+  });
+
+  // sort each sample's points by depth so lines are drawn left → right
+  Object.values(bySample).forEach(pts => pts.sort((a, b) => a.depth - b.depth));
+
+  const samples = Object.keys(bySample).sort();
+
+  // ── build one Plotly trace per sample ────────────────────────────────────
+  // type: 'scatter', mode: 'lines+markers' — equivalent to geom_line + geom_point
+  const traces = samples.map((sid, i) => {
+    const pts = bySample[sid];
+    return {
+      type:  'scatter',
+      mode:  'lines+markers',
+      name:  sid,
+      x:     pts.map(p => p.depth),
+      y:     pts.map(p => p.value),
+      line:  { color: PALETTE[i % PALETTE.length], width: 1.5 },
+      marker:{ color: PALETTE[i % PALETTE.length], size: 4 },
+      hovertemplate: '<b>%{fullData.name}</b><br>Depth: %{x}<br>' + metric + ': %{y:.4f}<extra></extra>'
+    };
+  });
+
+  const layout = {
+    paper_bgcolor: '#ffffff',
+    plot_bgcolor:  '#ffffff',
+    margin: { t: 30, r: 20, b: 60, l: 70 },
+    xaxis: {
+      title:     { text: 'Reads Depth', font: { color: '#828282', size: 12 } },
+      tickformat: ',',   // adds thousands separators: 5,000 instead of 5k
+      color:     '#828282',
+      gridcolor: 'rgba(0,0,0,0.07)',
+      zeroline:  false
+    },
+    yaxis: {
+      title:     { text: metric.charAt(0).toUpperCase() + metric.slice(1), font: { color: '#828282', size: 12 } },
+      color:     '#828282',
+      gridcolor: 'rgba(0,0,0,0.07)',
+      zeroline:  false
+    },
+    // hide legend — too many samples to show usefully; colors are per-sample
+    showlegend: false,
+    font: { family: "'Rubik', sans-serif", color: '#49494a' }
+  };
+
+  const config = { responsive: true, displayModeBar: true, displaylogo: false };
+
+  document.getElementById('rarefactionEmptyState').style.display = 'none';
+  document.getElementById('rarefactionPlotWrap').style.display   = '';
+  Plotly.react('rarefactionPlot', traces, layout, config);
+
+  if (activeTab === 'rarefaction') {
+    document.getElementById('rankBadge').textContent = 'ASV';
+    document.getElementById('infoText').textContent  = samples.length + ' samples · metric: ' + metric;
+    document.getElementById('sampleCount').textContent = samples.length + ' samples';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  TAB 1 — TAXA BAR PLOT (original logic, untouched)
+// ═══════════════════════════════════════════════════════
+async function fetchRank() {
+  const rank = document.getElementById('rankSel').value;
+  document.getElementById('rankBadge').textContent = rank;
+  currentData = MOCK.MOCK_TAXA[rank];
+  populateColorBy();
+  populateSortFields();
+  renderAllMetadataFilterUIs();
+  render();
+}
+
+// ── multi-level "Sort samples by" (QIIME2-style stacked sort rows) ──────────
+function getSortFieldOptions() {
+  // base options available regardless of metadata, plus one entry per metadata column
+  const opts = [
+    { value: 'name',     label: 'Sample name' },
+    { value: 'dominant', label: 'Dominant taxon' }
+  ];
+  const first = currentData?.metadata ? Object.values(currentData.metadata)[0] : null;
+  if (first) {
+    Object.keys(first).forEach(col => opts.push({ value: col, label: col }));
+  }
+  return opts;
+}
+
+function populateSortFields() {
+  // keep any existing rules whose field is still valid; otherwise reset to default
+  const valid = new Set(getSortFieldOptions().map(o => o.value));
+  sortRules = sortRules.filter(r => valid.has(r.field));
+  if (sortRules.length === 0) sortRules = [{ field: 'name', direction: 'asc' }];
+  renderSortRows();
+}
+
+function renderSortRows() {
+  const container = document.getElementById('sortRows');
+  const options = getSortFieldOptions();
+  const available = getAvailableMetaFields();
+
+  container.innerHTML = sortRules.map((rule, i) => {
+    // "Custom order" only makes sense for a real metadata column (name/dominant don't
+    // have a fixed, draggable set of values)
+    const canCustomOrder = rule.field !== 'name' && rule.field !== 'dominant';
+
+    const rowHtml = `
+    <div class="sort-row">
+      <select data-idx="${i}" data-key="field" onchange="updateSortRule(${i}, 'field', this.value)">
+        ${options.map(o => `<option value="${o.value}" ${o.value === rule.field ? 'selected' : ''}>${o.label}</option>`).join('')}
+      </select>
+      <select data-idx="${i}" data-key="direction" onchange="updateSortRule(${i}, 'direction', this.value)">
+        <option value="asc"  ${rule.direction === 'asc'  ? 'selected' : ''}>Ascending</option>
+        <option value="desc" ${rule.direction === 'desc' ? 'selected' : ''}>Descending</option>
+        ${canCustomOrder ? `<option value="custom" ${rule.direction === 'custom' ? 'selected' : ''}>Custom order</option>` : ''}
+      </select>
+      ${sortRules.length > 1 ? `<button type="button" class="sort-row-remove" onclick="removeSortRow(${i})" title="Remove sort level">&times;</button>` : ''}
+    </div>`;
+
+    let customHtml = '';
+    if (rule.direction === 'custom' && Array.isArray(rule.customOrder)) {
+      customHtml = `
+      <div class="custom-order-hint">Drag to set the order</div>
+      <div class="custom-order-list">
+        ${rule.customOrder.map((val, idx) => `
+          <div class="custom-order-item"
+               draggable="true"
+               ondragstart="onCustomOrderDragStart(event, ${i}, ${idx})"
+               ondragover="event.preventDefault()"
+               ondrop="onCustomOrderDrop(event, ${i}, ${idx})">
+            <span class="drag-handle">&#8942;&#8942;</span><span title="${escapeHtmlAttr(val)}">${escapeHtmlAttr(val)}</span>
+          </div>`).join('')}
+      </div>`;
+    }
+
+    return rowHtml + customHtml;
+  }).join('');
+
+  // no cap on sort levels — the only natural ceiling is how many fields exist to sort by
+  const addBtn = document.getElementById('sortAddBtn');
+  addBtn.disabled = sortRules.length >= options.length;
+}
+
+let customOrderDragSource = null;
+
+function onCustomOrderDragStart(e, ruleIdx, itemIdx) {
+  customOrderDragSource = { ruleIdx, itemIdx };
+  // Firefox requires setData to be called for a drag to initiate at all
+  e.dataTransfer.setData('text/plain', '');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onCustomOrderDrop(e, ruleIdx, itemIdx) {
+  e.preventDefault();
+  if (!customOrderDragSource || customOrderDragSource.ruleIdx !== ruleIdx) { customOrderDragSource = null; return; }
+  const arr = sortRules[ruleIdx].customOrder;
+  const [moved] = arr.splice(customOrderDragSource.itemIdx, 1);
+  arr.splice(itemIdx, 0, moved);
+  customOrderDragSource = null;
+  renderSortRows();
+  render();
+}
+
+function updateSortRule(i, key, value) {
+  if (key === 'field') {
+    sortRules[i].field = value;
+    sortRules[i].direction = 'asc'; // a custom order built for the old field wouldn't apply to the new one
+    delete sortRules[i].customOrder;
+  } else if (key === 'direction') {
+    sortRules[i].direction = value;
+    if (value === 'custom' && !Array.isArray(sortRules[i].customOrder)) {
+      const available = getAvailableMetaFields();
+      sortRules[i].customOrder = (available[sortRules[i].field] || []).slice();
+    }
+  }
+  renderSortRows(); // direction/field changes can add or remove the drag-list below this row
+  render();
+}
+
+function addSortRow() {
+  const options = getSortFieldOptions();
+  if (sortRules.length >= options.length) return; // no more distinct fields left to add
+  const used = new Set(sortRules.map(r => r.field));
+  const next = options.find(o => !used.has(o.value)) || options[0];
+  sortRules.push({ field: next.value, direction: 'asc' });
+  renderSortRows();
+  render();
+}
+
+function removeSortRow(i) {
+  if (sortRules.length <= 1) return;
+  sortRules.splice(i, 1);
+  renderSortRows();
+  render();
+}
+
+// generic multi-key comparator: walks sortRules in order, falling through to the
+// next rule only when the current one ties — same pattern as dplyr::arrange(a,b,c)
+// `taxonRank` maps a taxon's rowIdx -> its GLOBAL abundance rank (0 = most abundant
+// overall, same ordering used to assign bar colors). Clusters of same-dominant-taxon
+// samples are ordered by this rank (biggest taxon's cluster first), not by rowIdx —
+// rowIdx is just each taxon's position in the original/alphabetical taxa list and has
+// no relationship to how abundant or visually prominent it is.
+// `dominantPool` is `active` with Other/Unassigned/Unclassified entries already
+// stripped out (see dominantCandidatePool) — passed in pre-filtered so this doesn't
+// re-filter on every one of the O(n log n) comparator calls.
+// For a 'dominant' rule, each sample's own biggest taxon (from dominantPool) is found
+// independently — combined with whatever metadata levels precede it in the sort stack,
+// this naturally clusters samples within their shared metadata group AND by shared
+// dominant taxon, with no separate per-group taxa-pool computation needed.
+function compareSampleRules(a, b, rules, data, dominantPool, taxonRank, numericSortFields) {
+  for (let i = 0; i < rules.length; i++) {
+    const rule = rules[i];
+    let cmp;
+    if (rule.field === 'name') {
+      cmp = String(data.samples[a]).localeCompare(String(data.samples[b]));
+    } else if (rule.field === 'dominant') {
+      const domA = dominantPool.reduce((best, t) => data.matrix[t.rowIdx][a] > data.matrix[best.rowIdx][a] ? t : best, dominantPool[0]);
+      const domB = dominantPool.reduce((best, t) => data.matrix[t.rowIdx][b] > data.matrix[best.rowIdx][b] ? t : best, dominantPool[0]);
+      cmp = domA.rowIdx !== domB.rowIdx
+        ? taxonRank.get(domA.rowIdx) - taxonRank.get(domB.rowIdx)
+        : data.matrix[domA.rowIdx][b] - data.matrix[domA.rowIdx][a];
+    } else {
+      // metadata field — "custom" direction compares by position in the user's
+      // drag-and-drop order instead of alphabetically; anything not in that list
+      // (e.g. a new category that appeared after the order was set) sorts to the end
+      if (rule.direction === 'custom' && Array.isArray(rule.customOrder)) {
+        const valA = String(getMetaVal(data.samples[a], rule.field));
+        const valB = String(getMetaVal(data.samples[b], rule.field));
+        const idxA = rule.customOrder.indexOf(valA);
+        const idxB = rule.customOrder.indexOf(valB);
+        cmp = (idxA === -1 ? rule.customOrder.length : idxA) - (idxB === -1 ? rule.customOrder.length : idxB);
+      } else if (numericSortFields && numericSortFields.has(rule.field)) {
+        // numeric metadata field — compare by VALUE, not string, or "10.3" sorts before
+        // "2.85" because '1' < '2' character-by-character (classic string-vs-numeric bug).
+        // A missing/non-numeric value is treated as +Infinity, same "push to the end of
+        // ascending order" convention already used for unmatched custom-order values above.
+        const numA = parseLocaleNumber(getMetaVal(data.samples[a], rule.field));
+        const numB = parseLocaleNumber(getMetaVal(data.samples[b], rule.field));
+        cmp = (isNaN(numA) ? Infinity : numA) - (isNaN(numB) ? Infinity : numB);
+      } else {
+        cmp = String(getMetaVal(data.samples[a], rule.field)).localeCompare(String(getMetaVal(data.samples[b], rule.field)));
+      }
+    }
+    if (cmp !== 0) return rule.direction === 'desc' ? -cmp : cmp;
+  }
+  return 0;
+}
+
+// ranks every taxon by mean abundance across the given sample subset (descending) —
+// shared by filterActiveTaxa (display filter) and the global taxonRank map (cluster order)
+function rankTaxaByMean(data, sampleIndices) {
+  return data.taxa
+    .map((name, i) => {
+      const vals = sampleIndices.map(si => data.matrix[i][si]);
+      const mean = vals.reduce((s, v) => s + v, 0) / (vals.length || 1);
+      return { name, mean, rowIdx: i };
+    })
+    .sort((a, b) => b.mean - a.mean);
+}
+
+function filterActiveTaxa(data, sampleIndices) {
+  const ranked = rankTaxaByMean(data, sampleIndices);
+
+  if (mode === 'topn') {
+    const N = Math.max(1, parseInt(document.getElementById('topNInput').value) || 10);
+    return ranked.slice(0, N);
+  }
+  const thresh = parseFloat(document.getElementById('abundInput').value) || 1;
+  return ranked.filter(t => sampleIndices.some(si => data.matrix[t.rowIdx][si] >= thresh));
+}
+
+// taxa labeled this way convey nothing biologically ("dominated by Other" isn't a
+// finding) — excluded from the DOMINANCE candidate pool only, never from what's displayed
+function isUninformativeTaxon(name) {
+  return /^(other|unassigned|unclassified|unknown)$/i.test(String(name).trim());
+}
+
+// returns taxaList with uninformative entries removed, falling back to the original
+// list if that would leave nothing to compare (edge case: everything is unclassified)
+function dominantCandidatePool(taxaList) {
+  const filtered = taxaList.filter(t => !isUninformativeTaxon(t.name));
+  return filtered.length ? filtered : taxaList;
+}
+
+function populateColorBy() {
+  if (!currentData?.metadata) return;
+  const first = Object.values(currentData.metadata)[0];
+  if (!first) return;
+  const sel = document.getElementById('colorBySel');
+  const prev = sel.value;
+  sel.innerHTML = '<option value="none">— none —</option>';
+  Object.keys(first).forEach(col => {
+    const o = document.createElement('option');
+    o.value = col; o.textContent = col;
+    if (col === prev) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+
+function getMetaVal(sample, col) {
+  if (!currentData?.metadata?.[sample]) return '';
+  const v = currentData.metadata[sample][col];
+  return Array.isArray(v) ? (v[0] ?? '') : (v ?? '');
+}
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('btnTopN').className  = m === 'topn' ? 'active' : '';
+  document.getElementById('btnAbund').className = m === 'abund' ? 'active' : '';
+  document.getElementById('fieldTopN').style.display   = m === 'topn'  ? '' : 'none';
+  document.getElementById('fieldAbund').style.display  = m === 'abund' ? '' : 'none';
+  render();
+}
+
+function render() {
+  if (!currentData) return;
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('chartWrap').style.display  = '';
+
+  const data    = currentData;
+  const colorBy = document.getElementById('colorBySel').value;
+
+  const allSampleIdx = data.samples
+    .map((_, i) => i)
+    .filter(i => passesMetadataFilters('taxa', field => getMetaVal(data.samples[i], field)));
+
+  if (allSampleIdx.length === 0) {
+    document.getElementById('chartWrap').style.display = 'none';
+    document.getElementById('emptyState').style.display = '';
+    document.getElementById('emptyState').textContent = 'No samples match the current metadata filters.';
+    return;
+  }
+
+  const active = filterActiveTaxa(data, allSampleIdx);
+
+  // rank every taxon by overall abundance (0 = most abundant) so dominant-taxon
+  // clusters sort by prominence, not by their arbitrary position in the original taxa list
+  const taxonRank = new Map(
+    rankTaxaByMean(data, allSampleIdx).map((t, i) => [t.rowIdx, i])
+  );
+
+  const activeIdx = new Set(active.map(t => t.rowIdx));
+  const dominantPool = dominantCandidatePool(active); // Other/Unassigned excluded from sorting, still shown in the bars
+
+  // precompute once which sort-rule fields are numeric — checking this inside the
+  // comparator would call getAvailableMetaFields() (an O(samples × fields) scan) on
+  // every one of the O(n log n) comparisons instead of once per render()
+  const availableFields = getAvailableMetaFields();
+  const numericSortFields = new Set(
+    sortRules.filter(r => isNumericField(availableFields[r.field] || [])).map(r => r.field)
+  );
+
+  let sampleOrder = allSampleIdx.slice();
+  sampleOrder.sort((a, b) => compareSampleRules(a, b, sortRules, data, dominantPool, taxonRank, numericSortFields));
+
+  const sortedSamples = sampleOrder.map(i => data.samples[i]);
+  const otherRow = sampleOrder.map(origIdx =>
+    data.matrix.filter((_, ti) => !activeIdx.has(ti)).reduce((sum, row) => sum + row[origIdx], 0)
+  );
+
+  // display labels: metadata values used in the active sort levels, prefixed onto the
+  // sample id — e.g. "gut; No; L2S155" — same idea as QIIME2's taxa barplot labeling.
+  // 'name' and 'dominant' aren't metadata columns, so they're skipped here (nothing to paste).
+  const sortMetaFields = sortRules
+    .map(r => r.field)
+    .filter(f => f !== 'name' && f !== 'dominant');
+  const displayLabels = sortedSamples.map(s => {
+    const parts = sortMetaFields.map(f => String(getMetaVal(s, f)));
+    parts.push(s);
+    return parts.join('; ');
+  });
+
+  const datasets = active.map((t, i) => ({
+    label: t.name,
+    data: sampleOrder.map(origIdx => parseFloat(data.matrix[t.rowIdx][origIdx].toFixed(2))),
+    backgroundColor: PALETTE[i % PALETTE.length],
+    borderWidth: 0, stack: 'stack'
+  }));
+
+  const hasOther = otherRow.some(v => v > 0.01);
+  if (hasOther) {
+    datasets.push({ label: 'Other', data: otherRow.map(v => parseFloat(v.toFixed(2))), backgroundColor: OTHER_COLOR, borderWidth: 0, stack: 'stack' });
+  }
+
+  const uniqueVals = colorBy !== 'none'
+    ? [...new Set(data.samples.map(s => String(getMetaVal(s, colorBy))))].sort()
+    : [];
+  const labelColors = sortedSamples.map(s => {
+    if (colorBy === 'none') return '#49494a';
+    const val = String(getMetaVal(s, colorBy));
+    return PALETTE[uniqueVals.indexOf(val) % PALETTE.length];
+  });
+
+  const chartH = Math.max(500, sortedSamples.length * 22 + 80);
+  document.getElementById('chartWrap').style.height = chartH + 'px';
+
+  if (chartInst) chartInst.destroy();
+  chartInst = new Chart(document.getElementById('chart'), {
+    type: 'bar',
+    data: { labels: displayLabels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      scales: {
+        x: {
+          stacked: true, min: 0,
+          ticks: { callback: v => v + '%', font: { size: 10, family: "'DM Mono', monospace" }, color: '#828282', maxTicksLimit: 6 },
+          grid: { color: 'rgba(0,0,0,0.07)' }, border: { display: false }
+        },
+        y: {
+          stacked: true,
+          ticks: { font: { size: 10 }, color: ctx => labelColors[ctx.index] || '#49494a' },
+          grid: { display: false }, border: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1f2435', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1,
+          titleColor: '#e8eaf0', bodyColor: '#8a8fa8',
+          callbacks: {
+            title: ctx => {
+              const idx = ctx[0].dataIndex;
+              const s = sortedSamples[idx];   // raw sample id, independent of label text
+              if (colorBy === 'none') return s;
+              return s + '  ·  ' + colorBy + ': ' + getMetaVal(s, colorBy);
+            },
+            label: ctx => '  ' + ctx.dataset.label + ': ' + ctx.parsed.x.toFixed(1) + '%'
+          }
+        }
+      }
+    }
+  });
+
+  document.getElementById('legendArea').innerHTML = datasets.map(d =>
+    `<span class="legend-item"><span class="legend-swatch" style="background:${d.backgroundColor}"></span>${d.label}</span>`
+  ).join('');
+
+  const excluded = data.taxa.length - active.length;
+  const meanOther = hasOther ? (otherRow.reduce((a, v) => a + v, 0) / otherRow.length).toFixed(1) : '0';
+  document.getElementById('infoText').textContent = `${active.length} taxa · ${excluded} collapsed into Other (mean ${meanOther}%)`;
+  document.getElementById('sampleCount').textContent = `${sortedSamples.length} samples`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  TAB 2 — ALPHA DIVERSITY BOXPLOT
+// ═══════════════════════════════════════════════════════
+async function fetchAlpha() {
+  const rank    = document.getElementById('alphaRank').value;
+  const metrics = document.getElementById('alphaMetric').value;
+  if (activeTab === 'alpha') document.getElementById('rankBadge').textContent = rank;
+  alphaData = MOCK.MOCK_ALPHA.filter(r => r.rank === rank && r.metrics === metrics);
+  populateAlphaDropdowns();
+  renderAllMetadataFilterUIs();
+  renderAlpha();
+}
+
+function populateAlphaDropdowns() {
+  if (!alphaData || !alphaData.length) return;
+
+  // derive metadata columns — everything except metric and value
+  const exclude = new Set(['metrics', 'value', 'rank']);
+  const metaCols = Object.keys(alphaData[0]).filter(k => !exclude.has(k));
+
+  const groupSel = document.getElementById('alphaGroupVar');
+  const colorSel = document.getElementById('alphaColorBy');
+  const subjSel  = document.getElementById('alphaSubjectVar');
+  const prevGroup = groupSel.value;
+  const prevColor = colorSel.value;
+  const prevSubj  = subjSel.value;
+
+  groupSel.innerHTML = '<option value="">— select column —</option>';
+  colorSel.innerHTML = '<option value="">— same as group —</option>';
+  subjSel.innerHTML  = '<option value="">— select column —</option>';
+
+  metaCols.forEach(col => {
+    const og = document.createElement('option');
+    og.value = col; og.textContent = col;
+    if (col === prevGroup) og.selected = true;
+    groupSel.appendChild(og);
+
+    const oc = document.createElement('option');
+    oc.value = col; oc.textContent = col;
+    if (col === prevColor) oc.selected = true;
+    colorSel.appendChild(oc);
+
+    const os = document.createElement('option');
+    os.value = col; os.textContent = col;
+    if (col === prevSubj) os.selected = true;
+    subjSel.appendChild(os);
+  });
+
+  // auto-select first available group
+  if (!prevGroup && metaCols.length) groupSel.value = metaCols[0];
+
+  document.getElementById('runStatsBtn').disabled = false;
+  document.getElementById('alphaEmptyState').style.display = 'none';
+  document.getElementById('alphaPlotWrap').style.display   = '';
+}
+
+// reconcile the persisted drag-order against the current category universe:
+// keep existing relative order for categories still present, append any new
+// ones at the end, and start fresh if the groupVar column itself changed.
+function syncAlphaGroupOrder(groupVar, groups) {
+  if (alphaGroupOrderVar !== groupVar || !alphaGroupOrder) {
+    alphaGroupOrder    = [...groups];
+    alphaGroupOrderVar = groupVar;
+    return alphaGroupOrder;
+  }
+  const kept  = alphaGroupOrder.filter(g => groups.includes(g));
+  const added = groups.filter(g => !kept.includes(g));
+  alphaGroupOrder = [...kept, ...added];
+  return alphaGroupOrder;
+}
+
+function renderAlphaGroupOrderList(order) {
+  const hint = document.getElementById('alphaGroupOrderHint');
+  const list = document.getElementById('alphaGroupOrderList');
+  if (!order || order.length < 2) {
+    hint.style.display = 'none';
+    list.innerHTML = '';
+    return;
+  }
+  hint.style.display = '';
+  list.innerHTML = order.map((val, idx) => `
+    <div class="custom-order-item"
+         draggable="true"
+         ondragstart="onAlphaGroupOrderDragStart(event, ${idx})"
+         ondragover="event.preventDefault()"
+         ondrop="onAlphaGroupOrderDrop(event, ${idx})">
+      <span class="drag-handle">&#8942;&#8942;</span><span title="${escapeHtmlAttr(val)}">${escapeHtmlAttr(val)}</span>
+    </div>`).join('');
+}
+
+let alphaOrderDragSource = null;
+
+function onAlphaGroupOrderDragStart(e, idx) {
+  alphaOrderDragSource = idx;
+  // Firefox requires setData to be called for a drag to initiate at all
+  e.dataTransfer.setData('text/plain', '');
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function onAlphaGroupOrderDrop(e, idx) {
+  e.preventDefault();
+  if (alphaOrderDragSource === null || !alphaGroupOrder) { alphaOrderDragSource = null; return; }
+  const [moved] = alphaGroupOrder.splice(alphaOrderDragSource, 1);
+  alphaGroupOrder.splice(idx, 0, moved);
+  alphaOrderDragSource = null;
+  renderAlpha(); // redraws the list, the boxes, and (if still valid) the brackets
+}
+
+function renderAlpha() {
+  if (!alphaData || !alphaData.length) return;
+
+  const metric   = document.getElementById('alphaMetric').value;
+  const groupVar = document.getElementById('alphaGroupVar').value;
+  const colorVar = document.getElementById('alphaColorBy').value || groupVar;
+
+  if (!groupVar) return;
+
+  // update topbar badge when on alpha tab
+  if (activeTab === 'alpha') {
+    document.getElementById('rankBadge').textContent = metric;
+    document.getElementById('infoText').textContent  = `Grouped by ${groupVar}`;
+  }
+
+  // FIX: no client-side metric filter needed anymore — alphaData already
+  // contains only rows for the single rank+metrics combo requested in fetchAlpha()
+  const rows = alphaData.filter(r => passesMetadataFilters('alpha', field => r[field]));
+
+  if (rows.length === 0) {
+    document.getElementById('alphaPlotWrap').style.display = 'none';
+    document.getElementById('alphaEmptyState').style.display = '';
+    document.getElementById('alphaEmptyState').textContent = 'No samples match the current metadata filters.';
+    return;
+  }
+
+  // FIX: the branch above hides the plot and shows the empty-state message —
+  // previously nothing reversed that once a filter was loosened again, since
+  // populateAlphaDropdowns() (the only place that used to reset this) only
+  // runs once per fetchAlpha() call, not on every renderAlpha(). Without this,
+  // Plotly.react() below still succeeds and updates the chart correctly, but
+  // the div stays display:none and the "No samples match" message never
+  // clears — the user is stuck looking at it even after fixing the filter.
+  document.getElementById('alphaEmptyState').style.display = 'none';
+  document.getElementById('alphaPlotWrap').style.display   = '';
+
+  // x-axis groups: persist the user's drag-order across the full category
+  // universe for this groupVar, then narrow to whichever are present after
+  // metadata filtering — so a temporary filter hiding a group doesn't lose
+  // its place in the order once the filter is cleared.
+  const fullGroups  = [...new Set(alphaData.map(r => r[groupVar]))].sort();
+  const orderedFull = syncAlphaGroupOrder(groupVar, fullGroups);
+  const groups      = orderedFull.filter(g => rows.some(r => r[groupVar] === g));
+  const colorGroups = [...new Set(rows.map(r => r[colorVar]))].sort();
+
+  renderAlphaGroupOrderList(orderedFull);
+
+  const traces = groups.map((grp, i) => {
+    const subset = rows.filter(r => r[groupVar] === grp);
+    const colorGrp = colorVar !== groupVar ? subset[0]?.[colorVar] ?? grp : grp;
+    const colorIdx = colorGroups.indexOf(colorGrp);
+
+    return {
+      type:   'box',
+      name:   grp,
+      y:      subset.map(r => r.value),
+      marker: { color: PALETTE[i % PALETTE.length] },
+      line:   { color: PALETTE[i % PALETTE.length] },
+      fillcolor: PALETTE[i % PALETTE.length] + '33',
+      boxpoints: 'all',
+      jitter:    0.3,
+      pointpos:  0,
+      marker: {
+        color:   PALETTE[i % PALETTE.length],
+        size:    5,
+        opacity: 0.6
+      },
+    };
+  });
+
+  const layout = {
+    paper_bgcolor: '#ffffff',
+    plot_bgcolor:  '#ffffff',
+    font:  { family: "'Rubik', sans-serif", color: '#49494a', size: 12 },
+    margin: { t: 30, r: 20, b: 60, l: 60 },
+    yaxis: {
+      title:     { text: metric, font: { size: 12 } },
+      gridcolor: 'rgba(0,0,0,0.07)',
+      zerolinecolor: 'rgba(0,0,0,0.15)',
+      color: '#828282'
+    },
+    xaxis: {
+      title:     { text: groupVar, font: { size: 12 } },
+      color:     '#828282',
+      gridcolor: 'rgba(0,0,0,0.05)',
+      categoryorder: 'array',
+      categoryarray: groups
+    },
+    showlegend: false,
+    hoverlabel: {
+      bgcolor:    '#1f2435',
+      bordercolor:'rgba(255,255,255,0.1)',
+      font: { family: "'DM Mono', monospace", size: 11 }
+    }
+  };
+
+  const config = {
+    responsive: true,
+    displayModeBar: true,
+    modeBarButtonsToRemove: ['lasso2d', 'select2d', 'toImage'],
+    displaylogo: false,
+    modeBarButtonsToAdd: [{
+      name: 'Download plot with brackets',
+      icon: Plotly.Icons.camera,
+      click: downloadAlphaPlot
+    }]
+  };
+
+  Plotly.react('alphaPlot', traces, layout, config).then(() => {
+    // Stats results stay valid across color-by changes and resizes, but NOT
+    // across a filter change or a groupVar switch — either can change which
+    // samples actually feed the test, so cached p-values would otherwise be
+    // silently wrong (most visibly for paired tests, where removing one
+    // sample breaks the length match), not just repositioned.
+    if (isAlphaStatsCacheValid()) {
+      renderStatsAnnotations(lastStatsResults);
+    } else {
+      lastStatsResults      = null;
+      lastStatsGroupVar     = null;
+      lastStatsFilterVersion = null;
+      const existingOverlay = document.getElementById('bracketOverlay');
+      if (existingOverlay) existingOverlay.remove();
+    }
+    ensureAlphaBracketRedrawOnResize();
+  });
+}
+
+function downloadAlphaPlot() {
+  const format = document.getElementById('alphaExportFormat')?.value || 'svg';
+
+  // Plotly.toImage only knows how to rasterize its own traces, not our
+  // separately-drawn bracket overlay — so regardless of the requested
+  // format, we always start from the same merged SVG (plot + brackets),
+  // then rasterize that if PNG/JPG was asked for.
+  Plotly.toImage('alphaPlot', { format: 'svg' }).then(dataUrl => {
+    // SVG data URLs are URI-encoded, not base64
+    const plotSvgStr = decodeURIComponent(dataUrl.split(',')[1]);
+
+    const parser  = new DOMParser();
+    const plotDoc = parser.parseFromString(plotSvgStr, 'image/svg+xml');
+    const plotSvg = plotDoc.querySelector('svg');
+
+    const overlay = document.getElementById('bracketOverlay');
+    if (overlay) {
+      const extraTop = 40; // matches the offset applied when the overlay was drawn
+      const g = plotDoc.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('transform', `translate(0, -${extraTop})`);
+      Array.from(overlay.children).forEach(el => g.appendChild(el.cloneNode(true)));
+      plotSvg.appendChild(g);
+    }
+
+    const merged = new XMLSerializer().serializeToString(plotSvg);
+
+    if (format === 'svg') {
+      triggerDownload(new Blob([merged], { type: 'image/svg+xml' }), 'alpha_diversity.svg');
+    } else {
+      rasterizeMergedSvg(merged, plotSvg, format);
+    }
+  });
+}
+
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function rasterizeMergedSvg(svgString, plotSvg, format) {
+  // read the SVG's own declared size so the export matches the on-screen plot
+  const width  = parseFloat(plotSvg.getAttribute('width'))  || plotSvg.viewBox?.baseVal?.width  || 900;
+  const height = parseFloat(plotSvg.getAttribute('height')) || plotSvg.viewBox?.baseVal?.height || 560;
+  const scale  = 2; // export at 2x pixel density — the SVG source is vector, so
+                     // this is free resolution rather than upscaled blur, useful
+                     // for figures headed into a manuscript or a slide deck
+
+  const svgUrl = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
+  const img = new Image();
+
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width  = width  * scale;
+    canvas.height = height * scale;
+    const ctx = canvas.getContext('2d');
+
+    if (format === 'jpeg') {
+      // JPEG has no alpha channel — without an explicit fill, transparent
+      // regions render as black. Fill with the app's own (light) background
+      // so the exported figure still reads correctly.
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(svgUrl);
+
+    canvas.toBlob(blob => {
+      triggerDownload(blob, format === 'jpeg' ? 'alpha_diversity.jpg' : 'alpha_diversity.png');
+    }, format === 'jpeg' ? 'image/jpeg' : 'image/png', format === 'jpeg' ? 0.95 : undefined);
+  };
+
+  img.onerror = () => {
+    console.error('Could not rasterize alpha diversity plot for', format, 'export');
+    URL.revokeObjectURL(svgUrl);
+  };
+
+  img.src = svgUrl;
+}
+
+// ═══════════════════════════════════════════════════════
+//  TAB 3 — PCoA
+// ═══════════════════════════════════════════════════════
+async function fetchPcoa() {
+  const rank     = document.getElementById('pcoaRank').value;
+  const distance = document.getElementById('pcoaDistance').value;
+  if (activeTab === 'pcoa') document.getElementById('rankBadge').textContent = rank;
+  pcoaData = MOCK.mockPcoa(rank, distance);
+  populatePcoaDropdowns();
+  renderAllMetadataFilterUIs();
+  renderPcoa();
+}
+
+function populatePcoaDropdowns() {
+  if (!pcoaData?.meta_columns) return;
+
+  const groupSel = document.getElementById('pcoaGroupVar');
+  const shapeSel = document.getElementById('pcoaShapeVar');
+  const prevGroup = groupSel.value;
+  const prevShape = shapeSel.value;
+
+  const noneGroup = '<option value="">— none —</option>';
+  const noneShape = '<option value="">— none —</option>';
+  groupSel.innerHTML = noneGroup;
+  shapeSel.innerHTML = noneShape;
+
+  pcoaData.meta_columns.forEach(col => {
+    const og = document.createElement('option');
+    og.value = col; og.textContent = col;
+    if (col === prevGroup) og.selected = true;
+    groupSel.appendChild(og);
+
+    const os = document.createElement('option');
+    os.value = col; os.textContent = col;
+    if (col === prevShape) os.selected = true;
+    shapeSel.appendChild(os);
+  });
+
+  // auto-select first column for color, leave shape as none
+  if (!prevGroup && pcoaData.meta_columns.length) groupSel.value = pcoaData.meta_columns[0];
+}
+
+function setEllipse(val) {
+  showEllipse = val;
+  document.getElementById('ellipseOn').classList.toggle('active',  val);
+  document.getElementById('ellipseOff').classList.toggle('active', !val);
+  renderPcoa();
+}
+
+// Compute 95% confidence ellipse points from group coordinates
+// Equivalent to ggplot2's stat_ellipse(type="norm", level=0.95)
+function computeEllipse(xs, ys, level = 0.95) {
+  if (xs.length < 3) return null;
+
+  const n  = xs.length;
+  const mx = xs.reduce((a, v) => a + v, 0) / n;
+  const my = ys.reduce((a, v) => a + v, 0) / n;
+
+  // covariance matrix
+  let cxx = 0, cyy = 0, cxy = 0;
+  for (let i = 0; i < n; i++) {
+    cxx += (xs[i] - mx) ** 2;
+    cyy += (ys[i] - my) ** 2;
+    cxy += (xs[i] - mx) * (ys[i] - my);
+  }
+  cxx /= (n - 1); cyy /= (n - 1); cxy /= (n - 1);
+
+  // eigenvalues and eigenvectors of 2x2 covariance matrix
+  const trace  = cxx + cyy;
+  const det    = cxx * cyy - cxy * cxy;
+  const disc   = Math.sqrt(Math.max(0, (trace / 2) ** 2 - det));
+  const lam1   = trace / 2 + disc;
+  const lam2   = trace / 2 - disc;
+
+  // chi-squared scaling for 95% CI with 2 degrees of freedom
+  const scale  = Math.sqrt(5.991 * (n - 1) / n);  // chi2(2, 0.95) = 5.991
+
+  const angle  = Math.atan2(lam1 - cxx, cxy);
+  const a      = scale * Math.sqrt(Math.abs(lam1));
+  const b      = scale * Math.sqrt(Math.abs(lam2));
+
+  // parametric ellipse points
+  const pts = 60;
+  const ex  = [], ey = [];
+  for (let i = 0; i <= pts; i++) {
+    const t  = (2 * Math.PI * i) / pts;
+    const px = a * Math.cos(t);
+    const py = b * Math.sin(t);
+    ex.push(mx + px * Math.cos(angle) - py * Math.sin(angle));
+    ey.push(my + px * Math.sin(angle) + py * Math.cos(angle));
+  }
+  return { x: ex, y: ey };
+}
+
+function renderPcoa() {
+  if (!pcoaData?.coordinates?.length) return;
+
+  const groupVar = document.getElementById('pcoaGroupVar').value;
+  const shapeVar = document.getElementById('pcoaShapeVar').value;
+  const coords   = pcoaData.coordinates.filter(r => passesMetadataFilters('pcoa', field => r[field]));
+
+  if (coords.length === 0) {
+    document.getElementById('pcoaPlotWrap').style.display = 'none';
+    document.getElementById('pcoaEmptyState').style.display = '';
+    document.getElementById('pcoaEmptyState').textContent = 'No samples match the current metadata filters.';
+    return;
+  }
+
+  // fix key case — API returns pc1/pc2 or PC1/PC2 depending on R version
+  const getPC1 = r => r.pc1 ?? r.PC1 ?? 0;
+  const getPC2 = r => r.pc2 ?? r.PC2 ?? 0;
+  const varPc1 = pcoaData.variance_explained.PC1;
+  const varPc2 = pcoaData.variance_explained.PC2;
+
+  document.getElementById('pcoaEmptyState').style.display = 'none';
+  document.getElementById('pcoaPlotWrap').style.display   = '';
+
+  if (activeTab === 'pcoa') {
+    document.getElementById('rankBadge').textContent = document.getElementById('pcoaDistance').value;
+    // n_samples reflects the FILTERED count, not the server's original total, whenever filters are active
+    document.getElementById('infoText').textContent  = `${coords.length} samples · ${pcoaData.distance}`;
+  }
+
+  // Plotly symbol names for shape variable — mirrors ggplot2 shape scale
+  const SYMBOLS = ['circle','square','diamond','triangle-up','triangle-down',
+                   'cross','x','star','hexagon','pentagon'];
+
+  const colorGroups = groupVar
+    ? [...new Set(coords.map(r => r[groupVar]))].sort()
+    : ['all'];
+
+  const shapeGroups = shapeVar
+    ? [...new Set(coords.map(r => r[shapeVar]))].sort()
+    : ['all'];
+
+  const traces = [];
+
+  // build one trace per color×shape combination for correct Plotly legend entries
+  colorGroups.forEach((cGrp, ci) => {
+    shapeGroups.forEach((sGrp, si) => {
+      const subset = coords.filter(r =>
+        (!groupVar || r[groupVar] === cGrp) &&
+        (!shapeVar || r[shapeVar] === sGrp)
+      );
+      if (!subset.length) return;
+
+      const color  = groupVar ? PALETTE[ci % PALETTE.length] : PALETTE[0];
+      const symbol = SYMBOLS[si % SYMBOLS.length];
+
+      // legend name: show both dimensions if both active
+      const legendName = groupVar && shapeVar
+        ? `${cGrp} / ${sGrp}`
+        : groupVar ? cGrp
+        : shapeVar ? sGrp
+        : 'Samples';
+
+      traces.push({
+        type: 'scatter', mode: 'markers',
+        name: legendName,
+        x: subset.map(getPC1),
+        y: subset.map(getPC2),
+        text: subset.map(r => r.sample),
+        hovertemplate: '<b>%{text}</b><br>PC1: %{x:.4f}<br>PC2: %{y:.4f}<extra>' + legendName + '</extra>',
+        marker: {
+          color,
+          symbol,
+          size: 9,
+          opacity: 0.88,
+          line: { color: 'rgba(0,0,0,0.15)', width: 0.8 }
+        }
+      });
+    });
+  });
+
+  // ellipses — only drawn per color group
+  if (showEllipse && groupVar) {
+    colorGroups.forEach((cGrp, ci) => {
+      const subset = coords.filter(r => r[groupVar] === cGrp);
+      const ellipse = computeEllipse(subset.map(getPC1), subset.map(getPC2));
+      if (ellipse) {
+        traces.push({
+          type: 'scatter', mode: 'lines',
+          name: cGrp + ' ellipse',
+          x: ellipse.x, y: ellipse.y,
+          showlegend: false,
+          hoverinfo: 'skip',
+          line: { color: PALETTE[ci % PALETTE.length], width: 1.5, dash: 'dot' },
+          fill: 'toself',
+          fillcolor: PALETTE[ci % PALETTE.length] + '18'
+        });
+      }
+    });
+  }
+
+  // ── HTML legend — split into color section and shape section ──────────────
+  const legendEl = document.getElementById('pcoaLegend');
+  let legendHTML = '';
+
+  if (groupVar) {
+    legendHTML += `<div class="pcoa-legend-section">
+      <div class="pcoa-legend-title">Color — ${groupVar}</div>
+      ${colorGroups.map((grp, i) =>
+        `<span class="pcoa-legend-item">
+          <span class="pcoa-legend-dot" style="background:${PALETTE[i % PALETTE.length]}"></span>
+          ${grp}
+        </span>`
+      ).join('')}
+    </div>`;
+  }
+
+  if (shapeVar) {
+    // SVG shape icons matching Plotly symbols
+    const shapeSVG = {
+      'circle':        `<circle cx="6" cy="6" r="4" fill="#666"/>`,
+      'square':        `<rect x="2" y="2" width="8" height="8" fill="#666"/>`,
+      'diamond':       `<polygon points="6,1 11,6 6,11 1,6" fill="#666"/>`,
+      'triangle-up':   `<polygon points="6,1 11,11 1,11" fill="#666"/>`,
+      'triangle-down': `<polygon points="1,1 11,1 6,11" fill="#666"/>`,
+      'cross':         `<path d="M5,1v4H1v2h4v4h2V7h4V5H7V1z" fill="#666"/>`,
+      'x':             `<path d="M2,2l8,8M10,2l-8,8" stroke="#666" stroke-width="2"/>`,
+      'star':          `<polygon points="6,1 7.5,4.5 11,4.5 8.5,7 9.5,11 6,8.5 2.5,11 3.5,7 1,4.5 4.5,4.5" fill="#666"/>`,
+    };
+
+    legendHTML += `<div class="pcoa-legend-section" style="margin-top:8px;">
+      <div class="pcoa-legend-title">Shape — ${shapeVar}</div>
+      ${shapeGroups.map((grp, i) => {
+        const sym = SYMBOLS[i % SYMBOLS.length];
+        const icon = shapeSVG[sym] ?? shapeSVG['circle'];
+        return `<span class="pcoa-legend-item">
+          <span class="pcoa-legend-shape">
+            <svg width="12" height="12" viewBox="0 0 12 12">${icon}</svg>
+          </span>
+          ${grp}
+        </span>`;
+      }).join('')}
+    </div>`;
+  }
+
+  legendEl.innerHTML = legendHTML;
+
+  // ── Plotly layout — white canvas ──────────────────────────────────────────
+  const layout = {
+    paper_bgcolor: '#ffffff',
+    plot_bgcolor:  '#ffffff',
+    font: { family: "'DM Sans', sans-serif", color: '#1a1d2e', size: 12 },
+    margin: { t: 40, r: 40, b: 70, l: 70 },
+    xaxis: {
+      title:     { text: `PC1 (${varPc1}%)`, font: { size: 12 } },
+      gridcolor: 'rgba(0,0,0,0.07)',
+      zerolinecolor: 'rgba(0,0,0,0.2)',
+      linecolor: 'rgba(0,0,0,0.15)',
+      color: '#444'
+    },
+    yaxis: {
+      title:     { text: `PC2 (${varPc2}%)`, font: { size: 12 } },
+      gridcolor: 'rgba(0,0,0,0.07)',
+      zerolinecolor: 'rgba(0,0,0,0.2)',
+      linecolor: 'rgba(0,0,0,0.15)',
+      color: '#444',
+      scaleanchor: 'x', scaleratio: 1
+    },
+    legend: {
+      bgcolor:     'rgba(255,255,255,0.9)',
+      bordercolor: 'rgba(0,0,0,0.1)',
+      borderwidth: 1,
+      font: { size: 11, color: '#1a1d2e' }
+    },
+    hoverlabel: {
+      bgcolor:     '#1f2435',
+      bordercolor: 'rgba(255,255,255,0.1)',
+      font: { family: "'DM Mono', monospace", size: 11, color: '#e8eaf0' }
+    }
+  };
+
+  const config = {
+    responsive: true,
+    displayModeBar: true,
+    modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+    displaylogo: false,
+    toImageButtonOptions: { format: 'svg', filename: 'pcoa_' + pcoaData.distance }
+  };
+
+  Plotly.react('pcoaPlot', traces, layout, config);
+}
+
+
+// FRONTEND ONLY for now: toggles which Wilcoxon variant gets requested. The
+// backend's /alphaboxplot/stats always calls wilcox.test(g1, g2) with no
+// `paired` argument — this just changes what runStats() sends; it has no
+// effect until api.R reads body$paired and passes it through. Note paired
+// mode isn't just a flag either: wilcox.test(paired=TRUE) requires g1/g2 to
+// be the same length with samples aligned in matching order (e.g. the same
+// subject's before/after values) — the backend would need a way to know
+// which samples correspond to which, not just that pairing was requested.
+// Now backed server-side: api.R's /alphaboxplot/stats aligns g1/g2 by
+// subject_var before running a paired test, dropping any subject missing
+// from either group. Since a paired test without alignment silently produces
+// a different, arbitrary pairing on every run (confirmed against RStudio
+// disagreeing run-to-run), subject_var is mandatory whenever Paired is
+// selected — there's no meaningful fallback to offer instead.
+function setAlphaWilcoxType(type) {
+  alphaWilcoxPaired = (type === 'paired');
+  document.getElementById('btnWilcoxIndep').classList.toggle('active', !alphaWilcoxPaired);
+  document.getElementById('btnWilcoxPaired').classList.toggle('active', alphaWilcoxPaired);
+
+  const section = document.getElementById('alphaSubjectIdSection');
+  section.style.display = alphaWilcoxPaired ? '' : 'none';
+
+  if (!alphaWilcoxPaired) {
+    // independent test doesn't use subject correspondence — reset so a stale
+    // column choice doesn't silently carry over next time Paired is picked
+    alphaSubjectVar = '';
+    document.getElementById('alphaSubjectVar').value = '';
+  }
+}
+
+function changeAlphaSubjectVar(value) {
+  alphaSubjectVar = value;
+}
+
+async function runStats() {
+  const rank     = document.getElementById('alphaRank').value;
+  const metric   = document.getElementById('alphaMetric').value;
+  const groupVar = document.getElementById('alphaGroupVar').value;
+  if (!groupVar) return;
+
+  // apply the SAME client-side metadata filters renderAlpha() uses, so "filter
+  // then run the test" actually changes what gets tested rather than just what's
+  // drawn — a numeric filter (e.g. age between 20–40) can shrink a group without
+  // removing it outright, which a group-level exclude list wouldn't catch.
+  const filteredRows = alphaData.filter(r => passesMetadataFilters('alpha', field => r[field]));
+  const sampleIds    = filteredRows.map(r => r.sample_id);
+  const remainingGroups = new Set(filteredRows.map(r => r[groupVar]));
+
+  if (remainingGroups.size < 2) {
+    lastStatsResults  = null;
+    lastStatsGroupVar = null;
+    lastStatsFilterVersion = null;
+    const existingOverlay = document.getElementById('bracketOverlay');
+    if (existingOverlay) existingOverlay.remove();
+    alert('Fewer than 2 groups remain after filtering — nothing left to compare. Loosen a filter and try again.');
+    return;
+  }
+
+  if (alphaWilcoxPaired && !alphaSubjectVar) {
+    alert('Pick a subject/patient ID column — required for a paired test.');
+    return;
+  }
+
+  document.getElementById('statsLoading').style.display   = 'flex';
+
+  try {
+    // NOTE (demo): the real backend runs R's wilcox.test() (rank-sum / signed-rank,
+    // BH-adjusted). This build has no server, so mockAlphaStats() in mock-data.js
+    // approximates the same tests client-side via a normal approximation to the
+    // rank-sum/signed-rank statistic. P-values here are illustrative, not exact —
+    // good enough to demo the bracket/annotation UI, not for real analysis.
+    const results = MOCK.mockAlphaStats({
+      rows: filteredRows,
+      groupVar,
+      paired: alphaWilcoxPaired,
+      subjectVar: alphaSubjectVar,
+    });
+
+    const unboxVal = v => Array.isArray(v) ? v[0] : v;
+    const skippedMessages = results
+      .filter(row => row && unboxVal(row.error))
+      .map(row => `${unboxVal(row.group1)} vs ${unboxVal(row.group2)}: ${unboxVal(row.error)}`);
+
+    if (skippedMessages.length > 0) {
+      alert('Some comparisons were skipped:\n\n' + skippedMessages.join('\n'));
+    }
+
+    renderStatsTable(results);
+  } catch(e) {
+    console.error('Stats failed:', e);
+  } finally {
+    document.getElementById('statsLoading').style.display = 'none';
+  }
+}
+
+function resetAlphaStats() {
+  lastStatsResults  = null;
+  lastStatsGroupVar = null;
+  lastStatsFilterVersion = null;
+
+  const existingOverlay = document.getElementById('bracketOverlay');
+  if (existingOverlay) existingOverlay.remove();
+
+  // Re-render through the same function that draws the plot everywhere else,
+  // rather than patching the y-axis range and overlay by hand — renderAlpha()
+  // builds its layout with no explicit yaxis.range, so Plotly.react() here
+  // autoranges fresh from the trace data and can't leave stale headroom or a
+  // stale overlay behind, regardless of what state a manual relayout left.
+  renderAlpha();
+}
+
+// Was renderStatsTable — the table markup is gone (see request to remove it
+// and enlarge the plot instead), so this now just caches the result set and
+// draws the brackets. isNoValue/skipped-comparison handling still matters
+// here even without a table: it's what stops renderStatsAnnotations from
+// drawing a bracket for a comparison the backend couldn't compute.
+function renderStatsTable(results) {
+  // cache so redraws (resize, filter change, color-by change) don't need a refetch
+  lastStatsResults  = results;
+  lastStatsGroupVar = document.getElementById('alphaGroupVar').value;
+  lastStatsFilterVersion = alphaFilterVersion;
+
+  // draw brackets using BH-adjusted p-value
+  renderStatsAnnotations(results);
+}
+
+let alphaBracketRedrawBound = false;
+function ensureAlphaBracketRedrawOnResize() {
+  if (alphaBracketRedrawBound) return;
+  const plotDiv = document.getElementById('alphaPlot');
+  if (!plotDiv || typeof plotDiv.on !== 'function') return;
+
+  const redraw = () => {
+    if (isAlphaStatsCacheValid()) {
+      renderStatsAnnotations(lastStatsResults);
+    }
+  };
+  // 'plotly_relayout' covers the responsive:true auto-resize path and manual
+  // zoom/pan; brackets are pixel-baked SVG, so either one leaves them stale
+  // over the boxes unless we recompute here.
+  plotDiv.on('plotly_relayout', redraw);
+  alphaBracketRedrawBound = true;
+}
+
+// R's NA_real_ serializes to JSON null — treat null/undefined/NaN uniformly as
+// "no usable p-value" (a comparison the backend skipped for insufficient data),
+// since `null < 0.05` is true in JS (null coerces to 0) and would otherwise
+// silently render a skipped comparison as if it were highly significant.
+function isNoValue(v) {
+  return v === null || v === undefined || Number.isNaN(v);
+}
+
+function pToStars(p) {
+  if (isNoValue(p)) return 'n/a';
+  if (p > 0.05)   return 'ns';
+  if (p <= 0.0001) return '****';
+  if (p <= 0.001)  return '***';
+  if (p <= 0.01)   return '**';
+  return '*';
+}
+
+function formatPAdj(p) {
+  if (isNoValue(p)) return 'n/a';
+  return (p < 0.001 ? p.toExponential(2) : p.toFixed(4)) + ' (adj)';
+}
+
+// bumped every time renderStatsAnnotations is invoked, so an earlier call that's
+// still suspended on the `await Plotly.relayout` below can tell it's been
+// superseded once it resumes, and bail out instead of appending a second overlay
+let bracketRenderToken = 0;
+
+async function renderStatsAnnotations(results) {
+  const myToken = ++bracketRenderToken;
+
+  const groupVar = document.getElementById('alphaGroupVar').value;
+  const metric   = document.getElementById('alphaMetric').value;
+
+  // remove any previous SVG overlay first — if there's nothing to draw
+  // (e.g. stats were invalidated by a groupVar change), just leave it cleared
+  const existing = document.getElementById('bracketOverlay');
+  if (existing) existing.remove();
+  if (!results || !groupVar || !alphaData) return;
+
+  // FIX: filter the same way renderAlpha does — brackets need to be positioned
+  // against whatever's actually on the x-axis right now, not the full dataset.
+  const rows = alphaData.filter(r => passesMetadataFilters('alpha', field => r[field]));
+  const rawGroups = [...new Set(rows.map(r => r[groupVar]))].sort();
+  // use the persisted drag-order when it's for this same groupVar, so bracket
+  // x-positions always match what renderAlpha() just drew
+  const groups = (alphaGroupOrderVar === groupVar && alphaGroupOrder)
+    ? alphaGroupOrder.filter(g => rawGroups.includes(g))
+    : rawGroups;
+  // pre-filter to comparisons we can actually draw: both groups still on the
+  // x-axis, and a real (non-skipped) adjusted p-value. Doing this before the
+  // stacking math means skipped comparisons don't leave a blank gap in the
+  // bracket stack, and don't reserve vertical space for nothing.
+  const drawable = results
+    .map(row => ({
+      g1:    Array.isArray(row.group1)      ? row.group1[0]      : row.group1,
+      g2:    Array.isArray(row.group2)      ? row.group2[0]      : row.group2,
+      pv:    Array.isArray(row.p_value)     ? row.p_value[0]     : row.p_value,
+      pvAdj: Array.isArray(row.p_value_adj) ? row.p_value_adj[0] : row.p_value_adj,
+    }))
+    .filter(r => groups.includes(r.g1) && groups.includes(r.g2) && !isNoValue(r.pvAdj));
+
+  const nPairs = drawable.length;
+  if (nPairs === 0) return; // nothing left with a usable p-value to bracket
+
+  const plotDiv = document.getElementById('alphaPlot');
+
+  // ROOT CAUSE of cramped/hard-to-read brackets: bracketStep below divides
+  // whatever headroom Plotly's own autorange happened to leave above the
+  // highest box — a small default padding sized for axis labels, not for a
+  // stack of brackets. Scaling tick/font size alone would just cram bigger
+  // elements into that same thin sliver. Instead, reserve real headroom on
+  // the y-axis explicitly, sized for how many brackets we're about to draw,
+  // at roughly 1.75x the spacing the old implicit padding gave.
+  const dataMax = Math.max(...rows.map(r => r.value));
+  const dataMin = Math.min(...rows.map(r => r.value), 0);
+  const unit = (dataMax - dataMin) * 0.14; // ~1.75x the old implicit per-level gap
+  const desiredYMax = dataMax + unit * (nPairs + 1);
+  const existingRange = plotDiv._fullLayout.yaxis.range;
+
+  if (desiredYMax > existingRange[1]) {
+    await Plotly.relayout(plotDiv, { 'yaxis.range': [Math.min(existingRange[0], dataMin), desiredYMax] });
+  }
+
+  // if the dropdown (or another trigger) fired renderStatsAnnotations again
+  // while we were suspended above, that newer call already removed whatever
+  // overlay existed and will build its own — appending ours too would leave
+  // two <svg id="bracketOverlay"> elements stacked on top of each other,
+  // which is exactly the doubled/overlapping text this guard prevents.
+  if (myToken !== bracketRenderToken) return;
+
+  // read Plotly's internal layout to get plot area pixel bounds — re-fetched
+  // fresh in case the relayout above just changed it
+  const fullLayout = plotDiv._fullLayout;
+  const xaxis      = fullLayout.xaxis;
+  const yaxis       = fullLayout.yaxis;
+
+  // Plotly stores plot area offsets in _fullLayout
+  const plotLeft   = fullLayout.margin.l;
+  const plotTop    = fullLayout.margin.t;
+  const plotWidth  = fullLayout._size.w;
+  const plotHeight = fullLayout._size.h;
+
+  // convert a category index to pixel x (centre of that box)
+  function catToPx(catName) {
+    const idx = groups.indexOf(catName);
+    const step = plotWidth / groups.length;
+    return plotLeft + step * idx + step / 2;
+  }
+
+  // convert a data value to pixel y
+  const [yMin, yMax] = yaxis.range;
+  function valToPx(val) {
+    return extraTop + plotTop + plotHeight * (1 - (val - yMin) / (yMax - yMin));
+  }
+
+  // how many bracket rows we need — stack from top of data upward
+  const bracketStep = (yMax - dataMax) / (nPairs + 1);
+
+  // create SVG overlay positioned exactly over the Plotly div
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.id = 'bracketOverlay';
+  const extraTop = 40;
+  const svgW = fullLayout.margin.l + fullLayout._size.w + fullLayout.margin.r;
+  const svgH = fullLayout.margin.t + fullLayout._size.h + fullLayout.margin.b + extraTop;
+  svg.style.cssText = `
+    position: absolute; top: -${extraTop}px; left: 0; pointer-events: none;
+    width: ${svgW}px; height: ${svgH}px;
+  `;
+
+  // make alphaPlotWrap position:relative so SVG sits on top
+  document.getElementById('alphaPlotWrap').style.position = 'relative';
+  document.getElementById('alphaPlotWrap').appendChild(svg);
+
+  drawable.forEach(({ g1, g2, pv, pvAdj }, idx) => {
+    const x1    = catToPx(g1);
+    const x2    = catToPx(g2);
+    const yVal  = dataMax + bracketStep * (idx + 1);
+    const y     = valToPx(yVal);
+    const tickH = 14; // was 8 — ~1.75x taller, matched to the new headroom so ticks read clearly
+    const labelMode = document.getElementById('alphaBracketLabelMode')?.value || 'pvalue';
+    const pLabel = labelMode === 'stars' ? pToStars(pvAdj) : formatPAdj(pvAdj);
+
+    const line = (x0, y0, x1, y1) => {
+      const el = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      el.setAttribute('x1', x0); el.setAttribute('y1', y0);
+      el.setAttribute('x2', x1); el.setAttribute('y2', y1);
+      el.setAttribute('stroke', '#3a3a3b');
+      el.setAttribute('stroke-width', '1.5');
+      svg.appendChild(el);
+    };
+
+    line(x1, y + tickH, x1, y);   // left tick
+    line(x1, y, x2, y);           // horizontal bar
+    line(x2, y, x2, y + tickH);   // right tick
+
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', (x1 + x2) / 2);
+    txt.setAttribute('y', y - 6); // tightened slightly to match the smaller font below
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('fill', '#3a3a3b');
+    txt.setAttribute('font-size', '12'); // was 14 — sized down further per feedback
+    txt.setAttribute('font-family', "'DM Mono', monospace");
+    txt.textContent = pLabel;
+    svg.appendChild(txt);
+  });
+}
+// ═══════════════════════════════════════════════════════
+//  TAB 4 — UPGMA + TAXA BAR PLOT
+// ═══════════════════════════════════════════════════════
+async function fetchUpgma() {
+  const distance = document.getElementById('upgmaDistance').value;
+  const rank     = document.getElementById('upgmaRank').value;
+
+  document.getElementById('upgmaLoading').style.display = 'flex';
+  upgmaData = null;
+
+  if (activeTab === 'upgma') {
+    document.getElementById('rankBadge').textContent = rank;
+    document.getElementById('infoText').textContent  = 'Loading UPGMA…';
+  }
+
+  try {
+    upgmaData = MOCK.mockUpgma(rank, distance);
+    renderUpgma();
+  } catch(e) {
+    console.warn('UPGMA build failed:', e.message);
+  } finally {
+    document.getElementById('upgmaLoading').style.display = 'none';
+  }
+}
+
+function setUpgmaMode(m) {
+  upgmaMode = m;
+  document.getElementById('upgmaBtnTopN').className  = m === 'topn' ? 'active' : '';
+  document.getElementById('upgmaBtnAbund').className = m === 'abund' ? 'active' : '';
+  document.getElementById('upgmaFieldTopN').style.display   = m === 'topn'  ? '' : 'none';
+  document.getElementById('upgmaFieldAbund').style.display  = m === 'abund' ? '' : 'none';
+  renderUpgma();
+}
+
+function renderUpgma() {
+  if (!upgmaData) return;
+
+  document.getElementById('upgmaEmptyState').style.display = 'none';
+  document.getElementById('upgmaPlotWrap').style.display   = '';
+
+  const d = upgmaData;
+  const n = d.n_samples;
+
+  if (activeTab === 'upgma') {
+    document.getElementById('rankBadge').textContent = d.rank;
+    document.getElementById('infoText').textContent  = `${n} samples · ${d.distance} · UPGMA`;
+  }
+
+  // ── 1. Filter taxa (top-N or abundance threshold) ─────────────────────
+  const ranked = d.taxa
+    .map((name, i) => ({ name, mean: d.taxa_means[i], rowIdx: i }))
+    .sort((a, b) => b.mean - a.mean);
+
+  let active;
+  if (upgmaMode === 'topn') {
+    const N = Math.max(1, parseInt(document.getElementById('upgmaTopNInput').value) || 10);
+    active = ranked.slice(0, N);
+  } else {
+    const thresh = parseFloat(document.getElementById('upgmaAbundInput').value) || 1;
+    active = ranked.filter(t => d.samples.some((_, j) => d.matrix[t.rowIdx][j] >= thresh));
+  }
+
+  const activeIdx = new Set(active.map(t => t.rowIdx));
+
+  // ── 2. sample_index_map: for each position in sample_order,
+  //       which column in d.matrix? (1-based from R → 0-based here)
+  const idxMap = d.sample_index_map.map(i => i - 1);
+
+  // ── 3. Build bar traces — one per taxon, ordered by sample_order ──────
+  // Other = 100% minus sum of active taxa — correct regardless of how many
+  // taxa are in d.matrix, and O(N) instead of O(825 × 18)
+  const otherRow = d.sample_order.map((_, pos) => {
+    const col = idxMap[pos];
+    const activeSum = active.reduce((s, t) => s + d.matrix[t.rowIdx][col], 0);
+    return Math.max(0, parseFloat((100 - activeSum).toFixed(2)));
+  });
+
+  // Other goes FIRST so it renders at the bottom of each stacked bar
+  const hasOther = otherRow.some(v => v > 0.01);
+  const barTraces = [];
+  if (hasOther) {
+    barTraces.push({
+      type: 'bar', orientation: 'h', name: 'Other',
+      x: otherRow.map(v => parseFloat(v.toFixed(2))),
+      y: d.sample_order,
+      marker: { color: '#c8cad4' },   // light gray — less dominant visually
+      hovertemplate: '<b>%{y}</b><br>Other: %{x:.1f}%<extra></extra>',
+      showlegend: true
+    });
+  }
+
+  // Active taxa stacked on top of Other
+  active.forEach((t, i) => {
+    barTraces.push({
+      type: 'bar',
+      orientation: 'h',
+      name: t.name,
+      x: d.sample_order.map((_, pos) => parseFloat(d.matrix[t.rowIdx][idxMap[pos]].toFixed(2))),
+      y: d.sample_order,
+      marker: { color: PALETTE[i % PALETTE.length] },
+      hovertemplate: '<b>%{y}</b><br>' + t.name + ': %{x:.1f}%<extra></extra>',
+      showlegend: true
+    });
+  });
+
+  // ── 4. Build dendrogram segments trace ────────────────────────────────
+  // Segments: x=height (reversed), y=integer position 1..N
+  // R assigns leaf_pos 1..N top-to-bottom, but Plotly numeric axis is
+  // bottom-to-top. Mirror each y value: y_plot = n + 1 - y_r so that
+  // the tree leaf order matches the bar plot categoryarray order.
+  const mirror = y => n + 1 - y;
+  const segX = [], segY = [];
+  d.segments.forEach(s => {
+    segX.push(s.x, s.xend, null);
+    segY.push(mirror(s.y), mirror(s.yend), null);
+  });
+
+  const treeTrace = {
+    type: 'scatter', mode: 'lines',
+    x: segX, y: segY,
+    line: { color: '#2171b5', width: 1.2 },
+    hoverinfo: 'none',
+    showlegend: false,
+    xaxis: 'x',
+    yaxis: 'y'
+  };
+
+  // ── 5. Layout: two x-axes, shared y-axis ──────────────────────────────
+  // Tree panel: x-axis (height, reversed), x domain [0, 0.25]
+  // Bar panel:  x-axis2 (abundance),       x domain [0.30, 1.0]
+  // y-axis: numeric positions 1..N (tree) aligned with categorical (bar)
+  // Bar plot uses yaxis2 (categorical) that mirrors y positions via rev(sample_order)
+
+  const barHeight = Math.max(700, n * 32 + 100);
+
+  const layout = {
+    paper_bgcolor: '#ffffff',
+    plot_bgcolor:  '#ffffff',
+    font: { family: "'DM Sans', sans-serif", color: '#1a1d2e', size: 11 },
+    height: barHeight,
+    margin: { t: 40, r: 160, b: 60, l: 10 },
+    barmode: 'stack',
+
+    // tree x-axis (panel 1)
+    xaxis: {
+      domain: [0, 0.30],
+      autorange: 'reversed',
+      title: { text: 'Height', font: { size: 10 } },
+      showgrid: false,
+      zeroline: false,
+      color: '#555',
+      tickfont: { size: 9 }
+    },
+    // tree y-axis: pure numeric 1..N — NO ticktext, keeps segments working
+    yaxis: {
+      domain: [0, 1],
+      range: [0.5, n + 0.5],
+      showticklabels: false,
+      showgrid: false,
+      zeroline: false,
+      anchor: 'x'
+    },
+
+    // sample name labels — invisible x-axis between tree and bar
+    xaxis3: {
+      domain: [0.30, 0.42],
+      visible: false,
+      range: [0, 1]
+    },
+    yaxis3: {
+      domain: [0, 1],
+      range: [0.5, n + 0.5],
+      tickvals: d.sample_order.map((_, i) => mirror(i + 1)),
+      ticktext: d.sample_order,
+      showticklabels: true,
+      side: 'right',
+      tickfont: { size: 9, color: '#333' },
+      showgrid: false,
+      zeroline: false,
+      anchor: 'x3'
+    },
+
+    // bar x-axis (panel 2)
+    xaxis2: {
+      domain: [0.42, 1.0],
+      title: { text: 'Relative abundance (%)', font: { size: 10 } },
+      range: [0, 100],
+      showgrid: true,
+      gridcolor: 'rgba(0,0,0,0.07)',
+      zeroline: false,
+      color: '#555',
+      tickfont: { size: 9 }
+    },
+    // bar y-axis: categorical, ordered by tree leaf order (bottom-up = reversed)
+    yaxis2: {
+      domain: [0, 1],
+      categoryorder: 'array',
+      categoryarray: [...d.sample_order].reverse(),
+      showticklabels: false,
+      showgrid: false,
+      zeroline: false
+    },
+
+    legend: {
+      x: 1.01, y: 1,
+      orientation: 'v',
+      font: { size: 9, color: '#1a1d2e' },
+      bgcolor: 'rgba(255,255,255,0.9)',
+      bordercolor: 'rgba(0,0,0,0.1)',
+      borderwidth: 1
+    },
+    hoverlabel: {
+      bgcolor: '#1f2435',
+      bordercolor: 'rgba(255,255,255,0.1)',
+      font: { family: "'DM Mono', monospace", size: 11, color: '#e8eaf0' }
+    }
+  };
+
+  // Assign bar traces to xaxis2 / yaxis2
+  barTraces.forEach(t => { t.xaxis = 'x2'; t.yaxis = 'y2'; });
+
+  // Dummy invisible trace to activate xaxis3/yaxis3 for sample name labels
+  // y positions mirrored to match tree alignment (n+1-i instead of i+1)
+  const labelTrace = {
+    type: 'scatter', mode: 'markers',
+    x: Array(n).fill(0.5),
+    y: d.sample_order.map((_, i) => mirror(i + 1)),
+    marker: { size: 0, opacity: 0 },
+    hoverinfo: 'none',
+    showlegend: false,
+    xaxis: 'x3',
+    yaxis: 'y3'
+  };
+
+  const allTraces = [treeTrace, labelTrace, ...barTraces];
+
+  const config = {
+    responsive: true,
+    displayModeBar: true,
+    modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+    displaylogo: false,
+    toImageButtonOptions: { format: 'svg', filename: 'upgma_' + d.distance + '_' + d.rank }
+  };
+
+  Plotly.react('upgmaPlot', allTraces, layout, config);
+}
+// =====================================================
+//  TAB 5 - PERMANOVA
+// =====================================================
+function sigLabel(p) {
+  if (p === null || p === undefined || isNaN(p)) return '(ns)';
+  if (p <= 0.001) return '(***)';
+  if (p <= 0.01)  return '(**)';
+  if (p <= 0.05)  return '(*)';
+  if (p <= 0.1)   return '(.)';
+  return '(ns)';
+}
+
+async function fetchPermanovaMeta() {
+  const rank = document.getElementById('permanovaRank').value;
+  if (activeTab === 'permanova') document.getElementById('rankBadge').textContent = rank;
+  permanovaMeta = null;
+  permanovaData = null;
+  const raw = MOCK.mockPermanovaMeta(rank);
+  permanovaMeta = raw;
+  buildPermanovaSelector(raw.meta_columns || []);
+  const btn = document.getElementById('runPermanovaBtn');
+  if (btn) btn.disabled = false;
+  const st = document.getElementById('permanovaStatus');
+  if (st) st.textContent = (raw.n_samples || '') + ' samples - select covariates and run';
+}
+
+function buildPermanovaSelector(cols) {
+  const container = document.getElementById('permanovaCovariates');
+  if (!container) return;
+  container.innerHTML = '';
+  cols.forEach(function(col, i) {
+    const lbl = document.createElement('label');
+    lbl.style.cssText = 'display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text);cursor:pointer;';
+    const chk = document.createElement('input');
+    chk.type  = 'checkbox';
+    chk.value = col;
+    chk.style.cssText = 'width:auto;accent-color:var(--accent);';
+    if (i === 0) chk.checked = true;
+    const span = document.createElement('span');
+    span.textContent = col;
+    lbl.appendChild(chk);
+    lbl.appendChild(span);
+    container.appendChild(lbl);
+  });
+}
+
+async function fetchPermanova() {
+  const checked = Array.from(document.querySelectorAll('#permanovaCovariates input[type=checkbox]:checked'))
+    .map(function(cb) { return cb.value; });
+  const statusEl  = document.getElementById('permanovaStatus');
+  if (checked.length === 0) {
+    if (statusEl) statusEl.textContent = 'Select at least one covariate.';
+    return;
+  }
+  const rank      = document.getElementById('permanovaRank').value;
+  const distance  = document.getElementById('permanovaDistance').value;
+  const loadingEl = document.getElementById('permanovaLoading');
+  const btn       = document.getElementById('runPermanovaBtn');
+  if (loadingEl) loadingEl.style.display = 'flex';
+  if (btn)       btn.disabled = true;
+  if (statusEl)  statusEl.textContent = 'Running...';
+  permanovaData = null;
+  try {
+    const raw = MOCK.mockPermanova(rank, distance, checked);
+    permanovaData = raw;
+    renderPermanova();
+    if (statusEl) statusEl.textContent =
+      raw.n_samples + ' samples - ' + raw.distance + ' - ' + raw.permutations + ' permutations';
+    document.getElementById('rankBadge').textContent = distance;
+  } catch(e) {
+    if (statusEl) statusEl.textContent = 'Error: ' + e.message;
+    console.error('fetchPermanova failed:', e);
+  } finally {
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (btn)       btn.disabled = false;
+  }
+}
+
+function renderPermanova() {
+  if (!permanovaData) return;
+  const emptyEl = document.getElementById('permanovaEmptyState');
+  const wrapEl  = document.getElementById('permanovaPlotWrap');
+  if (emptyEl) emptyEl.style.display = 'none';
+  if (wrapEl)  wrapEl.style.display  = '';
+
+  const d       = permanovaData;
+  const results = d.results;
+  const labels  = results.map(function(r) { return r.covariate; });
+  const r2vals  = results.map(function(r) { return r.R2; });
+  const pvals   = results.map(function(r) { return r.p_value; });
+  const fvals   = results.map(function(r) { return r.F_value; });
+
+  const barColors = pvals.map(function(p) { return p <= 0.05 ? '#4f8ef7' : '#444a60'; });
+
+  const annotations = results.map(function(r, i) {
+    return {
+      x: labels[i],
+      y: r2vals[i],
+      text: r.R2.toFixed(4) + ' ' + sigLabel(r.p_value),
+      xanchor: 'center',
+      yanchor: 'bottom',
+      showarrow: false,
+      font: { size: 11, color: '#1a1d2e', family: 'DM Mono, monospace' },
+      yshift: 4
+    };
+  });
+
+  const customdata = results.map(function(r) {
+    return [r.F_value, r.p_value, sigLabel(r.p_value)];
+  });
+
+  const trace = {
+    type: 'bar',
+    x: labels,
+    y: r2vals,
+    marker: { color: barColors },
+    customdata: customdata,
+    hovertemplate: '%{x}<br>R2 = %{y:.4f}<br>F = %{customdata[0]}<br>p = %{customdata[1]} %{customdata[2]}<extra></extra>',
+    showlegend: false
+  };
+
+  const maxR2  = Math.max.apply(null, r2vals);
+  const layout = {
+    paper_bgcolor: '#ffffff',
+    plot_bgcolor:  '#ffffff',
+    font: { family: 'DM Sans, sans-serif', color: '#1a1d2e', size: 12 },
+    height: 480,
+    margin: { t: 80, r: 40, b: 100, l: 70 },
+    xaxis: {
+      title: { text: 'Metadata covariate', font: { size: 12 } },
+      tickangle: -30,
+      tickfont:  { size: 11 },
+      showgrid:  false,
+      zeroline:  false,
+      color:     '#555'
+    },
+    yaxis: {
+      title:      { text: 'R2 (variance explained)', font: { size: 12 } },
+      range:      [0, Math.min(1, maxR2 * 1.3)],
+      showgrid:   true,
+      gridcolor:  'rgba(0,0,0,0.07)',
+      zeroline:   false,
+      color:      '#555',
+      tickformat: '.2f'
+    },
+    annotations: annotations,
+    title: {
+      text: 'PERMANOVA - ' + d.distance + ' - ' + d.permutations + ' permutations',
+      font: { size: 13, color: '#1a1d2e' },
+      x: 0,
+      xanchor: 'left'
+    },
+    hoverlabel: {
+      bgcolor:     '#1f2435',
+      bordercolor: 'rgba(255,255,255,0.1)',
+      font:        { family: 'DM Mono, monospace', size: 11, color: '#e8eaf0' }
+    }
+  };
+
+  Plotly.react('permanovaPlot', [trace], layout, {
+    responsive:   true,
+    displayModeBar: true,
+    modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+    displaylogo:  false,
+    toImageButtonOptions: { format: 'svg', filename: 'permanova_' + d.distance }
+  });
+}
+// ═══════════════════════════════════════════════════════
+//  DEMO-ONLY: per-tab "Simulate error" toggle
+//  Not part of the real component — added so this standalone mockup can
+//  preview the DefaultErrorState view (libs/ui-kit/charts-plotly/src/lib/
+//  plotly-workspace/plotly-workspace-layout.tsx) for each of the six tabs on
+//  demand, without touching any of the fetch/render logic above. Toggling
+//  just swaps which sibling is visible inside that tab's .chart-area — the
+//  underlying mock data / chart instance is left untouched, so turning the
+//  error off restores the chart exactly as it was.
+// ═══════════════════════════════════════════════════════
+const ERROR_DEMO_TABS = ['rarefaction', 'taxa', 'alpha', 'pcoa', 'upgma', 'permanova'];
+let errorDemoActive = {};
+
+function toggleErrorDemo(tab) {
+  errorDemoActive[tab] = !errorDemoActive[tab];
+  const errorEl = document.getElementById(tab + 'ErrorState');
+  if (errorEl) errorEl.classList.toggle('visible', errorDemoActive[tab]);
+
+  updateTopbarErrorBtn(tab);
+
+  // Hide whichever "real" content sibling(s) this tab normally shows, so the
+  // error card doesn't render on top of the chart/empty-state underneath.
+  const hideIds = {
+    rarefaction: ['rarefactionEmptyState', 'rarefactionPlotWrap'],
+    taxa:        ['emptyState', 'chartWrap'],
+    alpha:       ['alphaEmptyState', 'alphaPlotWrap'],
+    pcoa:        ['pcoaEmptyState', 'pcoaPlotWrap'],
+    upgma:       ['upgmaEmptyState', 'upgmaPlotWrap'],
+    permanova:   ['permanovaEmptyState', 'permanovaPlotWrap'],
+  }[tab] || [];
+  hideIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (errorDemoActive[tab]) {
+      el.dataset.prevDisplay = el.style.display;
+      el.style.display = 'none';
+    } else {
+      el.style.display = el.dataset.prevDisplay || '';
+    }
+  });
+}
+
+// Reflects whichever tab's error-demo state is passed in on the single
+// page-level "Simulate error" button (there's only one now — see item 1).
+function updateTopbarErrorBtn(tab) {
+  const btn = document.getElementById('topbarErrorBtn');
+  if (!btn) return;
+  const active = !!errorDemoActive[tab];
+  btn.textContent = active ? 'Showing error — click to restore' : 'Simulate error';
+  btn.classList.toggle('active', active);
+}
+
+// ═══════════════════════════════════════════════════════
+//  species-group info popup (shown from the (i) icon on every analysis tab's
+//  chart-header) — reference table of genus -> species-group -> members from
+//  species_group.tsv, embedded as static data in mock-data.js.
+// ═══════════════════════════════════════════════════════
+function buildSpeciesGroupTableRows() {
+  const rows = MOCK.SPECIES_GROUPS || [];
+  const tbody = document.getElementById('speciesModalTbody');
+  if (!tbody) return;
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="3" class="species-modal-empty">No species-group reference data available.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map((r) => (
+    '<tr><td class="sg-genus">' + r.genus + '</td><td class="sg-group">' + r.group +
+    '</td><td class="sg-members">' + r.members + '</td></tr>'
+  )).join('');
+}
+
+function openSpeciesInfo() {
+  const overlay = document.getElementById('speciesModalOverlay');
+  if (!overlay) return;
+  if (!overlay.dataset.built) {
+    buildSpeciesGroupTableRows();
+    overlay.dataset.built = '1';
+  }
+  overlay.classList.add('visible');
+}
+function closeSpeciesInfo() {
+  const overlay = document.getElementById('speciesModalOverlay');
+  if (overlay) overlay.classList.remove('visible');
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeSpeciesInfo();
+});
+// end of script
+</script>
+<!-- end of body -->
+</body>
+<!-- end of document -->
+</html>
+
+
+
+
+

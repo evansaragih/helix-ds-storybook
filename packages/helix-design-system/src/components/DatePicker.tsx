@@ -1,237 +1,223 @@
-import { forwardRef, useState, useRef, useEffect } from 'react';
-import { Calendar, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { forwardRef, useMemo, useState } from 'react';
+import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { DropdownMenu } from './DropdownMenu';
+import { Tag } from './Tag';
 
-export type DatePickerMode = 'date' | 'range' | 'month' | 'year';
+/** Figma Mode — Single, Range, Date and Time, Time */
+export type DatePickerMode = 'single' | 'range' | 'date-time' | 'time';
 
-export interface DatePickerProps {
-  value?: Date | null;
-  onChange?: (date: Date | null) => void;
-  rangeStart?: Date | null;
-  rangeEnd?: Date | null;
-  onRangeChange?: (start: Date | null, end: Date | null) => void;
+export interface DateRange {
+  start?: Date;
+  end?: Date;
+}
+
+export interface DatePickerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue'> {
   mode?: DatePickerMode;
-  placeholder?: string;
-  disabled?: boolean;
-  minDate?: Date;
-  maxDate?: Date;
-  label?: string;
-  error?: string;
+  /** Selected date for single and date-time modes; the time part is used by date-time and time */
+  value?: Date | null;
+  defaultValue?: Date | null;
+  onChange?: (value: Date) => void;
+  /** Selected range for range mode */
+  range?: DateRange;
+  defaultRange?: DateRange;
+  onRangeChange?: (range: DateRange) => void;
+  /** Month shown first (defaults to the selected date or today) */
+  defaultMonth?: Date;
+  /** First day of the week, 0 = Sunday (default) */
+  weekStartsOn?: 0 | 1;
+  locale?: string;
+  /** Dates that can't be picked */
+  isDisabled?: (date: Date) => boolean;
 }
 
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DAYS   = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+const sameDay = (a?: Date | null, b?: Date | null) => !!a && !!b && a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const BRAND = 'var(--color-brand-primary, #F57E20)';
+const SUBTLE = 'var(--color-status-brand-bg, #FEF2E9)';
 
-function formatDate(d: Date | null | undefined): string {
-  if (!d) return '';
-  return `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
+function Nav({ dir, onClick }: { dir: -1 | 1; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label={dir === -1 ? 'Previous month' : 'Next month'}
+      onClick={onClick}
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, padding: 0, borderRadius: 5.33, cursor: 'pointer', border: '1px solid var(--color-stroke-subtle, #EEEEEE)', backgroundColor: 'var(--color-container-secondary, #F7F7F7)', color: 'var(--color-text-secondary, #49494A)' }}
+    >
+      {dir === -1 ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
+    </button>
+  );
 }
 
-function isSameDay(a: Date, b: Date) {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+function TimeColumn({ label, count, value, onChange }: { label: string; count: number; value: number; onChange: (v: number) => void }) {
+  return (
+    <div role="listbox" aria-label={label} style={{ display: 'flex', flexDirection: 'column', gap: 2, height: 256, overflowY: 'auto', padding: 2, width: 56 }}>
+      {Array.from({ length: count }, (_, i) => (
+        <button
+          key={i}
+          type="button"
+          role="option"
+          aria-selected={i === value}
+          onClick={() => onChange(i)}
+          style={{
+            flexShrink: 0, height: 32, border: 'none', borderRadius: 6, cursor: 'pointer', fontFamily: 'var(--font-family-body)', fontSize: 13,
+            backgroundColor: i === value ? BRAND : 'transparent', color: i === value ? '#FFFFFF' : 'var(--color-text-primary, #14141E)',
+          }}
+        >
+          {String(i).padStart(2, '0')}
+        </button>
+      ))}
+    </div>
+  );
 }
 
-function inRange(date: Date, start: Date | null, end: Date | null) {
-  if (!start || !end) return false;
-  return date >= start && date <= end;
-}
-
+/** A calendar panel for picking a single date, a date range, a date and time, or just a time. Compose it in a Popover under an Input for a date field. */
 export const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(({
-  value,
+  mode = 'single',
+  value: controlled,
+  defaultValue = null,
   onChange,
-  rangeStart,
-  rangeEnd,
+  range: controlledRange,
+  defaultRange = {},
   onRangeChange,
-  mode = 'date',
-  placeholder,
-  disabled = false,
-  minDate,
-  maxDate,
-  label,
-  error,
+  defaultMonth,
+  weekStartsOn = 0,
+  locale = 'en-US',
+  isDisabled,
+  style,
+  ...props
 }, ref) => {
-  const [open, setOpen] = useState(false);
-  const [viewDate, setViewDate] = useState(() => value ?? rangeStart ?? new Date());
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [internal, setInternal] = useState<Date | null>(defaultValue);
+  const [internalRange, setInternalRange] = useState<DateRange>(defaultRange);
+  const value = controlled !== undefined ? controlled : internal;
+  const range = controlledRange ?? internalRange;
+  const [month, setMonth] = useState(() => startOfDay(defaultMonth ?? value ?? range.start ?? new Date()));
+  const [hover, setHover] = useState<Date | null>(null);
+  const today = useMemo(() => new Date(), []);
 
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
+  const monthNames = useMemo(() => Array.from({ length: 12 }, (_, i) => new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(2000, i, 1))), [locale]);
+  const weekdays = useMemo(() => Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2023, 0, 1 + ((i + weekStartsOn) % 7)))), [locale, weekStartsOn]);
 
-  const displayValue = mode === 'range'
-    ? (rangeStart || rangeEnd ? `${formatDate(rangeStart)} – ${formatDate(rangeEnd)}` : '')
-    : formatDate(value);
+  const cells = useMemo(() => {
+    const first = new Date(month.getFullYear(), month.getMonth(), 1);
+    const lead = (first.getDay() - weekStartsOn + 7) % 7;
+    return Array.from({ length: 42 }, (_, i) => new Date(month.getFullYear(), month.getMonth(), 1 - lead + i)).filter((_, i, a) => i < 35 || a[35].getMonth() === month.getMonth());
+  }, [month, weekStartsOn]);
 
-  const prevMonth = () => setViewDate(d => new Date(d.getFullYear(), d.getMonth() - 1, 1));
-  const nextMonth = () => setViewDate(d => new Date(d.getFullYear(), d.getMonth() + 1, 1));
+  const setValue = (d: Date) => {
+    const next = new Date(d); if (value) next.setHours(value.getHours(), value.getMinutes());
+    if (controlled === undefined) setInternal(next);
+    onChange?.(next);
+  };
+  const setRange = (r: DateRange) => { if (controlledRange === undefined) setInternalRange(r); onRangeChange?.(r); };
 
-  const year = viewDate.getFullYear();
-  const month = viewDate.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  const handleDayClick = (day: number) => {
-    const selected = new Date(year, month, day);
+  const pick = (d: Date) => {
+    if (isDisabled?.(d)) return;
     if (mode === 'range') {
-      if (!rangeStart || (rangeStart && rangeEnd)) {
-        onRangeChange?.(selected, null);
-      } else {
-        const start = rangeStart < selected ? rangeStart : selected;
-        const end   = rangeStart < selected ? selected : rangeStart;
-        onRangeChange?.(start, end);
-        setOpen(false);
-      }
-    } else {
-      onChange?.(selected);
-      setOpen(false);
-    }
+      if (!range.start || range.end) setRange({ start: d });
+      else setRange(d < range.start ? { start: d, end: range.start } : { start: range.start, end: d });
+    } else setValue(d);
+    if (d.getMonth() !== month.getMonth()) setMonth(startOfDay(d));
   };
 
-  const isDisabledDay = (day: number) => {
-    const d = new Date(year, month, day);
-    return (minDate && d < minDate) || (maxDate && d > maxDate);
+  const setTime = (h?: number, m?: number) => {
+    const base = value ?? new Date();
+    const next = new Date(base); next.setHours(h ?? base.getHours(), m ?? base.getMinutes(), 0, 0);
+    if (controlled === undefined) setInternal(next);
+    onChange?.(next);
   };
+
+  const rangeEnd = range.end ?? (range.start && hover && hover > range.start ? hover : undefined);
+
+  const calendar = (
+    <div style={{ width: 252 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4, height: 24 }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 2 }}>
+          <DropdownMenu
+            trigger={<Tag size="sm" color="transparent" label={monthNames[month.getMonth()].slice(0, 3)} trailingIcon={<ChevronDown size={10} />} style={{ cursor: 'pointer' }} />}
+            items={monthNames.map((n, i) => ({ label: n, onSelect: () => setMonth(new Date(month.getFullYear(), i, 1)) }))}
+          />
+          <DropdownMenu
+            trigger={<Tag size="sm" color="transparent" label={String(month.getFullYear())} trailingIcon={<ChevronDown size={10} />} style={{ cursor: 'pointer' }} />}
+            items={Array.from({ length: 21 }, (_, i) => month.getFullYear() - 10 + i).map((y) => ({ label: String(y), onSelect: () => setMonth(new Date(y, month.getMonth(), 1)) }))}
+          />
+        </div>
+        <Nav dir={-1} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} />
+        <Nav dir={1} onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))} />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 36px)', marginTop: 16, height: 20 }}>
+        {weekdays.map((w) => <span key={w} style={{ textAlign: 'center', fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 12, lineHeight: '20px', color: 'var(--color-text-tertiary, #828282)' }}>{w.slice(0, 2)}</span>)}
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 36px)', gridAutoRows: 36, rowGap: 8, marginTop: 8 }} onMouseLeave={() => setHover(null)}>
+        {cells.map((d) => {
+          const outside = d.getMonth() !== month.getMonth();
+          const disabled = isDisabled?.(d);
+          const isStart = mode === 'range' && sameDay(d, range.start);
+          const isEnd = mode === 'range' && sameDay(d, range.end ?? undefined);
+          const inRange = mode === 'range' && range.start && rangeEnd && d > range.start && d < rangeEnd;
+          const selected = mode === 'range' ? isStart || isEnd : sameDay(d, value);
+          const isToday = sameDay(d, today);
+          return (
+            <div key={d.toISOString()} style={{ backgroundColor: inRange || ((isStart || isEnd) && range.start && rangeEnd && !sameDay(range.start, rangeEnd)) ? SUBTLE : 'transparent', borderRadius: isStart ? '8px 0 0 8px' : isEnd || (isStart === false && sameDay(d, rangeEnd)) ? '0 8px 8px 0' : 0 }}>
+              <button
+                type="button"
+                disabled={disabled}
+                aria-pressed={selected}
+                aria-current={isToday ? 'date' : undefined}
+                aria-label={d.toDateString()}
+                onClick={() => pick(d)}
+                onMouseEnter={() => setHover(d)}
+                className="helix-day"
+                style={{
+                  width: 36, height: 36, border: 'none', borderRadius: 8, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.4 : 1,
+                  fontFamily: 'var(--font-family-body)', fontSize: 13, position: 'relative',
+                  backgroundColor: selected ? BRAND : 'transparent', color: selected ? '#FAFAFA' : outside ? 'var(--color-text-tertiary, #828282)' : 'var(--color-text-primary, #14141E)',
+                }}
+              >
+                {d.getDate()}
+                {isToday && !selected && <span aria-hidden="true" style={{ position: 'absolute', left: '50%', bottom: 5, width: 4, height: 4, marginLeft: -2, borderRadius: '50%', backgroundColor: BRAND }} />}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const time = (
+    <div style={{ display: 'flex', gap: 8 }}>
+      <TimeColumn label="Hours" count={24} value={value?.getHours() ?? 0} onChange={(h) => setTime(h, undefined)} />
+      <TimeColumn label="Minutes" count={60} value={value?.getMinutes() ?? 0} onChange={(m) => setTime(undefined, m)} />
+    </div>
+  );
+
+  const timeRow = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingTop: 12, marginTop: 12, borderTop: '1px solid var(--color-stroke-subtle, #EEEEEE)', fontFamily: 'var(--font-family-body)', fontSize: 13, color: 'var(--color-text-secondary, #49494A)' }}>
+      <span style={{ flex: 1 }}>Time</span>
+      {(['h', 'm'] as const).map((k, i) => (
+        <span key={k} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {i === 1 && <span>:</span>}
+          <input
+            aria-label={k === 'h' ? 'Hours' : 'Minutes'}
+            inputMode="numeric"
+            value={String((k === 'h' ? value?.getHours() : value?.getMinutes()) ?? 0).padStart(2, '0')}
+            onChange={(e) => { const n = Number(e.target.value.replace(/\D/g, '').slice(-2)); if (k === 'h') setTime(Math.min(n, 23), undefined); else setTime(undefined, Math.min(n, 59)); }}
+            style={{ width: 40, height: 28, boxSizing: 'border-box', textAlign: 'center', borderRadius: 6, border: '1px solid var(--color-stroke-subtle, #EEEEEE)', fontFamily: 'var(--font-family-body)', fontSize: 13, outline: 'none' }}
+          />
+        </span>
+      ))}
+    </div>
+  );
 
   return (
-    <div ref={(el) => {
-      (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-      if (typeof ref === 'function') ref(el);
-      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
-    }} style={{ position: 'relative', display: 'inline-flex', flexDirection: 'column', gap: 4 }}>
-      {label && (
-        <label style={{
-          fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13,
-          color: 'var(--color-text-primary, #14141E)', lineHeight: '19.2px',
-        }}>
-          {label}
-        </label>
-      )}
-
-      {/* Input trigger */}
-      <div
-        onClick={() => { if (!disabled) setOpen(v => !v); }}
-        style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          height: 40, padding: '0 12px',
-          border: `1px solid ${error ? 'var(--color-destructive, #DC2626)' : open ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-stroke-subtle, #EEEEEE)'}`,
-          borderRadius: 8,
-          backgroundColor: disabled ? 'var(--color-container-secondary, #F7F7F7)' : '#FFFFFF',
-          cursor: disabled ? 'not-allowed' : 'pointer',
-          outline: open ? '3px solid var(--color-brand-primary-ring, rgba(245,126,32,0.2))' : 'none',
-          minWidth: 200,
-          boxSizing: 'border-box',
-          transition: 'border-color 0.15s',
-        }}
-      >
-        <Calendar size={16} color="var(--color-text-tertiary, #828282)" style={{ flexShrink: 0 }} />
-        <span style={{
-          flex: 1,
-          fontFamily: 'var(--font-family-body)', fontSize: 13,
-          color: displayValue ? 'var(--color-text-primary, #14141E)' : 'var(--color-text-tertiary, #828282)',
-        }}>
-          {displayValue || (placeholder ?? (mode === 'range' ? 'Select date range' : 'Select date'))}
-        </span>
-        {displayValue && !disabled && (
-          <button
-            onClick={e => {
-              e.stopPropagation();
-              if (mode === 'range') onRangeChange?.(null, null);
-              else onChange?.(null);
-            }}
-            style={{ padding: 0, border: 'none', background: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'var(--color-text-tertiary, #828282)' }}
-          >
-            <X size={14} />
-          </button>
-        )}
-      </div>
-
-      {error && (
-        <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 12, color: 'var(--color-destructive, #DC2626)', lineHeight: '18px' }}>
-          {error}
-        </span>
-      )}
-
-      {/* Calendar dropdown */}
-      {open && (
-        <div style={{
-          position: 'absolute', top: 'calc(100% + 4px)', left: 0, zIndex: 300,
-          backgroundColor: '#FFFFFF',
-          border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-          borderRadius: 'var(--radius-md, 6px)',
-          boxShadow: '0px 8px 24px rgba(0,0,0,0.10)',
-          padding: 12,
-          minWidth: 280,
-        }}>
-          {/* Month navigation */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <button onClick={prevMonth} style={{ padding: 4, border: 'none', background: 'none', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', color: 'var(--color-text-secondary, #49494A)' }}>
-              <ChevronLeft size={16} />
-            </button>
-            <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, letterSpacing: '-0.01px', color: 'var(--color-text-primary, #14141E)' }}>
-              {MONTHS[month]} {year}
-            </span>
-            <button onClick={nextMonth} style={{ padding: 4, border: 'none', background: 'none', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', color: 'var(--color-text-secondary, #49494A)' }}>
-              <ChevronRight size={16} />
-            </button>
-          </div>
-
-          {/* Day headers */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: 4 }}>
-            {DAYS.map(d => (
-              <div key={d} style={{ textAlign: 'center', fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, letterSpacing: '-0.01px', color: 'var(--color-text-tertiary, #828282)', padding: '4px 0' }}>
-                {d}
-              </div>
-            ))}
-          </div>
-
-          {/* Days grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}>
-            {Array.from({ length: firstDay }).map((_, i) => <div key={`e${i}`} />)}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1;
-              const date = new Date(year, month, day);
-              const isSelected = value && isSameDay(date, value);
-              const isRangeStart = rangeStart && isSameDay(date, rangeStart);
-              const isRangeEnd = rangeEnd && isSameDay(date, rangeEnd);
-              const isInRange = inRange(date, rangeStart ?? null, rangeEnd ?? null);
-              const isDis = isDisabledDay(day);
-              const isActive = isSelected || isRangeStart || isRangeEnd;
-              const today = isSameDay(date, new Date());
-
-              return (
-                <button
-                  key={day}
-                  onClick={() => { if (!isDis) handleDayClick(day); }}
-                  style={{
-                    width: '100%', aspectRatio: '1',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    border: 'none',
-                    borderRadius: 'var(--radius-md, 6px)',
-                    backgroundColor: isActive
-                      ? 'var(--color-brand-primary, #F57E20)'
-                      : (isInRange || (today && !isActive)) ? 'var(--color-status-brand-bg, #FEF2E9)' : 'transparent',
-                    color: isActive ? '#FFFFFF' : isDis ? '#D7D7D7' : 'var(--color-text-primary, #14141E)',
-                    cursor: isDis ? 'not-allowed' : 'pointer',
-                    fontFamily: 'var(--font-family-body)',
-                    fontSize: 13,
-                    fontWeight: 400,
-                    letterSpacing: '-0.01px',
-                    transition: 'background-color 0.15s',
-                  }}
-                  onMouseEnter={e => { if (!isActive && !isDis) e.currentTarget.style.backgroundColor = 'var(--color-status-brand-bg, #FEF2E9)'; }}
-                  onMouseLeave={e => { if (!isActive && !isInRange && !today) e.currentTarget.style.backgroundColor = 'transparent'; }}
-                >
-                  {day}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
+    <div
+      ref={ref}
+      role="group"
+      aria-label="Date picker"
+      style={{ display: 'inline-block', boxSizing: 'border-box', padding: 12, borderRadius: 12, backgroundColor: 'var(--color-container-primary, #FFFFFF)', border: '1px solid var(--color-stroke-subtle, #EEEEEE)', boxShadow: '0 1px 2px rgba(89,89,90,0.15)', ...style }}
+      {...props}
+    >
+      <style>{'.helix-day:hover:not(:disabled):not([aria-pressed="true"]){background-color:var(--color-container-tertiary,#EEEEEE)!important}.helix-day:focus-visible{outline:2px solid var(--color-brand-primary,#F57E20);outline-offset:-2px}'}</style>
+      {mode === 'time' ? time : mode === 'date-time' ? <>{calendar}{timeRow}</> : calendar}
     </div>
   );
 });

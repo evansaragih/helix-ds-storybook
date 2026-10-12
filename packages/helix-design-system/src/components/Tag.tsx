@@ -3,232 +3,159 @@ import { X, Check } from 'lucide-react';
 import { Badge } from './Badge';
 import type { BadgeSize } from './Badge';
 
+/** Figma Size */
 export type TagSize = 'sm' | 'md' | 'lg';
+/** Figma Color — neutral (outlined) · brand · transparent (no border or fill, e.g. in Breadcrumb) */
+export type TagColor = 'neutral' | 'brand' | 'transparent';
 
-export interface TagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'onSelect'> {
-  /** Size — sm (10px) · md (13px) · lg (16px) */
+export interface TagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'color' | 'onSelect'> {
   size?: TagSize;
-  /** Tag label text */
+  color?: TagColor;
   label: string;
-  /** Leading icon node — sized automatically. Mutually exclusive with `avatarSrc`. */
-  leadingIcon?: React.ReactNode;
-  /** Leading avatar image URL — sized automatically. Mutually exclusive with `leadingIcon`. */
-  avatarSrc?: string;
-  /** Show a leading status dot instead of an icon/avatar */
-  status?: boolean;
-  /** Status dot color token — defaults to success green */
-  statusColor?: string;
-  /** Render a selectable checkbox in place of an icon/avatar/dot */
-  checkbox?: boolean;
-  /** Checkbox checked state (only used when `checkbox` is true) */
-  checked?: boolean;
-  /** Fires with the next checked state when the checkbox is clicked */
-  onCheckedChange?: (checked: boolean) => void;
-  /** Trailing count — renders a small pill (e.g. 5) */
-  count?: number | string;
-  /** Render a trailing close (×) button and call this when clicked */
-  onClose?: (e: React.MouseEvent) => void;
-  /** Disabled — dims the tag and blocks interaction */
+  /** Figma State=Selected */
+  selected?: boolean;
+  /** Figma State=Disabled */
   disabled?: boolean;
+  /** Leading icon (Figma Leading Icon). Only one leading slot shows: checkbox → avatar → dot → icon. */
+  leadingIcon?: React.ReactNode;
+  /** Leading avatar image URL (Figma Leading Avatar) */
+  leadingAvatar?: string;
+  /** Leading status dot (Figma Leading Dot) */
+  leadingDot?: boolean;
+  /** Leading checkbox (Figma Leading Checkbox) — checked while `selected` */
+  leadingCheckbox?: boolean;
+  /** Fires with the next selected state when the checkbox is clicked */
+  onSelectedChange?: (selected: boolean) => void;
+  /** Trailing count (Figma Trailing Count) */
+  trailingCount?: number | string;
+  /** Trailing icon (Figma Trailing Icon) */
+  trailingIcon?: React.ReactNode;
+  /** Trailing close × (Figma Trailing Icon Close) — called when it is clicked */
+  onClose?: (e: React.MouseEvent) => void;
 }
 
-interface SizeDimensions {
-  fontSize: number;
-  lineHeight: string;
-  iconSize: number;
-  avatarSize: number;
-  dotSize: number;
-  checkboxSize: number;
-  closeSize: number;
-  px: number;
-  py: number;
-  gap: number;
-  countBadgeSize: BadgeSize;
-}
+/* ─── Figma sizes (Tag component set, Size=sm|md|lg) ───────────────── */
+interface SizeConfig { fontSize: number; lineHeight: string; px: number; py: number; gap: number; icon: number; avatar: number; dot: number; box: number; badge: BadgeSize }
 
-const SIZES: Record<TagSize, SizeDimensions> = {
-  sm: { fontSize: 10, lineHeight: '15.6px', iconSize: 10, avatarSize: 14, dotSize: 6, checkboxSize: 12, closeSize: 10, px: 8,  py: 3, gap: 4, countBadgeSize: 'sm' },
-  md: { fontSize: 13, lineHeight: '19.2px', iconSize: 12, avatarSize: 16, dotSize: 7, checkboxSize: 14, closeSize: 12, px: 10, py: 4, gap: 6, countBadgeSize: 'sm' },
-  lg: { fontSize: 16, lineHeight: '24px',   iconSize: 14, avatarSize: 20, dotSize: 8, checkboxSize: 16, closeSize: 14, px: 12, py: 5, gap: 6, countBadgeSize: 'md' },
+const SIZES: Record<TagSize, SizeConfig> = {
+  sm: { fontSize: 10, lineHeight: '15.6px', px: 8,  py: 2, gap: 4, icon: 10, avatar: 14, dot: 6, box: 12, badge: 'xs' },
+  md: { fontSize: 13, lineHeight: '19.2px', px: 10, py: 4, gap: 6, icon: 12, avatar: 16, dot: 7, box: 14, badge: 'sm' },
+  lg: { fontSize: 16, lineHeight: '24px',   px: 12, py: 4, gap: 6, icon: 14, avatar: 20, dot: 8, box: 16, badge: 'md' },
 };
 
-/* ─── Tag ──────────────────────────────────────────────────────────
- * A neutral, outlined, interactive pill for filtering/selecting or
- * removing an item — e.g. active filters, selected categories,
- * multi-select input tokens.
- *
- * Differs from Badge (status/count indicator, filled semantic colors,
- * generally non-interactive) in both look and purpose: Tag is always
- * outlined + neutral, and is built around interaction affordances
- * (checkbox, close, count) rather than color-coded meaning.
- * ────────────────────────────────────────────────────────────────── */
+const MUTED = 'var(--color-text-tertiary, #828282)';
+const BRAND = 'var(--color-brand-primary, #F57E20)';
+
+/** Compact removable / selectable label chip. Use for filters, selections or category labels. For status or count indicators use Badge. */
 export const Tag = forwardRef<HTMLSpanElement, TagProps>(({
   size = 'md',
+  color = 'neutral',
   label,
-  leadingIcon,
-  avatarSrc,
-  status = false,
-  statusColor = 'var(--color-text-success, #12843C)',
-  checkbox = false,
-  checked = false,
-  onCheckedChange,
-  count,
-  onClose,
+  selected = false,
   disabled = false,
+  leadingIcon,
+  leadingAvatar,
+  leadingDot = false,
+  leadingCheckbox = false,
+  onSelectedChange,
+  trailingCount,
+  trailingIcon,
+  onClose,
   style,
-  className,
   onClick,
   onMouseEnter,
   onMouseLeave,
-  onMouseDown,
-  onMouseUp,
   ...props
 }, ref) => {
   const s = SIZES[size];
   const [hovered, setHovered] = useState(false);
-  const [pressed, setPressed] = useState(false);
-  const [closeHovered, setCloseHovered] = useState(false);
+  const hover = hovered && !disabled && !selected;
 
-  const handleCheckboxClick = (e: React.MouseEvent) => {
-    if (disabled) return;
-    e.stopPropagation();
-    onCheckedChange?.(!checked);
-  };
-
-  // Selected: checkbox checked promotes the Tag to the brand-tinted "Selected" preset
-  // (same Colors/Surface/Selected token family used for active nav/list/tab chips in Figma).
-  const selected = checkbox && checked;
-
-  let bg: string;
-  let borderColor: string;
-  let textColor: string;
-  if (disabled) {
-    bg = 'var(--color-container-disabled, #D7D7D7)';
-    borderColor = 'var(--color-stroke-disabled, #D7D7D7)';
-    textColor = 'var(--color-text-muted, #9F9F9F)';
-  } else if (selected) {
+  // Figma State × Color
+  let bg = 'transparent';
+  let border = 'transparent';
+  let text = MUTED;
+  if (selected) {
     bg = 'var(--color-status-brand-bg, #FEF2E9)';
-    borderColor = 'var(--color-brand-primary, #F57E20)';
-    textColor = 'var(--color-brand-primary, #F57E20)';
-  } else {
-    bg = pressed ? 'var(--color-container-tertiary, #EEEEEE)' :
-      hovered ? 'var(--color-container-primary-hover, #EEEEEE)' :
-      'var(--color-container-primary, #FFFFFF)';
-    borderColor = pressed ? 'var(--color-stroke-strong, #9F9F9F)' :
-      hovered ? 'var(--color-stroke-hover, #828282)' :
-      'var(--color-stroke-default, #BABABA)';
-    textColor = 'var(--color-text-primary, #14141E)';
+    text = BRAND;
+    border = color === 'neutral' ? BRAND : 'transparent';
+  } else if (color === 'neutral') {
+    bg = hover ? 'var(--color-container-tertiary, #EEEEEE)' : 'var(--color-container-primary, #FFFFFF)';
+    border = disabled ? 'var(--color-stroke-disabled, #D7D7D7)' : 'var(--color-stroke-subtle, #EEEEEE)';
+  } else if (color === 'brand') {
+    bg = hover ? '#FFE1C9' : 'var(--color-status-brand-bg, #FEF2E9)';
+    text = hover ? 'var(--color-brand-primary-hover, #DF6505)' : BRAND;
+  } else if (hover) {
+    bg = 'var(--color-container-tertiary, #EEEEEE)';
   }
+
+  const slot: React.CSSProperties = { display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 };
 
   return (
     <span
       ref={ref}
-      className={className}
+      aria-disabled={disabled || undefined}
       onClick={disabled ? undefined : onClick}
       onMouseEnter={(e) => { setHovered(true); onMouseEnter?.(e); }}
-      onMouseLeave={(e) => { setHovered(false); setPressed(false); onMouseLeave?.(e); }}
-      onMouseDown={(e) => { setPressed(true); onMouseDown?.(e); }}
-      onMouseUp={(e) => { setPressed(false); onMouseUp?.(e); }}
+      onMouseLeave={(e) => { setHovered(false); onMouseLeave?.(e); }}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: s.gap,
-        paddingLeft: s.px,
-        paddingRight: s.px,
-        paddingTop: s.py,
-        paddingBottom: s.py,
-        borderRadius: 9999,
-        backgroundColor: bg,
-        border: `1px solid ${borderColor}`,
-        color: textColor,
+        padding: `${s.py}px ${s.px}px`,
+        borderRadius: 8,
         boxSizing: 'border-box',
-        flexShrink: 0,
-        cursor: disabled ? 'not-allowed' : onClick || checkbox ? 'pointer' : 'default',
-        transition: 'background-color 0.15s, border-color 0.15s',
-        ...style,
-      }}
-      {...props}
-    >
-      {/* Checkbox */}
-      {checkbox && (
-        <span
-          onClick={handleCheckboxClick}
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: s.checkboxSize, height: s.checkboxSize, flexShrink: 0,
-            borderRadius: 3,
-            border: `1px solid ${disabled ? 'var(--color-stroke-disabled, #D7D7D7)' : checked ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-stroke-default, #BABABA)'}`,
-            backgroundColor: disabled && checked ? 'var(--color-stroke-disabled, #D7D7D7)' : checked ? 'var(--color-brand-primary, #F57E20)' : 'transparent',
-          }}
-        >
-          {checked && <Check size={s.checkboxSize * 0.75} strokeWidth={3} color="var(--color-text-on-primary, #FFFFFF)" />}
-        </span>
-      )}
-
-      {/* Leading avatar */}
-      {!checkbox && avatarSrc && (
-        <span style={{
-          display: 'flex', flexShrink: 0, overflow: 'hidden',
-          width: s.avatarSize, height: s.avatarSize, borderRadius: '50%',
-        }}>
-          <img src={avatarSrc} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </span>
-      )}
-
-      {/* Leading icon */}
-      {!checkbox && !avatarSrc && leadingIcon && (
-        <span style={{ display: 'flex', alignItems: 'center', width: s.iconSize, height: s.iconSize, flexShrink: 0 }}>
-          {leadingIcon}
-        </span>
-      )}
-
-      {/* Status dot */}
-      {!checkbox && !avatarSrc && !leadingIcon && status && (
-        <span style={{
-          display: 'inline-block',
-          width: s.dotSize, height: s.dotSize, flexShrink: 0,
-          borderRadius: '50%',
-          backgroundColor: statusColor,
-        }} />
-      )}
-
-      {/* Label */}
-      <span style={{
+        backgroundColor: bg,
+        border: `1px solid ${border}`,
+        color: text,
+        opacity: disabled ? 0.5 : 1,
+        cursor: disabled ? 'not-allowed' : onClick || leadingCheckbox ? 'pointer' : 'default',
         fontFamily: 'var(--font-family-body)',
         fontWeight: 400,
         fontSize: s.fontSize,
         lineHeight: s.lineHeight,
         letterSpacing: '-0.01px',
         whiteSpace: 'nowrap',
-        color: 'inherit',
-      }}>
-        {label}
-      </span>
-
-      {/* Count — reuses Badge, since a numeric indicator is exactly Badge's job */}
-      {count !== undefined && (
-        <Badge size={s.countBadgeSize} variant="gray" label={String(count)} />
-      )}
-
-      {/* Close button — hovering the × itself (not the whole Tag) signals removal with an error tint */}
-      {onClose && (
-        <button
-          onClick={(e) => { e.stopPropagation(); if (!disabled) onClose(e); }}
-          onMouseEnter={(e) => { e.stopPropagation(); if (!disabled) setCloseHovered(true); }}
-          onMouseLeave={(e) => { e.stopPropagation(); setCloseHovered(false); }}
-          disabled={disabled}
+        flexShrink: 0,
+        transition: 'background-color 0.15s, border-color 0.15s, color 0.15s',
+        ...style,
+      }}
+      {...props}
+    >
+      {leadingCheckbox ? (
+        <span
+          role="checkbox"
+          aria-checked={selected}
+          onClick={(e) => { if (disabled) return; e.stopPropagation(); onSelectedChange?.(!selected); }}
           style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: s.closeSize + 4, height: s.closeSize + 4, flexShrink: 0,
-            padding: 0, border: 'none',
-            borderRadius: '50%',
-            backgroundColor: closeHovered && !disabled ? 'var(--color-status-error-bg, #FEE2E2)' : 'transparent',
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            color: closeHovered && !disabled ? 'var(--color-icon-error, #EF4444)' : 'var(--color-text-tertiary, #828282)',
-            transition: 'background-color 0.1s, color 0.1s',
+            ...slot, width: s.box, height: s.box, borderRadius: 3, boxSizing: 'border-box',
+            border: `1px solid ${selected ? BRAND : 'var(--color-stroke-default, #BABABA)'}`,
+            backgroundColor: selected ? BRAND : 'transparent',
           }}
         >
-          <X size={s.closeSize} strokeWidth={2} />
+          {selected && <Check size={s.box * 0.75} strokeWidth={3} color="#FFFFFF" />}
+        </span>
+      ) : leadingAvatar ? (
+        <img src={leadingAvatar} alt="" style={{ width: s.avatar, height: s.avatar, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+      ) : leadingDot ? (
+        <span style={{ width: s.dot, height: s.dot, borderRadius: '50%', backgroundColor: 'var(--color-text-success, #12843C)', flexShrink: 0 }} />
+      ) : leadingIcon ? (
+        <span style={{ ...slot, width: s.icon, height: s.icon }}>{leadingIcon}</span>
+      ) : null}
+
+      <span>{label}</span>
+
+      {trailingCount !== undefined && <Badge size={s.badge} color="neutral" appearance="subtle" label={String(trailingCount)} />}
+      {trailingIcon && <span style={{ ...slot, width: s.icon, height: s.icon }}>{trailingIcon}</span>}
+      {onClose && (
+        <button
+          type="button"
+          aria-label={`Remove ${label}`}
+          disabled={disabled}
+          onClick={(e) => { e.stopPropagation(); onClose(e); }}
+          style={{ ...slot, width: s.icon + 4, height: s.icon + 4, padding: 0, border: 'none', borderRadius: '50%', background: 'transparent', color: 'inherit', cursor: disabled ? 'not-allowed' : 'pointer' }}
+        >
+          <X size={s.icon} />
         </button>
       )}
     </span>

@@ -20,7 +20,7 @@ const COLUMNS: Column<SampleRow>[] = [
     render: (row: SampleRow) => (
       <Badge
         label={row.status}
-        variant={row.status === 'completed' ? 'green' : row.status === 'processing' ? 'yellow' : 'red'}
+        color={row.status === 'completed' ? 'success' : row.status === 'processing' ? 'warning' : 'error'}
         size="sm"
       />
     ),
@@ -36,7 +36,7 @@ const DATA: SampleRow[] = [
 ];
 
 const meta = {
-  title: 'Components/Data Display/Table',
+  title: 'Molecule/Tables',
   component: Table,
   tags: ['autodocs'],
   argTypes: {
@@ -47,7 +47,6 @@ const meta = {
     data: DATA,
     size: 'md',
     hoverable: true,
-    bordered: true,
     striped: false,
   },
 } satisfies Meta<typeof Table>;
@@ -64,9 +63,13 @@ export const Striped: Story = {
   render: (args) => <div style={{ width: 720 }}><Table {...args} /></div>,
 };
 
-export const WithCellBorders: Story = {
-  args: { cellBorders: true },
-  render: (args) => <div style={{ width: 720 }}><Table {...args} /></div>,
+/** Figma Left Side Header and Footer cells. */
+export const WithRowHeaderAndFooter: Story = {
+  render: (args) => (
+    <div style={{ width: 720 }}>
+      <Table {...args} columns={(args.columns as Column<unknown>[]).map((c, i) => ({ ...c, rowHeader: i === 0, footer: i === 0 ? 'Total' : i === 1 ? `${DATA.length} samples` : undefined }))} />
+    </div>
+  ),
 };
 
 export const Small: Story = {
@@ -76,11 +79,6 @@ export const Small: Story = {
 
 export const Empty: Story = {
   args: { data: [], emptyText: 'No samples submitted yet.' },
-  render: (args) => <div style={{ width: 720 }}><Table {...args} /></div>,
-};
-
-export const Borderless: Story = {
-  args: { bordered: false },
   render: (args) => <div style={{ width: 720 }}><Table {...args} /></div>,
 };
 
@@ -95,7 +93,7 @@ const WIDE_COLUMNS: Column<SampleRow>[] = [
     render: (row: SampleRow) => (
       <Badge
         label={row.status}
-        variant={row.status === 'completed' ? 'green' : row.status === 'processing' ? 'yellow' : 'red'}
+        color={row.status === 'completed' ? 'success' : row.status === 'processing' ? 'warning' : 'error'}
         size="sm"
       />
     ),

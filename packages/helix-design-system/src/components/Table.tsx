@@ -8,6 +8,10 @@ export interface Column<T = Record<string, unknown>> {
   render?: (row: T, index: number) => React.ReactNode;
   width?: string | number;
   align?: 'left' | 'center' | 'right';
+  /** Figma Left Side Header — body cells in this column use the darker header text color (usually the first column) */
+  rowHeader?: boolean;
+  /** Figma Footer cell content for this column — renders a footer row when any column has one */
+  footer?: React.ReactNode;
 }
 
 export interface TableProps<T = Record<string, unknown>> extends React.HTMLAttributes<HTMLDivElement> {
@@ -16,9 +20,6 @@ export interface TableProps<T = Record<string, unknown>> extends React.HTMLAttri
   size?: TableSize;
   striped?: boolean;
   hoverable?: boolean;
-  bordered?: boolean;
-  /** Show a border on every cell vs just rows */
-  cellBorders?: boolean;
   /** Pin the rightmost column so it stays visible while scrolling horizontally */
   freezeLastColumn?: boolean;
   emptyText?: string;
@@ -31,8 +32,6 @@ export function Table<T = Record<string, unknown>>({
   size = 'md',
   striped = false,
   hoverable = true,
-  bordered = true,
-  cellBorders = false,
   freezeLastColumn = false,
   emptyText = 'No data',
   getRowKey,
@@ -40,16 +39,19 @@ export function Table<T = Record<string, unknown>>({
   className,
   ...props
 }: TableProps<T>) {
-  const cellPy = size === 'sm' ? 8 : 12;
+  // Figma Table Cell: body 52 / 40, header 48 / 40 (Medium / Small), 16px side padding, 13px text
+  const bodyH = size === 'sm' ? 40 : 52;
+  const headH = size === 'sm' ? 40 : 48;
   const cellPx = 16;
-  const fontSize = size === 'sm' ? 12 : 13;
+  const fontSize = 13;
+  const hasFooter = columns.some((c) => c.footer !== undefined);
 
   return (
     <div
       style={{
         width: '100%',
-        borderRadius: 'var(--radius-lg, 8px)',
-        border: bordered ? '1px solid var(--color-stroke-subtle, #EEEEEE)' : 'none',
+        borderRadius: 6,
+        border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
         overflow: 'auto',
         ...style,
       }}
@@ -65,18 +67,16 @@ export function Table<T = Record<string, unknown>>({
                 <th
                   key={col.key}
                   style={{
-                    padding: `${cellPy}px ${cellPx}px`,
+                    height: headH,
+                    padding: `0 ${cellPx}px`,
                     textAlign: col.align ?? 'left',
                     fontFamily: 'var(--font-family-body)',
                     fontWeight: 500,
                     fontSize,
-                    lineHeight: '19.2px',
+                    lineHeight: '20px',
                     color: 'var(--color-text-primary, #14141E)',
                     letterSpacing: '-0.01px',
                     borderBottom: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-                    borderRight: cellBorders && ci < columns.length - 1
-                      ? '1px solid var(--color-stroke-subtle, #EEEEEE)'
-                      : 'none',
                     whiteSpace: 'nowrap',
                     width: col.width,
                     ...(isFrozen && {
@@ -141,18 +141,16 @@ export function Table<T = Record<string, unknown>>({
                         key={col.key}
                         data-frozen-cell={isFrozen ? '' : undefined}
                         style={{
-                          padding: `${cellPy}px ${cellPx}px`,
+                          height: bodyH,
+                          padding: `0 ${cellPx}px`,
                           textAlign: col.align ?? 'left',
                           fontFamily: 'var(--font-family-body)',
                           fontWeight: 400,
                           fontSize,
-                          lineHeight: '19.2px',
-                          color: 'var(--color-text-secondary, #49494A)',
+                          lineHeight: '20px',
+                          color: col.rowHeader ? 'var(--color-text-primary, #14141E)' : 'var(--color-text-secondary, #49494A)',
                           letterSpacing: '-0.01px',
-                          borderBottom: ri < data.length - 1
-                            ? '1px solid var(--color-stroke-subtle, #EEEEEE)'
-                            : 'none',
-                          borderRight: cellBorders && ci < columns.length - 1
+                          borderBottom: ri < data.length - 1 || hasFooter
                             ? '1px solid var(--color-stroke-subtle, #EEEEEE)'
                             : 'none',
                           ...(isFrozen && {
@@ -175,6 +173,17 @@ export function Table<T = Record<string, unknown>>({
             })
           )}
         </tbody>
+        {hasFooter && (
+          <tfoot>
+            <tr style={{ backgroundColor: 'var(--color-container-secondary, #F7F7F7)' }}>
+              {columns.map((col) => (
+                <td key={col.key} style={{ height: headH, padding: `0 ${cellPx}px`, textAlign: col.align ?? 'left', fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize, lineHeight: '20px', color: 'var(--color-text-primary, #14141E)', whiteSpace: 'nowrap' }}>
+                  {col.footer}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );

@@ -262,7 +262,7 @@ function TestingRoundEditor() {
                 {t.ic && (
                   <Tooltip content="Internal Control — nilai boleh Undetermined">
                     <span>
-                      <Badge variant="gray" size="sm" label="IC" />
+                      <Badge color="neutral" appearance="subtle" size="sm" label="IC" />
                     </span>
                   </Tooltip>
                 )}
@@ -276,7 +276,6 @@ function TestingRoundEditor() {
                 </span>
               </div>
               <Input
-                size="sm"
                 value={current}
                 placeholder={t.ic ? 'Ct / Neg. / N/A / Undetermined' : 'Ct / Neg. / N/A'}
                 onChange={(e) => setValue(t.key, e.target.value)}
@@ -302,12 +301,12 @@ function TestingRoundEditor() {
   }));
 
   const sheetFooter = round2Saved ? (
-    <Button variant="primary" size="sm" onClick={() => setOpen(false)}>Tutup</Button>
+    <Button hierarchy="primary" appearance="solid" size="sm" onClick={() => setOpen(false)}>Tutup</Button>
   ) : (
     <>
-      <Button variant="neutral" size="sm" onClick={() => setOpen(false)}>Batal</Button>
+      <Button hierarchy="secondary" appearance="solid" size="sm" onClick={() => setOpen(false)}>Batal</Button>
       <Button
-        variant="primary"
+        hierarchy="primary" appearance="solid"
         size="sm"
         disabled={activeDiseases.length === 0 || !analyst || !reason}
         onClick={() => setConfirmOpen(true)}
@@ -342,12 +341,12 @@ function TestingRoundEditor() {
           }}>
             <Stepper
               steps={[
-                { id: 'r1', label: 'Round 1', description: 'Tersimpan', status: 'completed' },
+                { id: 'r1', step: 'Round 1', title: 'Tersimpan', status: 'completed' },
                 {
                   id: 'r2',
-                  label: 'Round 2',
-                  description: round2Saved ? 'Tersimpan' : 'Sedang diisi',
-                  status: round2Saved ? 'completed' : 'active',
+                  step: 'Round 2',
+                  title: round2Saved ? 'Tersimpan' : 'Sedang diisi',
+                  status: round2Saved ? 'completed' : 'in-progress',
                 },
               ]}
             />
@@ -373,7 +372,7 @@ function TestingRoundEditor() {
                 <span style={{ fontFamily: heading, fontWeight: 600, fontSize: 15, color: 'var(--color-text-primary)' }}>
                   Round 1
                 </span>
-                <Badge variant="green" size="sm" label="Tersimpan" />
+                <Badge color="success" appearance="subtle" size="sm" label="Tersimpan" />
                 <Tooltip content="Round tersimpan tidak bisa diedit atau dihapus.">
                   <span style={{ display: 'inline-flex', color: 'var(--color-text-tertiary)' }}>
                     <Lock size={13} />
@@ -406,8 +405,8 @@ function TestingRoundEditor() {
                   Round 2
                 </span>
                 {round2Saved
-                  ? <Badge variant="green" size="sm" label="Tersimpan" />
-                  : <Badge variant="brand-subtle" size="sm" label="Retest" />}
+                  ? <Badge color="success" appearance="subtle" size="sm" label="Tersimpan" />
+                  : <Badge color="brand" appearance="subtle" size="sm" label="Retest" />}
               </div>
 
               {round2Saved ? (
@@ -424,7 +423,7 @@ function TestingRoundEditor() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
                   {/* ONE merged retest warning */}
                   <Alert
-                    variant="warning"
+                    status="warning"
                     title="Round 2 = retest — sample tidak First Time Right (FTR)"
                     description="Retest menurunkan FTR lab dan tercatat di Lab KPI PathoCheck. Perbaikan hasil Round 1 hanya lewat round ini."
                   />
@@ -437,7 +436,7 @@ function TestingRoundEditor() {
                     options={ANALYSTS}
                     value={analyst || undefined}
                     onValueChange={setAnalyst}
-                    helperText="Analis penanggung jawab round ini"
+                    hint="Analis penanggung jawab round ini"
                   />
 
                   {/* Diseases to re-test */}
@@ -449,9 +448,9 @@ function TestingRoundEditor() {
                           key={d.id}
                           size="md"
                           label={d.label}
-                          checkbox
-                          checked={retest[d.id]}
-                          onCheckedChange={() => toggleDisease(d.id)}
+                          leadingCheckbox
+                          selected={retest[d.id]}
+                          onSelectedChange={() => toggleDisease(d.id)}
                         />
                       ))}
                     </div>
@@ -487,9 +486,9 @@ function TestingRoundEditor() {
                       <span style={{ fontFamily: body, fontSize: 12, color: 'var(--color-text-tertiary)' }}>
                         Format:
                       </span>
-                      <Badge variant="gray" size="sm" label="angka (Ct)" />
-                      <Badge variant="gray" size="sm" label="Neg." />
-                      <Badge variant="gray" size="sm" label="N/A" />
+                      <Badge color="neutral" appearance="subtle" size="sm" label="angka (Ct)" />
+                      <Badge color="neutral" appearance="subtle" size="sm" label="Neg." />
+                      <Badge color="neutral" appearance="subtle" size="sm" label="N/A" />
                       <span style={{ fontFamily: body, fontSize: 12, color: 'var(--color-text-tertiary)' }}>
                         · IC + Undetermined
                       </span>
@@ -510,7 +509,6 @@ function TestingRoundEditor() {
                       <Accordion
                         key={activeDiseases.map((d) => d.id).join('-')}
                         type="multiple"
-                        accordionStyle="card"
                         defaultValue={activeDiseases.map((d) => d.id)}
                         items={accordionItems}
                       />
@@ -526,7 +524,7 @@ function TestingRoundEditor() {
       {/* ── Save confirmation with the "sudah cek ulang" acknowledgement ────── */}
       <AlertDialog
         open={confirmOpen}
-        variant="default"
+        iconStatus="default"
         title="Simpan Round 2?"
         description="Round yang tersimpan tidak bisa diedit maupun dihapus. Pastikan semua nilai sudah benar sebelum menyimpan."
         checkboxAction={{
@@ -573,16 +571,16 @@ function SamplePageBackdrop({ onManage }: { onManage: () => void }) {
         boxShadow: 'var(--shadow-sm)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
-          <Badge variant="brand-subtle" size="md" label="Benur" />
-          <Badge variant="blue" size="md" label="PathoCheck" />
-          <Badge variant="yellow" size="md" label="Processing" />
+          <Badge color="brand" appearance="subtle" size="md" label="Benur" />
+          <Badge color="info" appearance="subtle" size="md" label="PathoCheck" />
+          <Badge color="warning" appearance="subtle" size="md" label="Processing" />
         </div>
         <p style={{ margin: '0 0 16px', fontSize: 13, color: 'var(--color-text-secondary)' }}>
           Panel AHPND, EHP, WSSV · 1 dari 2 testing round terpakai. Round 1 sudah dilaporkan
           dengan seluruh nilai N/A.
         </p>
         <Button
-          variant="primary"
+          hierarchy="primary" appearance="solid"
           size="sm"
           leadingIcon={<Plus size={14} />}
           onClick={onManage}

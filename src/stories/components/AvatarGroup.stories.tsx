@@ -5,12 +5,12 @@ import { AVATAR_USERS } from '../../data/avatarUsers';
 const items = AVATAR_USERS.map((u, i) => ({ id: i, name: u.name, src: u.src }));
 
 const meta = {
-  title: 'Components/Data Display/AvatarGroup',
+  title: 'Molecule/Avatar/Avatar Group',
   component: AvatarGroup,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['xs', 'sm', 'md', 'lg'] },
-    addButtonShape: { control: 'select', options: ['circle', 'square'] },
+    size: { control: 'select', options: ['xs', 'sm', 'md'] },
+    addUserButtonShape: { control: 'select', options: ['circle', 'square'] },
   },
   args: {
     items,
@@ -27,7 +27,7 @@ export const Playground: Story = {};
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start' }}>
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+      {(['xs', 'sm', 'md'] as const).map((size) => (
         <AvatarGroup key={size} {...args} size={size} />
       ))}
     </div>
@@ -39,9 +39,9 @@ export const NoOverflow: Story = {
 };
 
 export const WithAddButtonCircle: Story = {
-  args: { showAddButton: true, addButtonShape: 'circle' },
+  args: { addUserButton: true, addUserButtonShape: 'circle' },
 };
 
 export const WithAddButtonSquare: Story = {
-  args: { showAddButton: true, addButtonShape: 'square' },
+  args: { addUserButton: true, addUserButtonShape: 'square' },
 };

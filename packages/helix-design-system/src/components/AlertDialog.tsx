@@ -1,10 +1,17 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
-import { AlertTriangle, Trash2, Info } from 'lucide-react';
+import * as RadixAlertDialog from '@radix-ui/react-alert-dialog';
+import { forwardRef } from 'react';
+import { Info, Trash2, TriangleAlert, CircleCheck } from 'lucide-react';
 import { Button } from './Button';
 import { Checkbox } from './Checkbox';
-import { MOTION_DURATION_BASE } from './motion';
+import { FooterActions } from './FooterActions';
+import { IconTile } from './IconTile';
+import { STATUS_TILE } from './ModalHeader';
+import type { ModalIconStatus } from './ModalHeader';
 
-export type AlertDialogVariant = 'default' | 'destructive' | 'info';
+/** Figma Icon status */
+export type AlertDialogIconStatus = ModalIconStatus;
+/** Figma Layout */
+export type AlertDialogLayout = 'stacked-left' | 'horizontal' | 'stacked-centered';
 
 export interface AlertDialogAction {
   label: string;
@@ -20,174 +27,87 @@ export interface AlertDialogCheckboxAction {
 
 export interface AlertDialogProps {
   open: boolean;
-  variant?: AlertDialogVariant;
+  onClose: () => void;
   title: string;
   description?: string;
-  /** Custom icon — defaults to variant icon */
+  iconStatus?: AlertDialogIconStatus;
+  layout?: AlertDialogLayout;
+  /** Override the status icon */
   icon?: React.ReactNode;
+  /** The confirming action — a destructive button when iconStatus is 'destructive' */
   confirmAction: AlertDialogAction;
   cancelAction?: AlertDialogAction;
-  onClose: () => void;
-  /** 'sm' condenses the layout */
-  size?: 'sm' | 'md';
-  /** Optional checkbox (e.g. "Don't show this again") shown left of the actions */
+  /** Optional checkbox on the left of the footer, e.g. "Don't show this again" (Figma Footer Actions → Left Content) */
   checkboxAction?: AlertDialogCheckboxAction;
 }
 
-const VARIANT_META: Record<AlertDialogVariant, { iconBg: string; iconColor: string; Icon: React.ComponentType<{ size?: number }> }> = {
-  default:     { iconBg: 'var(--color-brand-primary-ghost-hover, #FEF2E9)', iconColor: 'var(--color-brand-primary, #F57E20)', Icon: Info },
-  destructive: { iconBg: '#FEE2E2', iconColor: 'var(--color-destructive, #DC2626)', Icon: Trash2 },
-  info:        { iconBg: '#EBF2FE', iconColor: 'var(--color-text-info, #014CC5)', Icon: AlertTriangle },
+const ICONS: Record<AlertDialogIconStatus, React.ReactNode> = {
+  default: <Info size={24} />,
+  success: <CircleCheck size={24} />,
+  warning: <TriangleAlert size={24} />,
+  destructive: <Trash2 size={24} />,
+  info: <Info size={24} />,
 };
 
+const BORDER = '1px solid var(--color-stroke-subtle, #EEEEEE)';
+
+/** A modal that interrupts the flow to confirm a decision or acknowledge something important. For general content use Dialog. */
 export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogProps>(({
   open,
-  variant = 'default',
+  onClose,
   title,
   description,
+  iconStatus = 'default',
+  layout = 'stacked-left',
   icon,
   confirmAction,
   cancelAction,
-  onClose,
-  size = 'md',
   checkboxAction,
 }, ref) => {
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const vm = VARIANT_META[variant];
-  const IconEl = vm.Icon;
-
-  const [isMounted, setIsMounted] = useState(open);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      setIsMounted(true);
-      requestAnimationFrame(() => requestAnimationFrame(() => setIsVisible(true)));
-    } else {
-      setIsVisible(false);
-      const t = setTimeout(() => setIsMounted(false), MOTION_DURATION_BASE);
-      return () => clearTimeout(t);
-    }
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
-
-  if (!isMounted) return null;
+  const horizontal = layout === 'horizontal';
+  const centered = layout === 'stacked-centered';
 
   return (
-    <div
-      ref={overlayRef}
-      onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 1000,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.4)',
-        backdropFilter: 'blur(2px)',
-        opacity: isVisible ? 1 : 0,
-        transition: `opacity var(--motion-duration-base, ${MOTION_DURATION_BASE}ms) var(--motion-easing-standard, ease)`,
-      }}
-    >
-      <div
-        ref={ref}
-        role="alertdialog"
-        aria-modal="true"
-        aria-labelledby="alert-dialog-title"
-        style={{
-          backgroundColor: '#FFFFFF',
-          borderRadius: 8,
-          boxShadow: '0px 24px 48px rgba(0,0,0,0.12)',
-          width: '100%',
-          maxWidth: size === 'sm' ? 360 : 440,
-          margin: '0 16px',
-          overflow: 'hidden',
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'scale(1) translateY(0)' : 'scale(0.96) translateY(8px)',
-          transition: `opacity var(--motion-duration-base, ${MOTION_DURATION_BASE}ms) var(--motion-easing-standard, ease), transform var(--motion-duration-base, ${MOTION_DURATION_BASE}ms) var(--motion-easing-standard, ease)`,
-        }}
-      >
-        <div style={{ padding: size === 'sm' ? '24px 24px 0' : '32px 32px 0' }}>
-          {/* Icon */}
+    <RadixAlertDialog.Root open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <RadixAlertDialog.Portal>
+        <RadixAlertDialog.Overlay style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,20,30,0.7)' }} />
+        <RadixAlertDialog.Content
+          ref={ref}
+          style={{
+            position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1001,
+            width: 592, maxWidth: 'calc(100vw - 48px)', boxSizing: 'border-box', borderRadius: 12, overflow: 'hidden', border: BORDER,
+            backgroundColor: 'var(--color-container-primary, #FFFFFF)', boxShadow: '0 1px 2px rgba(89,89,90,0.15)',
+          }}
+        >
           <div style={{
-            width: 40, height: 40, borderRadius: 8,
-            backgroundColor: vm.iconBg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            marginBottom: 20,
+            display: 'flex', gap: 20, padding: 24,
+            flexDirection: horizontal ? 'row' : 'column',
+            alignItems: centered ? 'center' : 'flex-start',
+            textAlign: centered ? 'center' : 'left',
           }}>
-            <span style={{ color: vm.iconColor }}>
-              {icon ?? <IconEl size={22} />}
-            </span>
-          </div>
-
-          {/* Title */}
-          <h2
-            id="alert-dialog-title"
-            style={{
-              margin: '0 0 8px',
-              fontFamily: 'var(--font-family-heading, Rubik, sans-serif)',
-              fontWeight: 500,
-              fontSize: 16,
-              lineHeight: '24px',
-              color: 'var(--color-text-primary, #14141E)',
-            }}
-          >
-            {title}
-          </h2>
-
-          {description && (
-            <p style={{
-              margin: 0,
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: 400,
-              fontSize: 13,
-              lineHeight: '19.2px',
-              color: 'var(--color-text-secondary, #49494A)',
-            }}>
-              {description}
-            </p>
-          )}
-        </div>
-
-        {/* Actions */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 8,
-          justifyContent: checkboxAction ? 'space-between' : 'flex-end',
-          padding: size === 'sm' ? '20px 24px 24px' : '24px 32px 32px',
-        }}>
-          {checkboxAction && (
-            <Checkbox
-              size="Small"
-              checked={checkboxAction.checked}
-              onChange={(c) => checkboxAction.onChange(c === true)}
-              label={checkboxAction.label}
+            <IconTile
+              size="md"
+              appearance="subtle"
+              color={STATUS_TILE[iconStatus]}
+              shape={horizontal ? 'square' : 'circle'}
+              icon={icon ?? ICONS[iconStatus]}
             />
-          )}
-          <div style={{ display: 'flex', gap: 8, flexDirection: 'row-reverse' }}>
-            <Button
-              variant={variant === 'destructive' ? 'destructive' : 'primary'}
-              size="sm"
-              loading={confirmAction.loading}
-              onClick={confirmAction.onClick}
-            >
-              {confirmAction.label}
-            </Button>
-            {cancelAction && (
-              <Button
-                variant="neutral"
-                size="sm"
-                onClick={cancelAction.onClick}
-              >
-                {cancelAction.label}
-              </Button>
-            )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+              <RadixAlertDialog.Title style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 16, lineHeight: '24px', color: 'var(--color-text-primary, #14141E)' }}>{title}</RadixAlertDialog.Title>
+              {description && <RadixAlertDialog.Description style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '19.2px', color: 'var(--color-text-secondary, #49494A)' }}>{description}</RadixAlertDialog.Description>}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+          <div style={{ padding: 12, backgroundColor: 'var(--color-container-secondary, #F7F7F7)', borderTop: BORDER }}>
+            <FooterActions
+              leftContent={checkboxAction && <Checkbox size="sm" checked={checkboxAction.checked} onChange={checkboxAction.onChange} label={checkboxAction.label} />}
+            >
+              {cancelAction && <Button size="sm" hierarchy="secondary" appearance="outline" loading={cancelAction.loading} onClick={cancelAction.onClick}>{cancelAction.label}</Button>}
+              <Button size="sm" hierarchy={iconStatus === 'destructive' ? 'destructive' : 'primary'} loading={confirmAction.loading} onClick={confirmAction.onClick}>{confirmAction.label}</Button>
+            </FooterActions>
+          </div>
+        </RadixAlertDialog.Content>
+      </RadixAlertDialog.Portal>
+    </RadixAlertDialog.Root>
   );
 });
 

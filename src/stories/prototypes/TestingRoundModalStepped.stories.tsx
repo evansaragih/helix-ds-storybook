@@ -124,9 +124,9 @@ function isFilled(v: CellValue): boolean {
 const ROUND1: Record<string, CellValue> = Object.fromEntries(ALL_TARGETS.map((t) => [t.id, NA]));
 
 const STEPS = [
-  { id: 'setup', label: 'Setup retest', description: 'Analis · penyakit · alasan' },
-  { id: 'input', label: 'Input hasil', description: 'Nilai Round 2' },
-  { id: 'review', label: 'Review & simpan', description: 'Bandingkan lalu kunci' },
+  { id: 'setup', step: 'Setup retest', title: 'Analis · penyakit · alasan' },
+  { id: 'input', step: 'Input hasil', title: 'Nilai Round 2' },
+  { id: 'review', step: 'Review & simpan', title: 'Bandingkan lalu kunci' },
 ];
 
 /* ── kecil-kecil ── */
@@ -209,7 +209,7 @@ function TestingRoundFlow() {
   const stepStatus = (i: number) => {
     if (saved) return 'completed' as const;
     if (i < step) return 'completed' as const;
-    if (i === step) return 'active' as const;
+    if (i === step) return 'in-progress' as const;
     return 'pending' as const;
   };
   const steps = STEPS.map((s, i) => ({ ...s, status: stepStatus(i) }));
@@ -282,9 +282,9 @@ function TestingRoundFlow() {
               {labelOf(v)}
             </span>
             {isChanged ? (
-              <Badge size="sm" variant="yellow" label="berubah" />
+              <Badge size="sm" color="warning" appearance="subtle" label="berubah" />
             ) : (
-              <Badge size="sm" variant="gray" label="sama" />
+              <Badge size="sm" color="neutral" appearance="subtle" label="sama" />
             )}
           </span>
         ),
@@ -300,12 +300,11 @@ function TestingRoundFlow() {
         <Dialog
           open={open}
           onOpenChange={setOpen}
-          size="lg"
           showClose
           title={
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
               Testing Round
-              <Tag size="sm" label={SAMPLE_ID} leadingIcon={<ClipboardCheck size={12} />} />
+              <Tag label={SAMPLE_ID} leadingIcon={<ClipboardCheck />} />
             </span>
           }
           description="PathoCheck · maks 2 testing round per sample · Round 1 sudah tersimpan"
@@ -314,14 +313,14 @@ function TestingRoundFlow() {
               {/* kiri */}
               {saved ? (
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: FONT, fontSize: 12, color: 'var(--color-text-tertiary)' }}>
-                  <Lock size={12} /> Round terkunci — tidak bisa diedit / dihapus
+                  <Lock /> Round terkunci — tidak bisa diedit / dihapus
                 </span>
               ) : step > 0 ? (
-                <Button variant="neutral" size="sm" leadingIcon={<ChevronLeft size={14} />} onClick={() => setStep(step - 1)}>
+                <Button hierarchy="secondary" appearance="solid" leadingIcon={<ChevronLeft />} onClick={() => setStep(step - 1)}>
                   Kembali
                 </Button>
               ) : (
-                <Button variant="neutral" size="sm" onClick={() => setOpen(false)}>
+                <Button hierarchy="secondary" appearance="solid" onClick={() => setOpen(false)}>
                   Batal
                 </Button>
               )}
@@ -331,25 +330,25 @@ function TestingRoundFlow() {
                 <div style={{ display: 'flex', gap: 8 }}>
                   <Tooltip content="Sample ini sudah memakai 2 dari 2 round.">
                     <span>
-                      <Button variant="neutral" size="sm" disabled>
+                      <Button hierarchy="secondary" appearance="solid" disabled>
                         Maks 2 round tercapai
                       </Button>
                     </span>
                   </Tooltip>
-                  <Button size="sm" onClick={() => setOpen(false)}>
+                  <Button onClick={() => setOpen(false)}>
                     Selesai
                   </Button>
                 </div>
               ) : step === 0 ? (
-                <Button size="sm" trailingIcon={<ChevronRight size={14} />} disabled={!setupValid} onClick={() => setStep(1)}>
+                <Button trailingIcon={<ChevronRight />} disabled={!setupValid} onClick={() => setStep(1)}>
                   Lanjut ke input
                 </Button>
               ) : step === 1 ? (
-                <Button size="sm" trailingIcon={<ChevronRight size={14} />} disabled={!inputValid} onClick={() => setStep(2)}>
+                <Button trailingIcon={<ChevronRight />} disabled={!inputValid} onClick={() => setStep(2)}>
                   Lanjut ke review
                 </Button>
               ) : (
-                <Button size="sm" leadingIcon={<Lock size={14} />} onClick={() => setConfirmOpen(true)}>
+                <Button leadingIcon={<Lock />} onClick={() => setConfirmOpen(true)}>
                   Simpan Round 2
                 </Button>
               )}
@@ -380,7 +379,7 @@ function TestingRoundFlow() {
             {saved && (
               <>
                 <Alert
-                  variant="success"
+                  status="success"
                   title="Round 2 tersimpan permanen"
                   description={`${changedCount} nilai berubah dari Round 1. Kedua round kini terkunci untuk sample ini.`}
                 />
@@ -392,7 +391,7 @@ function TestingRoundFlow() {
                       <Tag size="sm" label="Round 2 terkunci" leadingIcon={<Lock size={11} />} />
                     </span>
                   </div>
-                  <Table columns={reviewColumns} data={reviewData} size="sm" getRowKey={(r) => r.key as string} cellBorders />
+                  <Table columns={reviewColumns} data={reviewData} size="sm" getRowKey={(r) => r.key as string} />
                 </div>
               </>
             )}
@@ -401,7 +400,7 @@ function TestingRoundFlow() {
             {!saved && step === 0 && (
               <>
                 <Alert
-                  variant="info"
+                  status="info"
                   title="Round 2 = retest sample ini"
                   description="Menambah Round 2 menandai sample tidak First Time Right (FTR) dan tercatat di Lab KPI PathoCheck. Isi setup di bawah untuk mulai."
                 />
@@ -412,7 +411,6 @@ function TestingRoundFlow() {
                     value={analyst || undefined}
                     onValueChange={setAnalyst}
                     placeholder="Pilih analis penanggung jawab round…"
-                    size="sm"
                   />
                 </div>
                 <div>
@@ -423,9 +421,9 @@ function TestingRoundFlow() {
                         key={d.id}
                         size="md"
                         label={d.label}
-                        checkbox
-                        checked={!!retest[d.id]}
-                        onCheckedChange={(c) => setRetest((prev) => ({ ...prev, [d.id]: c }))}
+                        leadingCheckbox
+                        selected={!!retest[d.id]}
+                        onSelectedChange={(c) => setRetest((prev) => ({ ...prev, [d.id]: c }))}
                       />
                     ))}
                   </div>
@@ -440,7 +438,6 @@ function TestingRoundFlow() {
                     value={reason || undefined}
                     onValueChange={setReason}
                     placeholder="Pilih alasan…"
-                    size="sm"
                   />
                 </div>
               </>
@@ -451,7 +448,6 @@ function TestingRoundFlow() {
               <>
                 <Accordion
                   type="single"
-                  accordionStyle="border"
                   items={[
                     {
                       id: 'format',
@@ -479,7 +475,7 @@ function TestingRoundFlow() {
                       <span style={{ fontFamily: FONT, fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>
                         {d.label}
                       </span>
-                      <Badge size="sm" variant="brand-subtle" label={`${d.targets.length} target`} />
+                      <Badge size="sm" color="brand" appearance="subtle" label={`${d.targets.length} target`} />
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                       {d.targets.map((t) => {
@@ -513,12 +509,10 @@ function TestingRoundFlow() {
                                 value={v.mode || undefined}
                                 onValueChange={(m) => setValue(t.id, { mode: m as ValueMode })}
                                 placeholder="Pilih nilai…"
-                                size="sm"
                                 style={{ flex: 1 }}
                               />
                               {v.mode === 'ct' && (
                                 <Input
-                                  size="sm"
                                   inputMode="decimal"
                                   placeholder="mis. 28.4"
                                   value={v.ct}
@@ -540,16 +534,16 @@ function TestingRoundFlow() {
             {!saved && step === 2 && (
               <>
                 <Alert
-                  variant="warning"
+                  status="warning"
                   title="Cek sebelum menyimpan — aksi ini permanen"
                   description={`Round 2 menurunkan FTR lab & tercatat di Lab KPI PathoCheck. ${changedCount} nilai berubah dari Round 1. Setelah disimpan, Round 1 & Round 2 tidak bisa diedit atau dihapus.`}
                 />
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
                     <SectionTitle>Perbandingan Round 1 → Round 2</SectionTitle>
-                    <Badge size="sm" variant="yellow" label={`${changedCount} berubah`} />
+                    <Badge size="sm" color="warning" appearance="subtle" label={`${changedCount} berubah`} />
                   </div>
-                  <Table columns={reviewColumns} data={reviewData} size="sm" getRowKey={(r) => r.key as string} cellBorders />
+                  <Table columns={reviewColumns} data={reviewData} size="sm" getRowKey={(r) => r.key as string} />
                 </div>
                 <div
                   style={{
@@ -580,7 +574,7 @@ function TestingRoundFlow() {
 
         <AlertDialog
           open={confirmOpen}
-          variant="default"
+          iconStatus="default"
           title="Simpan Round 2 secara permanen?"
           description="Round yang tersimpan tidak bisa diedit maupun dihapus. Pastikan seluruh nilai sudah benar."
           onClose={() => setConfirmOpen(false)}

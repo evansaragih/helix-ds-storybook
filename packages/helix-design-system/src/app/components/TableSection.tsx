@@ -31,17 +31,17 @@ const basicColumns: Column<User>[] = [
   { key: 'role',  header: 'Role' },
 ];
 
-const statusVariant: Record<string, 'success' | 'warning' | 'secondary'> = {
-  active: 'success', pending: 'warning', inactive: 'secondary',
+const statusVariant: Record<string, 'success' | 'warning' | 'neutral'> = {
+  active: 'success', pending: 'warning', inactive: 'neutral',
 };
 
 const richColumns: Column<User>[] = [
   { key: 'name',  header: 'Name',  render: row => <strong style={{ fontFamily: 'var(--font-family-body)', fontSize: 13 }}>{row.name}</strong> },
   { key: 'email', header: 'Email', render: row => <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#828282' }}>{row.email}</span> },
-  { key: 'role',  header: 'Role',  align: 'center', render: row => <Badge variant="outline" label={row.role} /> },
+  { key: 'role',  header: 'Role',  align: 'center', render: row => <Badge color="neutral" appearance="outline" label={row.role} /> },
   {
     key: 'status', header: 'Status', align: 'center',
-    render: row => <Badge variant="default" color={statusVariant[row.status]} label={row.status} />,
+    render: row => <Badge appearance="solid" color={statusVariant[row.status]} label={row.status} />,
   },
 ];
 
@@ -58,7 +58,7 @@ export function TableSection() {
   return (
     <PageLayout
       category="Components"
-      title="Table"
+      title="Tables"
       description="Tables display structured data in rows and columns. They support striped rows, hover highlighting, cell borders, and fully custom cell renderers."
       tocItems={toc}
     >
@@ -93,7 +93,7 @@ export function TableSection() {
             <Table columns={basicColumns} data={users} striped size="sm" getRowKey={r => r.id} />
           </DemoCard>
           <DemoCard title="cellBorders">
-            <Table columns={basicColumns} data={users} cellBorders getRowKey={r => r.id} />
+            <Table columns={basicColumns} data={users} getRowKey={r => r.id} />
           </DemoCard>
           <DemoCard title="Empty state">
             <Table columns={basicColumns} data={[]} emptyText="No team members found." />

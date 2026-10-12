@@ -1,4 +1,5 @@
 import { PageLayout, Section } from './PageLayout';
+import * as Helix from '../../components';
 import { Tag, Badge } from '../../components';
 import { Globe, MapPin } from 'lucide-react';
 
@@ -9,6 +10,7 @@ const toc = [
   { id: 'tag-sizes',       label: 'Sizes' },
   { id: 'tag-selectable',  label: 'Selectable (Checkbox)' },
   { id: 'tag-presets',     label: 'State Presets' },
+  { id: 'tag-figma-color', label: 'Color' },
 ];
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -78,8 +80,8 @@ export function TagSection() {
           <Card title="Tag — user-driven, neutral, interactive">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
               <Tag label="Design" onClose={() => {}} />
-              <Tag label="Remote" checkbox checked />
-              <Tag label="Filters" count={5} />
+              <Tag label="Remote" leadingCheckbox selected />
+              <Tag label="Filters" trailingCount={5} />
             </div>
             <ul style={{ margin: 0, paddingLeft: 18, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.8' }}>
               <li>Always outlined, neutral color</li>
@@ -90,9 +92,9 @@ export function TagSection() {
           </Card>
           <Card title="Badge — system-reported, color-coded, mostly static">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
-              <Badge variant="green" label="Active" status />
-              <Badge variant="red" label="Error" />
-              <Badge variant="brand-subtle" label="New" />
+              <Badge color="success" appearance="subtle" label="Active" status />
+              <Badge color="error" appearance="subtle" label="Error" />
+              <Badge color="brand" appearance="subtle" label="New" />
             </div>
             <ul style={{ margin: 0, paddingLeft: 18, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.8' }}>
               <li>Filled, color-coded by semantic meaning</li>
@@ -118,7 +120,7 @@ export function TagSection() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <Row label="Default"><Tag label="Label" /></Row>
             <Row label="With close"><Tag label="Label" onClose={() => {}} /></Row>
-            <Row label="With count"><Tag label="Label" count={5} /></Row>
+            <Row label="With count"><Tag label="Label" trailingCount={5} /></Row>
           </div>
         </Card>
         <div style={{ height: 12 }} />
@@ -126,23 +128,23 @@ export function TagSection() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <Row label="Default"><Tag label="Label" leadingIcon={<Globe size={12} />} /></Row>
             <Row label="With close"><Tag label="Label" leadingIcon={<Globe size={12} />} onClose={() => {}} /></Row>
-            <Row label="With count"><Tag label="Label" leadingIcon={<Globe size={12} />} count={5} /></Row>
+            <Row label="With count"><Tag label="Label" leadingIcon={<Globe size={12} />} trailingCount={5} /></Row>
           </div>
         </Card>
         <div style={{ height: 12 }} />
         <Card title="Leading avatar">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <Row label="Default"><Tag label="Label" avatarSrc={AVATAR_SRC} /></Row>
-            <Row label="With close"><Tag label="Label" avatarSrc={AVATAR_SRC} onClose={() => {}} /></Row>
-            <Row label="With count"><Tag label="Label" avatarSrc={AVATAR_SRC} count={5} /></Row>
+            <Row label="Default"><Tag label="Label" leadingAvatar={AVATAR_SRC} /></Row>
+            <Row label="With close"><Tag label="Label" leadingAvatar={AVATAR_SRC} onClose={() => {}} /></Row>
+            <Row label="With count"><Tag label="Label" leadingAvatar={AVATAR_SRC} trailingCount={5} /></Row>
           </div>
         </Card>
         <div style={{ height: 12 }} />
         <Card title="Status dot">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <Row label="Default"><Tag label="Label" status /></Row>
-            <Row label="With close"><Tag label="Label" status onClose={() => {}} /></Row>
-            <Row label="With count"><Tag label="Label" status count={5} /></Row>
+            <Row label="Default"><Tag label="Label" leadingDot /></Row>
+            <Row label="With close"><Tag label="Label" leadingDot onClose={() => {}} /></Row>
+            <Row label="With count"><Tag label="Label" leadingDot trailingCount={5} /></Row>
           </div>
         </Card>
       </Section>
@@ -169,10 +171,10 @@ export function TagSection() {
         </p>
         <Card title="Checkbox variants">
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <Row label="Unchecked"><Tag label="Label" checkbox /></Row>
-            <Row label="Checked"><Tag label="Label" checkbox checked /></Row>
-            <Row label="With close"><Tag label="Label" checkbox checked onClose={() => {}} /></Row>
-            <Row label="With count"><Tag label="Label" checkbox checked count={5} /></Row>
+            <Row label="Unchecked"><Tag label="Label" leadingCheckbox /></Row>
+            <Row label="Checked"><Tag label="Label" leadingCheckbox selected /></Row>
+            <Row label="With close"><Tag label="Label" leadingCheckbox selected onClose={() => {}} /></Row>
+            <Row label="With count"><Tag label="Label" leadingCheckbox selected trailingCount={5} /></Row>
           </div>
         </Card>
       </Section>
@@ -193,7 +195,7 @@ export function TagSection() {
           </Card>
           <Card title="Active / Selected">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-              <Tag label="Label" checkbox checked />
+              <Tag label="Label" leadingCheckbox selected />
             </div>
             <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>
               Triggers automatically when <code>checkbox</code> is checked — brand-tinted background/border/text,
@@ -203,7 +205,7 @@ export function TagSection() {
           <Card title="Disabled">
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
               <Tag label="Label" onClose={() => {}} disabled />
-              <Tag label="Label" checkbox checked disabled />
+              <Tag label="Label" leadingCheckbox selected disabled />
             </div>
             <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>
               Explicit disabled tokens (not a blanket opacity fade) — muted gray fill, border, and text.
@@ -219,6 +221,12 @@ export function TagSection() {
             </p>
           </Card>
         </div>
+      </Section>
+      <Section id="tag-figma-color" title="Color">
+        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
+          Figma's Color — neutral (outlined), brand, and transparent (borderless, e.g. inside a Breadcrumb).
+        </p>
+        <div style={{ padding: 24, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE', overflowX: 'auto' }}><div style={{ display: 'flex', gap: 8 }}>{(['neutral','brand','transparent'] as const).map(c => <Helix.Tag key={c} color={c} label={c} />)}</div></div>
       </Section>
     </PageLayout>
   );

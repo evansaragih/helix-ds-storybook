@@ -1,6 +1,5 @@
 import { Search, Sun, Moon, Monitor } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-import { Command } from '../../components/Command';
 import { Input } from '../../components/Input';
 import { foundationItems, componentItems } from '../data/navigation';
 
@@ -93,9 +92,8 @@ export function Header({ isCollapsed, onToggleCollapse, onSectionChange }: Heade
       {/* Search with Command dropdown */}
       <div className="flex-1" style={{ maxWidth: '448px', position: 'relative' }} ref={searchContainerRef}>
         <Input
-          size="md"
           placeholder="Search documentation..."
-          leadingContent={<Search size={16} />}
+          leading={<Search size={16} />}
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           onFocus={() => setIsSearchOpen(true)}
@@ -103,19 +101,19 @@ export function Header({ isCollapsed, onToggleCollapse, onSectionChange }: Heade
 
         {isSearchOpen && (
           <div style={{ position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0, zIndex: 50 }}>
-            <Command
-              items={searchItems}
-              value={searchQuery}
-              onQueryChange={setSearchQuery}
-              hideSearch
-              width="100%"
-              style={{ maxHeight: '360px', overflowY: 'auto' }}
-              onSelect={(item) => {
-                onSectionChange(item.id);
-                setIsSearchOpen(false);
-                setSearchQuery('');
-              }}
-            />
+            <div style={{ maxHeight: 360, overflowY: 'auto', padding: 4, backgroundColor: '#FFFFFF', border: '1px solid #EEEEEE', borderRadius: 10, boxShadow: '0 4px 16px rgba(0,0,0,0.10)' }}>
+              {searchItems
+                .filter((item) => item.label.toLowerCase().includes(searchQuery.toLowerCase()))
+                .map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => { onSectionChange(item.id); setIsSearchOpen(false); setSearchQuery(''); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', border: 'none', borderRadius: 6, background: 'transparent', cursor: 'pointer', fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#14141E' }}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+            </div>
           </div>
         )}
       </div>

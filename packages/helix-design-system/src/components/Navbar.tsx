@@ -1,207 +1,74 @@
 import { forwardRef } from 'react';
-import { Bell, Search, Menu } from 'lucide-react';
 
-export interface NavbarLink {
-  label: string;
-  href?: string;
-  active?: boolean;
-  onClick?: () => void;
-}
+/** Figma State — onTop is solid white; onScroll is translucent white with a blur */
+export type NavbarState = 'onTop' | 'onScroll';
 
 export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {
-  logo?: React.ReactNode;
-  links?: NavbarLink[];
-  actions?: React.ReactNode;
-  /** Show a search button */
-  showSearch?: boolean;
-  /** Show notification bell */
-  showNotifications?: boolean;
-  /** Avatar/user section */
-  user?: { name: string; avatar?: string; initials?: string };
-  /** Sticky top positioning */
-  sticky?: boolean;
-  /** Transparent background (for hero sections) */
-  transparent?: boolean;
-  onMenuClick?: () => void;
+  state?: NavbarState;
+  /** Left slot — usually the Logo (Figma Left Content) */
+  leftContent?: React.ReactNode;
+  /** Right slot — NavLinks, a Select, Buttons (Figma Right Content) */
+  rightContent?: React.ReactNode;
 }
 
-export const Navbar = forwardRef<HTMLElement, NavbarProps>(({
-  logo,
-  links = [],
-  actions,
-  showSearch = false,
-  showNotifications = false,
-  user,
-  sticky = false,
-  transparent = false,
-  onMenuClick,
-  style,
-  ...props
-}, ref) => {
+/** The marketing site header: a left slot for the logo and a right slot for links and actions, with a bottom border. For the dashboard top bar use Dashboard Navbar. */
+export const Navbar = forwardRef<HTMLElement, NavbarProps>(({ state = 'onTop', leftContent, rightContent, style, ...props }, ref) => (
+  <header
+    ref={ref}
+    style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, width: '100%', height: 60, boxSizing: 'border-box', padding: '0 24px',
+      backgroundColor: state === 'onScroll' ? 'rgba(255,255,255,0.6)' : '#FFFFFF',
+      backdropFilter: state === 'onScroll' ? 'blur(8px)' : undefined,
+      borderBottom: '1px solid var(--color-stroke-subtle, #EEEEEE)',
+      ...style,
+    }}
+    {...props}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>{leftContent}</div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>{rightContent}</div>
+  </header>
+));
+
+Navbar.displayName = 'Navbar';
+
+/* ─── NavLink (Figma _nav-link) ──────────────────────────────────────── */
+export interface NavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  label: string;
+  /** Figma State=Active — a solid brand pill */
+  active?: boolean;
+  /** Figma Surface — dark gives white link text for dark or colored backgrounds */
+  surface?: 'light' | 'dark';
+  /** Leading icon (Figma Leading=Icon) */
+  icon?: React.ReactNode;
+  /** Trailing icon (Figma Trailing=Icon) */
+  trailingIcon?: React.ReactNode;
+}
+
+/** A navigation link: default text, brand-colored hover, and a solid brand pill when active. */
+export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(({ label, active = false, surface = 'light', icon, trailingIcon, style, onMouseEnter, onMouseLeave, ...props }, ref) => {
+  const rest = surface === 'dark' ? '#FFFFFF' : 'var(--color-text-secondary, #49494A)';
+  const slot: React.CSSProperties = { display: 'flex', width: 16, height: 16, flexShrink: 0 };
   return (
-    <header
+    <a
       ref={ref}
+      aria-current={active ? 'page' : undefined}
+      onMouseEnter={(e) => { if (!active) e.currentTarget.style.color = 'var(--color-brand-primary, #F57E20)'; onMouseEnter?.(e); }}
+      onMouseLeave={(e) => { if (!active) e.currentTarget.style.color = rest; onMouseLeave?.(e); }}
       style={{
-        position: sticky ? 'sticky' : 'relative',
-        top: sticky ? 0 : undefined,
-        zIndex: sticky ? 100 : undefined,
-        width: '100%',
-        height: 64,
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: 24,
-        paddingRight: 24,
-        gap: 24,
-        backgroundColor: transparent ? 'transparent' : '#FFFFFF',
-        borderBottom: transparent ? 'none' : '1px solid var(--color-stroke-subtle, #EEEEEE)',
-        boxSizing: 'border-box',
+        display: 'inline-flex', alignItems: 'center', gap: 8, height: 36, boxSizing: 'border-box', padding: '8px 12px', borderRadius: 6,
+        fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px', whiteSpace: 'nowrap',
+        textDecoration: 'none', cursor: 'pointer', transition: 'color 0.15s',
+        color: active ? 'var(--color-text-on-primary, #FFFFFF)' : rest,
+        backgroundColor: active ? 'var(--color-brand-primary, #F57E20)' : 'transparent',
         ...style,
       }}
       {...props}
     >
-      {/* Mobile menu button */}
-      {onMenuClick && (
-        <button
-          onClick={onMenuClick}
-          aria-label="Open menu"
-          style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            width: 36, height: 36, borderRadius: 8,
-            border: 'none', backgroundColor: 'transparent',
-            cursor: 'pointer', color: 'var(--color-text-secondary, #49494A)',
-            flexShrink: 0,
-          }}
-        >
-          <Menu size={20} />
-        </button>
-      )}
-
-      {/* Logo */}
-      {logo && (
-        <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
-          {logo}
-        </div>
-      )}
-
-      {/* Nav links */}
-      {links.length > 0 && (
-        <nav style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1 }}>
-          {links.map((link, i) => (
-            <a
-              key={i}
-              href={link.href ?? '#'}
-              onClick={link.onClick ? (e) => { e.preventDefault(); link.onClick!(); } : undefined}
-              style={{
-                padding: '6px 12px',
-                borderRadius: 8,
-                fontFamily: 'var(--font-family-body)',
-                fontWeight: link.active ? 500 : 400,
-                fontSize: 14,
-                lineHeight: '21px',
-                color: link.active ? 'var(--color-brand-primary, #F57E20)' : 'var(--color-text-secondary, #49494A)',
-                backgroundColor: link.active ? 'var(--color-brand-primary-ghost-hover, #FEF2E9)' : 'transparent',
-                textDecoration: 'none',
-                cursor: 'pointer',
-                transition: 'color 0.15s, background-color 0.15s',
-              }}
-              onMouseEnter={e => {
-                if (!link.active) {
-                  e.currentTarget.style.color = 'var(--color-text-primary, #14141E)';
-                  e.currentTarget.style.backgroundColor = 'var(--color-container-secondary, #F7F7F7)';
-                }
-              }}
-              onMouseLeave={e => {
-                if (!link.active) {
-                  e.currentTarget.style.color = 'var(--color-text-secondary, #49494A)';
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-      )}
-
-      {/* Spacer when no nav links */}
-      {links.length === 0 && <div style={{ flex: 1 }} />}
-
-      {/* Right side actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-        {showSearch && (
-          <button
-            aria-label="Search"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 36, height: 36, borderRadius: 8,
-              border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-              backgroundColor: 'transparent', cursor: 'pointer',
-              color: 'var(--color-text-secondary, #49494A)',
-            }}
-          >
-            <Search size={16} />
-          </button>
-        )}
-
-        {showNotifications && (
-          <button
-            aria-label="Notifications"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 36, height: 36, borderRadius: 8,
-              border: '1px solid var(--color-stroke-subtle, #EEEEEE)',
-              backgroundColor: 'transparent', cursor: 'pointer',
-              color: 'var(--color-text-secondary, #49494A)',
-              position: 'relative',
-            }}
-          >
-            <Bell size={16} />
-            <span style={{
-              position: 'absolute', top: 6, right: 6,
-              width: 8, height: 8, borderRadius: '50%',
-              backgroundColor: 'var(--color-brand-primary, #F57E20)',
-              border: '2px solid #FFFFFF',
-            }} />
-          </button>
-        )}
-
-        {actions}
-
-        {user && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 4 }}>
-            {user.avatar ? (
-              <img
-                src={user.avatar}
-                alt={user.name}
-                style={{ width: 36, height: 36, borderRadius: 8, objectFit: 'cover' }}
-              />
-            ) : (
-              <div style={{
-                width: 36, height: 36, borderRadius: 8,
-                backgroundColor: 'var(--color-brand-primary, #F57E20)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-family-body)',
-                fontWeight: 600,
-                fontSize: 14,
-              }}>
-                {user.initials ?? user.name.charAt(0).toUpperCase()}
-              </div>
-            )}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <span style={{
-                fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 13,
-                lineHeight: '19.2px', color: 'var(--color-text-primary, #14141E)',
-                letterSpacing: '-0.01px',
-              }}>
-                {user.name}
-              </span>
-            </div>
-          </div>
-        )}
-      </div>
-    </header>
+      {icon && <span style={slot}>{icon}</span>}
+      {label}
+      {trailingIcon && <span style={slot}>{trailingIcon}</span>}
+    </a>
   );
 });
 
-Navbar.displayName = 'Navbar';
+NavLink.displayName = 'NavLink';

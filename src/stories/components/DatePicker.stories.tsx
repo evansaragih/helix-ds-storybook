@@ -1,66 +1,26 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DatePicker } from 'helix-design-system/components';
 
 const meta = {
-  title: 'Components/Inputs & Forms/DatePicker',
+  title: 'Organism/Date Pickers/Date Picker',
   component: DatePicker,
   tags: ['autodocs'],
   argTypes: {
-    mode: { control: 'select', options: ['date', 'range', 'month', 'year'] },
+    mode: { control: 'select', options: ['single', 'range', 'date-time', 'time'] },
+    weekStartsOn: { control: 'select', options: [0, 1] },
   },
-  args: {
-    mode: 'date',
-    label: 'Collection date',
-    placeholder: 'Select date',
-  },
+  args: { mode: 'single', defaultValue: new Date(2026, 3, 15) },
+  parameters: { layout: 'centered' },
 } satisfies Meta<typeof DatePicker>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function DatePickerDemo(args: React.ComponentProps<typeof DatePicker>) {
-  const [value, setValue] = useState<Date | null>(null);
-  return <DatePicker {...args} value={value} onChange={setValue} />;
-}
+export const Playground: Story = {};
 
-function RangeDemo(args: React.ComponentProps<typeof DatePicker>) {
-  const [start, setStart] = useState<Date | null>(null);
-  const [end, setEnd] = useState<Date | null>(null);
-  return (
-    <DatePicker
-      {...args}
-      mode="range"
-      rangeStart={start}
-      rangeEnd={end}
-      onRangeChange={(s, e) => { setStart(s); setEnd(e); }}
-    />
-  );
-}
-
-export const Playground: Story = {
-  render: (args) => <DatePickerDemo {...args} />,
-};
-
-export const Range: Story = {
-  args: { label: 'Reporting period', placeholder: 'Select date range' },
-  render: (args) => <RangeDemo {...args} />,
-};
-
-export const Invalid: Story = {
-  args: { error: 'Please select a valid date.' },
-  render: (args) => <DatePickerDemo {...args} />,
-};
-
-export const Disabled: Story = {
-  args: { disabled: true },
-  render: (args) => <DatePickerDemo {...args} />,
-};
-
-export const WithMinMax: Story = {
-  args: {
-    minDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-    maxDate: new Date(new Date().getFullYear(), new Date().getMonth(), 20),
-  },
-  render: (args) => <DatePickerDemo {...args} />,
-};
+/** Figma Mode=Range — click a start and an end date. */
+export const Range: Story = { args: { mode: 'range', defaultMonth: new Date(2026, 3, 1), defaultRange: { start: new Date(2026, 3, 10), end: new Date(2026, 3, 17) } } };
+export const DateAndTime: Story = { args: { mode: 'date-time', defaultValue: new Date(2026, 3, 15, 9, 30) } };
+export const Time: Story = { args: { mode: 'time', defaultValue: new Date(2026, 3, 15, 9, 30) } };
+export const MondayFirst: Story = { args: { weekStartsOn: 1 } };
+export const WithDisabledDates: Story = { args: { isDisabled: (d: Date) => d.getDay() === 0 || d.getDay() === 6 } };

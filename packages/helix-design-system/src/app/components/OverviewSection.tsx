@@ -110,7 +110,7 @@ export function OverviewSection() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '1px solid var(--color-border-default)'
+            border: '1px solid var(--color-stroke-subtle)'
           }}>
             {/* Yellow Badge */}
             <div style={{
@@ -269,7 +269,7 @@ export function OverviewSection() {
           padding: 'var(--spacing-32)',
           backgroundColor: 'var(--color-bg-secondary)',
           borderRadius: 'var(--radius-2xl)',
-          border: '1px solid var(--color-border-default)',
+          border: '1px solid var(--color-stroke-subtle)',
           textAlign: 'center',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease'
         }}
@@ -318,7 +318,7 @@ export function OverviewSection() {
           padding: 'var(--spacing-32)',
           backgroundColor: 'var(--color-bg-secondary)',
           borderRadius: 'var(--radius-2xl)',
-          border: '1px solid var(--color-border-default)',
+          border: '1px solid var(--color-stroke-subtle)',
           textAlign: 'center',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease'
         }}
@@ -367,7 +367,7 @@ export function OverviewSection() {
           padding: 'var(--spacing-32)',
           backgroundColor: 'var(--color-bg-secondary)',
           borderRadius: 'var(--radius-2xl)',
-          border: '1px solid var(--color-border-default)',
+          border: '1px solid var(--color-stroke-subtle)',
           textAlign: 'center',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease'
         }}

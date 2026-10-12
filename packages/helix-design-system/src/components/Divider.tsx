@@ -1,101 +1,35 @@
 import { forwardRef } from 'react';
 
+/** Figma Rotation */
 export type DividerOrientation = 'horizontal' | 'vertical';
+/** Figma Type */
 export type DividerType = 'line' | 'dash';
-export type DividerLabelAlign = 'left' | 'center' | 'right';
 
 export interface DividerProps extends React.HTMLAttributes<HTMLDivElement> {
   orientation?: DividerOrientation;
   type?: DividerType;
-  /** Optional label — only for horizontal dividers */
-  label?: string;
-  labelAlign?: DividerLabelAlign;
-  color?: string;
-  thickness?: number;
 }
 
-export const Divider = forwardRef<HTMLDivElement, DividerProps>(({
-  orientation = 'horizontal',
-  type = 'line',
-  label,
-  labelAlign = 'center',
-  color = 'var(--color-stroke-subtle, #D7D7D7)',
-  thickness = 1,
-  style,
-  className,
-  ...props
-}, ref) => {
-  const lineStyle: React.CSSProperties =
-    type === 'dash'
-      ? { borderStyle: 'dashed', borderColor: color }
-      : { borderStyle: 'solid', borderColor: color };
+const COLOR = 'var(--color-stroke-subtle, #EEEEEE)';
 
-  if (orientation === 'vertical') {
-    return (
-      <div
-        ref={ref}
-        className={className}
-        style={{
-          display: 'inline-block',
-          width: thickness,
-          alignSelf: 'stretch',
-          borderLeft: `${thickness}px ${lineStyle.borderStyle} ${lineStyle.borderColor}`,
-          flexShrink: 0,
-          ...style,
-        }}
-        role="separator"
-        aria-orientation="vertical"
-        {...props}
-      />
-    );
-  }
-
-  if (label) {
-    const leftFlex = labelAlign === 'left' ? '0 0 16px' : labelAlign === 'right' ? '1' : '1';
-    const rightFlex = labelAlign === 'right' ? '0 0 16px' : labelAlign === 'left' ? '1' : '1';
-    return (
-      <div
-        ref={ref}
-        className={className}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          width: '100%',
-          ...style,
-        }}
-        role="separator"
-        aria-orientation="horizontal"
-        {...props}
-      >
-        <span style={{ flex: leftFlex, borderBottom: `${thickness}px ${lineStyle.borderStyle} ${lineStyle.borderColor}` }} />
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 12,
-          lineHeight: '18px',
-          color: 'var(--color-text-tertiary, #828282)',
-          whiteSpace: 'nowrap',
-          flexShrink: 0,
-        }}>
-          {label}
-        </span>
-        <span style={{ flex: rightFlex, borderBottom: `${thickness}px ${lineStyle.borderStyle} ${lineStyle.borderColor}` }} />
-      </div>
-    );
-  }
+/** A simple horizontal or vertical separator line. Use for splitting adjacent sections with no label; for a divider with an embedded label or action use Content Divider. */
+export const Divider = forwardRef<HTMLDivElement, DividerProps>(({ orientation = 'horizontal', type = 'line', style, ...props }, ref) => {
+  const vertical = orientation === 'vertical';
+  const line: React.CSSProperties = type === 'dash'
+    ? { border: 'none', [vertical ? 'borderLeft' : 'borderTop']: `1px dashed ${COLOR}` }
+    : { backgroundColor: COLOR };
 
   return (
     <div
       ref={ref}
-      className={className}
+      role="separator"
+      aria-orientation={orientation}
       style={{
-        width: '100%',
-        borderBottom: `${thickness}px ${lineStyle.borderStyle} ${lineStyle.borderColor}`,
-        flexShrink: 0,
+        flexShrink: 0, borderRadius: 16, boxSizing: 'border-box',
+        ...(vertical ? { width: 1, alignSelf: 'stretch', minHeight: 32 } : { height: 1, width: '100%' }),
+        ...line,
         ...style,
       }}
-      role="separator"
-      aria-orientation="horizontal"
       {...props}
     />
   );

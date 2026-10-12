@@ -529,7 +529,6 @@ export function DashboardPage() {
               columns={COLUMNS}
               data={ACTIVITY_DATA}
               getRowKey={r => r.id}
-              bordered={false}
               style={{ borderRadius: 0 }}
             />
           </div>

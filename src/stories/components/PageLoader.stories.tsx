@@ -3,19 +3,12 @@ import { useEffect, useState } from 'react';
 import { PageLoader } from 'helix-design-system/components';
 
 const meta = {
-  title: 'Components/Feedback/PageLoader',
+  title: 'Atomic/Loading indicator/Page Loader',
   component: PageLoader,
   tags: ['autodocs'],
-  parameters: {
-    docs: {
-      description: {
-        component: 'A branded card shown while a page or view is fetching data — logo over a determinate progress bar. Used for full-page/route loads, not small in-place operations (use Spinner or ProgressBar for those).',
-      },
-    },
-  },
-  args: {
-    value: 40,
-  },
+  argTypes: { brand: { control: 'select', options: ['nusantics', 'cekolam', 'causa'] }, value: { control: { type: 'range', min: 0, max: 100 } } },
+  args: { value: 50, brand: 'nusantics' },
+  parameters: { layout: 'centered' },
 } satisfies Meta<typeof PageLoader>;
 
 export default meta;
@@ -23,24 +16,18 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Empty: Story = {
-  args: { value: 0 },
-};
-
-export const Complete: Story = {
-  args: { value: 100 },
+export const Brands: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', gap: 16, background: '#F7F7F7', padding: 24, borderRadius: 12 }}>
+      {(['nusantics', 'cekolam', 'causa'] as const).map((brand) => <PageLoader key={brand} {...args} brand={brand} />)}
+    </div>
+  ),
 };
 
 export const Animated: Story = {
-  render: () => {
-    function Demo() {
-      const [value, setValue] = useState(0);
-      useEffect(() => {
-        const id = setInterval(() => setValue((v) => (v >= 100 ? 0 : v + 4)), 200);
-        return () => clearInterval(id);
-      }, []);
-      return <PageLoader value={value} />;
-    }
-    return <Demo />;
+  render: (args) => {
+    const [value, setValue] = useState(0);
+    useEffect(() => { const t = setInterval(() => setValue((v) => (v >= 100 ? 0 : v + 5)), 300); return () => clearInterval(t); }, []);
+    return <PageLoader {...args} value={value} />;
   },
 };

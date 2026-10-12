@@ -1,113 +1,32 @@
-import { PageLayout, Section } from './PageLayout';
-import { Carousel } from '../../components/Carousel';
+import { ComponentDocPage } from './ComponentDocPage';
+import { Carousel } from '../../components';
 
-const toc = [
-  { id: 'carousel-usage', label: 'Usage Guidelines' },
-  { id: 'carousel-single', label: 'Single Slide' },
-  { id: 'carousel-multi', label: 'Multiple Visible' },
-  { id: 'carousel-autoplay', label: 'Auto-play' },
-];
-
-function SlideCard({ index, color }: { index: number; color: string }) {
-  return (
-    <div style={{
-      height: 180,
-      borderRadius: 12,
-      backgroundColor: color,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: '#FFFFFF',
-      fontFamily: 'var(--font-family-body)',
-      fontWeight: 600,
-      fontSize: 24,
-    }}>
-      Slide {index}
-    </div>
-  );
-}
-
-const COLORS = ['#F57E20', '#089AAA', '#476142', '#014CC5', '#DC2626', '#A66800'];
-
-const slides = COLORS.map((color, i) => ({
-  id: i + 1,
-  content: <SlideCard index={i + 1} color={color} />,
-}));
-
-const featureSlides = [
-  { id: 1, content: (
-    <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
-      <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#FEF2E9', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#F57E20', fontSize: 20 }}>🚀</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Fast onboarding</h3>
-      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Get your team up and running in minutes with guided setup and pre-built templates.</p>
-    </div>
-  )},
-  { id: 2, content: (
-    <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
-      <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#E6F7F9', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#089AAA', fontSize: 20 }}>📊</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Advanced analytics</h3>
-      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Track every metric that matters with real-time dashboards and custom report exports.</p>
-    </div>
-  )},
-  { id: 3, content: (
-    <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
-      <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#EBF0EA', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#476142', fontSize: 20 }}>🔒</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Enterprise security</h3>
-      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>SOC 2 compliant, SSO, audit logs, and role-based access control built in from day one.</p>
-    </div>
-  )},
-  { id: 4, content: (
-    <div style={{ padding: 24, border: '1px solid #EEEEEE', borderRadius: 12, backgroundColor: '#FFF' }}>
-      <div style={{ width: 40, height: 40, borderRadius: 10, backgroundColor: '#EBF2FE', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12, color: '#014CC5', fontSize: 20 }}>🤝</div>
-      <h3 style={{ margin: '0 0 8px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 16, color: '#14141E' }}>Team collaboration</h3>
-      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 13, color: '#49494A', lineHeight: '1.6' }}>Comments, mentions, shared views, and live presence — work together in real time.</p>
-    </div>
-  )},
+const IMG = (id: string) => `https://images.unsplash.com/${id}?w=1200&q=70`;
+const SLIDES = [
+  { id: 's1', image: IMG('photo-1532094349884-543bc11b234d'), title: 'Sample prep', description: 'Samples are prepared and labelled before sequencing.', label: 'Step 1', bullets: ['Logged on arrival', 'Barcoded', 'Stored at 4°C'] },
+  { id: 's2', image: IMG('photo-1582719471384-894fbb16e074'), title: 'Microscopy', description: 'Quality check under the microscope.', label: 'Step 2', bullets: ['Visual QC', 'Contamination check'] },
+  { id: 's3', image: IMG('photo-1576086213369-97a306d36557'), title: 'Analysis', description: 'Results are reviewed by the analyst.', label: 'Step 3', bullets: ['Automated pipeline', 'Analyst sign-off'] },
+  { id: 's4', image: IMG('photo-1579154204601-01588f351e67'), title: 'Reporting', description: 'A report is issued to the customer.', label: 'Step 4', bullets: ['PDF report', 'Shared securely'] },
 ];
 
 export function CarouselSection() {
   return (
-    <PageLayout
-      category="Components"
+    <ComponentDocPage
+      slug="carousel"
       title="Carousel"
-      description="Carousels allow users to browse through a set of items one by one or in groups. Use them for feature highlights, image galleries, or content previews."
-      tocItems={toc}
-    >
-      <Section id="carousel-usage" title="Usage Guidelines">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-          {[
-            { heading: 'Limit carousel depth', body: 'Users rarely advance past slide 3–4. Keep critical content in the first 2 slides. Don\'t hide important actions inside later slides.' },
-            { heading: 'Always show controls', body: 'Keep arrow buttons and dots visible. Hidden-until-hover controls are difficult on touch devices and reduce discoverability.' },
-            { heading: 'Don\'t auto-play text', body: 'Auto-play is acceptable for image galleries but avoid it for carousels containing text or interactive elements — users may not have time to read.' },
-          ].map(g => (
-            <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="carousel-single" title="Single Slide">
-        <Carousel items={slides.slice(0, 4)} visibleCount={1} />
-      </Section>
-
-      <Section id="carousel-multi" title="Multiple Visible">
-        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Set <code>visibleCount</code> to show multiple slides at once — useful for feature or card grids.
-        </p>
-        <Carousel items={featureSlides} visibleCount={2} gap={16} />
-        <div style={{ marginTop: 24 }}>
-          <Carousel items={slides} visibleCount={3} gap={12} />
-        </div>
-      </Section>
-
-      <Section id="carousel-autoplay" title="Auto-play">
-        <p style={{ margin: '0 0 24px', fontFamily: 'var(--font-family-body)', fontSize: 14, color: '#828282', lineHeight: '1.6' }}>
-          Pass <code>autoPlay</code> in milliseconds to enable automatic advancing. Suitable for image galleries.
-        </p>
-        <Carousel items={slides} visibleCount={1} autoPlay={3000} />
-      </Section>
-    </PageLayout>
+      description="A set of slides shown one at a time or as a row of cards, with a page indicator and prev / next navigation. Layouts: Single, Center Peek, Row Cards, Stack Peek and Split Feature."
+      usage={[
+        { heading: 'Browse, don’t bury', body: 'Use a carousel for browsable content like photos or features — not for essential information.' },
+        { heading: 'Show the next one', body: 'Peek layouts hint at more slides, which makes the control easier to discover.' },
+        { heading: 'Indicator for position', body: 'Choose the page indicator that fits the surface; use the inverse dots on dark backgrounds.' },
+      ]}
+      demos={[
+        { id: 'single', title: 'Single', node: <Carousel slides={SLIDES} /> },
+        { id: 'center', title: 'Center Peek', node: <Carousel slides={SLIDES} layout="center-peek" /> },
+        { id: 'row', title: 'Row Cards', node: <Carousel slides={SLIDES} layout="row-cards" /> },
+        { id: 'stack', title: 'Stack Peek', node: <Carousel slides={SLIDES} layout="stack-peek" /> },
+        { id: 'split', title: 'Split Feature', node: <div style={{ width: 1000 }}><Carousel slides={SLIDES} layout="split-feature" /></div> },
+      ]}
+    />
   );
 }

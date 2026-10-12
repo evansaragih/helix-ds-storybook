@@ -5,7 +5,7 @@ import { AVATAR_USERS } from '../../data/avatarUsers';
 const user = AVATAR_USERS[0];
 
 const meta = {
-  title: 'Components/Data Display/AvatarLabelGroup',
+  title: 'Molecule/Avatar/Avatar Label Group',
   component: AvatarLabelGroup,
   tags: ['autodocs'],
   argTypes: {

@@ -1,37 +1,43 @@
 import { forwardRef } from 'react';
+import { Dot } from './Dot';
+import type { DotSize } from './Dot';
 
-export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg';
-export type AvatarShape = 'circular' | 'rounded';
+/** Figma Size — XXSmall 13 · XSmall 24 · Small 36 · Medium 48 · Large 58 */
+export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
+/** Figma Shape — Rounded (default) or Circular */
+export type AvatarShape = 'rounded' | 'circular';
+/** Figma Content */
 export type AvatarContent = 'image' | 'icon' | 'placeholder';
 
 export interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: AvatarSize;
   shape?: AvatarShape;
-  /** 'image' = src required; 'icon' = icon required; 'placeholder' = shows initials */
   content?: AvatarContent;
+  /** 1px ring around the avatar; adds 2px to each side (Figma Border) */
+  border?: boolean;
+  /** Presence dot on the bottom-right corner (Figma Status). Use either this or `companyLogo`. */
+  status?: boolean;
+  /** Small logo / icon tile on the bottom-right corner (Figma Company logo). Use either this or `status`. */
+  companyLogo?: React.ReactNode;
+  /** Image URL for content 'image' */
   src?: string;
   alt?: string;
-  /** Initials to show for placeholder (max 2 chars, auto-derived from name if name given) */
+  /** Initials for the placeholder (max 2 chars); derived from `name` when omitted */
   initials?: string;
-  /** Full name — auto-generates initials from first + last word */
+  /** Full name — used for placeholder initials */
   name?: string;
-  /** Icon node for content=icon */
+  /** Icon node for content 'icon' */
   icon?: React.ReactNode;
 }
 
-interface SizeConfig {
-  size: number;
-  fontSize: number;
-  iconSize: number;
-  radius: number;
-  roundedRadius: number;
-}
+interface SizeConfig { box: number; font: number; icon: number; radius: number; dot: DotSize; dotPx: number; logo: number }
 
 const SIZES: Record<AvatarSize, SizeConfig> = {
-  xs: { size: 26, fontSize: 13, iconSize: 12, radius: 9999, roundedRadius: 8 },
-  sm: { size: 38, fontSize: 13, iconSize: 14, radius: 9999, roundedRadius: 8 },
-  md: { size: 48, fontSize: 20, iconSize: 18, radius: 9999, roundedRadius: 8 },
-  lg: { size: 58, fontSize: 20, iconSize: 22, radius: 9999, roundedRadius: 8 },
+  xxs: { box: 13, font: 7,  icon: 8,  radius: 4.27, dot: 'sm', dotPx: 6,  logo: 10 },
+  xs:  { box: 24, font: 13, icon: 12, radius: 8,    dot: 'sm', dotPx: 6,  logo: 10 },
+  sm:  { box: 36, font: 13, icon: 14, radius: 8,    dot: 'lg', dotPx: 10, logo: 14 },
+  md:  { box: 48, font: 16, icon: 18, radius: 8,    dot: 'xl', dotPx: 12, logo: 16 },
+  lg:  { box: 58, font: 20, icon: 22, radius: 8,    dot: '2xl', dotPx: 16, logo: 18 },
 };
 
 function getInitials(name?: string, initials?: string): string {
@@ -42,84 +48,85 @@ function getInitials(name?: string, initials?: string): string {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
+/** A person or entity avatar — image, icon or initials — with an optional presence dot or company-logo overlay. */
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(({
   size = 'md',
-  shape = 'circular',
+  shape = 'rounded',
   content = 'placeholder',
+  border = false,
+  status = false,
+  companyLogo,
   src,
   alt = '',
   initials,
   name,
   icon,
   style,
-  className,
   ...props
 }, ref) => {
   const cfg = SIZES[size];
-  const radius = shape === 'circular' ? cfg.radius : cfg.roundedRadius;
+  const radius = shape === 'circular' ? 9999 : cfg.radius;
 
-  const base: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: cfg.size,
-    height: cfg.size,
-    borderRadius: radius,
-    flexShrink: 0,
-    overflow: 'hidden',
-    position: 'relative',
-    backgroundColor: 'var(--color-container-tertiary, #EEEEEE)',
-    ...style,
+  const face: React.CSSProperties = {
+    width: cfg.box, height: cfg.box, borderRadius: radius, overflow: 'hidden',
+    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
   };
 
+  let inner: React.ReactNode;
   if (content === 'image' && src) {
-    return (
-      <div ref={ref} style={base} className={className} {...props}>
-        <img
-          src={src}
-          alt={alt}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-        />
+    inner = <div style={face}><img src={src} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /></div>;
+  } else if (content === 'icon' && icon) {
+    inner = (
+      <div style={{ ...face, backgroundColor: 'var(--color-container-tertiary, #EEEEEE)', color: 'var(--color-text-tertiary, #828282)' }}>
+        <span style={{ display: 'flex', width: cfg.icon, height: cfg.icon }}>{icon}</span>
       </div>
     );
-  }
-
-  if (content === 'icon' && icon) {
-    return (
-      <div ref={ref} style={base} className={className} {...props}>
-        <span style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          width: cfg.iconSize, height: cfg.iconSize, color: 'var(--color-text-tertiary, #828282)',
-        }}>
-          {icon}
+  } else {
+    inner = (
+      <div style={{ ...face, backgroundColor: 'var(--color-brand-primary-hover, #DF6505)' }}>
+        <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: cfg.font, lineHeight: 1, color: '#FFFFFF', letterSpacing: '-0.01em', userSelect: 'none' }}>
+          {getInitials(name, initials)}
         </span>
       </div>
     );
   }
 
-  // Placeholder: initials on brand-colored background
-  const text = getInitials(name, initials);
+  const ringed = border ? 2 : 0;
+
   return (
     <div
       ref={ref}
       style={{
-        ...base,
-        backgroundColor: 'var(--color-brand-primary, #F57E20)',
+        position: 'relative',
+        display: 'inline-flex',
+        flexShrink: 0,
+        width: cfg.box + ringed * 2,
+        height: cfg.box + ringed * 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
+        borderRadius: radius + ringed,
+        backgroundColor: border ? 'var(--color-container-primary, #FFFFFF)' : undefined,
+        boxShadow: border ? 'inset 0 0 0 1px var(--color-stroke-subtle, #EEEEEE)' : undefined,
+        ...style,
       }}
-      className={className}
       {...props}
     >
-      <span style={{
-        fontFamily: 'var(--font-family-body)',
-        fontWeight: 500,
-        fontSize: cfg.fontSize,
-        lineHeight: 1,
-        color: '#FFFFFF',
-        letterSpacing: '-0.01em',
-        userSelect: 'none',
-      }}>
-        {text}
-      </span>
+      {inner}
+      {status && !companyLogo && (
+        <span style={{ position: 'absolute', right: ringed, bottom: ringed, display: 'flex' }}>
+          <Dot color="success" size={cfg.dot} ring />
+        </span>
+      )}
+      {companyLogo && (
+        <span style={{
+          position: 'absolute', right: ringed, bottom: ringed, width: cfg.logo, height: cfg.logo, borderRadius: 4,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', boxSizing: 'border-box',
+          backgroundColor: 'var(--color-status-brand-bg, #FEF2E9)', border: '1px solid #FFFFFF',
+        }}>
+          {companyLogo}
+        </span>
+      )}
     </div>
   );
 });

@@ -1,110 +1,51 @@
 import { forwardRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from './Button';
+import { IconButton } from './IconButton';
+import { Select } from './Select';
+
+/** Figma Content */
+export type PaginationContent =
+  | 'numbered' | 'simple' | 'simple-reversed' | 'simple-split'
+  | 'grouped' | 'pagination-right' | 'pagination-left'
+  | 'page-count' | 'showing';
+/** Figma Density — full uses labelled Previous / Next; compact uses icon buttons */
+export type PaginationDensity = 'full' | 'compact';
 
 export interface PaginationProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Total number of items */
   total: number;
   pageSize?: number;
+  /** Controlled current page (1-based) */
   page?: number;
   defaultPage?: number;
   onPageChange?: (page: number) => void;
+  /** Page buttons shown on each side of the current page */
   siblingCount?: number;
-  showFirstLast?: boolean;
+  content?: PaginationContent;
+  density?: PaginationDensity;
+  /** Show the "rows per page" select (default: on for simple, page-count and showing content) */
   showRowsPerPage?: boolean;
   pageSizes?: number[];
   onPageSizeChange?: (size: number) => void;
 }
 
-function range(from: number, to: number) {
-  return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+
+function buildPages(current: number, total: number, siblings: number): (number | '…')[] {
+  if (total <= 7) return range(1, total);
+  const left = Math.max(current - siblings, 1);
+  const right = Math.min(current + siblings, total);
+  const showLeft = left > 2;
+  const showRight = right < total - 1;
+  if (!showLeft && showRight) return [...range(1, 3 + siblings * 2), '…', total];
+  if (showLeft && !showRight) return [1, '…', ...range(total - 2 - siblings * 2, total)];
+  return [1, '…', ...range(left, right), '…', total];
 }
 
-function buildPages(current: number, total: number, siblings: number): (number | '...')[] {
-  const totalPages = total;
-  if (totalPages <= 7) return range(1, totalPages);
+const text: React.CSSProperties = { fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '20px', letterSpacing: '-0.01px', color: 'var(--color-text-secondary, #49494A)', whiteSpace: 'nowrap' };
 
-  const leftSibling = Math.max(current - siblings, 1);
-  const rightSibling = Math.min(current + siblings, totalPages);
-
-  const showLeft = leftSibling > 2;
-  const showRight = rightSibling < totalPages - 1;
-
-  if (!showLeft && showRight) {
-    const leftItems = range(1, 3 + siblings * 2);
-    return [...leftItems, '...', totalPages];
-  }
-  if (showLeft && !showRight) {
-    const rightItems = range(totalPages - 2 - siblings * 2, totalPages);
-    return [1, '...', ...rightItems];
-  }
-  return [1, '...', ...range(leftSibling, rightSibling), '...', totalPages];
-}
-
-function PageBtn({
-  children, active, disabled, onClick,
-}: {
-  children: React.ReactNode;
-  active?: boolean;
-  disabled?: boolean;
-  onClick?: () => void;
-}) {
-  const [hovered, setHovered] = useState(false);
-
-  const bg = active
-    ? 'var(--color-brand-primary, #F57E20)'
-    : disabled
-    ? 'transparent'
-    : hovered
-    ? 'var(--color-container-tertiary, #EEEEEE)'
-    : 'transparent';
-
-  const color = active
-    ? '#FFFFFF'
-    : disabled
-    ? 'var(--color-text-muted, #9F9F9F)'
-    : 'var(--color-text-secondary, #49494A)';
-
-  const boxShadow = active
-    ? '0px 0.5px 4px 0px var(--color-brand-primary, #F57E20), inset 0px -5px 4px 0px var(--color-brand-primary, #F57E20)'
-    : 'none';
-
-  return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 8,
-        minWidth: 36,
-        height: 36,
-        padding: '8px 11px',
-        borderRadius: 8,
-        border: active
-          ? '1px solid var(--color-brand-primary, #F57E20)'
-          : '1px solid transparent',
-        backgroundColor: bg,
-        color,
-        cursor: disabled ? 'default' : 'pointer',
-        fontFamily: 'var(--font-family-body)',
-        fontWeight: 400,
-        fontSize: 13,
-        lineHeight: '19.2px',
-        letterSpacing: '-0.01px',
-        outline: 'none',
-        transition: 'background-color 0.15s, color 0.15s',
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-        boxShadow,
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
+/** Page navigation for long lists and tables. Pick a content layout (numbered, simple, grouped, page count, showing…) and a density (full or compact icon navigation). */
 export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(({
   total,
   pageSize = 10,
@@ -112,131 +53,118 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(({
   defaultPage = 1,
   onPageChange,
   siblingCount = 1,
-  showFirstLast = false,
-  showRowsPerPage = false,
+  content = 'numbered',
+  density = 'full',
+  showRowsPerPage,
   pageSizes = [10, 25, 50, 100],
   onPageSizeChange,
   style,
-  className,
   ...props
 }, ref) => {
   const [internalPage, setInternalPage] = useState(defaultPage);
-  const [internalPageSize, setInternalPageSize] = useState(pageSize);
-  const resolvedPageSize = onPageSizeChange ? pageSize : internalPageSize;
-  const totalPages = Math.max(1, Math.ceil(total / resolvedPageSize));
-  const isControlled = controlledPage !== undefined;
-  const current = Math.min(Math.max(isControlled ? controlledPage! : internalPage, 1), totalPages);
+  const [internalSize, setInternalSize] = useState(pageSize);
+  const size = onPageSizeChange ? pageSize : internalSize;
+  const totalPages = Math.max(1, Math.ceil(total / size));
+  const controlled = controlledPage !== undefined;
+  const current = Math.min(Math.max(controlled ? controlledPage! : internalPage, 1), totalPages);
+  const compact = density === 'compact';
 
   const go = (p: number) => {
     const next = Math.min(Math.max(p, 1), totalPages);
-    if (!isControlled) setInternalPage(next);
+    if (!controlled) setInternalPage(next);
     onPageChange?.(next);
   };
+  const changeSize = (s: number) => { setInternalSize(s); onPageSizeChange?.(s); go(1); };
 
-  const handlePageSizeChange = (size: number) => {
-    setInternalPageSize(size);
-    onPageSizeChange?.(size);
-    go(1);
-  };
-
+  const withRows = showRowsPerPage ?? ['simple', 'simple-reversed', 'simple-split', 'page-count', 'showing'].includes(content);
   const pages = buildPages(current, totalPages, siblingCount);
 
-  const paginationControls = (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 0 }}>
-      <PageBtn disabled={current <= 1} onClick={() => go(current - 1)}>
-        <ChevronLeft size={14} strokeWidth={2} />
-        Previous
-      </PageBtn>
+  const prev = compact
+    ? <IconButton key="prev" aria-label="Previous page" hierarchy="secondary" size="sm" icon={<ChevronLeft size={16} />} disabled={current <= 1} onClick={() => go(current - 1)} />
+    : <Button key="prev" hierarchy="secondary" size="sm" disabled={current <= 1} onClick={() => go(current - 1)}>Previous</Button>;
+  const next = compact
+    ? <IconButton key="next" aria-label="Next page" hierarchy="secondary" size="sm" icon={<ChevronRight size={16} />} disabled={current >= totalPages} onClick={() => go(current + 1)} />
+    : <Button key="next" hierarchy="secondary" size="sm" disabled={current >= totalPages} onClick={() => go(current + 1)}>Next</Button>;
 
-      {pages.map((p, i) =>
-        p === '...' ? (
-          <span key={`dots-${i}`} style={{
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            width: 36, height: 36, color: 'var(--color-text-muted, #9F9F9F)',
-          }}>
-            <MoreHorizontal size={12} />
-          </span>
-        ) : (
-          <PageBtn key={p} active={p === current} onClick={() => go(p as number)}>
-            {p}
-          </PageBtn>
-        )
-      )}
+  const pageButton = (p: number | '…', i: number, grouped = false, pos?: 'first' | 'mid' | 'last') => p === '…'
+    ? <span key={`d${i}`} aria-hidden="true" style={{ ...text, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: grouped ? 36 : 24, color: 'var(--color-text-tertiary, #828282)' }}>…</span>
+    : (
+      <Button
+        key={p}
+        size="sm"
+        hierarchy={p === current ? 'primary' : 'secondary'}
+        aria-current={p === current ? 'page' : undefined}
+        onClick={() => go(p)}
+        style={{ minWidth: 36, paddingLeft: 8, paddingRight: 8, ...(grouped ? { borderRadius: pos === 'first' ? '6px 0 0 6px' : pos === 'last' ? '0 6px 6px 0' : 0, marginLeft: pos === 'first' ? 0 : -1 } : {}) }}
+      >
+        {p}
+      </Button>
+    );
 
-      <PageBtn disabled={current >= totalPages} onClick={() => go(current + 1)}>
-        Next
-        <ChevronRight size={14} strokeWidth={2} />
-      </PageBtn>
+  const pageList = <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{pages.map((p, i) => pageButton(p, i))}</div>;
+
+  const grouped = (
+    <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+      <Button size="sm" hierarchy="secondary" disabled={current <= 1} onClick={() => go(current - 1)} style={{ borderRadius: '6px 0 0 6px' }}>{compact ? <ChevronLeft size={16} /> : 'Previous'}</Button>
+      {pages.map((p, i) => pageButton(p, i, true, 'mid'))}
+      <Button size="sm" hierarchy="secondary" disabled={current >= totalPages} onClick={() => go(current + 1)} style={{ borderRadius: '0 6px 6px 0', marginLeft: -1 }}>{compact ? <ChevronRight size={16} /> : 'Next'}</Button>
     </div>
   );
 
-  if (!showRowsPerPage) {
-    return (
-      <div
-        ref={ref}
-        role="navigation"
-        aria-label="Pagination"
-        style={{ display: 'inline-flex', alignItems: 'center', ...style }}
-        className={className}
-        {...props}
-      >
-        {paginationControls}
+  const rows = withRows && !compact && (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <span style={text}>Rows per page</span>
+      <div style={{ width: 72 }}>
+        <Select options={pageSizes.map((s) => ({ value: String(s), label: String(s) }))} value={String(size)} onValueChange={(v) => changeSize(Number(v))} />
       </div>
-    );
+    </div>
+  );
+
+  const pageText = <span style={text}>Page {current} of {totalPages}</span>;
+  const pageInput = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <span style={text}>Showing page</span>
+      <input
+        aria-label="Current page"
+        inputMode="numeric"
+        value={current}
+        onChange={(e) => { const n = Number(e.target.value.replace(/\D/g, '')); if (n) go(n); }}
+        style={{ width: 36, height: 36, boxSizing: 'border-box', textAlign: 'center', borderRadius: 8, border: '1px solid var(--color-stroke-subtle, #EEEEEE)', fontFamily: 'var(--font-family-body)', fontSize: 13, outline: 'none' }}
+      />
+      <span style={text}>of {totalPages}</span>
+    </div>
+  );
+  const indicator = <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>{pageText}{rows}</div>;
+
+  const row: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 8, width: '100%', ...style };
+
+  let body: React.ReactNode;
+  switch (content) {
+    case 'simple':
+      body = <><div style={{ flex: 1 }}>{compact ? null : indicator}</div>{compact ? <>{prev}{pageText}{next}</> : <div style={{ display: 'flex', gap: 8 }}>{prev}{next}</div>}</>; break;
+    case 'simple-reversed':
+      body = <>{compact ? <>{prev}{pageText}{next}</> : <div style={{ display: 'flex', gap: 8 }}>{prev}{next}</div>}<div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>{compact ? null : indicator}</div></>; break;
+    case 'simple-split':
+      body = <>{prev}<div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>{compact ? pageText : indicator}</div>{next}</>; break;
+    case 'grouped':
+      body = <><div style={{ flex: 1 }}>{compact ? null : indicator}</div>{grouped}</>; break;
+    case 'pagination-right':
+      body = <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>{grouped}</div>; break;
+    case 'pagination-left':
+      body = <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-start' }}>{grouped}</div>; break;
+    case 'page-count':
+      body = <>{compact ? null : <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>{pageInput}{rows && <><span aria-hidden="true" style={{ width: 1, height: 32, backgroundColor: 'var(--color-stroke-subtle, #EEEEEE)' }} />{rows}</>}</div>}<div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>{compact ? <>{prev}{pageText}{next}</> : <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>{prev}{pageList}{next}</div>}</div></>; break;
+    case 'showing':
+      body = compact
+        ? <div style={{ flex: 1, display: 'flex', justifyContent: 'center', gap: 8, alignItems: 'center' }}>{prev}{pageText}{next}</div>
+        : <>{pageInput}<div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 8 }}>{prev}{pageList}{next}</div>{rows}</>; break;
+    default: // numbered
+      body = <>{compact ? prev : prev}<div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>{pageList}</div>{next}</>;
   }
 
   return (
-    <div
-      ref={ref}
-      role="navigation"
-      aria-label="Pagination"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        ...style,
-      }}
-      className={className}
-      {...props}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{
-          fontFamily: 'var(--font-family-body)',
-          fontWeight: 400,
-          fontSize: 13,
-          lineHeight: '19.2px',
-          letterSpacing: '-0.01px',
-          color: 'var(--color-text-secondary, #49494A)',
-          whiteSpace: 'nowrap',
-        }}>
-          Rows per page
-        </span>
-        {pageSizes && pageSizes.length > 0 && (
-          <select
-            value={resolvedPageSize}
-            onChange={e => handlePageSizeChange(Number(e.target.value))}
-            style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 13,
-              lineHeight: '19.2px',
-              color: 'var(--color-text-secondary, #49494A)',
-              border: '1px solid var(--color-input-border-default, #D7D7D7)',
-              borderRadius: 8,
-              padding: '6px 12px',
-              backgroundColor: 'transparent',
-              cursor: 'pointer',
-              outline: 'none',
-            }}
-          >
-            {pageSizes.map(s => (
-              <option key={s} value={s}>{s}</option>
-            ))}
-          </select>
-        )}
-      </div>
-
-      {paginationControls}
+    <div ref={ref} role="navigation" aria-label="Pagination" style={row} {...props}>
+      {body}
     </div>
   );
 });

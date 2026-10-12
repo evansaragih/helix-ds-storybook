@@ -1,28 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tabs } from 'helix-design-system/components';
+import { LayoutDashboard } from 'lucide-react';
 
 const ITEMS = [
-  { id: 'overview', label: 'Overview', content: <div style={{ padding: '16px 0' }}>Overview content</div> },
-  { id: 'activity', label: 'Activity', content: <div style={{ padding: '16px 0' }}>Activity content</div>, badge: 3 },
-  { id: 'settings', label: 'Settings', content: <div style={{ padding: '16px 0' }}>Settings content</div> },
-  { id: 'archived', label: 'Archived', content: <div style={{ padding: '16px 0' }}>Archived content</div>, disabled: true },
+  { id: 'overview', label: 'Overview', content: <div>Overview content</div> },
+  { id: 'activity', label: 'Activity', content: <div>Activity content</div>, badge: 3 },
+  { id: 'settings', label: 'Settings', content: <div>Settings content</div> },
+  { id: 'archived', label: 'Archived', content: <div>Archived content</div>, disabled: true },
 ];
 
 const meta = {
-  title: 'Components/Navigation/Tabs',
+  title: 'Molecule/Tab/Tabs Horizontal',
   component: Tabs,
   tags: ['autodocs'],
   argTypes: {
-    tabStyle: { control: 'select', options: ['primary', 'line', 'default'] },
-    size: { control: 'select', options: ['sm', 'md'] },
-    type: { control: 'select', options: ['default', 'white'] },
+    appearance: { control: 'select', options: ['line', 'filled', 'contained'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    showNavigation: { control: 'boolean' },
   },
-  args: {
-    items: ITEMS,
-    tabStyle: 'primary',
-    size: 'sm',
-    defaultValue: 'overview',
-  },
+  args: { items: ITEMS, appearance: 'line', size: 'md', defaultValue: 'overview' },
+  decorators: [(Story) => <div style={{ width: 420 }}><Story /></div>],
 } satisfies Meta<typeof Tabs>;
 
 export default meta;
@@ -30,33 +27,29 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Variants: Story = {
+/** Figma Appearance — Line, Filled and Contained. */
+export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {(['primary', 'line', 'default'] as const).map((tabStyle) => (
-        <div key={tabStyle}>
-          <p style={{ fontFamily: 'Rubik, sans-serif', fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 8 }}>{tabStyle}</p>
-          <Tabs {...args} tabStyle={tabStyle} />
-        </div>
-      ))}
+      {(['line', 'filled', 'contained'] as const).map((appearance) => <Tabs key={appearance} {...args} appearance={appearance} renderContent={false} />)}
     </div>
   ),
 };
 
-export const WithNavArrows: Story = {
-  args: {
-    showNavArrows: true,
-    items: Array.from({ length: 10 }, (_, i) => ({ id: `tab-${i}`, label: `Tab ${i + 1}`, content: <div style={{ padding: '16px 0' }}>{`Content ${i + 1}`}</div> })),
-    defaultValue: 'tab-0',
-  },
-  render: (args) => <div style={{ width: 320 }}><Tabs {...args} /></div>,
-};
-
-export const WhiteOnDark: Story = {
-  args: { type: 'white' },
+export const Sizes: Story = {
   render: (args) => (
-    <div style={{ background: 'var(--color-bg-inverse)', padding: 24, borderRadius: 8 }}>
-      <Tabs {...args} />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {(['sm', 'md', 'lg'] as const).map((size) => <Tabs key={size} {...args} size={size} appearance="filled" renderContent={false} />)}
     </div>
   ),
+};
+
+export const WithIcons: Story = {
+  args: { items: ITEMS.map((i) => ({ ...i, icon: <LayoutDashboard size={16} /> })) },
+};
+
+/** Figma Nav Prev / Next — shown only when the tabs are wider than the space; narrow the canvas to see them. */
+export const WithNavigation: Story = {
+  decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
+  args: { items: Array.from({ length: 10 }, (_, i) => ({ id: `t${i}`, label: `Tab ${i + 1}` })) },
 };

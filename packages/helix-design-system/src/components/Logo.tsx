@@ -15,7 +15,7 @@ import markCausaWhite from '../assets/logo/causa/mark-white.svg';
 
 export type LogoVariant = 'wordmark' | 'mark';
 export type LogoTone = 'default' | 'white';
-type LogoBrand = 'nusantics' | 'cekolam' | 'causa';
+export type LogoBrand = 'nusantics' | 'cekolam' | 'causa';
 
 export interface LogoProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** 'wordmark' = full lockup, 'mark' = icon only */
@@ -23,6 +23,8 @@ export interface LogoProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** 'white' for dark/colored surfaces (e.g. transparent Navbar) */
   tone?: LogoTone;
   height?: number;
+  /** Render this brand's logo regardless of the surrounding [data-brand] (default: follow it) */
+  brand?: LogoBrand;
 }
 
 const ASSETS: Record<LogoBrand, Record<LogoVariant, Record<LogoTone, string>>> = {
@@ -54,7 +56,14 @@ const BRANDS = Object.keys(ASSETS) as LogoBrand[];
  * the right one — no JS brand detection, so it stays in sync with
  * whatever ancestor sets data-brand="nusantics|cekolam|causa".
  */
-export function Logo({ variant = 'wordmark', tone = 'default', height = 24, className, style, ...props }: LogoProps) {
+export function Logo({ variant = 'wordmark', tone = 'default', height = 24, brand, className, style, ...props }: LogoProps) {
+  if (brand) {
+    return (
+      <span className={className} style={{ display: 'inline-flex', alignItems: 'center', height, ...style }} {...props}>
+        <img src={ASSETS[brand][variant][tone]} alt={LABELS[brand]} style={{ height: '100%', width: 'auto' }} />
+      </span>
+    );
+  }
   return (
     <span
       className={['helix-logo', className].filter(Boolean).join(' ')}

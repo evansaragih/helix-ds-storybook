@@ -1,200 +1,139 @@
 import { forwardRef, useState } from 'react';
 
-export type ButtonVariant =
-  | 'primary' | 'secondary' | 'tertiary'
-  | 'destructive' | 'neutral' | 'invert'
-  | 'ghost-neutral' | 'ghost-brand'
-  | 'primary-outline' | 'secondary-outline' | 'tertiary-outline'
-  | 'primary-subtle' | 'neutral-subtle';
-
+/** Figma Hierarchy */
+export type ButtonHierarchy = 'primary' | 'secondary' | 'tertiary' | 'destructive';
+/** Figma Appearance */
+export type ButtonAppearance = 'solid' | 'outline' | 'subtle' | 'ghost' | 'link';
+/** Figma Size */
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
+/** Figma Underline — only used by appearance 'link' */
+export type ButtonUnderline = 'always' | 'on-hover' | 'none';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
+  hierarchy?: ButtonHierarchy;
+  appearance?: ButtonAppearance;
   size?: ButtonSize;
+  underline?: ButtonUnderline;
+  /** Figma State=Loading — shows a spinner and blocks interaction at full opacity */
   loading?: boolean;
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
-  /** Pill shape (border-radius: 9999px) */
-  pill?: boolean;
 }
 
-interface SizeConfig {
-  height: string;
-  px: number;
-  py: number;
-  fontSize: number;
-  lineHeight: string;
-  iconSize: number;
-  gap: number;
-  radius: number;
-}
+/* ─── Figma sizes (Button component set, Size=xs|sm|md|lg) ─────────── */
+interface SizeConfig { height: number; px: number; fontSize: number; lineHeight: string; iconSize: number; gap: number; radius: number }
 
 const SIZES: Record<ButtonSize, SizeConfig> = {
-  xs: { height: '24px', px: 6,  py: 4,  fontSize: 11, lineHeight: '15.6px', iconSize: 12, gap: 4,  radius: 6 },
-  sm: { height: '36px', px: 11, py: 8,  fontSize: 13, lineHeight: '19.2px', iconSize: 14, gap: 6,  radius: 8 },
-  md: { height: '48px', px: 16, py: 12, fontSize: 16, lineHeight: '24px',   iconSize: 16, gap: 8,  radius: 8 },
-  lg: { height: '58px', px: 20, py: 12, fontSize: 20, lineHeight: '30px',   iconSize: 20, gap: 8,  radius: 10 },
+  xs: { height: 24, px: 6,  fontSize: 10, lineHeight: '15.6px', iconSize: 12, gap: 4, radius: 4 },
+  sm: { height: 36, px: 12, fontSize: 13, lineHeight: '19.2px', iconSize: 14, gap: 6, radius: 6 },
+  md: { height: 44, px: 16, fontSize: 16, lineHeight: '24px',   iconSize: 16, gap: 8, radius: 8 },
+  lg: { height: 52, px: 20, fontSize: 20, lineHeight: '30px',   iconSize: 20, gap: 8, radius: 8 },
 };
 
-type VariantState = 'default' | 'hover' | 'focus';
-
-interface VariantStyles {
+/* ─── Figma Hierarchy × Appearance → resting / hover / focus styles ──
+ * Disabled keeps the resting style at 50% opacity, as in Figma.
+ * Tertiary exists as Solid and Outline only in Figma; other appearances use Outline. */
+export interface ButtonStyle {
   bg: string;
   border: string;
+  borderHover?: string;
   color: string;
-  shadow?: string;
-  innerBorder?: boolean;
-  bgHover: string;
-  bgFocus: string;
-  ring?: string;
-  /** Text color swapped in on hover/focus (defaults to `color`) */
   colorHover?: string;
-  /** Frosted-glass surface (e.g. for buttons placed over images) */
+  bgHover: string;
+  shadow?: string;
+  ring?: string;
   backdropBlur?: boolean;
-  /** Disabled state dims the resting style via opacity instead of swapping to the shared disabled tokens */
-  subtleDisabled?: boolean;
 }
 
-const VARIANTS: Record<ButtonVariant, VariantStyles> = {
-  primary: {
-    bg: 'var(--color-brand-primary)',
-    border: 'var(--color-brand-primary)',
-    color: '#FFFFFF',
-    shadow: '0px 0.5px 4px 0px var(--color-shadow-brand-primary)',
-    innerBorder: true,
-    bgHover: 'var(--color-brand-primary-hover)',
-    bgFocus: 'var(--color-brand-primary)',
-    ring: 'var(--color-brand-primary-ring)',
-  },
-  secondary: {
-    bg: 'var(--color-brand-secondary)',
-    border: 'var(--color-brand-secondary)',
-    color: '#FFFFFF',
-    shadow: '0px 0.5px 4px 0px var(--color-shadow-brand-secondary)',
-    innerBorder: true,
-    bgHover: 'var(--color-brand-secondary-hover)',
-    bgFocus: 'var(--color-brand-secondary)',
-    ring: 'var(--color-brand-secondary-ring)',
-  },
-  tertiary: {
-    bg: 'var(--color-brand-tertiary)',
-    border: 'var(--color-brand-tertiary)',
-    color: '#FFFFFF',
-    shadow: '0px 0.5px 4px 0px var(--color-shadow-brand-tertiary)',
-    innerBorder: true,
-    bgHover: 'var(--color-brand-tertiary-hover)',
-    bgFocus: 'var(--color-brand-tertiary)',
-    ring: 'var(--color-brand-tertiary-ring)',
-  },
-  destructive: {
-    bg: '#DC2626',
-    border: '#DC2626',
-    color: '#FFFFFF',
-    innerBorder: true,
-    bgHover: '#B91C1C',
-    bgFocus: '#DC2626',
-    ring: 'rgba(220,38,38,0.7)',
-  },
-  neutral: {
-    bg: 'var(--color-btn-neutral)',
-    border: 'var(--color-btn-neutral-border)',
-    color: 'var(--color-btn-neutral-text)',
-    bgHover: 'var(--color-btn-neutral-hover)',
-    bgFocus: 'var(--color-btn-neutral)',
-    ring: '#D7D7D7',
-  },
-  invert: {
-    bg: 'var(--color-btn-invert)',
-    border: 'var(--color-btn-invert-border)',
-    color: '#FFFFFF',
-    innerBorder: true,
-    bgHover: 'var(--color-btn-invert-hover)',
-    bgFocus: 'var(--color-btn-invert)',
-    ring: '#D7D7D7',
-  },
-  'ghost-neutral': {
-    bg: 'transparent',
-    border: 'transparent',
-    color: 'var(--color-text-primary)',
-    bgHover: '#F7F7F7',
-    bgFocus: '#EEEEEE',
-    ring: '#D7D7D7',
-  },
-  'ghost-brand': {
-    bg: 'transparent',
-    border: 'transparent',
-    color: 'var(--color-brand-primary)',
-    bgHover: 'var(--color-brand-primary-ghost-hover)',
-    bgFocus: 'var(--color-brand-primary-ghost-focus)',
-    ring: 'var(--color-brand-primary-ring)',
-  },
-  'primary-outline': {
-    bg: 'transparent',
-    border: 'var(--color-brand-primary)',
-    color: 'var(--color-brand-primary)',
-    bgHover: 'var(--color-brand-primary-ghost-hover)',
-    bgFocus: 'var(--color-brand-primary-ghost-focus)',
-    ring: 'var(--color-brand-primary-ring)',
-  },
-  'secondary-outline': {
-    bg: 'transparent',
-    border: 'var(--color-brand-secondary)',
-    color: 'var(--color-brand-secondary)',
-    bgHover: 'var(--color-brand-secondary-ghost-hover)',
-    bgFocus: 'var(--color-brand-secondary-ghost-focus)',
-    ring: 'var(--color-brand-secondary-ring)',
-  },
-  'tertiary-outline': {
-    bg: 'transparent',
-    border: 'var(--color-brand-tertiary)',
-    color: 'var(--color-brand-tertiary)',
-    bgHover: 'var(--color-brand-tertiary-ghost-hover)',
-    bgFocus: 'var(--color-brand-tertiary-ghost-focus)',
-    ring: 'var(--color-brand-tertiary-ring)',
-  },
-  'primary-subtle': {
-    bg: 'var(--color-status-brand-bg)',
-    border: 'transparent',
-    color: 'var(--color-brand-primary)',
-    bgHover: '#EADFD6',
-    bgFocus: 'var(--color-status-brand-bg)',
-    ring: 'var(--color-brand-primary-ring)',
-    subtleDisabled: true,
-  },
-  'neutral-subtle': {
-    bg: 'rgba(255,255,255,0.1)',
-    border: 'rgba(255,255,255,1)',
-    color: 'var(--color-text-secondary)',
-    colorHover: 'var(--color-text-primary)',
-    bgHover: 'rgba(255,255,255,0.3)',
-    bgFocus: 'rgba(255,255,255,0.1)',
-    backdropBlur: true,
-    ring: '#D7D7D7',
-    subtleDisabled: true,
-  },
+const solidShadow = (tint: string, pct = 15) =>
+  `inset 0px 2px 0px 0px rgba(255,255,255,0.4), 0px 4px 4px 0px color-mix(in srgb, ${tint} ${pct}%, transparent)`;
+
+const RING = {
+  primary: 'var(--color-brand-primary-ring, rgba(245,126,32,0.7))',
+  secondary: 'var(--color-brand-secondary-ring, rgba(88,89,91,0.7))',
+  destructive: 'rgba(220,38,38,0.7)',
+  neutral: '#D7D7D7',
 };
+const DESTRUCTIVE = 'var(--color-destructive, #DC2626)';
+const DESTRUCTIVE_HOVER = 'var(--color-destructive-hover, #B91C1C)';
+const DESTRUCTIVE_PRESSED = 'var(--color-destructive-pressed, #991B1B)';
+
+export function resolveButtonStyle(hierarchy: ButtonHierarchy, appearance: ButtonAppearance): ButtonStyle {
+  const tertiaryOutline = hierarchy === 'tertiary' && appearance !== 'solid';
+  const a: ButtonAppearance = tertiaryOutline ? 'outline' : appearance;
+  const h = tertiaryOutline ? 'tertiaryOutline' : hierarchy;
+
+  const text = {
+    primary: 'var(--color-brand-primary)',
+    secondary: 'var(--color-text-secondary, #49494A)',
+    tertiaryOutline: 'var(--color-brand-secondary)',
+    tertiary: '#FFFFFF',
+    destructive: DESTRUCTIVE,
+  }[h];
+
+  if (a === 'solid') {
+    if (h === 'secondary') {
+      return { bg: 'var(--color-container-primary, #FFFFFF)', border: 'var(--color-stroke-subtle, #EEEEEE)', color: 'var(--color-text-tertiary, #828282)',
+        shadow: solidShadow('#000000', 5), bgHover: 'var(--color-container-tertiary, #EEEEEE)', ring: RING.neutral };
+    }
+    const solid = {
+      primary:     { bg: 'var(--color-brand-primary)',   hover: 'var(--color-brand-primary-hover)',   border: 'var(--color-brand-primary-pressed, #B35001)',   tint: 'var(--color-shadow-brand-primary)',   ring: RING.primary },
+      tertiary:    { bg: 'var(--color-brand-secondary)', hover: 'var(--color-brand-secondary-hover)', border: 'var(--color-brand-secondary-pressed, #393A3B)', tint: 'var(--color-shadow-brand-secondary)', ring: RING.secondary },
+      destructive: { bg: DESTRUCTIVE,                    hover: DESTRUCTIVE_HOVER,                    border: DESTRUCTIVE_PRESSED,                            tint: '#DC2626',                             ring: RING.destructive },
+    }[h as 'primary' | 'tertiary' | 'destructive'];
+    return { bg: solid.bg, border: solid.border, color: '#FFFFFF', shadow: solidShadow(solid.tint), bgHover: solid.hover, ring: solid.ring };
+  }
+
+  if (a === 'outline') {
+    const o = {
+      primary:         { border: 'var(--color-brand-primary)',                    hover: 'var(--color-brand-primary-hover)',                ring: RING.primary },
+      secondary:       { border: 'var(--color-stroke-subtle, #EEEEEE)',           hover: undefined,                                         ring: RING.neutral },
+      tertiaryOutline: { border: 'var(--color-brand-secondary)',                  hover: 'var(--color-brand-secondary-pressed, #393A3B)',  ring: RING.secondary },
+      destructive:     { border: DESTRUCTIVE,                                     hover: DESTRUCTIVE_HOVER,                                ring: RING.destructive },
+    }[h as 'primary' | 'secondary' | 'tertiaryOutline' | 'destructive'];
+    return { bg: 'transparent', border: o.border, borderHover: o.hover, color: text, bgHover: 'transparent', ring: o.ring };
+  }
+
+  if (a === 'subtle') {
+    if (h === 'secondary') {
+      // Frosted surface for use over imagery / dark backgrounds
+      return { bg: 'rgba(255,255,255,0.5)', border: 'transparent', color: '#FFFFFF', bgHover: 'rgba(255,255,255,0.5)', backdropBlur: true, ring: RING.neutral };
+    }
+    const t = h === 'primary'
+      ? { bg: 'var(--color-status-brand-bg, #FEF2E9)', hover: '#FFE1C9', ring: RING.primary }
+      : { bg: 'var(--color-status-error-bg, #FEE2E2)', hover: 'var(--primitive-red-5, #FECACA)', ring: RING.destructive };
+    return { bg: t.bg, border: 'transparent', color: text, bgHover: t.hover, ring: t.ring };
+  }
+
+  // ghost + link: text only
+  const ring = { primary: 'var(--color-brand-primary-hover)', secondary: '#828282', destructive: DESTRUCTIVE_PRESSED }[h as 'primary' | 'secondary' | 'destructive'];
+  return {
+    bg: 'transparent', border: 'transparent',
+    color: a === 'link' && h === 'secondary' ? 'var(--color-text-tertiary, #828282)' : text,
+    colorHover: h === 'primary' ? 'var(--color-brand-primary-hover)' : undefined,
+    bgHover: 'transparent',
+    ring: a === 'ghost' ? ring : undefined,
+  };
+}
 
 function Spinner({ size }: { size: number }) {
   return (
     <span style={{
-      display: 'inline-block',
-      width: size, height: size, flexShrink: 0,
-      borderRadius: '50%',
-      border: '1.5px solid currentColor',
-      borderTopColor: 'transparent',
-      animation: 'badge-spin 0.75s linear infinite',
+      display: 'inline-block', width: size, height: size, flexShrink: 0, borderRadius: '50%',
+      border: '1.5px solid currentColor', borderTopColor: 'transparent', animation: 'badge-spin 0.75s linear infinite',
     }} />
   );
 }
 
+/** Core action button. Use for the primary action in a view, supporting actions, or a destructive / irreversible action (Hierarchy). For an icon-only action use IconButton. */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
-  variant = 'primary',
+  hierarchy = 'primary',
+  appearance = 'solid',
   size = 'sm',
+  underline = 'always',
   loading = false,
   leadingIcon,
   trailingIcon,
-  pill = false,
   disabled,
   children,
   style,
@@ -207,97 +146,60 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const s = SIZES[size];
-  const v = VARIANTS[variant];
+  const v = resolveButtonStyle(hierarchy, appearance);
+  const isLink = appearance === 'link';
+  const blocked = disabled || loading;
 
-  const isDisabled = disabled || loading;
-
-  const getVS = (): VariantState => {
-    if (focused) return 'focus';
-    if (hovered) return 'hover';
-    return 'default';
-  };
-  const vs = getVS();
-
-  const bg = isDisabled ? (v.subtleDisabled ? v.bg : 'var(--color-btn-disabled-bg)') :
-    vs === 'hover' ? v.bgHover :
-    vs === 'focus' ? v.bgFocus :
-    v.bg;
-
-  const borderColor = isDisabled ? (v.subtleDisabled ? v.border : 'var(--color-btn-disabled-bg)') : v.border;
-  const textColor = isDisabled
-    ? (v.subtleDisabled ? v.color : 'var(--color-btn-disabled-text)')
-    : (vs === 'hover' || vs === 'focus') ? (v.colorHover ?? v.color) : v.color;
-
-  const boxShadow = isDisabled ? 'none' :
-    focused && v.ring ? `0 0 0 3px ${v.ring}` :
-    v.shadow ?? 'none';
-
-  const radius = pill ? 9999 : s.radius;
-
-  const outerStyle: React.CSSProperties = {
-    position: 'relative',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: s.height,
-    paddingLeft: s.px,
-    paddingRight: s.px,
-    border: `1px solid ${borderColor}`,
-    borderRadius: radius,
-    backgroundColor: bg,
-    boxShadow,
-    cursor: isDisabled ? 'not-allowed' : 'pointer',
-    gap: s.gap,
-    fontFamily: 'var(--font-family-body)',
-    fontWeight: 400,
-    fontSize: s.fontSize,
-    lineHeight: s.lineHeight,
-    color: textColor,
-    letterSpacing: '-0.01px',
-    whiteSpace: 'nowrap',
-    opacity: isDisabled && v.subtleDisabled ? 0.5 : 1,
-    backdropFilter: v.backdropBlur ? 'blur(2px)' : undefined,
-    userSelect: 'none',
-    outline: 'none',
-    transition: 'background-color 0.15s, box-shadow 0.15s',
-    ...style,
-  };
-
-  // Inner highlight border for solid brand/destructive/invert buttons
-  if (v.innerBorder && !isDisabled) {
-    outerStyle.boxShadow = (outerStyle.boxShadow && outerStyle.boxShadow !== 'none')
-      ? `${outerStyle.boxShadow}, inset 0 0 0 1px rgba(255,255,255,0.2)`
-      : 'inset 0 0 0 1px rgba(255,255,255,0.2)';
-  }
+  const active = !blocked && hovered;
+  const bg = active ? v.bgHover : v.bg;
+  const border = active && v.borderHover ? v.borderHover : v.border;
+  const color = active && v.colorHover ? v.colorHover : v.color;
+  const boxShadow = blocked ? 'none' : focused && v.ring ? `0 0 0 3px ${v.ring}` : v.shadow ?? 'none';
 
   return (
     <button
       ref={ref}
-      disabled={isDisabled}
-      style={outerStyle}
+      disabled={blocked}
+      style={{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: isLink ? 'auto' : s.height,
+        paddingLeft: isLink ? 0 : s.px,
+        paddingRight: isLink ? 0 : s.px,
+        border: isLink ? 'none' : `1px solid ${border}`,
+        borderRadius: s.radius,
+        backgroundColor: bg,
+        boxShadow,
+        cursor: blocked ? 'not-allowed' : 'pointer',
+        gap: s.gap,
+        fontFamily: 'var(--font-family-body)',
+        fontWeight: 400,
+        fontSize: s.fontSize,
+        lineHeight: s.lineHeight,
+        letterSpacing: '-0.01px',
+        color,
+        textDecoration: isLink && (underline === 'always' || (underline === 'on-hover' && hovered)) ? 'underline' : 'none',
+        whiteSpace: 'nowrap',
+        opacity: disabled ? 0.5 : 1,
+        backdropFilter: v.backdropBlur ? 'blur(2px)' : undefined,
+        userSelect: 'none',
+        outline: 'none',
+        transition: 'background-color 0.15s, border-color 0.15s, box-shadow 0.15s',
+        ...style,
+      }}
       onMouseEnter={(e) => { setHovered(true); onMouseEnter?.(e); }}
       onMouseLeave={(e) => { setHovered(false); onMouseLeave?.(e); }}
       onFocus={(e) => { setFocused(true); onFocus?.(e); }}
       onBlur={(e) => { setFocused(false); onBlur?.(e); }}
       {...props}
     >
-      {loading ? (
-        <Spinner size={s.iconSize} />
-      ) : (
-        leadingIcon && (
-          <span style={{ display: 'flex', alignItems: 'center', width: s.iconSize, height: s.iconSize, flexShrink: 0 }}>
-            {leadingIcon}
-          </span>
-        )
-      )}
-      {children && (
-        <span style={{ color: 'inherit' }}>{children}</span>
-      )}
-      {!loading && trailingIcon && (
-        <span style={{ display: 'flex', alignItems: 'center', width: s.iconSize, height: s.iconSize, flexShrink: 0 }}>
-          {trailingIcon}
-        </span>
-      )}
+      {loading
+        ? <Spinner size={s.iconSize} />
+        : leadingIcon && <span style={{ display: 'flex', alignItems: 'center', width: s.iconSize, height: s.iconSize, flexShrink: 0 }}>{leadingIcon}</span>}
+      {children && <span style={{ color: 'inherit' }}>{children}</span>}
+      {!loading && trailingIcon && <span style={{ display: 'flex', alignItems: 'center', width: s.iconSize, height: s.iconSize, flexShrink: 0 }}>{trailingIcon}</span>}
     </button>
   );
 });

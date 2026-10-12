@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { DatePicker, Pagination, Button } from 'helix-design-system/components';
+import { DatePicker, Popover, Pagination, Button } from 'helix-design-system/components';
 import { getChangelogEntries } from '../../data/changelog';
 
 const PAGE_SIZE = 15;
@@ -45,15 +45,25 @@ export function ChangelogTable() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, flexWrap: 'wrap' }}>
-        <DatePicker
-          mode="range"
-          rangeStart={rangeStart}
-          rangeEnd={rangeEnd}
-          onRangeChange={handleRangeChange}
-          placeholder="Filter by date range"
-        />
+        <Popover
+          width={300}
+          trigger={
+            <Button hierarchy="secondary" appearance="outline" size="sm">
+              {rangeStart || rangeEnd
+                ? `${rangeStart?.toLocaleDateString() ?? '…'} – ${rangeEnd?.toLocaleDateString() ?? '…'}`
+                : 'Filter by date range'}
+            </Button>
+          }
+        >
+          <DatePicker
+            mode="range"
+            range={{ start: rangeStart ?? undefined, end: rangeEnd ?? undefined }}
+            onRangeChange={(r) => handleRangeChange(r.start ?? null, r.end ?? null)}
+            style={{ border: 'none', boxShadow: 'none', padding: 0 }}
+          />
+        </Popover>
         {(rangeStart || rangeEnd) && (
-          <Button variant="ghost-neutral" size="sm" onClick={clearFilter}>
+          <Button hierarchy="secondary" appearance="ghost" size="sm" onClick={clearFilter}>
             Clear filter
           </Button>
         )}

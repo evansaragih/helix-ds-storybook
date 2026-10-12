@@ -1,424 +1,159 @@
-import { useState, useRef, useEffect, forwardRef } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { forwardRef, useId, useState } from 'react';
+import { FieldMessage } from './FieldMessage';
 
-export type InputSize = 'xs' | 'sm' | 'md' | 'lg';
+/** Figma Layout */
+export type InputLayout = 'vertical' | 'horizontal';
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
-  size?: InputSize;
-  /** Floating variant — label animates inside the box between a centered placeholder and a small caption */
-  floating?: boolean;
-  /** External label (default) or animated internal label (floating) */
+  /** Static label above (vertical) or beside (horizontal) the box; becomes the floating label when `floating` */
   label?: string;
+  /** Show the required asterisk after the label (Figma Show Required) */
   required?: boolean;
-  secondaryLabel?: React.ReactNode;
-  leadingContent?: React.ReactNode;
+  /** Hint text under the box (Figma Show Hint) */
+  hint?: string;
+  /** Error message under the box — also puts the input in the Error state */
+  error?: string;
+  /** Error state without a message */
+  invalid?: boolean;
+  /** Figma Floating — the label sits inside the box and shrinks when filled or focused */
+  floating?: boolean;
+  layout?: InputLayout;
+  /** Leading slot — icon, text, flag or selector (Figma Show Leading) */
+  leading?: React.ReactNode;
   leadingDivider?: boolean;
-  trailingContent?: React.ReactNode;
+  /** Trailing slot — icon, text, button or selector (Figma Show Trailing) */
+  trailing?: React.ReactNode;
   trailingDivider?: boolean;
-  helperText?: string;
-  error?: boolean;
-  errorText?: string;
-  showCharCount?: boolean;
 }
 
-interface SizeConfig {
-  height: number;
-  radius: number;
-  slotHeight: number;
-  fontSize: number;
-  inputPx: number;
-  labelGap: number;
-  dividerColor: string;
+const BRAND = 'var(--color-brand-primary, #F57E20)';
+
+/** Border + fill for the Figma Input States: Default / Hovered / Focused / Error / Disabled. Shared by Input and TextArea. */
+export function fieldBoxStyle(state: { hovered: boolean; focused: boolean; invalid: boolean; disabled: boolean }): React.CSSProperties {
+  if (state.disabled) return { backgroundColor: 'var(--color-stroke-disabled, #D7D7D7)', border: '1px solid var(--color-stroke-disabled, #D7D7D7)' };
+  const base: React.CSSProperties = { backgroundColor: 'var(--color-container-primary, #FFFFFF)', border: '1px solid var(--color-stroke-subtle, #EEEEEE)' };
+  if (state.invalid) return { ...base, border: '1px solid var(--primitive-red-70, #991B1B)' };
+  if (state.focused) return { ...base, border: `1px solid ${BRAND}`, boxShadow: '0 0 0 2px rgba(245,126,32,0.15)' };
+  if (state.hovered) return { ...base, border: '1px solid #828282' };
+  return base;
 }
 
-const SIZE: Record<InputSize, SizeConfig> = {
-  xs: { height: 32, radius: 6,  slotHeight: 28, fontSize: 13, inputPx: 10, labelGap: 8, dividerColor: 'var(--color-stroke-subtle, #d7d7d7)' },
-  sm: { height: 38, radius: 6,  slotHeight: 28, fontSize: 13, inputPx: 12, labelGap: 8, dividerColor: 'var(--color-stroke-subtle, #d7d7d7)' },
-  md: { height: 42, radius: 8,  slotHeight: 36, fontSize: 13, inputPx: 12, labelGap: 8, dividerColor: 'var(--color-stroke-subtle, #d7d7d7)' },
-  lg: { height: 48, radius: 8,  slotHeight: 40, fontSize: 13, inputPx: 16, labelGap: 8, dividerColor: 'var(--color-stroke-default, #bababa)' },
+/** Placeholder color from Figma (Text/Muted); browsers default to a darker grey. Rendered once per field, scoped by class. */
+export const placeholderCss = '.helix-field::placeholder{color:var(--color-text-muted,#9F9F9F);opacity:1}';
+
+export const labelText: React.CSSProperties = {
+  fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, lineHeight: '20px', letterSpacing: '-0.01px', color: 'var(--color-text-secondary, #49494A)',
 };
 
-const F = {
-  height: 56,
-  radius: 8,
-  slotHeight: 40,
-  inputPx: 16,
-  inputPy: 8,
-  valueFontSize: 16,
-  captionFontSize: 10,
-  inputHeight: 24,
-  dividerColor: 'var(--color-stroke-default, #bababa)',
-  labelGap: 8,
-};
-
-// Top position so the 16px (24px line-height) text is vertically centered in 56px
-const FLOAT_RESTING_TOP = (F.height - F.inputHeight) / 2; // = 16
-
+/** Single-line text input with a label, optional leading / trailing content and a hint or error message. For multi-line text use TextArea. */
 export const Input = forwardRef<HTMLInputElement, InputProps>(({
-  size = 'md',
-  floating = false,
   label,
-  required,
-  secondaryLabel,
-  leadingContent,
+  required = false,
+  hint,
+  error,
+  invalid = false,
+  floating = false,
+  layout = 'vertical',
+  leading,
   leadingDivider = false,
-  trailingContent,
+  trailing,
   trailingDivider = false,
-  helperText,
-  error = false,
-  errorText,
-  showCharCount = false,
   disabled,
-  placeholder,
   value,
   defaultValue,
-  maxLength,
-  onChange,
+  placeholder,
+  id,
+  style,
+  className,
   onFocus,
   onBlur,
-  onMouseEnter,
-  onMouseLeave,
-  className,
-  style,
+  onChange,
   ...props
 }, ref) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-  const [charCount, setCharCount] = useState(
-    (value?.toString() ?? defaultValue?.toString() ?? '').length
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [filled, setFilled] = useState(Boolean(value ?? defaultValue));
+  const generated = useId();
+  const inputId = id ?? generated;
+  const isInvalid = invalid || Boolean(error);
+  const lifted = floating && (focused || filled || Boolean(value));
+
+  const divider = <span aria-hidden="true" style={{ alignSelf: 'stretch', width: 1, backgroundColor: 'var(--color-stroke-subtle, #EEEEEE)' }} />;
+  const slot: React.CSSProperties = { display: 'flex', alignItems: 'center', flexShrink: 0, color: 'var(--color-text-secondary, #49494A)' };
+
+  const labelEl = label && (
+    <label htmlFor={inputId} style={{ ...labelText, display: 'inline-flex', gap: 4 }}>
+      {label}
+      {required && <span aria-hidden="true" style={{ color: 'var(--color-destructive, #DC2626)' }}>*</span>}
+    </label>
   );
 
-  // Used only by floating variant to measure box width for the SVG trace
-  const floatLabelRef = useRef<HTMLLabelElement>(null);
-  const [boxWidth, setBoxWidth] = useState(0);
-
-  useEffect(() => {
-    if (!floating) return;
-    const el = floatLabelRef.current;
-    if (!el) return;
-    setBoxWidth(el.offsetWidth);
-    const ro = new ResizeObserver(() => setBoxWidth(el.offsetWidth));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [floating]);
-
-  // Floating label is "active" when the field is focused or has a value
-  const hasValue = value !== undefined ? String(value).length > 0 : charCount > 0;
-  const isFloatingActive = isFocused || hasValue;
-  // "Filled" state (non-floating only): a field with a value keeps the focus-colored
-  // border + a subtle shadow even when not focused, so it reads as filled at a glance.
-  const isFilled = !floating && hasValue;
-
-  const cfg = floating ? null : SIZE[size];
-  const height    = floating ? F.height    : cfg!.height;
-  const radius    = floating ? F.radius    : cfg!.radius;
-  const inputPx   = floating ? F.inputPx   : cfg!.inputPx;
-  const slotH     = floating ? F.slotHeight : cfg!.slotHeight;
-  const divColor  = floating ? F.dividerColor : cfg!.dividerColor;
-  const labelGap  = floating ? F.labelGap  : cfg!.labelGap;
-
-  let borderColor = 'var(--color-stroke-subtle, #d7d7d7)';
-  let bgColor = '#FFFFFF';
-
-  if (disabled) {
-    borderColor = 'var(--color-stroke-subtle, #eeeeee)';
-    bgColor = '#F5F5F5';
-  } else if (error) {
-    borderColor = 'var(--color-destructive, #DC2626)';
-  } else if (isFocused) {
-    // Floating: SVG trace owns the border while focused — CSS border stays transparent
-    borderColor = floating
-      ? 'transparent'
-      : 'var(--color-brand-primary, #F57E20)';
-  } else if (isFilled) {
-    borderColor = 'var(--color-input-border-focus, #F57E20)';
-  } else if (isHovered) {
-    borderColor = floating
-      ? 'var(--color-input-border-hover, #9F9F9F)'
-      : 'var(--color-stroke-default, #bababa)';
-  }
-
-  const supportingText = error && errorText ? errorText : helperText;
-
-  const iconColor = disabled
-    ? 'var(--color-text-disabled, #929292)'
-    : 'var(--color-text-secondary, #828282)';
-
-  const inputTextColor = disabled
-    ? 'var(--color-text-disabled, #929292)'
-    : 'var(--color-text-primary, #14141E)';
-
-  const baseInputStyle: React.CSSProperties = {
-    border: 'none',
-    outline: 'none',
-    background: 'transparent',
-    fontFamily: 'var(--font-family-body)',
-    color: inputTextColor,
-    padding: 0,
-    margin: 0,
-  };
-
-  const boxStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-    height: `${height}px`,
-    borderRadius: `${radius}px`,
-    border: `1px solid ${borderColor}`,
-    backgroundColor: bgColor,
-    boxShadow: isFilled ? '0px 1px 2px 0px rgba(0,0,0,0.06)' : undefined,
-    transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
-    overflow: 'hidden',
-    boxSizing: 'border-box',
-    ...style,
-  };
-
-  const slotStyle = (): React.CSSProperties => ({
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    height: `${slotH}px`,
-    paddingLeft: inputPx,
-    paddingRight: inputPx,
-    color: iconColor,
-    flexShrink: 0,
-  });
-
-  const dividerEl = <div style={{ width: '1px', height: `${slotH}px`, backgroundColor: divColor, flexShrink: 0 }} />;
-
-  /* ─── Floating variant ──────────────────────────────────── */
-  if (floating) {
-    // After a divider there's no slot padding, so add inputPx explicitly
-    const labelLeft  = leadingDivider  ? F.inputPx : (leadingContent  ? 0 : F.inputPx);
-    const labelRight = trailingDivider ? F.inputPx : (trailingContent ? 0 : F.inputPx);
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: `${F.labelGap}px`, width: '100%' }} className={className}>
-        {/* Wrap the entire box in <label> so clicking anywhere focuses the input */}
-        <label
-          ref={floatLabelRef}
-          style={{ ...boxStyle, cursor: disabled ? 'not-allowed' : 'text', position: 'relative', overflow: 'visible' }}
-          onMouseEnter={() => { if (!disabled) setIsHovered(true); }}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          {/* Leading slot */}
-          {leadingContent && (
-            <>
-              <div style={slotStyle()}>{leadingContent}</div>
-              {leadingDivider && dividerEl}
-            </>
-          )}
-
-          {/* Main content area — position: relative so label/input can be absolute inside */}
-          <div style={{ flex: 1, minWidth: 0, position: 'relative', height: '100%', alignSelf: 'stretch' }}>
-
-            {/* Animated floating label */}
-            <span
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                left: labelLeft,
-                right: labelRight,
-                pointerEvents: 'none',
-                fontFamily: 'var(--font-family-body)',
-                fontWeight: 400,
-                letterSpacing: '-0.01px',
-                color: 'var(--colors/input/text/placeholder, #9f9f9f)',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                // Animate between resting (centered, 16px) and active (top caption, 10px)
-                transition: 'top 0.2s ease, font-size 0.2s ease, line-height 0.2s ease, opacity 0.15s ease',
-                ...(isFloatingActive ? {
-                  top: `${F.inputPy}px`,
-                  fontSize: `${F.captionFontSize}px`,
-                  lineHeight: '15.6px',
-                } : {
-                  top: `${FLOAT_RESTING_TOP}px`,
-                  fontSize: `${F.valueFontSize}px`,
-                  lineHeight: `${F.inputHeight}px`,
-                }),
-              }}
-            >
-              {label || placeholder || ''}
-            </span>
-
-            {/* Actual input — fades in when active, always focusable */}
-            <input
-              ref={ref}
-              style={{
-                ...baseInputStyle,
-                position: 'absolute',
-                bottom: `${F.inputPy}px`,
-                left: labelLeft,
-                right: labelRight,
-                width: `calc(100% - ${labelLeft + labelRight}px)`,
-                height: `${F.inputHeight}px`,
-                fontSize: `${F.valueFontSize}px`,
-                lineHeight: `${F.inputHeight}px`,
-                // Fade in when active so it doesn't overlap the resting label
-                opacity: isFloatingActive ? 1 : 0,
-                transition: 'opacity 0.15s ease',
-              }}
-              disabled={disabled}
-              placeholder=""
-              value={value}
-              defaultValue={defaultValue}
-              maxLength={maxLength}
-              onFocus={(e) => { setIsFocused(true); onFocus?.(e); }}
-              onBlur={(e) => { setIsFocused(false); onBlur?.(e); }}
-              onChange={(e) => { setCharCount(e.target.value.length); onChange?.(e); }}
-              {...props}
-            />
-          </div>
-
-          {/* Trailing slot */}
-          {trailingContent && (
-            <>
-              {trailingDivider && dividerEl}
-              <div style={slotStyle()}>{trailingContent}</div>
-            </>
-          )}
-
-          {/* Tracing border SVG — draws around the perimeter on focus then fades */}
-          {isFocused && boxWidth > 0 && (
-            <svg
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                top: -1, left: -1,
-                width: boxWidth + 2,
-                height: F.height + 2,
-                pointerEvents: 'none',
-                overflow: 'visible',
-                borderRadius: F.radius,
-              }}
-            >
-              <rect
-                x={1} y={1}
-                width={boxWidth} height={F.height}
-                rx={F.radius} ry={F.radius}
-                fill="none"
-                stroke="var(--color-brand-primary, #F57E20)"
-                strokeWidth={2}
-                style={{
-                  strokeDasharray: 9999,
-                  animation: 'trace-border 5s ease forwards',
-                }}
-              />
-            </svg>
-          )}
-        </label>
-
-        {/* Supporting row */}
-        {(supportingText || (showCharCount && maxLength)) && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-              {error && <AlertCircle size={10} color="var(--color-destructive, #DC2626)" />}
-              {supportingText && (
-                <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', letterSpacing: '-0.01px', color: error ? 'var(--color-destructive, #DC2626)' : 'var(--color-text-tertiary, #828282)' }}>
-                  {supportingText}
-                </span>
-              )}
-            </div>
-            {showCharCount && maxLength && (
-              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', color: 'var(--color-text-tertiary, #828282)', letterSpacing: '-0.01px' }}>
-                {charCount}/{maxLength}
-              </span>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  /* ─── Default (sized) variant ───────────────────────────── */
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: `${labelGap}px`, width: '100%' }} className={className}>
-      {/* External label */}
-      {label && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <label style={{
-            fontFamily: 'var(--font-family-body)',
-            fontWeight: 400,
-            fontSize: '13px',
-            lineHeight: '19.2px',
-            color: 'var(--color-text-primary, #14141E)',
-            display: 'flex',
-            gap: '4px',
+  const box = (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        position: 'relative', display: 'flex', alignItems: 'center', gap: 8, boxSizing: 'border-box',
+        height: floating ? 48 : 36, padding: '0 8px', borderRadius: 8,
+        ...fieldBoxStyle({ hovered, focused, invalid: isInvalid, disabled: Boolean(disabled) }),
+        ...(floating && !focused && !isInvalid && !disabled ? { boxShadow: '0 1px 2px rgba(89,89,90,0.15)' } : {}),
+        transition: 'border-color 0.15s, box-shadow 0.15s',
+      }}
+    >
+      {leading && <><span style={slot}>{leading}</span>{leadingDivider && divider}</>}
+      <div style={{ position: 'relative', flex: 1, minWidth: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
+        {floating && label && (
+          <label htmlFor={inputId} style={{
+            position: 'absolute', left: 0, top: lifted ? 6 : '50%', transform: lifted ? 'none' : 'translateY(-50%)',
+            fontFamily: 'var(--font-family-body)', fontSize: lifted ? 10 : 13, lineHeight: lifted ? '15.6px' : '20px',
+            color: 'var(--color-text-muted, #9F9F9F)', pointerEvents: 'none', transition: 'all 0.15s',
           }}>
-            {label}
-            {required && <span style={{ color: 'var(--color-destructive, #DC2626)' }}>*</span>}
+            {label}{required && <span style={{ color: 'var(--color-destructive, #DC2626)' }}> *</span>}
           </label>
-          {secondaryLabel && (
-            <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '12px', color: 'var(--color-text-secondary, #828282)' }}>
-              {secondaryLabel}
-            </span>
-          )}
-        </div>
-      )}
-
-      {/* Input box */}
-      <div
-        style={boxStyle}
-        onMouseEnter={() => { if (!disabled) setIsHovered(true); }}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {leadingContent && (
-          <>
-            <div style={slotStyle()}>{leadingContent}</div>
-            {leadingDivider && dividerEl}
-          </>
         )}
-
+        <style>{placeholderCss}</style>
         <input
           ref={ref}
-          style={{
-            ...baseInputStyle,
-            flex: 1,
-            paddingLeft: leadingDivider ? inputPx : (leadingContent ? 0 : inputPx),
-            paddingRight: trailingDivider ? inputPx : (trailingContent ? 0 : inputPx),
-            fontSize: `${cfg!.fontSize}px`,
-            lineHeight: '19.2px',
-            height: '100%',
-            boxSizing: 'border-box',
-            width: '100%',
-          }}
-          disabled={disabled}
-          placeholder={placeholder}
+          className="helix-field"
+          id={inputId}
           value={value}
           defaultValue={defaultValue}
-          maxLength={maxLength}
-          onFocus={(e) => { setIsFocused(true); onFocus?.(e); }}
-          onBlur={(e) => { setIsFocused(false); onBlur?.(e); }}
-          onChange={(e) => { setCharCount(e.target.value.length); onChange?.(e); }}
+          disabled={disabled}
+          placeholder={floating ? (lifted ? placeholder : undefined) : placeholder}
+          aria-invalid={isInvalid || undefined}
+          onFocus={(e) => { setFocused(true); onFocus?.(e); }}
+          onBlur={(e) => { setFocused(false); onBlur?.(e); }}
+          onChange={(e) => { setFilled(e.target.value !== ''); onChange?.(e); }}
+          style={{
+            width: '100%', minWidth: 0, border: 'none', outline: 'none', background: 'transparent',
+            padding: floating ? '16px 0 0' : 0,
+            fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '20px', letterSpacing: '-0.01px',
+            color: 'var(--color-text-primary, #14141E)',
+          }}
           {...props}
         />
-
-        {trailingContent && (
-          <>
-            {trailingDivider && dividerEl}
-            <div style={slotStyle()}>{trailingContent}</div>
-          </>
-        )}
       </div>
+      {trailing && <>{trailingDivider && divider}<span style={slot}>{trailing}</span></>}
+    </div>
+  );
 
-      {/* Supporting row */}
-      {(supportingText || (showCharCount && maxLength)) && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            {error && <AlertCircle size={10} color="var(--color-destructive, #DC2626)" />}
-            {supportingText && (
-              <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', letterSpacing: '-0.01px', color: error ? 'var(--color-destructive, #DC2626)' : 'var(--color-text-tertiary, #828282)' }}>
-                {supportingText}
-              </span>
-            )}
-          </div>
-          {showCharCount && maxLength && (
-            <span style={{ fontFamily: 'var(--font-family-body)', fontSize: '10px', lineHeight: '15.6px', color: 'var(--color-text-tertiary, #828282)', letterSpacing: '-0.01px' }}>
-              {charCount}/{maxLength}
-            </span>
-          )}
-        </div>
-      )}
+  const message = (error || hint) && <FieldMessage state={error ? 'error' : 'default'}>{error ?? hint}</FieldMessage>;
+  const column = (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1, minWidth: 0 }}>
+      {!floating && layout === 'vertical' && labelEl}
+      {box}
+      {message}
+    </div>
+  );
+
+  return (
+    <div className={className} style={{ display: layout === 'horizontal' && !floating ? 'flex' : 'block', gap: 12, ...style }}>
+      {layout === 'horizontal' && !floating ? (
+        <>
+          <div style={{ width: 96, flexShrink: 0, minHeight: 36, display: 'flex', alignItems: 'center' }}>{labelEl}</div>
+          {column}
+        </>
+      ) : column}
     </div>
   );
 });

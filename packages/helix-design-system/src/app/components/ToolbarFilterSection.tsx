@@ -1,125 +1,51 @@
 import { useState } from 'react';
-import { PageLayout, Section } from './PageLayout';
-import { ToolbarFilter } from '../../components/ToolbarFilter';
-import { Button } from '../../components';
-import { Plus, Download } from 'lucide-react';
+import { ComponentDocPage } from './ComponentDocPage';
+import { ToolbarFilter, FilterSectionHeader, FilterGroupCard, SideFilterPanel } from '../../components';
 
-const toc = [
-  { id: 'toolbar-usage', label: 'Usage Guidelines' },
-  { id: 'toolbar-search', label: 'Search Only' },
-  { id: 'toolbar-filters', label: 'With Filters' },
-  { id: 'toolbar-full', label: 'Full Toolbar' },
-];
+const STATUS = [{ value: 'completed', label: 'Completed' }, { value: 'processing', label: 'Processing' }, { value: 'failed', label: 'Failed' }];
 
-const statusFilter = {
-  key: 'status',
-  label: 'Status',
-  multiple: true,
-  options: [
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'archived', label: 'Archived' },
-  ],
+const COLUMNS = [{ value: 'status', label: 'Status' }, { value: 'type', label: 'Sample type' }, { value: 'analyst', label: 'Analyst' }];
+const VALUES: Record<string, { value: string; label: string }[]> = {
+  status: STATUS,
+  type: [{ value: 'stool', label: 'Stool' }, { value: 'swab', label: 'Swab' }, { value: 'water', label: 'Water' }],
 };
 
-const roleFilter = {
-  key: 'role',
-  label: 'Role',
-  options: [
-    { value: 'admin', label: 'Admin' },
-    { value: 'editor', label: 'Editor' },
-    { value: 'viewer', label: 'Viewer' },
-  ],
-};
+function FilterGroup({ initial }: { initial: string }) {
+  const [column, setColumn] = useState(initial);
+  const [selected, setSelected] = useState<string[]>([]);
+  return <FilterGroupCard columns={COLUMNS} column={column} onColumnChange={(c) => { setColumn(c); setSelected([]); }} values={VALUES[column] ?? []} selected={selected} onSelectedChange={setSelected} onRemove={() => {}} />;
+}
+
+function SidePanelDemo() {
+  const [field, setField] = useState<string>();
+  const [dir, setDir] = useState<'asc' | 'desc'>('asc');
+  return (
+    <div style={{ border: '1px solid var(--color-stroke-subtle)', minHeight: 520 }}>
+      <SideFilterPanel filterTitle="Filter samples by meta" onAddFilter={() => {}} sortTitle="Sort samples by" onAddSort={() => {}} sortFields={COLUMNS} sortField={field} onSortFieldChange={setField} sortDirection={dir} onSortDirectionChange={setDir}>
+        <FilterGroup initial="status" />
+        <FilterGroup initial="type" />
+      </SideFilterPanel>
+    </div>
+  );
+}
 
 export function ToolbarFilterSection() {
-  const [search1, setSearch1] = useState('');
-  const [search2, setSearch2] = useState('');
-  const [search3, setSearch3] = useState('');
-  const [activeFilters, setActiveFilters] = useState<Record<string, string | string[]>>({});
-
-  const handleFilterChange = (key: string, value: string | string[]) => {
-    setActiveFilters(prev => ({ ...prev, [key]: value }));
-  };
-
-  const clearAll = () => {
-    setSearch2('');
-    setActiveFilters({});
-  };
-
-  const totalResults = 247;
-
   return (
-    <PageLayout
-      category="Components"
-      title="Toolbar Filter"
-      description="Toolbar filters give users control over list and table views by combining search, filter dropdowns, result counts, and action buttons in a single composable bar."
-      tocItems={toc}
-    >
-      <Section id="toolbar-usage" title="Usage Guidelines">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-          {[
-            { heading: 'Always show result count', body: 'After any filter is applied, show the number of matching results. This gives users instant feedback on the impact of their selection.' },
-            { heading: 'Persist active state', body: 'Active filters should be visually distinct — highlighted border, fill, and count badge. Users should be able to see at a glance which filters are on.' },
-            { heading: 'Easy to clear', body: 'Provide a "Clear all" button whenever at least one filter is active. Don\'t make users individually deselect each filter.' },
-          ].map(g => (
-            <div key={g.heading} style={{ padding: 16, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-              <p style={{ margin: '0 0 6px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>{g.heading}</p>
-              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#49494A', lineHeight: '1.6' }}>{g.body}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="toolbar-search" title="Search Only">
-        <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-          <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search bar</p>
-          <ToolbarFilter
-            searchValue={search1}
-            onSearchChange={setSearch1}
-            searchPlaceholder="Search members…"
-            totalResults={totalResults}
-          />
-        </div>
-      </Section>
-
-      <Section id="toolbar-filters" title="With Filters">
-        <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-          <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search + filters (try clicking the filter buttons)</p>
-          <ToolbarFilter
-            searchValue={search2}
-            onSearchChange={setSearch2}
-            filters={[statusFilter, roleFilter]}
-            activeFilters={activeFilters}
-            onFilterChange={handleFilterChange}
-            onClearAll={clearAll}
-            totalResults={totalResults}
-          />
-        </div>
-      </Section>
-
-      <Section id="toolbar-full" title="Full Toolbar">
-        <div style={{ padding: 20, backgroundColor: '#F7F7F7', borderRadius: 10, border: '1px solid #EEEEEE' }}>
-          <p style={{ margin: '0 0 16px', fontFamily: 'var(--font-family-body)', fontWeight: 600, fontSize: 13, color: '#14141E' }}>Search + filters + actions</p>
-          <ToolbarFilter
-            searchValue={search3}
-            onSearchChange={setSearch3}
-            searchPlaceholder="Search projects…"
-            filters={[statusFilter, roleFilter]}
-            activeFilters={activeFilters}
-            onFilterChange={handleFilterChange}
-            onClearAll={clearAll}
-            totalResults={totalResults}
-            actions={
-              <div style={{ display: 'flex', gap: 8 }}>
-                <Button variant="neutral" size="sm" leadingIcon={<Download size={14} />}>Export</Button>
-                <Button variant="primary" size="sm" leadingIcon={<Plus size={14} />}>New project</Button>
-              </div>
-            }
-          />
-        </div>
-      </Section>
-    </PageLayout>
+    <ComponentDocPage
+      slug="toolbar-filter"
+      title="Filter"
+      description="Controls for narrowing and ordering a list or table: a toolbar of sort and filter chips with a Reset link, a section header with an add button, and a side filter panel built from filter group cards."
+      usage={[
+        { heading: 'Chips for quick filters', body: 'Use the toolbar for a few common filters above a table; each chip opens its options.' },
+        { heading: 'Panel for many filters', body: 'When people combine several columns, use the side panel with one card per column.' },
+        { heading: 'Always reset', body: 'Show the Reset link so people can get back to the full list in one click.' },
+      ]}
+      demos={[
+        { id: 'toolbar', title: 'Toolbar Filter', description: 'Click a chip to open its options.',
+          node: <div style={{ width: 640, minHeight: 220 }}><ToolbarFilter sort={[{ id: 's', label: 'Sort: Date', options: [{ value: 'date', label: 'Date' }, { value: 'name', label: 'Name' }], value: 'date' }]} filters={[{ id: 'st', label: 'Status', options: STATUS }, { id: 'ty', label: 'Type', options: STATUS }]} onReset={() => {}} /></div> },
+        { id: 'header', title: 'Filter Section Header', node: <div style={{ width: 320 }}><FilterSectionHeader title="Filter samples by meta" onAdd={() => {}} /></div> },
+        { id: 'side-panel', title: 'Side Filter Panel', description: 'One filter group card per column, plus a sort section.', node: <SidePanelDemo /> },
+      ]}
+    />
   );
 }

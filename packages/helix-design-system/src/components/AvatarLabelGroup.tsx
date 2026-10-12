@@ -11,17 +11,17 @@ export interface AvatarLabelGroupProps extends React.HTMLAttributes<HTMLDivEleme
 }
 
 interface SizeConfig {
-  avatarSize: 'xs' | 'sm' | 'md' | 'lg';
+  avatarSize: 'sm' | 'md' | 'lg';
   nameFontSize: number;
   emailFontSize: number;
   gap: number;
 }
 
 const SIZES: Record<AvatarLabelGroupSize, SizeConfig> = {
-  sm: { avatarSize: 'xs', nameFontSize: 13, emailFontSize: 12, gap: 8 },
-  md: { avatarSize: 'sm', nameFontSize: 14, emailFontSize: 13, gap: 10 },
-  lg: { avatarSize: 'md', nameFontSize: 16, emailFontSize: 13, gap: 12 },
-  xl: { avatarSize: 'lg', nameFontSize: 18, emailFontSize: 14, gap: 14 },
+  sm: { avatarSize: 'sm', nameFontSize: 13, emailFontSize: 10, gap: 8 },
+  md: { avatarSize: 'md', nameFontSize: 13, emailFontSize: 13, gap: 12 },
+  lg: { avatarSize: 'lg', nameFontSize: 16, emailFontSize: 13, gap: 12 },
+  xl: { avatarSize: 'lg', nameFontSize: 20, emailFontSize: 16, gap: 16 },
 };
 
 export const AvatarLabelGroup = forwardRef<HTMLDivElement, AvatarLabelGroupProps>(({
@@ -40,14 +40,14 @@ export const AvatarLabelGroup = forwardRef<HTMLDivElement, AvatarLabelGroupProps
       style={{ display: 'inline-flex', alignItems: 'center', gap: cfg.gap, ...style }}
       {...props}
     >
-      <Avatar size={cfg.avatarSize} src={src} name={name} content={src ? 'image' : 'placeholder'} />
+      <Avatar size={cfg.avatarSize} shape="circular" src={src} name={name} content={src ? 'image' : 'placeholder'} />
       <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <span style={{
           fontFamily: 'var(--font-family-body)',
-          fontWeight: 600,
+          fontWeight: 500,
           fontSize: cfg.nameFontSize,
           lineHeight: 1.3,
-          color: 'var(--color-text-primary, #14141E)',
+          color: 'var(--color-text-secondary, #49494A)',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',

@@ -2,53 +2,24 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Accordion } from 'helix-design-system/components';
 
 const ITEMS = [
-  { id: 'item-1', title: 'What is Nusantics?', content: 'Nusantics is a biotech company focused on microbiome research and diagnostics across Indonesia.' },
-  { id: 'item-2', title: 'How do I get my results?', content: 'Results are delivered through the CeKolam dashboard within 5-7 business days of sample collection.' },
-  { id: 'item-3', title: 'Is my data secure?', content: 'All sample and genomic data is encrypted at rest and in transit, following ISO 27001 practices.' },
-  { id: 'item-4', title: 'Archived FAQ', content: 'This section is no longer maintained.', disabled: true },
+  { id: 'q1', title: 'How are samples processed?', content: 'Samples are logged on arrival, prepared, sequenced and quality-checked before a report is issued.' },
+  { id: 'q2', title: 'How long does a result take?', content: 'Most results are ready within three to five working days, depending on the panel.' },
+  { id: 'q3', title: 'Can I add samples to a batch later?', content: 'Yes — until the batch is locked for processing.' },
+  { id: 'q4', title: 'Archived questions', content: 'Not available.', disabled: true },
 ];
 
 const meta = {
-  title: 'Components/Navigation/Accordion',
+  title: 'Molecule/Accordion',
   component: Accordion,
   tags: ['autodocs'],
-  argTypes: {
-    type: { control: 'select', options: ['single', 'multiple'] },
-    accordionStyle: { control: 'select', options: ['default', 'border', 'card'] },
-  },
-  args: {
-    items: ITEMS,
-    type: 'single',
-    accordionStyle: 'default',
-    defaultValue: 'item-1',
-  },
+  argTypes: { type: { control: 'select', options: ['single', 'multiple'] } },
+  args: { items: ITEMS, type: 'single' },
+  decorators: [(Story) => <div style={{ width: 400 }}><Story /></div>],
 } satisfies Meta<typeof Accordion>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
-  render: (args) => <div style={{ width: 480 }}><Accordion {...args} /></div>,
-};
-
-export const Variants: Story = {
-  render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 480 }}>
-      {(['default', 'border', 'card'] as const).map((accordionStyle) => (
-        <div key={accordionStyle}>
-          <p style={{ fontFamily: 'Rubik, sans-serif', fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 8 }}>{accordionStyle}</p>
-          <Accordion {...args} accordionStyle={accordionStyle} />
-        </div>
-      ))}
-    </div>
-  ),
-};
-
-export const Multiple: Story = {
-  args: { type: 'multiple', defaultValue: ['item-1', 'item-2'] },
-  render: (args) => <div style={{ width: 480 }}><Accordion {...args} /></div>,
-};
-
-export const WithDisabledItem: Story = {
-  render: (args) => <div style={{ width: 480 }}><Accordion {...args} defaultValue="item-4" /></div>,
-};
+export const Playground: Story = {};
+export const OpenByDefault: Story = { args: { defaultValue: 'q1' } };
+export const Multiple: Story = { args: { type: 'multiple', defaultValue: ['q1', 'q2'] } };

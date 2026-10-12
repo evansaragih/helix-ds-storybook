@@ -1,173 +1,70 @@
 import { forwardRef } from 'react';
+import { Badge } from './Badge';
 
-export type ProgressLabelType = 'none' | 'title' | 'trailing' | 'top-floating' | 'bottom-floating' | 'within';
+/** Figma Type — how the percentage and label are shown */
+export type ProgressBarType = 'base' | 'title-label' | 'trailing-label' | 'top-floating-label' | 'bottom-floating-label' | 'within';
 
 export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: number;       // 0–100
-  max?: number;
-  labelType?: ProgressLabelType;
-  label?: string;      // used as title when labelType='title'
-  color?: string;      // track fill color
-  trackColor?: string; // background track color
-  height?: number;     // track height in px
-  animated?: boolean;
-  showPercent?: boolean;
+  /** Progress from 0 to 100 (Figma Value) */
+  value: number;
+  type?: ProgressBarType;
+  /** Left text for title-label (Figma Label) */
+  label?: React.ReactNode;
+  /** Right text for title-label (Figma Supporting Text); defaults to the percentage */
+  supportingText?: React.ReactNode;
 }
 
-function clamp(v: number, min = 0, max = 100) {
-  return Math.min(Math.max(v, min), max);
-}
+const clamp = (v: number) => Math.min(Math.max(v, 0), 100);
+const text: React.CSSProperties = { fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '20px', letterSpacing: '-0.01px', color: 'var(--color-text-primary, #14141E)' };
 
+/** A horizontal track showing determinate completion. Use for upload or download progress and form completion; for an unknown wait use Spinner. */
 export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(({
   value,
-  max = 100,
-  labelType = 'none',
+  type = 'base',
   label,
-  color = 'var(--color-brand-primary, #F57E20)',
-  trackColor = 'var(--color-container-tertiary, #EEEEEE)',
-  height = 8,
-  animated = false,
-  showPercent = true,
+  supportingText,
   style,
-  className,
   ...props
 }, ref) => {
-  const pct = clamp((value / max) * 100);
-  const pctStr = `${Math.round(pct)}%`;
+  const pct = clamp(value);
+  const label$ = `${Math.round(pct)}%`;
 
-  const labelStyle: React.CSSProperties = {
-    fontFamily: 'var(--font-family-body)',
-    fontWeight: 400,
-    fontSize: 13,
-    lineHeight: '19.2px',
-    color: 'var(--color-text-primary, #14141E)',
-    letterSpacing: '-0.01px',
-    whiteSpace: 'nowrap',
-  };
-
-  const track = (
-    <div style={{
-      width: '100%',
-      height,
-      borderRadius: 9999,
-      backgroundColor: trackColor,
-      overflow: 'hidden',
-      position: 'relative',
-    }}>
-      <div style={{
-        height: '100%',
-        width: pctStr,
-        borderRadius: 9999,
-        backgroundColor: color,
-        transition: animated ? 'width 0.4s ease' : 'none',
-        position: 'relative',
-      }}>
-        {labelType === 'within' && pct > 8 && showPercent && (
-          <span style={{
-            ...labelStyle,
-            position: 'absolute',
-            right: 6,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            fontSize: 10,
-            lineHeight: '15.6px',
-            color: '#FFFFFF',
-            fontWeight: 400,
-          }}>
-            {pctStr}
-          </span>
-        )}
+  const track = (within = false) => (
+    <div
+      role="progressbar"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={pct}
+      style={{ position: 'relative', flex: 1, minWidth: 0, height: within ? 16 : 8, borderRadius: 9999, overflow: 'hidden', backgroundColor: 'var(--color-container-tertiary, #EEEEEE)' }}
+    >
+      <div style={{ width: `${pct}%`, height: '100%', borderRadius: 9999, backgroundColor: 'var(--color-brand-primary, #F57E20)', transition: 'width 0.3s ease', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, boxSizing: 'border-box' }}>
+        {within && pct >= 12 && <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 8, lineHeight: '12px', color: '#FFFFFF' }}>{label$}</span>}
       </div>
     </div>
   );
 
-  if (labelType === 'none') {
-    return (
-      <div ref={ref} style={{ width: '100%', ...style }} className={className} {...props}>
-        {track}
+  const floating = (
+    <div aria-hidden="true" style={{ position: 'relative', height: 20 }}>
+      <div style={{ position: 'absolute', left: `${pct}%`, transform: `translateX(-${pct}%)` }}>
+        <Badge size="sm" color="neutral" appearance="outline" label={label$} />
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (labelType === 'title') {
-    return (
-      <div ref={ref} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, ...style }} className={className} {...props}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-          {label && <span style={labelStyle}>{label}</span>}
-          {showPercent && <span style={labelStyle}>{pctStr}</span>}
-        </div>
-        {track}
-      </div>
-    );
-  }
-
-  if (labelType === 'trailing') {
-    return (
-      <div ref={ref} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 12, ...style }} className={className} {...props}>
-        <div style={{ flex: 1 }}>{track}</div>
-        {showPercent && <span style={{ ...labelStyle, flexShrink: 0, textAlign: 'right', minWidth: 42 }}>{pctStr}</span>}
-      </div>
-    );
-  }
-
-  if (labelType === 'top-floating') {
-    return (
-      <div ref={ref} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, ...style }} className={className} {...props}>
-        {showPercent && (
-          <div style={{ display: 'flex' }}>
-            <span style={{
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: 400,
-              fontSize: 10,
-              lineHeight: '15.6px',
-              color: 'var(--color-text-primary, #14141E)',
-              letterSpacing: '-0.01px',
-              whiteSpace: 'nowrap',
-              padding: '2px 6px',
-              borderRadius: 9999,
-              border: '0.5px solid var(--color-stroke-subtle, #D7D7D7)',
-              backgroundColor: 'var(--color-container-primary, #FFFFFF)',
-            }}>
-              {pctStr}
-            </span>
-          </div>
-        )}
-        {track}
-      </div>
-    );
-  }
-
-  if (labelType === 'bottom-floating') {
-    return (
-      <div ref={ref} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 8, ...style }} className={className} {...props}>
-        {track}
-        {showPercent && (
-          <div style={{ display: 'flex' }}>
-            <span style={{
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: 400,
-              fontSize: 10,
-              lineHeight: '15.6px',
-              color: 'var(--color-text-primary, #14141E)',
-              letterSpacing: '-0.01px',
-              whiteSpace: 'nowrap',
-              padding: '2px 6px',
-              borderRadius: 9999,
-              border: '0.5px solid var(--color-stroke-subtle, #D7D7D7)',
-              backgroundColor: 'var(--color-container-primary, #FFFFFF)',
-            }}>
-              {pctStr}
-            </span>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // within — rendered above in track
   return (
-    <div ref={ref} style={{ width: '100%', ...style }} className={className} {...props}>
-      {track}
+    <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%', ...style }} {...props}>
+      {type === 'title-label' && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+          <span style={text}>{label}</span>
+          <span style={text}>{supportingText ?? label$}</span>
+        </div>
+      )}
+      {type === 'top-floating-label' && floating}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        {track(type === 'within')}
+        {type === 'trailing-label' && <span style={{ ...text, minWidth: 42, textAlign: 'right' }}>{label$}</span>}
+      </div>
+      {type === 'bottom-floating-label' && floating}
     </div>
   );
 });

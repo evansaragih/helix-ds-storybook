@@ -2,16 +2,15 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Switch } from 'helix-design-system/components';
 
 const meta = {
-  title: 'Components/Inputs & Forms/Switch',
+  title: 'Atomic/Switch',
   component: Switch,
   tags: ['autodocs'],
   argTypes: {
     size: { control: 'select', options: ['sm', 'md'] },
+    invalid: { control: 'boolean' },
+    disabled: { control: 'boolean' },
   },
-  args: {
-    label: 'Enable notifications',
-    size: 'md',
-  },
+  args: { label: 'Label', size: 'md' },
 } satisfies Meta<typeof Switch>;
 
 export default meta;
@@ -19,32 +18,24 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
-export const Checked: Story = {
-  args: { defaultChecked: true },
-};
-
 export const Sizes: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      {(['sm', 'md'] as const).map((size) => (
-        <Switch key={size} {...args} size={size} defaultChecked label={`Size ${size}`} />
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {(['sm', 'md'] as const).map((size) => <Switch key={size} {...args} size={size} defaultChecked />)}
     </div>
   ),
 };
 
-export const WithHelperText: Story = {
-  args: { helperText: 'Get an email when a new report is ready.' },
+/** Figma States — Off, On, Disabled, Invalid. Hover and focus are interactive. */
+export const States: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Switch {...args} label="Off" />
+      <Switch {...args} label="On" defaultChecked />
+      <Switch {...args} label="Disabled" disabled />
+      <Switch {...args} label="Invalid" invalid feedback="This setting is required." />
+    </div>
+  ),
 };
 
-export const Invalid: Story = {
-  args: { invalid: true, helperText: 'This setting requires verification.' },
-};
-
-export const Disabled: Story = {
-  args: { disabled: true },
-};
-
-export const DisabledChecked: Story = {
-  args: { disabled: true, defaultChecked: true },
-};
+export const WithSupportingText: Story = { args: { supportingText: 'Notify me when a sample finishes processing.' } };

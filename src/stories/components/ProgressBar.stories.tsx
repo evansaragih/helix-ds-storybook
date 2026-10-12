@@ -1,59 +1,35 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressBar } from 'helix-design-system/components';
 
+const TYPES = ['base', 'title-label', 'trailing-label', 'top-floating-label', 'bottom-floating-label', 'within'] as const;
+
 const meta = {
-  title: 'Components/Data Display/ProgressBar',
+  title: 'Atomic/Progress Indicator/Progress Bar',
   component: ProgressBar,
   tags: ['autodocs'],
-  argTypes: {
-    labelType: {
-      control: 'select',
-      options: ['none', 'title', 'trailing', 'top-floating', 'bottom-floating', 'within'],
-    },
-  },
-  args: {
-    value: 64,
-    labelType: 'title',
-    label: 'Processing samples',
-  },
+  argTypes: { type: { control: 'select', options: TYPES }, value: { control: { type: 'range', min: 0, max: 100 } } },
+  args: { value: 50, type: 'base', label: 'Storage used' },
+  decorators: [(Story) => <div style={{ width: 516 }}><Story /></div>],
 } satisfies Meta<typeof ProgressBar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
-  render: (args) => <div style={{ width: 320 }}><ProgressBar {...args} /></div>,
-};
+export const Playground: Story = {};
 
-export const LabelTypes: Story = {
+/** Figma Type. */
+export const Types: Story = {
   render: (args) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 320 }}>
-      {(['none', 'title', 'trailing', 'top-floating', 'bottom-floating', 'within'] as const).map((labelType) => (
-        <div key={labelType}>
-          <p style={{ fontFamily: 'Rubik, sans-serif', fontSize: 12, color: 'var(--color-text-tertiary)', marginBottom: 8 }}>{labelType}</p>
-          <ProgressBar {...args} labelType={labelType} height={labelType === 'within' ? 20 : 8} />
-        </div>
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      {TYPES.map((type) => <ProgressBar key={type} {...args} type={type} />)}
     </div>
   ),
 };
 
-export const Complete: Story = {
-  args: { value: 100 },
-  render: (args) => <div style={{ width: 320 }}><ProgressBar {...args} /></div>,
-};
-
-export const Empty: Story = {
-  args: { value: 0 },
-  render: (args) => <div style={{ width: 320 }}><ProgressBar {...args} /></div>,
-};
-
-export const CustomColor: Story = {
-  args: { color: 'var(--color-brand-tertiary)', value: 42 },
-  render: (args) => <div style={{ width: 320 }}><ProgressBar {...args} /></div>,
-};
-
-export const Animated: Story = {
-  args: { animated: true },
-  render: (args) => <div style={{ width: 320 }}><ProgressBar {...args} /></div>,
+export const Values: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {[0, 25, 50, 75, 100].map((value) => <ProgressBar key={value} {...args} type="trailing-label" value={value} />)}
+    </div>
+  ),
 };

@@ -4,17 +4,19 @@ import { User } from 'lucide-react';
 import { AVATAR_USERS } from '../../data/avatarUsers';
 
 const meta = {
-  title: 'Components/Data Display/Avatar',
+  title: 'Molecule/Avatar/Avatar',
   component: Avatar,
   tags: ['autodocs'],
   argTypes: {
-    size: { control: 'select', options: ['xs', 'sm', 'md', 'lg'] },
-    shape: { control: 'select', options: ['circular', 'rounded'] },
+    size: { control: 'select', options: ['xxs', 'xs', 'sm', 'md', 'lg'] },
+    border: { control: 'boolean' },
+    shape: { control: 'select', options: ['rounded', 'circular'] },
+    status: { control: 'boolean' },
     content: { control: 'select', options: ['image', 'icon', 'placeholder'] },
   },
   args: {
     size: 'md',
-    shape: 'circular',
+    shape: 'rounded',
     content: 'placeholder',
     name: 'Sari Dewi',
   },
@@ -82,6 +84,16 @@ export const UserGallery: Story = {
           </a>
         </div>
       ))}
+    </div>
+  ),
+};
+
+/** Figma Status (presence dot) and Company logo are mutually exclusive overlays. */
+export const Overlays: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => <Avatar key={size} {...args} size={size} status />)}
+      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => <Avatar key={`l${size}`} {...args} size={size} companyLogo={<span style={{ fontSize: 8, fontWeight: 700, color: '#F57E20' }}>N</span>} />)}
     </div>
   ),
 };
