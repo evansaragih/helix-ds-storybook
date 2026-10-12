@@ -1,4 +1,3 @@
-import { PageLayout } from './PageLayout';
 import { OverviewSection } from './OverviewSection';
 import { PrimitivesSection } from './PrimitivesSection';
 import { SemanticsSection } from './SemanticsSection';
@@ -67,11 +66,11 @@ import { TagSection } from './TagSection';
 
 interface MainContentProps {
   activeSection: string;
-  isCollapsed: boolean;
+  left: number;
   onSectionChange: (section: string) => void;
 }
 
-export function MainContent({ activeSection, isCollapsed, onSectionChange }: MainContentProps) {
+export function MainContent({ activeSection, left, onSectionChange }: MainContentProps) {
   const renderSection = () => {
     switch (activeSection) {
       case 'overview':          return <OverviewSection onNavigate={onSectionChange} />;
@@ -138,30 +137,13 @@ export function MainContent({ activeSection, isCollapsed, onSectionChange }: Mai
       case 'lightbox': return <LightboxSection />;
       case 'dashboard-layout': return <DashboardLayoutSection />;
       case 'tag': return <TagSection />;
-      case 'components-overview':
-        return (
-          <PageLayout
-            category="Components"
-            title="Components"
-            description="The Helix design system follows the Figma component sets. Pick any component to see usage guidance and interactive examples."
-            tocItems={[]}
-          >
-            <div className="dx-usage" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: 12 }}>
-              {componentItems.filter((i) => i.id !== 'components-overview').map((i) => (
-                <button key={i.id} className="dx-tile" onClick={() => onSectionChange(i.id)}>
-                  {i.label}
-                </button>
-              ))}
-            </div>
-          </PageLayout>
-        );
       default:
         return <OverviewSection onNavigate={onSectionChange} />;
     }
   };
 
   return (
-    <main className="dx-main" style={{ marginLeft: isCollapsed ? 64 : 248 }}>
+    <main className="dx-main" style={{ marginLeft: left }}>
       <div className="dx-container">{renderSection()}</div>
     </main>
   );

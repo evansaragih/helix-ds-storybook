@@ -5,17 +5,19 @@ import { IconButton } from '../../components/IconButton';
 import { foundationItems, componentItems } from '../data/navigation';
 
 interface HeaderProps {
-  isCollapsed: boolean;
-  onToggleCollapse: () => void;
+  left: number;
+  panelOpen: boolean;
+  onTogglePanel: () => void;
   onSectionChange: (section: string) => void;
 }
 
 const searchItems = [
+  { label: 'Overview', id: 'overview', group: 'Foundations' },
   ...foundationItems.map((item) => ({ ...item, group: 'Foundations' })),
   ...componentItems.map((item) => ({ ...item, group: 'Components' })),
 ];
 
-export function Header({ isCollapsed, onToggleCollapse, onSectionChange }: HeaderProps) {
+export function Header({ left, panelOpen, onTogglePanel, onSectionChange }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [highlight, setHighlight] = useState(0);
@@ -58,14 +60,14 @@ export function Header({ isCollapsed, onToggleCollapse, onSectionChange }: Heade
   };
 
   return (
-    <header className="dx-header" style={{ left: isCollapsed ? 64 : 248 }}>
+    <header className="dx-header" style={{ left }}>
       <IconButton
         hierarchy="secondary"
         appearance="ghost"
         size="sm"
-        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-label={panelOpen ? 'Close navigation panel' : 'Open navigation panel'}
         icon={<PanelLeft size={18} />}
-        onClick={onToggleCollapse}
+        onClick={onTogglePanel}
       />
 
       <div ref={containerRef} style={{ flex: 1, maxWidth: 480, position: 'relative' }}>

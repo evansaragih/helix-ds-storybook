@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { EmptyState } from 'helix-design-system/components';
+import { EmptyState, Illustration } from 'helix-design-system/components';
 import { Search } from 'lucide-react';
 
 const TYPES = ['search', 'users', 'files', 'integrations', 'no-data', 'no-lab-results', 'error', 'no-permission'] as const;
@@ -13,7 +13,7 @@ const meta = {
     size: { control: 'select', options: ['default', 'compact'] },
     illustration: { control: 'select', options: [true, false, 'dna', 'rna', 'lab-flask', 'microscope'] },
   },
-  args: { type: 'search', size: 'default', primaryAction: { label: 'New item' }, secondaryAction: { label: 'Clear search' } },
+  args: { type: 'search', size: 'default', animated: true, primaryAction: { label: 'New item' }, secondaryAction: { label: 'Clear search' } },
   decorators: [(Story) => <div style={{ width: 384, border: '1px solid #EEEEEE', borderRadius: 12 }}><Story /></div>],
 } satisfies Meta<typeof EmptyState>;
 
@@ -37,3 +37,19 @@ export const Compact: Story = { args: { size: 'compact' }, decorators: [(Story) 
 export const WithIconTile: Story = { args: { icon: <Search size={24} />, illustration: false } };
 export const BiotechIllustration: Story = { args: { type: 'no-lab-results', illustration: 'dna' } };
 export const NoActions: Story = { args: { primaryAction: undefined, secondaryAction: undefined } };
+
+const NAMES = ['no-data', 'search', 'users', 'files', 'integrations', 'error', 'no-permission', 'dna', 'rna', 'lab-flask', 'microscope'] as const;
+
+export const Illustrations: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32, justifyItems: 'center', width: 760 }}>
+      {NAMES.map((name) => (
+        <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, fontFamily: 'var(--font-family-body)', fontSize: 12, color: '#828282' }}>
+          <Illustration name={name} />
+          {name}
+        </div>
+      ))}
+    </div>
+  ),
+  decorators: [(Story) => <Story />],
+};
