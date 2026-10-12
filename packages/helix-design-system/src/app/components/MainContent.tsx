@@ -74,7 +74,7 @@ interface MainContentProps {
 export function MainContent({ activeSection, isCollapsed, onSectionChange }: MainContentProps) {
   const renderSection = () => {
     switch (activeSection) {
-      case 'overview':          return <OverviewSection />;
+      case 'overview':          return <OverviewSection onNavigate={onSectionChange} />;
       case 'primitives':        return <PrimitivesSection />;
       case 'semantics':         return <SemanticsSection />;
       case 'typography':        return <TypographySection />;
@@ -156,7 +156,7 @@ export function MainContent({ activeSection, isCollapsed, onSectionChange }: Mai
           </PageLayout>
         );
       default:
-        return <OverviewSection />;
+        return <OverviewSection onNavigate={onSectionChange} />;
     }
   };
 

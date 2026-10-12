@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
-import colorHeroBg from '../../assets/hero/color-hero-bg.png';
-import colorHeroIllustration from '../../assets/hero/color-hero-illustration.png';
+import { useState } from 'react';
+import { PageLayout } from './PageLayout';
+import { Tabs } from '../../components/Tabs';
 
 function hexToRgb(hex: string): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -40,7 +40,7 @@ const ColorCard = ({ shade, hex }: { shade: string; hex: string }) => (
 );
 
 const PaletteSection = ({ id, name, colors }: { id: string; name: string; colors: Array<{ shade: string; hex: string }> }) => (
-  <div id={id} style={{ marginBottom: '40px', scrollMarginTop: '160px' }}>
+  <div id={id} style={{ marginBottom: '40px', scrollMarginTop: '88px' }}>
     <h3 style={{
       fontFamily: 'var(--font-family-body)',
       fontWeight: 600,
@@ -66,8 +66,6 @@ const PaletteSection = ({ id, name, colors }: { id: string; name: string; colors
 export function PrimitivesSection() {
   const [activeTab, setActiveTab] = useState<'brand' | 'system'>('brand');
   const [brandMode, setBrandMode] = useState<'nusantics' | 'cekolam' | 'causa'>('nusantics');
-  const [activeAnchor, setActiveAnchor] = useState('');
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const nusanticsColors = {
     'Orange (Primary)': [
@@ -185,244 +183,49 @@ export function PrimitivesSection() {
   const currentPalettes = activeTab === 'brand' ? brandColors[brandMode] : systemColors;
   const paletteKeys = Object.keys(currentPalettes);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveAnchor(entry.target.id);
-        });
-      },
-      { rootMargin: '-20% 0px -70% 0px' }
-    );
-    paletteKeys.forEach((key) => {
-      const el = document.getElementById(`palette-${key.replace(/\s+/g, '-').toLowerCase()}`);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, [activeTab, brandMode]);
+  const paletteId = (name: string) => `palette-${name.replace(/\s+/g, '-').toLowerCase()}`;
 
   return (
-    <div ref={contentRef}>
-      {/* Hero banner — negative margin to bleed to card edges */}
-      <div style={{
-        margin: '-32px -32px 32px',
-        height: '280px',
-        position: 'relative',
-        overflow: 'hidden',
-        borderRadius: '16px 16px 0 0',
-        backgroundColor: '#F57E20'
-      }}>
-        {/* Background texture */}
-        <img
-          src={colorHeroBg}
-          alt=""
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '339.23%',
-            top: '-119.62%',
-            objectFit: 'cover',
-            mixBlendMode: 'lighten',
-            pointerEvents: 'none'
-          }}
+    <PageLayout
+      category="Foundations"
+      title="Color"
+      description="We use colors purposefully to communicate how things function in the interface, how they relate to other elements, and their level of prominence."
+      tocItems={paletteKeys.map((name) => ({ id: paletteId(name), label: name }))}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-24)', marginBottom: 'var(--spacing-32)' }}>
+        <Tabs
+          showNavigation={false}
+          renderContent={false}
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as 'brand' | 'system')}
+          items={[
+            { id: 'brand', label: 'Color Palettes' },
+            { id: 'system', label: 'System Colors' },
+          ]}
         />
-        {/* Illustration */}
-        <img
-          src={colorHeroIllustration}
-          alt=""
-          style={{
-            position: 'absolute',
-            right: '-46px',
-            top: '-6px',
-            height: '509px',
-            width: '749px',
-            objectFit: 'cover',
-            mixBlendMode: 'soft-light',
-            pointerEvents: 'none'
-          }}
-        />
-        {/* Text content */}
-        <div style={{
-          position: 'relative',
-          zIndex: 1,
-          padding: '48px 80px',
-          maxWidth: '50%'
-        }}>
-          <p style={{
-            margin: '0 0 8px',
-            fontFamily: 'var(--font-family-body)',
-            fontWeight: 400,
-            fontSize: '13px',
-            color: 'rgba(255,255,255,0.8)',
-            lineHeight: '19.2px'
-          }}>
-            Foundations
-          </p>
-          <h1 style={{
-            margin: '0 0 16px',
-            fontFamily: 'var(--font-family-body)',
-            fontWeight: 700,
-            fontSize: '40px',
-            color: 'white',
-            lineHeight: '1.2'
-          }}>
-            Color
-          </h1>
-          <p style={{
-            margin: 0,
-            fontFamily: 'var(--font-family-body)',
-            fontWeight: 400,
-            fontSize: '14px',
-            color: 'rgba(255,255,255,0.9)',
-            lineHeight: '1.6',
-            maxWidth: '360px'
-          }}>
-            We use colors purposefully to communicate how things function in the interface, how they relate to other elements, and their level of prominence.
-          </p>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div style={{
-        display: 'flex',
-        gap: '0',
-        borderBottom: '1px solid #d7d7d7',
-        marginBottom: '24px',
-        margin: '0 48px 24px 48px',
-      }}>
-        {[
-          { id: 'brand', label: 'Color Palettes' },
-          { id: 'system', label: 'System Colors' }
-        ].map((tab) => {
-          const isActive = activeTab === tab.id as 'brand' | 'system';
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as 'brand' | 'system')}
-              style={{
-                padding: '10px 20px',
-                border: 'none',
-                borderBottom: isActive ? '2px solid #F57E20' : '2px solid transparent',
-                backgroundColor: 'transparent',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-family-body)',
-                fontWeight: isActive ? 500 : 400,
-                fontSize: '14px',
-                color: isActive ? '#F57E20' : '#828282',
-                transition: 'all 0.15s',
-                marginBottom: '-1px'
-              }}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Brand selector (only for brand tab) */}
-      {activeTab === 'brand' && (
-        <div style={{
-          display: 'flex',
-          gap: '6px',
-          marginBottom: '32px',
-          padding: '4px',
-          margin: '0 48px',
-          backgroundColor: '#f5f5f5',
-          borderRadius: '8px',
-          width: 'fit-content'
-        }}>
-          {(['nusantics', 'cekolam', 'causa'] as const).map((brand) => {
-            const isActive = brandMode === brand;
-            return (
-              <button
-                key={brand}
-                onClick={() => setBrandMode(brand)}
-                style={{
-                  padding: '6px 16px',
-                  borderRadius: '6px',
-                  fontFamily: 'var(--font-family-body)',
-                  fontWeight: isActive ? 500 : 400,
-                  fontSize: '13px',
-                  color: isActive ? 'white' : '#58595b',
-                  backgroundColor: isActive ? '#F57E20' : 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s'
-                }}
-              >
-                {brandNames[brand]}
-              </button>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Content + On This Page */}
-      <div style={{ display: 'flex', gap: '40px', alignItems: 'flex-start', padding: '40px 48px' }}>
-        {/* Main palette content */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          {paletteKeys.map((name) => {
-            const id = `palette-${name.replace(/\s+/g, '-').toLowerCase()}`;
-            return (
-              <PaletteSection
-                key={name}
-                id={id}
-                name={name}
-                colors={(currentPalettes as Record<string, Array<{ shade: string; hex: string }>>)[name]}
-              />
-            );
-          })}
-        </div>
-
-        {/* On This Page */}
-        <div style={{
-          width: '160px',
-          flexShrink: 0,
-          position: 'sticky',
-          top: '120px'
-        }}>
-          <p style={{
-            margin: '0 0 12px',
-            fontFamily: 'var(--font-family-body)',
-            fontWeight: 600,
-            fontSize: '13px',
-            color: '#14141e'
-          }}>
-            On This Page
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            {paletteKeys.map((name) => {
-              const id = `palette-${name.replace(/\s+/g, '-').toLowerCase()}`;
-              const isActive = activeAnchor === id;
-              return (
-                <button
-                  key={name}
-                  onClick={() => {
-                    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  style={{
-                    display: 'block',
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '4px 0',
-                    border: 'none',
-                    backgroundColor: 'transparent',
-                    cursor: 'pointer',
-                    fontFamily: 'var(--font-family-body)',
-                    fontWeight: 400,
-                    fontSize: '12px',
-                    color: isActive ? '#F57E20' : '#828282',
-                    transition: 'color 0.15s'
-                  }}
-                >
-                  {name}
-                </button>
-              );
-            })}
+        {activeTab === 'brand' && (
+          <div style={{ width: 'fit-content' }}>
+            <Tabs
+              appearance="contained"
+              size="sm"
+              showNavigation={false}
+              renderContent={false}
+              value={brandMode}
+              onValueChange={(v) => setBrandMode(v as typeof brandMode)}
+              items={(Object.keys(brandNames) as (keyof typeof brandNames)[]).map((id) => ({ id, label: brandNames[id] }))}
+            />
           </div>
-        </div>
+        )}
       </div>
-    </div>
+
+      {paletteKeys.map((name) => (
+        <PaletteSection
+          key={name}
+          id={paletteId(name)}
+          name={name}
+          colors={(currentPalettes as Record<string, Array<{ shade: string; hex: string }>>)[name]}
+        />
+      ))}
+    </PageLayout>
   );
 }

@@ -120,7 +120,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
 
   return (
     <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: 8, ...style }} {...props}>
-      {appearance === 'container' ? <ContentContainer surface="gray" contentSurface="default" divided={false} footer={note || undefined}>{target}</ContentContainer> : <>{target}{note}</>}
+      {appearance === 'container' ? <ContentContainer surface="gray" contentStyle="floating" contentSurface="default" divided={false} footer={note || undefined}>{target}</ContentContainer> : <>{target}{note}</>}
     </div>
   );
 });

@@ -1,417 +1,109 @@
-import React from 'react';
+import { Palette, Type, Ruler, Layers, Shapes, Fingerprint, ArrowRight, Beaker } from 'lucide-react';
 import demoVideo from '../../imports/Nusantics_Design_System_Document.mp4';
+import { Badge } from '../../components/Badge';
+import { Button, Checkbox, RadioButton, Slider, ProgressBar, Spinner, Divider, IconTile, Dot, Switch, Badge as DemoBadge, Input } from '../../components';
+import { foundationItems, componentItems } from '../data/navigation';
 
-export function OverviewSection() {
+interface OverviewSectionProps {
+  onNavigate: (section: string) => void;
+}
+
+const foundationMeta: Record<string, { icon: typeof Palette; blurb: string }> = {
+  primitives: { icon: Palette, blurb: 'Brand and system palettes with semantic color roles.' },
+  typography: { icon: Type, blurb: 'Font families, type scale and weights for clear hierarchy.' },
+  utilities: { icon: Ruler, blurb: 'Spacing scale and layout primitives for harmonious designs.' },
+  elevation: { icon: Layers, blurb: 'Shadow levels that communicate depth and focus.' },
+  icons: { icon: Shapes, blurb: 'A consistent icon set sized for every component.' },
+  'brand-identity': { icon: Fingerprint, blurb: 'Brand-aware logos for Nusantics, CeKolam and Causa.' },
+};
+
+const noop = () => {};
+const previews: { id: string; title: string; node: React.ReactNode }[] = [
+  { id: 'button', title: 'Buttons', node: <div style={{ display: 'flex', gap: 8 }}><Button size="sm">Button</Button><Button size="sm" hierarchy="secondary" appearance="outline">Button</Button></div> },
+  { id: 'checkbox', title: 'Checkbox', node: <div style={{ display: 'flex', gap: 12 }}><Checkbox checked onChange={noop} label="Checked" /><Checkbox checked={false} onChange={noop} label="Off" /></div> },
+  { id: 'radio-button', title: 'Radio Button', node: <RadioButton value="basic" label="Basic" supportingText="Up to 10 samples" /> },
+  { id: 'switch', title: 'Switch', node: <Switch label="Notifications" defaultChecked /> },
+  { id: 'slider', title: 'Slider', node: <div style={{ width: 160 }}><Slider defaultValue={50} aria-label="Preview" /></div> },
+  { id: 'progress-bar', title: 'Progress Indicator', node: <div style={{ width: 160 }}><ProgressBar value={60} label="Storage used" /></div> },
+  { id: 'spinner', title: 'Loading Indicator', node: <Spinner /> },
+  { id: 'divider', title: 'Divider', node: <div style={{ width: 160 }}><Divider /></div> },
+  { id: 'icon-tile', title: 'Icon Tile', node: <IconTile size="md" icon={<Beaker size={20} />} /> },
+  { id: 'dot', title: 'Dot', node: <div style={{ display: 'flex', gap: 8 }}>{(['brand', 'info', 'success', 'warning', 'error'] as const).map((c) => <Dot key={c} color={c} size="xl" />)}</div> },
+  { id: 'badge', title: 'Badge', node: <div style={{ display: 'flex', gap: 6 }}><DemoBadge label="Brand" color="brand" appearance="subtle" /><DemoBadge label="Done" color="success" appearance="subtle" /></div> },
+  { id: 'input', title: 'Input', node: <div style={{ width: 170 }}><Input placeholder="Placeholder" /></div> },
+];
+
+function ShowcaseCard({ title, onClick, children }: { title: string; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button className="dx-showcase" onClick={onClick}>
+      <span className="dx-showcase-preview"><span className="dx-showcase-slot" aria-hidden>{children}</span></span>
+      <span className="dx-showcase-title">{title}</span>
+      <span className="dx-showcase-link">See Components</span>
+    </button>
+  );
+}
+
+export function OverviewSection({ onNavigate }: OverviewSectionProps) {
+  const componentCount = componentItems.filter((i) => i.id !== 'components-overview').length;
+  const stats = [
+    { value: componentCount, label: 'Components' },
+    { value: foundationItems.length, label: 'Foundations' },
+    { value: 3, label: 'Brand themes' },
+  ];
+
   return (
     <div>
-      {/* Hero Section */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 'var(--spacing-48)',
-        alignItems: 'center',
-        marginBottom: 'var(--spacing-80)',
-        minHeight: '500px'
-      }}>
-        {/* Left Content */}
-        <div>
-          <h1 style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--text-display-large)',
-            color: 'var(--color-text-primary)',
-            marginBottom: 'var(--spacing-24)',
-            fontWeight: 'var(--font-weight-bold)',
-            lineHeight: '1.2'
-          }}>
-            Helix Design System
-          </h1>
-
-          <p style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--text-body-large)',
-            color: 'var(--color-text-secondary)',
-            marginBottom: 'var(--spacing-32)',
-            lineHeight: '1.7',
-            maxWidth: '480px'
-          }}>
-            Accelerate designer's and developer's workflow for a seamless and impactful user experience across all interfaces.
-          </p>
-
-          <button
-            style={{
-              backgroundColor: 'var(--color-brand-primary)',
-              color: 'var(--color-text-on-primary)',
-              padding: 'var(--spacing-16) var(--spacing-32)',
-              borderRadius: 'var(--radius-lg)',
-              border: 'none',
-              fontSize: 'var(--text-body-default)',
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: 'var(--font-weight-semibold)',
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(245, 126, 32, 0.3)',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#DF6505';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(245, 126, 32, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'var(--color-brand-primary)';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(245, 126, 32, 0.3)';
-            }}
-          >
-            Discover more
-          </button>
+      <section className="dx-landing">
+        <div className="dx-landing-copy">
+          <Badge label="Design System" color="brand" appearance="subtle" size="md" />
+          <h1>Helix Design System</h1>
+          <p>Accelerate designer's and developer's workflow for a seamless and impactful user experience across all interfaces.</p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Button size="md" trailingIcon={<ArrowRight size={16} />} onClick={() => onNavigate('components-overview')}>Browse components</Button>
+            <Button size="md" hierarchy="secondary" appearance="outline" onClick={() => onNavigate('primitives')}>Explore foundations</Button>
+          </div>
         </div>
-
-        {/* Right Visual Elements */}
-        <div style={{
-          position: 'relative',
-          height: '500px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          {/* Overview Video */}
-          <video
-            src={demoVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: 'var(--radius-2xl)',
-              boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)'
-            }}
-          />
+        <div className="dx-landing-media">
+          <video src={demoVideo} autoPlay loop muted playsInline />
         </div>
+      </section>
+
+      <div className="dx-stats">
+        {stats.map((s) => (
+          <div key={s.label} className="dx-stat">
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </div>
+        ))}
       </div>
 
-      {/* Components Section */}
-      <div style={{ marginBottom: 'var(--spacing-64)' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 'var(--spacing-48)',
-          alignItems: 'center'
-        }}>
-          {/* Visual Preview */}
-          <div style={{
-            position: 'relative',
-            height: '400px',
-            backgroundColor: 'var(--color-bg-secondary)',
-            borderRadius: 'var(--radius-2xl)',
-            padding: 'var(--spacing-32)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1px solid var(--color-stroke-subtle)'
-          }}>
-            {/* Yellow Badge */}
-            <div style={{
-              position: 'absolute',
-              top: '40px',
-              left: '40px',
-              backgroundColor: '#F59E0B',
-              color: '#FFFFFF',
-              padding: 'var(--spacing-8) var(--spacing-16)',
-              borderRadius: 'var(--radius-full)',
-              fontSize: 'var(--text-body-small)',
-              fontFamily: 'var(--font-family-body)',
-              fontWeight: 'var(--font-weight-semibold)',
-              boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
-            }}>
-              NEW
-            </div>
-
-            {/* Component Cards Stack */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-16)', width: '100%', maxWidth: '300px' }}>
-              {/* Card 1 */}
-              <div style={{
-                backgroundColor: '#3B82F6',
-                padding: 'var(--spacing-16)',
-                borderRadius: 'var(--radius-xl)',
-                boxShadow: '0 8px 24px rgba(59, 130, 246, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-12)'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                  borderRadius: 'var(--radius-md)'
-                }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ height: '8px', backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 'var(--radius-sm)', marginBottom: 'var(--spacing-4)', width: '80%' }} />
-                  <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.3)', borderRadius: 'var(--radius-sm)', width: '60%' }} />
-                </div>
-              </div>
-
-              {/* Card 2 */}
-              <div style={{
-                backgroundColor: '#22C55E',
-                padding: 'var(--spacing-16)',
-                borderRadius: 'var(--radius-xl)',
-                boxShadow: '0 8px 24px rgba(34, 197, 94, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-12)'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                  borderRadius: 'var(--radius-md)'
-                }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ height: '8px', backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 'var(--radius-sm)', marginBottom: 'var(--spacing-4)', width: '70%' }} />
-                  <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.3)', borderRadius: 'var(--radius-sm)', width: '50%' }} />
-                </div>
-              </div>
-
-              {/* Card 3 */}
-              <div style={{
-                backgroundColor: '#F57E20',
-                padding: 'var(--spacing-16)',
-                borderRadius: 'var(--radius-xl)',
-                boxShadow: '0 8px 24px rgba(245, 126, 32, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-12)'
-              }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                  borderRadius: 'var(--radius-md)'
-                }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ height: '8px', backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: 'var(--radius-sm)', marginBottom: 'var(--spacing-4)', width: '75%' }} />
-                  <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.3)', borderRadius: 'var(--radius-sm)', width: '55%' }} />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div>
-            <h2 style={{
-              fontFamily: 'var(--font-family-heading)',
-              fontSize: 'var(--text-heading-page-title)',
-              color: 'var(--color-text-primary)',
-              marginBottom: 'var(--spacing-20)',
-              fontWeight: 'var(--font-weight-semibold)'
-            }}>
-              Components
-            </h2>
-
-            <p style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--text-body-large)',
-              color: 'var(--color-text-secondary)',
-              marginBottom: 'var(--spacing-24)',
-              lineHeight: '1.7'
-            }}>
-              The reusable building blocks of our design framework. Crafted with flexibility, each component fulfills a distinct interaction or UI requirement, seamlessly combining to form cohesive patterns and intuitive user experiences.
-            </p>
-
-            <button
-              style={{
-                backgroundColor: 'var(--color-brand-primary)',
-                color: 'var(--color-text-on-primary)',
-                padding: 'var(--spacing-12) var(--spacing-24)',
-                borderRadius: 'var(--radius-lg)',
-                border: 'none',
-                fontSize: 'var(--text-body-default)',
-                fontFamily: 'var(--font-family-body)',
-                fontWeight: 'var(--font-weight-medium)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#DF6505';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--color-brand-primary)';
-              }}
-            >
-              Explore more
-            </button>
-          </div>
+      <section className="dx-section">
+        <h2>Foundations</h2>
+        <p className="dx-lead">The tokens every component is built from.</p>
+        <div className="dx-showcase-grid">
+          {foundationItems.map((item) => {
+            const Icon = (foundationMeta[item.id]?.icon ?? Palette);
+            return (
+              <ShowcaseCard key={item.id} title={item.label} onClick={() => onNavigate(item.id)}>
+                <IconTile size="md" icon={<Icon size={20} />} />
+              </ShowcaseCard>
+            );
+          })}
         </div>
-      </div>
+      </section>
 
-      {/* Feature Cards */}
-      <h2 style={{
-        fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--text-heading-section-title)',
-        color: 'var(--color-text-primary)',
-        marginBottom: 'var(--spacing-24)',
-        fontWeight: 'var(--font-weight-semibold)',
-        textAlign: 'center'
-      }}>
-        Design System Foundations
-      </h2>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: 'var(--spacing-24)',
-        marginBottom: 'var(--spacing-48)'
-      }}>
-        <div style={{
-          padding: 'var(--spacing-32)',
-          backgroundColor: 'var(--color-bg-secondary)',
-          borderRadius: 'var(--radius-2xl)',
-          border: '1px solid var(--color-stroke-subtle)',
-          textAlign: 'center',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-4px)';
-          e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.08)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'none';
-        }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            margin: '0 auto var(--spacing-16)',
-            background: 'linear-gradient(135deg, #F57E20 0%, #DF6505 100%)',
-            borderRadius: 'var(--radius-xl)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '28px'
-          }}>
-            🎨
-          </div>
-          <h3 style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--text-heading-sub-section)',
-            color: 'var(--color-text-primary)',
-            marginBottom: 'var(--spacing-12)',
-            fontWeight: 'var(--font-weight-semibold)'
-          }}>
-            Color System
-          </h3>
-          <p style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--text-body-default)',
-            color: 'var(--color-text-secondary)',
-            lineHeight: '1.6',
-            margin: 0
-          }}>
-            Comprehensive color palettes with semantic tokens and accessibility in mind.
-          </p>
+      <section className="dx-section">
+        <h2>Components</h2>
+        <p className="dx-lead">Start with the pieces used on almost every screen.</p>
+        <div className="dx-showcase-grid">
+          {previews.map((p) => (
+            <ShowcaseCard key={p.id} title={p.title} onClick={() => onNavigate(p.id)}>{p.node}</ShowcaseCard>
+          ))}
         </div>
-
-        <div style={{
-          padding: 'var(--spacing-32)',
-          backgroundColor: 'var(--color-bg-secondary)',
-          borderRadius: 'var(--radius-2xl)',
-          border: '1px solid var(--color-stroke-subtle)',
-          textAlign: 'center',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-4px)';
-          e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.08)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'none';
-        }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            margin: '0 auto var(--spacing-16)',
-            background: 'linear-gradient(135deg, #58595B 0%, #393A3B 100%)',
-            borderRadius: 'var(--radius-xl)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '28px'
-          }}>
-            ✍️
-          </div>
-          <h3 style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--text-heading-sub-section)',
-            color: 'var(--color-text-primary)',
-            marginBottom: 'var(--spacing-12)',
-            fontWeight: 'var(--font-weight-semibold)'
-          }}>
-            Typography
-          </h3>
-          <p style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--text-body-default)',
-            color: 'var(--color-text-secondary)',
-            lineHeight: '1.6',
-            margin: 0
-          }}>
-            Carefully crafted type scale with Quicksand and Rubik font families.
-          </p>
+        <div style={{ marginTop: 24 }}>
+          <Button hierarchy="secondary" appearance="outline" trailingIcon={<ArrowRight size={16} />} onClick={() => onNavigate('components-overview')}>All {componentCount} components</Button>
         </div>
-
-        <div style={{
-          padding: 'var(--spacing-32)',
-          backgroundColor: 'var(--color-bg-secondary)',
-          borderRadius: 'var(--radius-2xl)',
-          border: '1px solid var(--color-stroke-subtle)',
-          textAlign: 'center',
-          transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-4px)';
-          e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.08)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = 'none';
-        }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            margin: '0 auto var(--spacing-16)',
-            background: 'linear-gradient(135deg, #476142 0%, #2E402A 100%)',
-            borderRadius: 'var(--radius-xl)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '28px'
-          }}>
-            📐
-          </div>
-          <h3 style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--text-heading-sub-section)',
-            color: 'var(--color-text-primary)',
-            marginBottom: 'var(--spacing-12)',
-            fontWeight: 'var(--font-weight-semibold)'
-          }}>
-            Spacing & Layout
-          </h3>
-          <p style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--text-body-default)',
-            color: 'var(--color-text-secondary)',
-            lineHeight: '1.6',
-            margin: 0
-          }}>
-            Consistent spacing scale and layout primitives for harmonious designs.
-          </p>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }

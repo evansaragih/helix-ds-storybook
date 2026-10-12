@@ -57,7 +57,7 @@ export function Sidebar({ activeSection, onSectionChange, isCollapsed }: Sidebar
                 <button className="dx-group-label" aria-expanded={open} onClick={() => toggleGroup(id)}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     {label}
-                    <Badge label={String(items.length)} color="neutral" appearance="subtle" size="xs" />
+                    <Badge label={String(items.filter((i) => i.id !== 'components-overview').length)} color="neutral" appearance="subtle" size="xs" />
                   </span>
                   <ChevronDown size={14} />
                 </button>

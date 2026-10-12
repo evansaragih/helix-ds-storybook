@@ -144,3 +144,61 @@
 }
 .dx-tile:hover { border-color: var(--color-brand-primary); background: var(--color-brand-primary-ghost-hover); transform: translateY(-1px); }
 .dx-tile:focus-visible { outline: 2px solid var(--color-brand-primary-ring); outline-offset: 2px; }
+
+.dx-landing {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--spacing-48); align-items: center;
+  padding: 56px; margin-bottom: var(--spacing-24);
+  border: 1px solid var(--color-stroke-subtle); border-radius: 28px;
+  background:
+    radial-gradient(50% 90% at 0% 0%, rgba(245,126,32,.14) 0%, rgba(245,126,32,0) 70%),
+    var(--color-container-secondary);
+}
+.dx-landing-copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-16); }
+.dx-landing-copy h1 { margin: 0; font-family: var(--font-family-heading); font-weight: 700; font-size: 56px; line-height: 1.05; letter-spacing: -0.03em; color: var(--color-text-primary); }
+.dx-landing-copy p { margin: 0 0 var(--spacing-8); max-width: 460px; font-size: 17px; line-height: 1.65; color: var(--color-text-secondary); }
+.dx-landing-media { aspect-ratio: 1 / 1; max-height: 440px; justify-self: end; width: 100%; overflow: hidden; border-radius: var(--radius-2xl); box-shadow: 0 24px 60px rgba(20,20,30,.12); }
+.dx-landing-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.dx-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-16); margin-bottom: 56px; }
+.dx-stat { display: flex; align-items: baseline; gap: var(--spacing-12); padding: 20px var(--spacing-24); border: 1px solid var(--color-stroke-subtle); border-radius: var(--radius-2xl); background: var(--color-container-primary); }
+.dx-stat strong { font-family: var(--font-family-heading); font-size: 36px; font-weight: 700; letter-spacing: -0.02em; color: var(--color-brand-primary); }
+.dx-stat span { font-size: 14px; color: var(--color-text-secondary); }
+
+.dx-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--spacing-16); }
+.dx-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: var(--spacing-24); text-align: left; cursor: pointer;
+  border: 1px solid var(--color-stroke-subtle); border-radius: var(--radius-2xl); background: var(--color-container-primary);
+  transition: border-color .15s ease, box-shadow .2s ease, transform .15s ease;
+}
+.dx-card:hover { border-color: var(--color-brand-primary); box-shadow: 0 8px 24px rgba(245,126,32,.12); transform: translateY(-2px); }
+.dx-card:focus-visible { outline: 2px solid var(--color-brand-primary-ring); outline-offset: 2px; }
+.dx-card-icon { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin-bottom: var(--spacing-8); border-radius: var(--radius-xl); background: var(--color-brand-primary-ghost-hover); color: var(--color-brand-primary-hover); }
+.dx-card h3 { margin: 0; font-family: var(--font-family-heading); font-size: 18px; font-weight: 700; color: var(--color-text-primary); }
+.dx-card p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--color-text-secondary); }
+
+@media (max-width: 1000px) { .dx-landing { grid-template-columns: 1fr; padding: 32px; } .dx-landing-media { justify-self: stretch; max-height: 320px; } .dx-landing-copy h1 { font-size: 40px; } .dx-stats { grid-template-columns: 1fr; } }
+
+/* Showcase card — Figma _doc/component-menu */
+.dx-showcase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--spacing-24); }
+.dx-showcase {
+  display: flex; flex-direction: column; gap: 0; padding: 4px 4px 12px; text-align: left; cursor: pointer;
+  background: var(--color-container-primary); border: .5px solid var(--color-stroke-subtle); border-radius: 12px;
+  filter: drop-shadow(0 8px 8px rgba(0,0,0,.1)); transition: transform .15s ease, filter .2s ease;
+}
+.dx-showcase:hover { transform: translateY(-2px); filter: drop-shadow(0 12px 12px rgba(0,0,0,.14)); }
+.dx-showcase:focus-visible { outline: 2px solid var(--color-brand-primary-ring); outline-offset: 3px; }
+.dx-showcase-preview {
+  position: relative; display: block; padding: 8px; margin-bottom: 12px; overflow: hidden;
+  background: var(--color-container-secondary); border: .5px solid var(--color-stroke-subtle); border-radius: var(--radius-lg);
+}
+.dx-showcase-slot {
+  position: relative; display: flex; align-items: center; justify-content: center; min-height: 112px; padding: 16px;
+  margin: 0; pointer-events: none; overflow: hidden;
+  background:
+    linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) 0 24px / 100% .5px no-repeat,
+    linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) 0 calc(100% - 24px) / 100% .5px no-repeat,
+    linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) 24px 0 / .5px 100% no-repeat,
+    linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) calc(100% - 24px) 0 / .5px 100% no-repeat;
+}
+.dx-showcase-title { padding: 0 12px; font-family: var(--font-family-body); font-weight: 500; font-size: 16px; line-height: 24px; letter-spacing: -.16px; color: var(--color-text-primary); }
+.dx-showcase-link { padding: 0 12px; font-size: 13px; line-height: 19px; color: var(--color-text-tertiary); text-decoration: underline; }

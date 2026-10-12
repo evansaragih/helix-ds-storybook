@@ -47,7 +47,7 @@ export interface FilterGroupCardProps extends React.HTMLAttributes<HTMLDivElemen
 export const FilterGroupCard = forwardRef<HTMLDivElement, FilterGroupCardProps>(({
   columns, column, onColumnChange, values, selected, onSelectedChange, onRemove, style, ...props
 }, ref) => (
-  <ContentContainer ref={ref} contentSurface="default" divided={false} style={{ boxShadow: 'none', ...style }} {...props}>
+  <ContentContainer ref={ref} contentStyle="floating" contentSurface="default" divided={false} style={{ boxShadow: 'none', ...style }} {...props}>
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <div style={{ flex: 1, minWidth: 0 }}><Select options={columns} value={column} onValueChange={onColumnChange} placeholder="Select column" /></div>
