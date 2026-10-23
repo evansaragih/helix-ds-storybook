@@ -1,0 +1,116 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/1. Token Architecture" />
+
+# 1. Token Architecture
+
+## 1.1 Tiers
+
+Exactly three tiers. A token belongs to one tier and may only reference the tier below it.
+
+| Tier | Example | Brand-aware? | Usable in components? |
+|---|---|---|---|
+| **Primitive** | `colors-green-500`, `spacing-4` | No | ❌ Never directly |
+| **Semantic** | `colors-text-primary`, `colors-surface-danger` | Yes | ✅ This is the component API |
+| **Component** | `button-bg-primary-hover` | Yes | ✅ Only inside that component |
+
+**Rule:** components and applications consume **semantic** tokens. A primitive in a component is a bug.
+
+**Mechanism:** eslint rule banning raw hex, `rgb(`, and arbitrary Tailwind values (`bg-[#…]`) across the DS
+and all apps; primitive Tailwind classes additionally restricted inside the DS.
+
+## 1.2 Layer placement
+
+A token lives in the **narrowest layer that is still true**.
+
+- Shared across all brands → its own collection (`Primitives`, `Typography`, `Utilities`, `Breakpoints`).
+- Differs per brand → the `Semantics` collection, expressed as a **mode**, never as a separate collection.
+
+Brand parity is then guaranteed by construction: a variable cannot exist for one brand and not another.
+
+## 1.3 Naming
+
+`{category}-{role}-{variant}-{state}`, lowercase, kebab-case, no abbreviations.
+
+- ✅ `colors-text-secondary`, `colors-border-input-focus`
+- ❌ `colors-txt-2`, `clr-brand`
+
+Collection names are plain ASCII — no emoji. Collection names become filesystem paths.
+
+**Mechanism:** the token export skill (§1.6) validates every name — known category prefix, kebab-case,
+spell-check — and refuses to write the output on a violation.
+
+## 1.4 Modes
+
+Two mode axes, and only two:
+
+| Axis | Values | Where |
+|---|---|---|
+| **Brand** | `Nusantics` · `CeKolam` · `Causa` | modes of the `Semantics` collection |
+| **Colour scheme** | light only | — |
+
+**Decided: no dark theme.** If that changes it is an RFC (§7.3), because adding a scheme axis means
+revisiting every component.
+
+Anything in the token source that is not one of these axes is deleted. Documentation chrome is not a design
+token and does not belong in the pipeline.
+
+## 1.5 shadcn compatibility layer
+
+The `{brand}-ShadCN` variables exist to satisfy shadcn's variable names for code that predates our semantic
+layer. **Accepted as a compatibility shim, not a design decision.**
+
+- Never referenced by new components.
+- Carries a `$description` of `"compat: do not use in new work"`.
+- Deleted when no gen3 component reads a shadcn variable name.
+
+**Mechanism:** eslint bans the shim's Tailwind classes in files created after the charter is ratified.
+
+**Ratified 2026-08-17 (D1):** the shim becomes a code-side alias map, not a Figma collection. A mapping that
+exists only to satisfy a vendor's naming is not design intent, and keeping it in Figma makes designers
+maintain something meaningless to them. Executed via
+[`token-legacy-shadcn-mapping.md`](../../../docs/maintenance/details/30-gen3-charter-alignment/token-legacy-shadcn-mapping.md):
+frontend migrates every consumer to its correct new-token mapping (145 resolved directly, 61 pending a
+designer pick, 8 needing a fresh decision), then the `-Legacy`/`-ShadCN` Figma collections are deleted
+entirely — nothing about the shim survives in Figma once that lands.
+
+## 1.6 Source of truth & pipeline
+
+**Figma variables are the source of truth.** A token is added in Figma first, always.
+
+```
+Figma variables
+   └─ token-sync skill (use_figma, Plugin API)
+        └─ source/tokens/token.json
+             └─ split-tokens.ts
+                  └─ Style Dictionary
+                       ├─ per-brand CSS custom properties
+                       ├─ Tailwind config
+                       └─ typed TS tokens
+```
+
+- The pipeline is **one-way**. Nobody edits `src/generated/*` by hand.
+- The export runs **on demand**, triggered by whoever changed something — designer after publishing
+  variables, engineer before consuming them. Not on a schedule, not in CI.
+- The export skill reports a **diff summary** (added / removed / renamed / re-valued) before writing, so the
+  person running it sees the blast radius.
+
+**Mechanism:** `token-sync` skill (§9). It reads the live variable collections through the Figma
+Plugin API, so what lands in the repo is what is published — there is no second tool's interpretation in
+between, and a stale export is impossible to leave unnoticed.
+
+## 1.7 Theming mechanism
+
+**Target (cycle 2, not yet built):** one mechanism, identical in Storybook and in every app. Style Dictionary
+emits each brand's tokens already scoped to its selector (`[data-brand="nusantics"]`); consumers import one
+stylesheet from `ui-tokens` and set `data-brand` on a root element. Storybook's brand switcher sets the same
+attribute.
+
+**Rule:** no consumer — app or Storybook — assembles brand CSS itself. If a `.storybook` folder is
+string-replacing selectors, the pipeline is wrong, not the folder.
+
+**Current state:** two unrelated mechanisms. Storybook hand-rolls the selector via
+`.storybook/generate-brand-css.mjs` (string-replaces `:root` → `[data-brand="x"]`, duplicated across three
+lib `.storybook/` folders). Apps don't use `data-brand` at all — each app imports exactly one brand's
+`:root`-scoped generated CSS directly (see `libs/ui-kit/design-system/README.md`). `data-brand` wiring in app
+root layouts is deferred to cycle 2 (§1.7 in `docs/maintenance/30-gen3-charter-alignment.md`).

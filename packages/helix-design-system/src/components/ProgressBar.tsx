@@ -37,7 +37,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(({
       aria-valuenow={pct}
       style={{ position: 'relative', flex: 1, minWidth: 0, height: within ? 16 : 8, borderRadius: 9999, overflow: 'hidden', backgroundColor: 'var(--color-container-tertiary, #EEEEEE)' }}
     >
-      <div style={{ width: `${pct}%`, height: '100%', borderRadius: 9999, backgroundColor: 'var(--color-brand-primary, #F57E20)', transition: 'width 0.3s ease', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, boxSizing: 'border-box' }}>
+      <div style={{ width: `${pct}%`, height: '100%', borderRadius: 9999, backgroundColor: 'var(--color-brand-primary, #F57E20)', transition: 'width var(--motion-duration-slow) var(--motion-easing-standard)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 4, boxSizing: 'border-box' }}>
         {within && pct >= 12 && <span style={{ fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: 8, lineHeight: '12px', color: '#FFFFFF' }}>{label$}</span>}
       </div>
     </div>

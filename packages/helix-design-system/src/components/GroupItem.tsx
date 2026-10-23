@@ -67,12 +67,11 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(({
   const sm = size === 'sm';
   const kind = control ?? (type === 'photo-card' ? 'none' : 'checkbox');
 
-  // Figma State: Default / Hover / Focused / Destructive / Disabled — all drawn on the grey shell; checked adds a brand edge
+  // Figma State: Default / Hover / Focused / Destructive / Disabled — the shell keeps its shadow; Hover only turns the white card grey (see `card`); checked adds a brand edge
   const shadow = disabled ? `0 1px 2px ${NEUTRAL}`
     : destructive ? `0 0 0 3px ${DESTRUCTIVE_A15}`
     : focused ? `0 0 0 2px ${BRAND_A15}`
-    : checked ? `0 1px 2px ${NEUTRAL}${hovered ? `, 0 1px 3px ${NEUTRAL}` : ''}, inset 0 0 0 1px var(--color-brand-primary, #F57E20)`   // selected: brand edge (not in Figma yet)
-    : hovered ? `0 1px 2px ${NEUTRAL}, 0 1px 3px ${NEUTRAL}, inset 0 0 0 1px var(--color-stroke-hover, #828282)`
+    : checked ? `0 1px 2px ${NEUTRAL}, inset 0 0 0 1px var(--color-brand-primary, #F57E20)`   // selected: brand edge (not in Figma yet)
     : `0 1px 2px ${NEUTRAL}`;
 
   const ctrl = kind === 'none' ? null : kind === 'checkbox' ? (
@@ -99,7 +98,7 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(({
   );
 
   const card = (inner: React.ReactNode, padding: React.CSSProperties['padding']) => (
-    <div style={{ boxSizing: 'border-box', width: '100%', padding, borderRadius: 12, backgroundColor: 'var(--color-container-primary, #FFFFFF)' }}>{inner}</div>
+    <div style={{ boxSizing: 'border-box', width: '100%', padding, borderRadius: 12, backgroundColor: hovered && !disabled ? 'var(--color-bg-hover, #EEEEEE)' : 'var(--color-container-primary, #FFFFFF)', transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard)' }}>{inner}</div>
   );
 
   let content: React.ReactNode;
@@ -166,7 +165,7 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(({
         boxShadow: shadow,
         opacity: disabled ? 0.5 : 1,
         cursor: disabled ? 'not-allowed' : kind === 'none' ? 'default' : 'pointer',
-        transition: 'box-shadow 0.15s',
+        transition: 'box-shadow var(--motion-duration-fast) var(--motion-easing-standard)',
         ...style,
       }}
       {...props}

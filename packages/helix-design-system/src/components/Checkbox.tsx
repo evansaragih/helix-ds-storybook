@@ -76,7 +76,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
         backgroundColor: bg,
         border: `${focusRing ? 2 : 1}px solid ${focusRing ? BRAND_HOVER : border}`,
         boxShadow: focusRing ? `0 0 0 3px ${BRAND}` : undefined,
-        transition: 'background-color 0.15s, border-color 0.15s',
+        transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard)',
       }}>
         {on && !disabled && (indeterminate ? <Minus size={d.icon} color="#FFFFFF" strokeWidth={3} /> : <Check size={d.icon} color="#FFFFFF" strokeWidth={3} />)}
         <input

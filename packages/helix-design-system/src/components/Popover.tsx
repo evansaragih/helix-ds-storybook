@@ -43,6 +43,7 @@ export const Popover = forwardRef<HTMLDivElement, PopoverProps>(({
     <RadixPopover.Portal>
       <RadixPopover.Content
         ref={ref}
+        className="helix-pop"
         side={side}
         align={align}
         sideOffset={8}

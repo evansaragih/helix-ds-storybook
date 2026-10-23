@@ -47,13 +47,13 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(({
       <RadixTooltip.Portal>
         <RadixTooltip.Content
           ref={ref}
+          className="helix-pop"
           side={side}
           align={align}
           sideOffset={arrow ? 4 : 8}
           style={{
             zIndex: 9999, maxWidth: detailed ? 228 : 320, borderRadius: 8, overflow: 'visible',
             backgroundColor: 'var(--color-container-primary, #FFFFFF)', boxShadow: SHADOW,
-            animationDuration: '0.15s',
           }}
         >
           <div style={{ overflow: 'hidden', borderRadius: 8 }}>

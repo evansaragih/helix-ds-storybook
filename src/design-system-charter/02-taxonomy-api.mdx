@@ -1,0 +1,208 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/2. Taxonomy & Public API" />
+
+# 2. Taxonomy & Public API
+
+## 2.1 The five tiers
+
+| Tier | Owns |
+|---|---|
+| **atomic** | One indivisible control or visual element |
+| **molecule** | One recognisable UI job, built from atomics |
+| **organism** | One region of a page, built from molecules, often data-driven |
+| **template** | Page-level layout and slots, with no content of its own |
+| **page** | A complete, generic, domain-free screen |
+
+## 2.2 Tier test — objective, in order
+
+Run these top to bottom. **The first tier whose conditions all hold is the answer.** No judgement calls.
+
+| Tier | All of these must be true |
+|---|---|
+| **atomic** | Composes **zero** other DS components (icons excepted) · has **one** primary interaction or none · does not lay out siblings · maps to a single Figma component set |
+| **molecule** | Composes **1–4** DS components · has **one** primary interaction · no page-level layout, no routing, no data fetching · fits on one screen at default size |
+| **organism** | Composes **5+** DS components, **or** accepts structured data (`items` / `columns` / `rows`) · owns internal orchestration state · occupies a page region, not a page |
+| **template** | Defines page-level layout (`<main>`, grid, sidebar, header slots) · renders **no** content of its own — everything arrives via slots or children |
+| **page** | A complete wired screen that is **generic and domain-free**: error states, login shell, maintenance. Nothing product-specific ever qualifies |
+
+### Tie-breakers
+
+- **Cannot name it without a product noun?** (`UploadNpwpForm`, `PoolMeasurementCard`) → it is not a DS
+  component at all. See §8.
+- **Two or more primary interactions?** → at least molecule.
+- **Renders a page-level grid or `<main>`?** → template, never organism.
+- **Only meaningful inside one parent?** (`DropdownItem`, `TableRow`) → not its own tier — it is an export of
+  the parent's file (§2.7).
+
+## 2.3 Admission test — does it belong in the DS at all?
+
+All four must be true:
+
+1. It has a design in the Figma library.
+2. It is used, or will be used, by **≥3 distinct features or apps** — the rule of three.
+3. It carries no domain knowledge: no product entity names, no API shapes, no business rules.
+4. It has a name a designer and an engineer both already use.
+
+Fails (2) → lives in the feature until the third consumer appears. Fails (3) → lives in a feature lib
+permanently (§8). Composing DS components inside a feature is normal and correct; it is not a DS gap.
+
+## 2.4 No client/server split
+
+**Rule:** the taxonomy is the folder structure. There is no `client/` or `server/` axis.
+
+A component that needs client-side interactivity carries `'use client'` at the top of its own file. That is
+a per-file React concern, not an architectural one.
+
+Splitting the tree by rendering environment duplicates the entire taxonomy (`client/molecule/*` **and**
+`server/molecule/*`), forces a component to pick a side before anyone knows which it needs, and produces two
+names for one idea. It is the single biggest structural mistake to avoid carrying forward.
+
+## 2.5 Import surface
+
+### The problem we are actually solving
+
+Not deep imports. An **unversioned wildcard that exposes internals**: `…/design-system/*` lets any consumer
+reach any file, including things that were never meant to be public. That is how gen2 accumulated 164
+distinct imported module paths and became unchangeable — every internal file became somebody's API.
+
+There are two ways to prevent that, and they are equally valid:
+
+| Option | Surface | Trade-off |
+|---|---|---|
+| **A · Single barrel** | `@nusantics/ui-kit/design-system` only | Best ergonomics; depends on tree-shaking actually working |
+| **B · Explicit subpath map** | one **declared** subpath per public component, generated from the registry | Deep-import bundle behaviour, still sealed and versioned; more machinery |
+
+Both are sealed. What is banned in either case is the **wildcard**.
+
+### Current rule: deep module imports (interim)
+
+<b style={{color:'#c2410c'}}>OPEN — deferred by decision, 2026-08-16, revisit in cycle 2 (R3).</b> Not an
+oversight: revisit after Figma↔code alignment (item 30) lands. Deferring the spike changes nothing about how
+anyone writes imports this cycle — §2.5's interim rule is already "continue importing by deep module path,"
+so postponing the spike only postpones removing the wildcard, not the current guardrails below.
+
+Until the spike below concludes, **continue importing by deep module path**, as today. This is deliberate:
+option A depends on tree-shaking behaviour we have not verified in this workspace, and switching the whole
+library to a barrel on an unverified assumption is a bundle-size regression waiting to happen.
+
+Interim guardrails, so the current pattern does not rot into gen2's:
+
+- Import **only** `@nusantics/ui-kit/design-system/lib/{tier}/{name}` — a real public component.
+- **Never** import vendored primitives (§2.6), `util/*` internals, or a component's private sub-modules.
+- Do not deep-import anything that is exported from the barrel under a different name.
+
+**Mechanism:** eslint `no-restricted-imports` allowing the `lib/{tier}/*` shape and rejecting everything
+else under the wildcard. This gets most of the protection now, with none of the risk.
+
+### The spike
+
+**Question:** can option A deliver the same bundle output as deep imports in our workspace?
+
+Context that makes this non-obvious: apps compile the DS **from TypeScript source** via `tsconfig` path
+aliases, not from a built package — so the DS is part of each app's own module graph. Most DS modules carry
+`'use client'`, and client-boundary modules reached through a barrel are the classic over-inclusion case.
+
+**Steps:**
+
+1. Baseline: build one representative app, record client chunk totals.
+2. Declare `"sideEffects"` accurately on the package. Without it, a bundler must assume every module has
+   side effects and keeps them all.
+3. Confirm ESM end to end, with no CJS in the consumer path.
+4. Enable Next's `optimizePackageImports` for the package — it rewrites barrel imports to direct module
+   paths at build time.
+5. Convert one app to barrel imports. Rebuild. Compare.
+
+**Acceptance:** barrel imports produce client chunks within a small, agreed margin of the deep-import
+baseline, on a real app, measured — not reasoned.
+
+**Outcomes:** passes → adopt option A and codemod consumers onto the barrel. Fails → adopt option B, a
+generated subpath map. **Either way the wildcard goes.** The interim rule above is the only thing that is
+temporary.
+
+## 2.6 Vendored primitives are internal
+
+Vendored code (shadcn and similar) is an implementation detail. It is **not exported**, and application code
+never imports it. Every vendored primitive we depend on gets a DS-owned wrapper with our tokens, our prop
+names and our DoD.
+
+Otherwise a vendor's API becomes our public API — we cannot upgrade or replace it without breaking apps, and
+a designer looking at "Dialog" in Figma cannot tell which of two Dialogs an engineer used.
+
+## 2.7 One component, two ways to use it
+
+**There is no "data-driven component" and "compound component". There is one component.**
+
+The root is a container. Give it `items` and it builds the children for you, using its own sub-components.
+Give it `children` and you build them yourself, from the same sub-components. Same file, same name, same
+Figma component set, same story set.
+
+```tsx
+// lib/molecule/dropdown.tsx  ← one file
+export { Dropdown, DropdownContent, DropdownSection, DropdownHeader, DropdownItem };
+```
+
+```tsx
+// you give it data — it renders DropdownItem for each entry, internally
+<Dropdown items={[{ label: 'Edit', onSelect }, { label: 'Delete', onSelect }]} />
+
+// you build it yourself — same component, same parts
+<Dropdown>
+  <DropdownHeader>Actions</DropdownHeader>
+  <DropdownItem onSelect={…}>Edit</DropdownItem>
+</Dropdown>
+```
+
+**Rules:**
+
+- `items` and `children` are **mutually exclusive** — a TypeScript discriminated union, so passing both fails
+  to compile.
+- The `items` path is implemented **on top of** the sub-components, inside the DS. Both paths render the same
+  DOM. It is never re-composed in each app.
+- The sub-components (`DropdownItem`, `DropdownHeader`) are **not atomics and not separate components**. They
+  are named exports of the same file, because they are meaningless outside it.
+
+**Which to use:** reach for `items` by default. Drop to children only when you need per-item control the
+`items` shape does not express — a custom row, an interleaved separator, a nested submenu. Needing children
+often *and* for the same reason means the `items` shape is missing a field; fix the shape rather than making
+every consumer compose.
+
+This mirrors the Figma side: the parent component set is public, its internals are private sub-parts
+(§4.2, §4.3).
+
+## 2.8 Prop conventions
+
+| Concern | Convention |
+|---|---|
+| Visual style | `variant` (`primary` · `secondary` · `ghost` · `destructive`) |
+| Size | `size` (`sm` · `md` · `lg`) — `md` is always the default |
+| Semantic meaning | `intent` / `status` (`info` · `success` · `warning` · `error`) — never overloaded onto `variant` |
+| Boolean state | positive naming: `disabled`, `loading`, `required`, `readOnly` |
+| Events | `on{Event}`, value-first payloads: `onValueChange(value)` |
+| Composition | `asChild` for polymorphism; named slot props (`leading`, `trailing`, `actions`) for content |
+| Escape hatch | `className` merged via `cn()` on the root element — always present, never used to restyle |
+
+Every interactive component supports **both** controlled (`value` + `onValueChange`) and uncontrolled
+(`defaultValue`) usage.
+
+### 2.8b Reserved and native-attribute names (advisory list)
+
+Referenced from §4.5b — a Figma property name maps straight to a prop name, so this list applies regardless
+of which side introduced the name first. Two tiers:
+
+**Never** (`key`, `ref`, `children`, `dangerouslySetInnerHTML`, `className`, `class`, `style`) — always a
+collision, no judgment call needed. See §4.5b.
+
+**Needs a human read** — a name from this list is only a real collision when the prop's meaning diverges from
+the native attribute's own meaning (a `disabled: boolean` prop is fine; a `type` prop with unrelated values is
+not):
+
+`id` · `title` · `role` · `hidden` · `tabIndex` · `lang` · `dir` · `draggable` · `contentEditable` ·
+`spellCheck` · `translate` · `slot` · `type` · `value` · `checked` · `disabled` · `name` · `placeholder` ·
+`href` · `src` · `alt` · `target` · `rel` · `form` · `required` · `readOnly` · `autoFocus` · `multiple` ·
+`min` · `max` · `step` · `pattern` · `list` · any `on{Event}` handler name · any `aria-*`/`data-*` name
+
+## 2.9 Accessibility is part of the API
+
+Keyboard interaction, focus management, roles and labelling are component responsibilities, not consumer
+responsibilities. A component that requires the consumer to add `aria-*` to be usable is unfinished.

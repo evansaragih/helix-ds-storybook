@@ -155,7 +155,7 @@ export const UploadProgressDrawer = forwardRef<HTMLDivElement, UploadProgressDra
           hierarchy="secondary"
           appearance="ghost"
           size="sm"
-          icon={<ChevronDown size={16} style={{ transform: expanded ? 'rotate(180deg)' : undefined, transition: 'transform 0.2s' }} />}
+          icon={<ChevronDown size={16} style={{ transform: expanded ? 'rotate(180deg)' : undefined, transition: 'transform var(--motion-duration-base) var(--motion-easing-standard)' }} />}
           onClick={() => onExpandedChange?.(!expanded)}
         />
       </div>

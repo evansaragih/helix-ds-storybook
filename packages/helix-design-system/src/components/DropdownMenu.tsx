@@ -46,7 +46,7 @@ export const DropdownMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(({
       <RadixMenu.Portal>
         <RadixMenu.Content
           ref={ref}
-          className={scope}
+          className={`helix-pop ${scope}`}
           side={side}
           align={align}
           sideOffset={8}

@@ -50,7 +50,7 @@ function PageIndicator({ count, index, appearance }: { count: number; index: num
     );
   }
   if (appearance === 'bar') {
-    return <div aria-hidden="true" style={{ width: 120, height: 8, borderRadius: 9999, backgroundColor: off, overflow: 'hidden' }}><div style={{ width: `${((index + 1) / count) * 100}%`, height: '100%', backgroundColor: on, borderRadius: 9999, transition: 'width 0.2s' }} /></div>;
+    return <div aria-hidden="true" style={{ width: 120, height: 8, borderRadius: 9999, backgroundColor: off, overflow: 'hidden' }}><div style={{ width: `${((index + 1) / count) * 100}%`, height: '100%', backgroundColor: on, borderRadius: 9999, transition: 'width var(--motion-duration-base) var(--motion-easing-standard)' }} /></div>;
   }
   if (appearance === 'progress') {
     return <div aria-hidden="true" style={{ display: 'flex', gap: 0, width: 72 }}>{Array.from({ length: count }, (_, i) => <span key={i} style={{ flex: 1, height: 4, borderRadius: 9999, backgroundColor: i === index ? on : off }} />)}</div>;
@@ -61,7 +61,7 @@ function PageIndicator({ count, index, appearance }: { count: number; index: num
       {Array.from({ length: count }, (_, i) => (
         <span key={i} style={{
           height: inverse ? (i === index ? 12 : 8) : 12, width: inverse ? (i === index ? 12 : 8) : i === index ? 40 : 12,
-          borderRadius: 24, backgroundColor: i === index ? on : off, transition: 'width 0.2s',
+          borderRadius: 24, backgroundColor: i === index ? on : off, transition: 'width var(--motion-duration-base) var(--motion-easing-standard)',
         }} />
       ))}
     </div>
@@ -167,7 +167,7 @@ export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
       <div ref={ref} style={{ ...root, display: 'flex', flexDirection: 'column', gap: 16, width: 720 }} {...props}>
         {showNavigation && <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>{nav(-1, () => go(index - 1), true)}{nav(1, () => go(index + 1), true)}</div>}
         <div style={{ overflow: 'hidden' }}>
-          <div style={{ display: 'flex', gap: 16, transform: `translateX(-${index * 240}px)`, transition: 'transform 0.3s ease' }}>
+          <div style={{ display: 'flex', gap: 16, transform: `translateX(-${index * 240}px)`, transition: 'transform var(--motion-duration-slow) var(--motion-easing-standard)' }}>
             {slides.map((s) => <Card key={s.id} slide={s} width={224} height={280} />)}
           </div>
         </div>

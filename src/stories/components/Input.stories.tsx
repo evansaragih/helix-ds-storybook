@@ -44,6 +44,18 @@ export const Floating: Story = {
   ),
 };
 
+/** Required in the floating style is a red dot on the box's top-right corner, not an asterisk in the label. */
+export const FloatingRequired: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <Input {...args} label="Kode SKU BiomeSeq" floating required />
+      <Input {...args} label="Kode SKU BiomeSeq" floating required defaultValue="NUS-BQ002.48-260601-ABC" />
+      <Input {...args} label="Kode SKU BiomeSeq" floating required leading={<span>🏷</span>} leadingDivider />
+      <Input {...args} label="Kode SKU BiomeSeq" floating required error="Format kode SKU tidak sesuai." hint={undefined} />
+    </div>
+  ),
+};
+
 export const Horizontal: Story = { args: { layout: 'horizontal' }, decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>] };
 
 export const LeadingAndTrailing: Story = {

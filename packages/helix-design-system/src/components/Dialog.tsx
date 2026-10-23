@@ -54,9 +54,10 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(({
   <RadixDialog.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange}>
     {trigger && <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>}
     <RadixDialog.Portal>
-      <RadixDialog.Overlay style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,20,30,0.7)' }} />
+      <RadixDialog.Overlay className="helix-dialog-overlay" style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,20,30,0.7)' }} />
       <RadixDialog.Content
         ref={ref}
+        className="helix-dialog-content"
         style={{
           position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1001,
           width, maxWidth: 'calc(100vw - 48px)', maxHeight: 'calc(100vh - 96px)', display: 'flex', flexDirection: 'column',

@@ -149,6 +149,9 @@ flagged.
   standard part of the workflow, not a separate ask.
 - Bind all colors/spacing/radius/type to semantic tokens per above.
 - Default to `lucide-react` for icons.
+- Motion: any component with hover/focus/open/close/expand behaviour loads the
+  `helix-component-motion` skill — durations and easings come from the
+  `--motion-*` tokens, never literals; exits must animate too.
 - After Storybook/component changes, run the `sync-design-docs` skill to
   keep the docs site in sync.
 

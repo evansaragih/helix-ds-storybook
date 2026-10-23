@@ -55,7 +55,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(({
       style={{
         display: 'flex', alignItems: 'center', gap: 8, minHeight: 36, boxSizing: 'border-box', padding: '8px 12px', borderRadius: 6,
         backgroundColor: bg, color, cursor: disabled ? 'not-allowed' : interactive ? 'pointer' : 'default',
-        fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px', transition: 'background-color 0.15s',
+        fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px', transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard)',
         ...style,
       }}
       {...props}

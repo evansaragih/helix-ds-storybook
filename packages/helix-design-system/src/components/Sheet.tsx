@@ -68,7 +68,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(({
     <RadixDialog.Root open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <RadixDialog.Portal>
         <style>{KEYFRAMES}</style>
-        <RadixDialog.Overlay className="helix-sheet-overlay" style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,20,30,0.7)', animation: 'helix-sheet-fade 0.2s ease' }} />
+        <RadixDialog.Overlay className="helix-sheet-overlay" style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,20,30,0.7)', animation: 'helix-sheet-fade var(--motion-duration-base) var(--motion-easing-standard)' }} />
         <RadixDialog.Content
           ref={ref}
           className="helix-sheet"
@@ -76,7 +76,7 @@ export const Sheet = forwardRef<HTMLDivElement, SheetProps>(({
           style={{
             position: 'fixed', zIndex: 1001, display: 'flex', flexDirection: 'column', boxSizing: 'border-box', maxWidth: '100vw',
             backgroundColor: 'var(--color-container-primary, #FFFFFF)', border: MODAL_BORDER, boxShadow: '0 1px 2px rgba(89,89,90,0.15)',
-            animation: `helix-sheet-${side} 0.25s ease`, ...position,
+            animation: `helix-sheet-${side} var(--motion-duration-slow) var(--motion-easing-decelerate)`, ...position,
           }}
         >
           <ModalHeader title={title ?? 'Panel'} description={description} icon={icon} iconStatus={iconStatus} layout={headerLayout} action={headerAction} showClose={showClose} />

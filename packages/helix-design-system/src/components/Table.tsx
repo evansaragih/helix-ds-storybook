@@ -119,7 +119,7 @@ export function Table<T = Record<string, unknown>>({
                   key={getRowKey ? getRowKey(row, ri) : ri}
                   style={{
                     backgroundColor: striped && ri % 2 === 1 ? baseBg : 'transparent',
-                    transition: hoverable ? 'background-color 0.1s' : 'none',
+                    transition: hoverable ? 'background-color var(--motion-duration-fast) var(--motion-easing-standard)' : 'none',
                   }}
                   onMouseEnter={hoverable ? (e) => {
                     const tr = e.currentTarget as HTMLTableRowElement;

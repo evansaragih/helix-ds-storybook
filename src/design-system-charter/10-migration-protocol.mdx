@@ -1,0 +1,112 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/10. Migration Protocol" />
+
+# 10. Gen2 → Gen3 Migration Protocol
+
+> This section has an end date. When gen2 is deleted, it is removed from the charter.
+
+> **Under revision.** §10.2's alignment attributes (A1–A11) and any claim that `component-check` feeds this
+> tracker are being redefined once item 30 (gen3 charter alignment) finishes — see
+> `docs/maintenance/30-gen3-charter-alignment.md`. Everything else in this section (§10.1 engineering
+> classification, §10.3–§10.6) is unaffected and current. Treat §10.2 as historical, not current guidance,
+> until item 30 closes.
+
+## 10.1 Two classifications, not one
+
+The existing component map classifies every gen2 module by **engineering** status
+(`OK` · `PARTIAL` · `MISSING-BUILD` · `MISSING-DESIGN` · `DROP`). That answers *can an engineer swap this?*
+
+It does not answer the design-side question: *do Figma and code agree on what this component is?* Both
+classifications are needed, and only the second requires a designer.
+
+## 10.2 Alignment attributes
+
+Every component gets a second set of fields, each scored `Aligned` · `Mismatch` · `Missing` · `N/A`, with a
+one-line note:
+
+| # | Attribute | Question | Owner when mismatched |
+|---|---|---|---|
+| A1 | **Name** | Does the Figma name map mechanically to the code name? (§4.4) | Both |
+| A2 | **Cardinality** | One public Figma component set : one code file? | Both |
+| A3 | **Variant props** | Do the parent's variant property names and values equal the code prop names and values? (§4.5) | Both |
+| A4 | **States** | default / hover / focus / active / disabled / loading / error present on both sides? (§4.5) | Design |
+| A5 | **Anatomy** | Do the sub-parts and slots match? | Both |
+| A6 | **Token binding** | Figma layers bound to variables; code uses semantic tokens only? | Both |
+| A7 | **Brand coverage** | Designed and built for all three brands? | Both |
+| A8 | **Content states** | Empty / loading (data) / error (data) / long text designed and built, where applicable? (§6.8 `D7`) | Design |
+| A9 | **Responsive** | Breakpoint behaviour specified and implemented? | Both |
+| A10 | **Usage guidance** | Figma `description` and Storybook usage docs filled? | Design |
+| A11 | **Registry** | `component-registry.json` entry present and correct? (§4.7) | Engineering |
+
+Plus one resolution field:
+
+**`RESOLUTION` = `ALIGNED` · `FIGMA-MOVES` · `CODE-MOVES` · `BOTH-MOVE` · `DEFERRED`**
+
+This is the field that ends arguments. Every mismatch has an owner and a direction before work starts.
+
+## 10.3 Pre-fill, then review by column
+
+**Step 1 — `component-check --all` fills A1–A11 for every row** (§9.4), with a proposed resolution and a note
+per mismatch. Humans never start from a blank grid.
+
+**Step 2 — review only the flagged cells, one attribute column at a time.**
+
+This is the core move. Do not walk components alphabetically. Open one attribute across all components at
+once:
+
+> *"Here are the components where Figma splits what code unifies (A2). Proposed rule: Figma merges into one
+> component set with a variant property, unless the code component exceeds 300 lines. Agree?"*
+
+One decision, many rows resolved. Mismatches cluster by attribute and by component family, so a grid of
+~1,500 cells collapses to roughly **10–14 batch decisions**.
+
+**Step 3 — anything still contested goes to the weekly triage** (45 minutes, agenda = flagged leftovers
+only).
+
+Batch decisions are recorded in the tracker's `Decisions` sheet with the rows they closed, so the reasoning
+survives the meeting.
+
+## 10.4 Tracker
+
+One row per component. The live tracker is
+`docs/maintenance/details/24-gen2-gen3-migration-research/alignment-tracker.md`, kept current by
+`component-check` (§9.4.1). Full column schema (including the sheets this file doesn't cover — Consumers,
+Decisions, Foundations — still tracked separately, not yet automated):
+`docs/maintenance/details/24-gen2-gen3-migration-research/tracker-schema.md`.
+
+Source of truth is the markdown file in the repository. If a spreadsheet view is wanted for a meeting, export
+it from the markdown — never the other way round.
+
+**Status machine**, reusing the Figma `Docs / StatusBar` vocabulary (§5.3):
+
+```
+Draft → To Review → Ready for Dev → Work In Progress → Updated → Done (gen2 deleted)
+                 ↘ On Hold
+```
+
+`Done` means the gen2 file is deleted, not that the gen3 component exists.
+
+**WIP limits:** design ≤ 3, engineering ≤ 5. Limits are what make a long list flow instead of all starting
+and none finishing.
+
+## 10.5 Order of work
+
+**Foundations before components.** Tokens, taxonomy, the import-surface guardrail (§2.5), theming and the enforcement mechanisms
+(§6.7) land first. Every component decision depends on them, and redoing components because the token
+layering changed is the one genuinely unrecoverable mistake available here.
+
+**Then per component, as one vertical slice:** design → build → migrate consumers → delete the gen2 file.
+Gen2 deletion is continuous, and remaining gen2 imports is the only progress metric that cannot be gamed.
+
+**Pilot before scaling.** Run two full slices first — one easy, one hard — and re-estimate everything from
+them.
+
+**Then per app.** Once the DS covers what an app needs, that app migrates in one merge request, verified by
+visual snapshots before the next app starts. Smallest app first.
+
+## 10.6 The large components are their own workstreams
+
+Table, charts and maps are not rows in a 136-item list. Each has its own deep-dive document, its own scope
+decision and its own lead, running in parallel from the start. The table alone accounts for roughly a third
+of all gen2 usage; if it slips, the migration slips regardless of how the rest goes.

@@ -61,7 +61,7 @@ export const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(({
         position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
         width: d.box, height: d.box, borderRadius: '50%', boxSizing: 'border-box',
         backgroundColor: bg, border: `${ring ? 2 : 1}px solid ${ring ? BRAND_HOVER : border}`,
-        boxShadow: ring ? `0 0 0 3px ${BRAND}` : undefined, transition: 'border-color 0.15s',
+        boxShadow: ring ? `0 0 0 3px ${BRAND}` : undefined, transition: 'border-color var(--motion-duration-fast) var(--motion-easing-standard)',
       }}>
         {checked && !disabled && <span style={{ width: d.dot, height: d.dot, borderRadius: '50%', backgroundColor: BRAND }} />}
         <input

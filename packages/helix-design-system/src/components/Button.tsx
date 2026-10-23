@@ -186,7 +186,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         backdropFilter: v.backdropBlur ? 'blur(2px)' : undefined,
         userSelect: 'none',
         outline: 'none',
-        transition: 'background-color 0.15s, border-color 0.15s, box-shadow 0.15s',
+        transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard), box-shadow var(--motion-duration-fast) var(--motion-easing-standard)',
         ...style,
       }}
       onMouseEnter={(e) => { setHovered(true); onMouseEnter?.(e); }}

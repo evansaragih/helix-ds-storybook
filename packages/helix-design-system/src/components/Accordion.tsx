@@ -40,8 +40,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(({
   const scope = `helix-accordion-${useId().replace(/:/g, '')}`;
 
   const css = `
-    .${scope} [data-state="closed"][role="region"] { animation: helix-acc-up 0.2s ease; }
-    .${scope} [data-state="open"][role="region"] { animation: helix-acc-down 0.2s ease; }
+    .${scope} [data-state="closed"][role="region"] { animation: helix-acc-up var(--motion-duration-base) var(--motion-easing-standard); }
+    .${scope} [data-state="open"][role="region"] { animation: helix-acc-down var(--motion-duration-base) var(--motion-easing-standard); }
     @keyframes helix-acc-down { from { height: 0; opacity: 0 } to { height: var(--radix-accordion-content-height); opacity: 1 } }
     @keyframes helix-acc-up { from { height: var(--radix-accordion-content-height); opacity: 1 } to { height: 0; opacity: 0 } }
     .${scope} .helix-acc-item[data-state="closed"]:not([data-disabled]):hover { background-color: ${TRACK} !important; }
@@ -61,7 +61,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(({
       value={item.id}
       disabled={item.disabled}
       className="helix-acc-item"
-      style={{ boxSizing: 'border-box', borderRadius: 12, border: `1px solid ${STROKE}`, backgroundColor: 'var(--color-container-primary, #FFFFFF)', overflow: 'hidden', opacity: item.disabled ? 0.5 : 1, transition: 'background-color 0.15s' }}
+      style={{ boxSizing: 'border-box', borderRadius: 12, border: `1px solid ${STROKE}`, backgroundColor: 'var(--color-container-primary, #FFFFFF)', overflow: 'hidden', opacity: item.disabled ? 0.5 : 1, transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard)' }}
     >
       <RadixAccordion.Header style={{ margin: 0 }}>
         <RadixAccordion.Trigger
@@ -73,7 +73,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(({
           }}
         >
           <span>{item.title}</span>
-          <ChevronDown size={16} style={{ flexShrink: 0, color: 'var(--color-text-secondary, #49494A)', transition: 'transform 0.2s' }} />
+          <ChevronDown size={16} style={{ flexShrink: 0, color: 'var(--color-text-secondary, #49494A)', transition: 'transform var(--motion-duration-base) var(--motion-easing-standard)' }} />
         </RadixAccordion.Trigger>
       </RadixAccordion.Header>
       <RadixAccordion.Content style={{ overflow: 'hidden' }}>

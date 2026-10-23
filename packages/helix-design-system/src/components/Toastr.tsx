@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { playNotificationSound } from './notificationSound';
+import { MOTION_DURATION_BASE } from './motion';
 
 /** Figma Position */
 export type ToastrPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
@@ -18,8 +19,8 @@ export interface ToastrProps {
   sound?: boolean;
 }
 
-const DURATION = 220;
-const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+/** Exit delay before unmount = the --motion-duration-base token (JS mirror in motion.ts) */
+const DURATION = MOTION_DURATION_BASE;
 
 /** A toast pinned to a viewport corner that slides and fades in and out. There is no backdrop: the page behind stays clickable. Surfaces an Alert, usually layout 'compact'; for inline page messages use Alert directly. */
 export const Toastr = forwardRef<HTMLDivElement, ToastrProps>(({ open, onClose, position = 'top-right', children, width = 600, sound = true }, ref) => {
@@ -59,7 +60,7 @@ export const Toastr = forwardRef<HTMLDivElement, ToastrProps>(({ open, onClose, 
         justifyContent: horizontal === 'left' ? 'flex-start' : 'flex-end',
       }}
     >
-      <style>{`@media (prefers-reduced-motion: reduce){.helix-toastr{transition:opacity ${DURATION}ms linear !important;transform:none !important}}`}</style>
+      <style>{`@media (prefers-reduced-motion: reduce){.helix-toastr{transition:opacity var(--motion-duration-base) linear !important;transform:none !important}}`}</style>
       <div
         ref={ref}
         role="status"
@@ -70,7 +71,7 @@ export const Toastr = forwardRef<HTMLDivElement, ToastrProps>(({ open, onClose, 
           boxShadow: '0 4px 8px rgba(89,89,90,0.15), 0 12px 24px rgba(89,89,90,0.15)',
           opacity: shown ? 1 : 0,
           transform: shown ? 'translateY(0)' : `translateY(${offset}px)`,
-          transition: `opacity ${DURATION}ms ${EASE}, transform ${DURATION}ms ${EASE}`,
+          transition: 'opacity var(--motion-duration-base) var(--motion-easing-decelerate), transform var(--motion-duration-base) var(--motion-easing-decelerate)',
         }}
       >
         {children}

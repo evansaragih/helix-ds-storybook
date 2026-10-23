@@ -1,0 +1,209 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/6. Definition of Done" />
+
+# 6. Definition of Done
+
+A component is **Done** when every box is checked. Partial completion has a status, not an exception.
+
+## 6.1 Design (DS Design Owner)
+
+- [ ] One **public component set** on its family page (§5.2); internals `_`-prefixed and unpublished
+- [ ] Every consumer-relevant variation is a variant property **on the public parent** (§4.3)
+- [ ] Variant properties named per §4.5; each `State` value present is drawn from default · hover · focus ·
+      active · disabled · loading · error — not all seven are required, only the ones the component's
+      interaction model actually has
+- [ ] Colours bound to **variables** — no detached values
+- [ ] Spacing, radii and type bound to **variables** — **non-blocking for now** (§6.8 `D5`);
+      lower-severity token debt, reported but doesn't gate hand-off
+- [ ] Content states designed, where the component's data shape makes them apply: empty · loading (data) ·
+      error (data) · long text / overflow — not §4.5's `State=Error` (that's the component's own validation
+      state; this is what it renders when the *data it displays* is missing, pending, or failed)
+- [ ] Responsive behaviour specified at our breakpoints — **deferred for now** (§6.8 `D8`); revisit once
+      cross-breakpoint design workflow exists
+- [ ] `description` filled per §4.6
+- [ ] Status chip set; `documentationLinks` points at the Storybook story — **non-blocking for now**
+      (§6.8 `D10`)
+
+## 6.2 Engineering (DS Engineering Owner)
+
+- [ ] One file at `lib/{tier}/{name}.tsx`, tier chosen by the §2.2 test, exported from the barrel
+- [ ] Props follow §2.8; controlled **and** uncontrolled supported
+- [ ] Data-driven API present if the component has repeating children (§2.7)
+- [ ] Semantic tokens only — no hex, no primitive classes, no arbitrary Tailwind values
+- [ ] Renders correctly on all three brands
+- [ ] `'use client'` only where genuinely needed
+- [ ] Exported prop type; no `any`
+- [ ] `className` escape hatch merged via `cn()`
+
+## 6.3 Accessibility
+
+- [ ] Keyboard operable end to end; sensible focus order
+- [ ] Visible focus indicator
+- [ ] Correct role and semantics; labelling available via prop
+- [ ] Text contrast ≥ 4.5:1, UI contrast ≥ 3:1, on every brand
+- [ ] `@storybook/addon-a11y` reports zero violations for every story
+
+## 6.4 Documentation
+
+- [ ] Story set titled `{Tier}/{Name}`, `tags: ['autodocs']`
+- [ ] One story per meaningful variant — the story list mirrors the Figma variant matrix
+- [ ] `parameters.design` points at the Figma node (§4.8)
+- [ ] Usage guidance: when to use, when not to, what to use instead
+- [ ] `component-registry.json` entry present and correct (§4.7)
+
+## 6.5 Verification
+
+- [ ] Visual snapshot baseline committed (story × brand × viewport)
+- [ ] Unit test where there is branching logic or state — not for purely presentational components
+- [ ] `nx run ui-kit-design-system:lint` and `:test` pass
+
+## 6.6 Release
+
+- [ ] Changeset written, describing the change in consumer terms
+- [ ] Codemod written if the change is breaking (§7.5)
+- [ ] If it replaces a gen2 component: the gen2 file is deleted in the same merge request as the last
+      consumer migration
+
+## 6.7 What enforces this
+
+Enforcement runs locally. Nothing here depends on CI.
+
+| Check | Mechanism | When it runs |
+|---|---|---|
+| lint · test | `nx run ui-kit-design-system:lint\|test` | pre-push hook, and on demand |
+| typecheck | `nx affected -t typecheck` | pre-push hook |
+| tokens-only | eslint `no-restricted-syntax` — hex, `rgb(`, arbitrary values | on save, pre-push |
+| import surface | eslint `no-restricted-imports` — allows `lib/{tier}/*`, rejects internals (§2.5, interim) | on save, pre-push |
+| a11y | `@storybook/addon-a11y` | in Storybook, per story |
+| visual | Storybook snapshot run | before release, on demand |
+| Figma link present | eslint rule requiring `parameters.design` in every story | on save, pre-push |
+| registry drift | `component-check` skill (§9) | on demand, before release |
+| token drift | `token-sync` skill (§1.6) | on demand, after a Figma change |
+
+> **On Code Connect.** It requires a plan tier above our Figma Professional plan, so the binding lives in
+> `component-registry.json` instead. §4.7 covers what that recovers and what it costs.
+
+## 6.8 Checklist codes
+
+§6.1–§6.5 above are the rules. This is the same checklist as short codes, for tooling that needs to name one
+check without repeating its sentence — `docs/reference/component-alignment.md`'s `design_open`/`code_open`/
+`parity_open` columns, and the `component-check` skill that writes them. Keep the codes
+verbatim wherever they're written back (`D3: …`) — that's how a column sweep filters and how an agent writes
+back without ambiguity. **This table and §6.1–§6.5 must agree; if they ever don't, §6.1–§6.5 wins** and this
+table gets fixed.
+
+### Designer done gate
+
+`component-check`'s own computed `Designer done` verdict — distinct from the Figma status chip value
+`Ready for Dev` (§5.3), which a human sets once this reads green — requires every applicable **`D`-code**
+for the component to be green.
+**`P`- and `E`-codes are the engineering handoff scope, not a precondition** — most of them structurally
+can't be green before code exists (`P3` variant parity, `P4` anatomy parity, `E11` story usage all need a
+built component to compare against), so gating on them makes `Designer done` unreachable for anything not
+already built — exactly backwards for a gate whose entire point is triggering the build. This is why
+`30-gen3-charter-alignment.md`'s per-row flow reads `designer fixes D-cells → frontend fixes E-cells →
+parity cells go green`, in that order: the gate this section states formalizes what that flow already
+assumes. `component-check` implements this gate directly and never sets `status` itself (it only pre-fills
+the cells this gate reads) — see that skill's boundaries.
+
+### Fully Aligned gate
+
+A second, stricter gate: `Fully Aligned` requires every applicable D-, E-, and P-code to read `Aligned`,
+`N/A`, or `Mismatch — Reminder` — nothing left at `Mismatch — Blocking` or `Missing` anywhere across all
+three sections. `Missing` genuinely blocks this gate (unlike `Reminder`) — a code that couldn't be
+automatically evaluated (most Class C checks: brand-render, a11y, controlled/uncontrolled props) needs a
+human to actually confirm it before the row can be called fully resolved, the same way `P4`'s anatomy check
+already defers to a human. This is what signals it's correct to flip the tracker's `status` to `Done` — the
+E/P-side counterpart to `Designer done`'s relationship with the `Ready for Dev` status chip. Expect
+`Fully Aligned: No` to be the common case for a while: most components will carry open `Missing` on the
+Class C codes until someone does that confirmation pass and updates the tracker.
+
+### Verdict taxonomy
+
+Every code resolves to one of five verdicts: `Aligned` (matches spec) · `Mismatch — Blocking` (a hard rule
+violation; must close before the gate it belongs to can pass) · `Mismatch — Reminder` (legitimate but
+incomplete — a closed-list membership check passes but the list isn't exhausted, or a code-only value is a
+deprecation candidate; reported, never blocks) · `N/A` (the concept doesn't apply here) · `Missing` (can't be
+evaluated). Tooling (`component-check`, `component-alignment.md`) reports at this granularity, not a flat
+pass/fail.
+
+**Membership vs. completeness.** Several codes reference an open-ended recommended list rather than a
+required set — `D4`'s State values, `P5`'s States, `D7`'s content-state keywords. A value drawn from
+*outside* the list is `Mismatch — Blocking`; the list simply not being fully used is `Mismatch — Reminder`
+at most, never `Blocking`. This generalizes what `D4`'s row already states for States to every code shaped
+the same way, instead of leaving each to restate it independently.
+
+**Required subset vs. optional subset.** A different shape from membership vs. completeness, but the same
+outcome: a code that names a required core plus an optional-for-now periphery gates only on the named-required
+part. `D8` is the original instance (fully deferred, not just partially); `D10` and `D11` join it as fully
+non-blocking too. `D10`'s `documentationLinks` clause was already non-blocking for a structural reason (can't
+be true before the story exists, the same reasoning §6.8 already uses to keep `P3`/`P4`/`E11` out of the
+gate), and its status-chip clause is non-blocking by policy decision rather than a structural one. `D11`'s
+Header/Variants requirement is now also non-blocking by policy decision — all of `D11` (Header, Variants,
+Anatomy, States, Usage alike) resolves `Mismatch — Reminder` at most, never `Blocking`. `D5` is the one
+remaining genuine split, and for a severity reason — colour binding is blocking, spacing/radii/type binding
+is reported but non-blocking (lower-severity token debt, and comparatively unreliable to detect — see
+`component-check`'s own `detached-values.js` corner-radius false-positive history). Across all four codes,
+the non-blocking part is reported (never silently dropped) but resolves to `Mismatch — Reminder` at most —
+never `Mismatch — Blocking` on its own.
+
+**`D7` — third named exception (resolved).** Previously flagged here as an unreconciled divergence
+(`component-check` treated `D7` as non-gating while this section named only `D6`/`D8` as exceptions).
+Resolved: `D7` joins `D6`/`D8` as a named, non-gating exception — always `Mismatch — Reminder` at most, never
+`Blocking` — same status as its own keyword list already gets under the membership-vs-completeness rule
+above. What changed is that *applicability* is no longer a judgment call: `D7`'s own row states the
+mechanical test (§2.2 tier / §2.7 `items` API for the data-driven keywords, a free-text prop for
+overflow), so a component that doesn't take structured data or free text resolves `N/A` outright instead of
+an Analyzer guessing "this probably doesn't need it."
+
+### Designer checks — §6.1, §5.2, §4.x
+
+| Code | Check                                                                                                |
+| ---- | ----------------------------------------------------------------------------------------------------- |
+| D1   | One **public component set** on its family page; internals `_`-prefixed and unpublished (§5.4, §4.2) |
+| D2   | Name is Title Case, unique, no tier word, not `Old`/`v2`/`Copy` (§4.4, §5.1b)                          |
+| D3   | Every consumer-relevant variation is a variant property **on the public parent** (§4.3) — **Figma-only**; whether code implements that variation is `P3`'s concern, not `D3`'s |
+| D4   | Property names/values per §4.5 (variant, boolean, text, instance-swap alike); each `State` value present is drawn from default · hover · focus · active · disabled · loading · error, not all seven required; no name collides with a reserved identifier (§4.5b) |
+| D5   | Colours bound to **variables**, no detached values — **blocking**; spacing, radii and type bound to variables — **non-blocking**, lower-severity token debt |
+| D6   | ~~Verified on all three brands~~ — **deprecated 2026-09**: semantic-token discipline (`D5`) already guarantees the binding is brand-aware, and triplicate Figma renders cost more (file size, designer time) than they catch. `P7` is redefined as `E5` alone — see Parity table. |
+| D7   | Content states designed: empty · loading (data) · error (data) · long text / overflow — not §4.5's `State=Error` (that's the component's own validation state, a `D4` concern). Applies only where the component's data shape makes it relevant: empty/loading(data)/error(data) require an `items`/columns/rows API (§2.7) or organism tier (§2.2); long text/overflow requires a free-text content prop. No such shape → `N/A`, not a gap. |
+| D8   | Responsive behaviour specified at our breakpoints — **deferred**, non-blocking; revisit once cross-breakpoint design workflow exists |
+| D9   | `description` filled per the §4.6 template — usage, not attribution                                    |
+| D10  | Status chip set — **non-blocking**; `documentationLinks` → the Storybook story — **non-blocking**, can't be true before the story exists (same category as `P3`/`P4`/`E11`, §6.8) |
+| D11  | Family page has Header, Variants, Anatomy, States, Usage sections — all recommended but optional for now (§5.2) — **non-blocking** |
+
+### Frontend checks — §6.2–§6.5
+
+| Code | Check                                                                                        |
+| ---- | --------------------------------------------------------------------------------------------- |
+| E1   | One file at `lib/{tier}/{name}.tsx`, tier per the §2.2 test, exported from the barrel         |
+| E2   | Props per §2.8; controlled **and** uncontrolled                                                |
+| E3   | `items` API where there are repeating children; `items`/`children` mutually exclusive (§2.7)   |
+| E4   | Semantic tokens only — no hex, no primitive classes, no arbitrary values                        |
+| E5   | Renders correctly on all three brands                                                          |
+| E6   | `'use client'` only where genuinely needed                                                     |
+| E7   | Exported prop type, no `any`; `className` merged via `cn()`                                    |
+| E8   | a11y: keyboard, visible focus, roles/labels, contrast, `addon-a11y` zero violations             |
+| E9   | Story set `{Tier}/{Name}`, `tags:['autodocs']`, one story per meaningful variant                |
+| E10  | `parameters.design` → the Figma node                                                           |
+| E11  | Usage guidance: when to use, when not to, what instead                                          |
+| E12  | Unit test where there is branching logic or state                                              |
+| E13  | Visual snapshot baseline committed (story × brand)                                              |
+| E14  | `component-registry.json` entry present and correct                                             |
+
+### Parity — needs both faces open
+
+| Code | Check                                                                 | How filled                |
+| ---- | ----------------------------------------------------------------------- | -------------------------- |
+| P1   | Figma name maps mechanically to the code name (§4.4)                    | `component-check` proposes |
+| P2   | One public Figma set : one code file (§4.5)                             | `component-check` proposes |
+| P3   | Property names **and values** equal the prop names and values, incl. no reserved-name collision (§4.5b). A code prop that merges two Figma variant properties (e.g. Hierarchy+Appearance collapsed into one enum) is not itself a defect — score it against the union of per-axis values, not against matching prop cardinality; only a Figma axis with zero code representation is a Mismatch. | `component-check` proposes |
+| P4   | Anatomy part names equal the code's slot/prop names (§5.2)              | Human, both faces open    |
+| P5   | States match both sides                                                  | derived: `D4 ∧ E2`         |
+| P6   | Token binding both sides                                                 | derived: `D5 ∧ E4`         |
+| P7   | Brand coverage (code side only — `D6` retired 2026-09)                   | `= E5`                     |
+
+The tracker mechanics that consume these codes — column layout, queue views, why narrow-with-codes beats a
+32-column grid — live in `docs/reference/component-alignment.md`, next to the tracker they describe, not
+here.

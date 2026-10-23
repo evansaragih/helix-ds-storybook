@@ -102,7 +102,7 @@ export const Dropzone = forwardRef<HTMLDivElement, DropzoneProps>(({
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', boxSizing: 'border-box', width: '100%',
         gap: large ? 16 : 12, padding: large ? '64px 32px' : 24, borderRadius: 8,
         backgroundColor: bg, border: `1.5px dashed ${border}`, cursor: disabled ? 'not-allowed' : 'pointer', outline: 'none',
-        transition: 'background-color 0.15s, border-color 0.15s',
+        transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard)',
       }}
     >
       <IoMdCloudUpload size={large ? 56 : 40} style={{ color: 'var(--color-icon-on-surface-neutral, #393A3B)', opacity: disabled ? 0.5 : 1 }} />

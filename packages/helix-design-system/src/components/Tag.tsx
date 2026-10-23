@@ -117,7 +117,7 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(({
         letterSpacing: '-0.01px',
         whiteSpace: 'nowrap',
         flexShrink: 0,
-        transition: 'background-color 0.15s, border-color 0.15s, color 0.15s',
+        transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard), color var(--motion-duration-fast) var(--motion-easing-standard)',
         ...style,
       }}
       {...props}

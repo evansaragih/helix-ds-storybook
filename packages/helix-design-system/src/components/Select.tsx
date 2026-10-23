@@ -132,7 +132,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
         {floating && label && (
           <span style={{
             position: 'absolute', left: 8, top: lifted ? 6 : '50%', transform: lifted ? 'none' : 'translateY(-50%)',
-            fontSize: lifted ? 10 : 13, lineHeight: lifted ? '15.6px' : '20px', color: 'var(--color-text-muted, #9F9F9F)', transition: 'all 0.15s', pointerEvents: 'none',
+            fontSize: lifted ? 10 : 13, lineHeight: lifted ? '15.6px' : '20px', color: 'var(--color-text-muted, #9F9F9F)', transition: 'all var(--motion-duration-fast) var(--motion-easing-standard)', pointerEvents: 'none',
           }}>{label}</span>
         )}
         <span style={{
@@ -142,7 +142,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
         }}>
           {hasValue ? text : floating ? '' : placeholder}
         </span>
-        <ChevronDown size={16} style={{ flexShrink: 0, color: 'var(--color-text-secondary, #49494A)', transform: open ? 'rotate(180deg)' : undefined, transition: 'transform 0.15s' }} />
+        <ChevronDown size={16} style={{ flexShrink: 0, color: 'var(--color-text-secondary, #49494A)', transform: open ? 'rotate(180deg)' : undefined, transition: 'transform var(--motion-duration-fast) var(--motion-easing-standard)' }} />
       </button>
     </RadixPopover.Trigger>
   );
@@ -169,6 +169,7 @@ export const Select = forwardRef<HTMLButtonElement, SelectProps>(({
           {trigger}
           <RadixPopover.Portal>
             <RadixPopover.Content
+              className="helix-pop"
               align="start"
               sideOffset={8}
               onOpenAutoFocus={(e) => { if (!multi) { e.preventDefault(); (listRef.current?.querySelector('[data-option][aria-selected="true"],[data-option]') as HTMLElement | null)?.focus(); } }}

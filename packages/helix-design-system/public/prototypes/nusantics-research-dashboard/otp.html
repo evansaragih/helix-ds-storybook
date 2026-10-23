@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="id" data-brand="nusantics">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verifikasi kode | Nusantics Research Dashboard</title>
+  <link rel="icon" href="../_shared/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../_shared/theme.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="login">
+    <section class="hero" aria-label="Tentang Nusantics Research Dashboard">
+      <span class="hero__mark" aria-hidden="true"><i></i><b></b></span>
+      <div class="hero__copy">
+        <img class="hero__logo" src="assets/nusantics-wordmark-white.svg" alt="Nusantics" width="164" height="20">
+        <h2 class="hero__title">Riset Genomik untuk Institusi Riset Indonesia</h2>
+        <p class="hero__desc">Platform analisis genomik berbasis cloud untuk komunitas riset dan pendidikan — dari pengiriman sampel hingga laporan ilmiah.</p>
+      </div>
+      <img class="hero__mockup" src="assets/login-mockup.png" alt="Tampilan Nusantics Research Dashboard dengan grafik taxa bar plot" width="874" height="874">
+    </section>
+
+    <section class="panel panel--otp">
+      <div class="panel__inner panel__inner--otp">
+        <a class="back-btn" href="login.html" id="back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+          Kembali
+        </a>
+
+        <header class="intro intro--center">
+          <h1 class="intro__title">Masukkan kode 6 digit</h1>
+          <p class="intro__desc" id="otp-desc">Masukkan kode verifikasi yang telah dikirim ke <strong class="accent" id="otp-target">+628134567890</strong></p>
+        </header>
+
+        <form class="otp-form" id="otp-form" novalidate>
+          <fieldset class="otp" id="otp">
+            <legend class="visually-hidden">Kode verifikasi 6 digit</legend>
+            <div class="otp__row">
+              <div class="otp__group">
+                <input class="otp__box" inputmode="text" autocomplete="one-time-code" maxlength="1" aria-label="Digit 1" autocapitalize="characters">
+                <input class="otp__box" inputmode="text" maxlength="1" aria-label="Digit 2" autocapitalize="characters">
+                <input class="otp__box" inputmode="text" maxlength="1" aria-label="Digit 3" autocapitalize="characters">
+              </div>
+              <span class="otp__dash" aria-hidden="true"></span>
+              <div class="otp__group">
+                <input class="otp__box" inputmode="text" maxlength="1" aria-label="Digit 4" autocapitalize="characters">
+                <input class="otp__box" inputmode="text" maxlength="1" aria-label="Digit 5" autocapitalize="characters">
+                <input class="otp__box" inputmode="text" maxlength="1" aria-label="Digit 6" autocapitalize="characters">
+              </div>
+            </div>
+            <p class="field__msg otp__msg" id="otp-msg" role="alert" hidden></p>
+          </fieldset>
+
+          <p class="otp__timer" id="otp-timer">Permintaan kode OTP baru dalam <strong class="accent" id="otp-count">00:30</strong></p>
+
+          <button class="btn btn--primary" id="verify" type="submit">
+            <span class="btn__label">Verifikasi</span>
+            <span class="btn__spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <button class="link-btn" type="button" id="help-open">Ada masalah dengan OTP?</button>
+      </div>
+
+      <div class="alert" id="alert" role="alert" hidden>
+        <svg class="alert__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+        <div class="alert__text"><strong id="alert-title"></strong><span id="alert-desc"></span></div>
+        <button class="alert__close" type="button" id="alert-close" aria-label="Tutup"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bantuan OTP -->
+  <dialog class="help" id="help" aria-labelledby="help-title">
+    <div class="help__head">
+      <div>
+        <h2 class="help__title" id="help-title">Kode OTP tidak diterima.</h2>
+        <p class="help__sub">Anda mungkin mengalami salah satu dari hal berikut:</p>
+      </div>
+      <button class="alert__close" type="button" id="help-close" aria-label="Tutup"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="help__list">
+      <details class="acc" open>
+        <summary>Nomor atau email yang dimasukkan salah</summary>
+        <p>Periksa kembali tujuan pengiriman kode. Jika keliru, pilih <strong>Kembali</strong> untuk mengubahnya, lalu minta kode baru.</p>
+      </details>
+      <details class="acc">
+        <summary>Pesan terlambat atau tidak masuk</summary>
+        <p>Kode bisa tertunda hingga satu menit. Pastikan sinyal baik dan, untuk email, cek folder spam atau promosi sebelum meminta kode baru.</p>
+      </details>
+      <details class="acc">
+        <summary>Kode sudah kedaluwarsa</summary>
+        <p>Kode hanya berlaku singkat. Tunggu hitungan mundur selesai, lalu pilih <strong>Kirim ulang kode</strong>.</p>
+      </details>
+    </div>
+    <p class="help__foot">Masih bermasalah? Hubungi kami di <a href="mailto:hello@nusantics.com">hello@nusantics.com</a>.</p>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script src="otp.js"></script>
+</body>
+</html>

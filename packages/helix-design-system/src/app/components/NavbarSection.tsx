@@ -24,7 +24,7 @@ export function NavbarSection() {
         { heading: 'Dashboard bars', body: 'In app screens use the Dashboard Navbar for context and the Dashboard Footer for page actions.' },
       ]}
       demos={[
-        { id: 'marketing', title: 'Marketing Navbar', description: 'onTop is solid white; onScroll is translucent with a blur.',
+        { id: 'marketing', title: 'Marketing Navbar', description: 'onScroll is a solid Surface/Default fill, with no transparency or blur.',
           node: <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 900 }}><Navbar state="onTop" leftContent={<strong style={{ fontFamily: 'var(--font-family-body)' }}>Helix</strong>} rightContent={right} /><div style={{ background: 'linear-gradient(135deg, #FCC9A3, #EBF2FE)' }}><Navbar state="onScroll" leftContent={<strong style={{ fontFamily: 'var(--font-family-body)' }}>Helix</strong>} rightContent={right} /></div></div> },
         { id: 'dashboard', title: 'Dashboard Navbar and Footer',
           node: <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 900 }}><DashboardNavbar leftContent={<Breadcrumb items={[{ label: 'Lab' }, { label: 'Processing' }]} />} rightContent={<Button size="sm">New sample</Button>} /><DashboardFooter leftContent={<Button hierarchy="secondary" appearance="ghost" size="sm">Back</Button>} rightContent={<Button size="sm">Save</Button>} /></div> },

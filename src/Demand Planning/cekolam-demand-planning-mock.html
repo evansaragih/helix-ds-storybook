@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="id" data-brand="cekolam">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CeKolam – Demand Planning</title>
+<meta name="description" content="Mockup HTML Demand Planning CeKolam, Langkah 1: tentukan periode dan jumlah sampel per tambak.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../packages/helix-design-system/src/styles/theme.css">
+<link rel="stylesheet" href="shell.css">
+<link rel="stylesheet" href="demand-planning.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24"><path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1V3a1 1 0 0 1 1-1zM5 10v9h14v-9zm3 2h3v3H8z"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 2h6v2h-1v5.2l5.4 9A2 2 0 0 1 17.7 21H6.3a2 2 0 0 1-1.7-2.8L10 9.200V4H9zm2 2v5.800L8.100 15h7.800L13 9.800V4z"/></symbol>
+  <symbol id="i-pond" viewBox="0 0 24 24"><path d="M3 14c2 0 2-1.500 4.500-1.500S10 14 12 14s2-1.500 4.500-1.500S19 14 21 14v2c-2 0-2 1.500-4.500 1.500S14 16 12 16s-2 1.500-4.500 1.500S5 16 3 16zm0 4c2 0 2-1.500 4.500-1.500S10 18 12 18s2-1.500 4.500-1.500S19 18 21 18v2c-2 0-2 1.500-4.500 1.500S14 20 12 20s-2 1.500-4.500 1.500S5 20 3 20zM12 3c3 3.500 5 6 5 8.500a5 5 0 0 1-10 0C7 9 9 6.500 12 3z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 3h2v16h14v2H4zm5 9h3v6H9zm5-5h3v11h-3z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 14 14"><path d="M7 14c.97 0 1.75-.78 1.75-1.75H5.25C5.25 13.220 6.030 14 7 14zm5.890-4.090c-.53-.57-1.520-1.420-1.520-4.220 0-2.130-1.490-3.830-3.500-4.240V.88a.875.875 0 0 0-1.750 0v.57C4.120 1.860 2.630 3.560 2.630 5.690c0 2.800-.99 3.650-1.520 4.220-.16.170-.24.380-.24.590 0 .45.350.88.880.88h10.490c.52 0 .87-.43.880-.88 0-.21-.07-.42-.23-.59z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 14 14"><path fill-rule="evenodd" d="M3.090 4.840a.5.5 0 0 1 .72 0L7 7.930l3.090-3.090a.5.5 0 0 1 .72.720l-3.500 3.500a.5.5 0 0 1-.72 0l-3.500-3.500a.5.5 0 0 1 0-.72z"/></symbol>
+  <symbol id="i-updown" viewBox="0 0 12 12"><path fill-rule="evenodd" d="M6 1.800a.6.6 0 0 1 .42.180l1.800 1.800a.6.6 0 0 1-.85.850L6 3.250 4.620 4.620a.6.6 0 0 1-.85-.85l1.800-1.800A.6.6 0 0 1 6 1.800zM3.780 7.380a.6.6 0 0 1 .84 0L6 8.750l1.380-1.370a.6.6 0 0 1 .85.850l-1.800 1.800a.6.6 0 0 1-.85 0l-1.800-1.800a.6.6 0 0 1 0-.85z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M10.500 3a7.500 7.500 0 0 1 5.960 12.050l4.240 4.240a1 1 0 0 1-1.410 1.410l-4.240-4.240A7.500 7.500 0 1 1 10.500 3zm0 2a5.500 5.500 0 1 0 0 11 5.500 5.500 0 0 0 0-11z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 4.800-5.200 10.800-6.200 11.900a1 1 0 0 1-1.600 0C10.200 19.800 5 13.800 5 9a7 7 0 0 1 7-7zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M6.300 9.300a1 1 0 0 1 1.400 0l4.300 4.300 4.300-4.300a1 1 0 1 1 1.400 1.400l-5 5a1 1 0 0 1-1.400 0l-5-5a1 1 0 0 1 0-1.400z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7.500" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1V3a1 1 0 0 1 1-1zM5 10v9h14v-9z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-next" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.500" fill="none" stroke="currentColor" stroke-width="1.800"/><path d="M12 7.500v5.500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.500" r="1.200"/></symbol>
+  <symbol id="i-waves" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"><path id="w" d="M2 7c.6.5 1.200 1 2.500 1C7 8 7 6 9.500 6c2.600 0 2.400 2 5 2 2.500 0 2.500-2 5-2 1.300 0 1.900.5 2.500 1"/><path d="M2 13c.6.5 1.200 1 2.500 1C7 14 7 12 9.500 12c2.600 0 2.400 2 5 2 2.500 0 2.500-2 5-2 1.300 0 1.900.5 2.500 1"/><path d="M2 19c.6.5 1.200 1 2.500 1C7 20 7 18 9.500 18c2.600 0 2.400 2 5 2 2.500 0 2.500-2 5-2 1.300 0 1.900.5 2.500 1"/></g></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M6 6l1 14a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-14M10 11v6M14 11v6"/></g></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></g></symbol>
+  <symbol id="i-range" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.500" width="18" height="16.500" rx="2"/><path d="M3 10h18M8 2.500v4M16 2.500v4M8 15.500h8"/></g></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.500 6h.01M3.500 12h.01M3.500 18h.01" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs></svg>
+
+<div class="app">
+  <aside class="hx-sidebar" id="sidebar" aria-label="Navigasi utama">
+    <div class="hx-sb-head">
+      <a class="hx-logo" href="#" aria-label="CeKolam">
+        <img class="hx-logo-full dp-logo" src="assets/wordmark-default.svg" alt="CeKolam">
+        <span class="hx-logo-mark"><img src="assets/mark-default.svg" alt="CeKolam"></span>
+      </a>
+      <span class="hx-pill">Staging</span>
+    </div>
+    <nav class="hx-sb-nav" aria-label="Menu utama">
+      <a class="hx-nav-item" href="#" aria-label="Beranda"><svg class="hx-i"><use href="#i-home"/></svg><span class="hx-label">Beranda</span></a>
+      <a class="hx-nav-item" href="#" aria-label="Demand Planning" aria-current="page"><svg class="hx-i"><use href="#i-plan"/></svg><span class="hx-label">Demand Planning</span></a>
+      <a class="hx-nav-item" href="#" aria-label="Order Sampel"><svg class="hx-i"><use href="#i-flask"/></svg><span class="hx-label">Order Sampel</span></a>
+      <a class="hx-nav-item" href="#" aria-label="Tambak"><svg class="hx-i"><use href="#i-pond"/></svg><span class="hx-label">Tambak</span></a>
+      <a class="hx-nav-item" href="#" aria-label="Laporan"><svg class="hx-i"><use href="#i-chart"/></svg><span class="hx-label">Laporan</span></a>
+    </nav>
+    <div class="hx-sb-foot">
+      <div class="hx-user"><div class="hx-avatar" aria-hidden="true"><span>AG</span></div><span class="hx-user-name">dr. Andi Gunawan</span><button class="hx-ib hx-ib--24" type="button" aria-label="Menu akun"><svg class="hx-i mut"><use href="#i-updown"/></svg></button></div>
+    </div>
+  </aside>
+
+  <div class="frame">
+    <div class="body">
+      <header class="hx-navbar">
+        <div class="hx-nav-left">
+          <button class="hx-ib hx-ib--36" type="button" id="sbToggle" aria-controls="sidebar" aria-expanded="true" aria-label="Ciutkan sidebar"><img src="assets/ic-panel.svg" alt=""></button>
+          <span class="hx-nav-div" aria-hidden="true"></span>
+          <a class="hx-crumb" href="#" aria-current="page"><svg class="hx-i" style="font-size:12px;color:#828282" aria-hidden="true"><use href="#i-plan"/></svg><span>Demand Planning</span></a>
+        </div>
+        <div class="hx-nav-right">
+          <button class="hx-ib hx-ib--36 hx-ib--ghost" type="button" aria-label="Notifikasi"><svg class="hx-i mut"><use href="#i-bell"/></svg></button>
+          <button class="hx-btn hx-btn--dark" type="button" aria-label="Organisasi: PT Cekolam Indonesia"><span class="hx-txt">PT Cekolam Indonesia</span><svg class="hx-i"><use href="#i-down"/></svg></button>
+        </div>
+      </header>
+
+      <main class="dp-page">
+        <div class="cc cc--page">
+          <header class="cc__head dp-head">
+            <div>
+              <h1 class="dp-h1" id="pageTitle" tabindex="-1">Demand Planning</h1>
+              <p class="dp-sub" id="pageSub"></p>
+            </div>
+            <ol class="dp-steps" aria-label="Langkah">
+              <li class="dp-step is-current" id="st1" aria-current="step"><span class="dp-step__n">1</span>Rencana sampel</li>
+              <li class="dp-step" id="st2"><span class="dp-step__n">2</span>Tinjau</li>
+              <li class="dp-step" id="st3"><span class="dp-step__n">3</span>Submit</li>
+            </ol>
+          </header>
+
+          <div class="cc__body cc__body--scroll" id="dpScroll">
+            <div class="dp-layout" id="dpLayout" data-layout="split">
+              <button class="cc dp-filter" type="button" id="filterBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="dpAside">
+                <span class="cc__head cc__head--row">
+                  <span class="cc__title">Periode &amp; cakupan</span>
+                  <span class="dp-filter__edit">Ubah<svg class="dp-i" aria-hidden="true"><use href="#i-chev"/></svg></span>
+                </span>
+                <span class="cc__body">
+                  <span class="dp-filter__row"><svg class="dp-i" aria-hidden="true"><use href="#i-calendar"/></svg><span class="dp-filter__k">Periode</span><span class="dp-filter__v" id="filterPeriod"></span></span>
+                  <span class="dp-filter__row"><svg class="dp-i" aria-hidden="true"><use href="#i-waves"/></svg><span class="dp-filter__k">Cakupan</span><span class="dp-filter__v" id="filterScope"></span></span>
+                </span>
+              </button>
+              <div class="dp-scrim" id="sheetScrim"></div>
+              <div class="dp-aside" id="dpAside">
+              <div class="dp-sheet__bar">
+                <span class="dp-sheet__grab" aria-hidden="true"></span>
+                <div class="dp-sheet__row"><h2 class="cc__title" id="sheetTitle">Atur periode &amp; cakupan</h2>
+                  <button class="dlg__close" type="button" id="sheetClose" aria-label="Tutup"><svg class="dp-i" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+              </div>
+              <section class="cc" id="periodCard" aria-labelledby="periodTitle">
+                <header class="cc__head cc__head--row">
+                  <h2 class="cc__title" id="periodTitle">Periode</h2>
+                  <span class="dp-badge" id="periodBadge"></span>
+                </header>
+                <div class="cc__body dp-period" id="periodEdit">
+                  <div class="dp-seg" role="radiogroup" aria-label="Jenis periode" id="modeSeg">
+                    <label class="dp-seg__opt"><input type="radio" name="mode" value="bulan" checked><span>Bulanan</span></label>
+                    <label class="dp-seg__opt"><input type="radio" name="mode" value="minggu"><span>Mingguan</span></label>
+                    <label class="dp-seg__opt"><input type="radio" name="mode" value="tanggal"><span>Per tanggal</span></label>
+                  </div>
+                  <div class="dp-period__fields" id="periodFields"></div>
+                  <p class="dp-rangehint" id="rangeHint"></p>
+                </div>
+                <div class="cc__body dp-view" id="periodView" role="list" hidden></div>
+              </section>
+
+              <section class="cc" id="scopeCard" aria-labelledby="scopeTitle">
+                <header class="cc__head cc__head--row">
+                  <h2 class="cc__title" id="scopeTitle">Cakupan tambak</h2>
+                  <span class="dp-badge" id="scopeBadge"></span>
+                </header>
+                <div class="cc__body dp-period">
+                  <div class="dp-seg" role="radiogroup" aria-label="Cakupan planning" id="scopeSeg">
+                    <label class="dp-seg__opt"><input type="radio" name="scope" value="region"><span>Per Region</span></label>
+                    <label class="dp-seg__opt"><input type="radio" name="scope" value="prov"><span>Per Provinsi</span></label>
+                    <label class="dp-seg__opt"><input type="radio" name="scope" value="tambak" checked><span>Per Tambak</span></label>
+                  </div>
+                  <div class="dp-period__fields" id="scopeFields"></div>
+                  <p class="dp-rangehint" id="scopeHint"></p>
+                </div>
+              </section>
+              <div class="dp-sheet__foot"><button class="dp-btn dp-btn--primary" type="button" id="sheetDone">Selesai</button></div>
+            </div>
+
+              <section class="cc dp-list" id="listCard" aria-labelledby="listTitle">
+                <header class="cc__head cc__head--row">
+                  <div class="cc__head--row" style="flex:1">
+                    <h2 class="cc__title" id="listTitle">Rincian sampel</h2>
+                    <button class="dp-btn dp-btn--ghost dp-farms-btn" type="button" id="farmsBtn" aria-haspopup="dialog"><svg class="dp-i" aria-hidden="true"><use href="#i-list"/></svg><span id="resultCount" aria-live="polite"></span></button>
+                  </div>
+                </header>
+                <div class="cc__body" id="groups"></div>
+              </section>
+
+              <section class="cc dp-review" id="reviewCard" aria-labelledby="reviewTitle" hidden>
+                <header class="cc__head cc__head--row">
+                  <h2 class="cc__title" id="reviewTitle">Ringkasan rencana</h2>
+                  <span class="dp-count" id="reviewCount"></span>
+                </header>
+                <div class="cc__body dp-review__body" id="reviewBody"></div>
+              </section>
+            </div>
+          </div>
+
+          <footer class="cc__foot dp-bar" aria-label="Ringkasan rencana">
+            <div class="dp-bar__sum" aria-live="polite">
+              <span><b id="sumFarms">0</b> tambak</span>
+              <span class="dp-bar__dot" aria-hidden="true"></span>
+              <span><b id="sumSamples">0</b> sampel</span>
+              <span class="dp-bar__dot" aria-hidden="true"></span>
+              <span id="sumPeriod"></span>
+              <span class="dp-bar__hint" id="sumHint">Isi minimal 1 tambak untuk lanjut</span>
+            </div>
+            <button class="dp-btn dp-btn--ghost" type="button" id="clearAll">Kosongkan</button>
+            <button class="dp-btn dp-btn--primary" type="button" id="next">Lanjut ke Tinjau<svg class="dp-i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <button class="dp-btn dp-btn--ghost" type="button" id="back" hidden><svg class="dp-i" aria-hidden="true"><use href="#i-prev"/></svg>Kembali ubah</button>
+            <button class="dp-btn dp-btn--primary" type="button" id="submit" hidden>Submit rencana<svg class="dp-i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          </footer>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+<dialog class="dlg" id="farmsDlg" aria-labelledby="farmsTitle" aria-describedby="farmsDesc">
+  <header class="dlg__head">
+    <div class="dlg__lead">
+      <span class="dlg__tile" aria-hidden="true"><svg class="dp-i"><use href="#i-waves"/></svg></span>
+      <div class="dlg__text"><h2 class="dlg__title" id="farmsTitle">Tambak dalam cakupan</h2><p class="dlg__desc" id="farmsDesc"></p></div>
+    </div>
+    <form method="dialog"><button class="dlg__close" aria-label="Tutup"><svg class="dp-i" aria-hidden="true"><use href="#i-x"/></svg></button></form>
+  </header>
+  <div class="dlg__body" id="farmsBody"></div>
+  <form method="dialog" class="dlg__foot"><button class="dp-btn dp-btn--ghost dlg__ok" autofocus>Tutup</button></form>
+</dialog>
+<dialog class="adlg" id="clearDlg" aria-labelledby="clearTitle" aria-describedby="clearDesc">
+  <div class="adlg__body">
+    <span class="adlg__tile" aria-hidden="true"><svg class="dp-i"><use href="#i-trash"/></svg></span>
+    <div class="adlg__text">
+      <h2 class="adlg__title" id="clearTitle">Hapus semua data yang sudah diisi?</h2>
+      <p class="adlg__desc" id="clearDesc"></p>
+    </div>
+  </div>
+  <form method="dialog" class="adlg__foot">
+    <button class="dp-btn dp-btn--ghost" value="cancel" id="clearCancel" autofocus>Batal</button>
+    <button class="dp-btn dp-btn--destructive" value="confirm" id="clearConfirm">Ya, hapus semua</button>
+  </form>
+</dialog>
+<script src="demand-planning.js"></script>
+</body>
+</html>

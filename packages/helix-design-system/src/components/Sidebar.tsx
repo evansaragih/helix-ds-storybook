@@ -32,7 +32,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
         height: '100%',
         boxSizing: 'border-box',
         backgroundColor: 'var(--color-container-primary, #FFFFFF)',
-        transition: 'width 0.2s',
+        transition: 'width var(--motion-duration-base) var(--motion-easing-standard)',
         ...style,
       }}
       {...props}
@@ -118,7 +118,7 @@ export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(({
         lineHeight: '19.2px',
         letterSpacing: '-0.13px',
         textAlign: 'left',
-        transition: 'background-color 0.15s, color 0.15s',
+        transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard), color var(--motion-duration-fast) var(--motion-easing-standard)',
         ...style,
       }}
       {...props}

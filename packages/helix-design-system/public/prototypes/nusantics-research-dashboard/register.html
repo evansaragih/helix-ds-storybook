@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="id" data-brand="nusantics">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pendaftaran Akun | Nusantics Research Dashboard</title>
+  <meta name="description" content="Daftarkan diri dan kelompok studi Anda di Nusantics Research Dashboard.">
+  <link rel="icon" href="../_shared/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../_shared/theme.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="login">
+    <section class="hero" aria-label="Tentang Nusantics Research Dashboard">
+      <span class="hero__mark" aria-hidden="true"><i></i><b></b></span>
+      <div class="hero__copy">
+        <img class="hero__logo" src="assets/nusantics-wordmark-white.svg" alt="Nusantics" width="164" height="20">
+        <h2 class="hero__title">Riset Genomik untuk Institusi Riset Indonesia</h2>
+        <p class="hero__desc">Platform analisis genomik berbasis cloud untuk komunitas riset dan pendidikan — dari pengiriman sampel hingga laporan ilmiah.</p>
+      </div>
+      <img class="hero__mockup" src="assets/login-mockup.png" alt="Tampilan Nusantics Research Dashboard dengan grafik taxa bar plot" width="874" height="874">
+    </section>
+
+    <section class="panel panel--register">
+      <div class="panel__inner panel__inner--register">
+        <a class="back-btn" href="login.html" id="back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+          Kembali
+        </a>
+
+        <header class="intro">
+          <h1 class="intro__title">Pendaftaran Akun</h1>
+          <p class="intro__desc" id="reg-desc">Daftarkan diri dan buat kelompok studi baru di institusi Anda! Jika sudah terdaftar, minta Lead kelompok Anda untuk mengundang, jadi tidak perlu mendaftar ulang.</p>
+        </header>
+
+        <ol class="stepper" id="stepper" aria-label="Langkah pendaftaran">
+          <li class="stepper__item is-current" aria-current="step"><span class="stepper__dot"><span class="stepper__num">1</span><svg class="stepper__check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span class="stepper__label">Institusi dan Kelompok Studi</span></li>
+          <li class="stepper__item"><span class="stepper__dot"><span class="stepper__num">2</span><svg class="stepper__check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span class="stepper__label">Data Diri Anda</span></li>
+          <li class="stepper__item"><span class="stepper__dot"><span class="stepper__num">3</span><svg class="stepper__check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span><span class="stepper__label">Review Data</span></li>
+        </ol>
+
+        <form class="form" id="reg-form" novalidate>
+          <!-- Langkah 1 -->
+          <div class="step" data-step="1">
+            <div class="field" id="f-email">
+              <div class="field__box">
+                <input class="field__input" id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder=" " aria-describedby="m-email" required>
+                <label class="field__label" for="email">Email Institusional <span class="req" aria-hidden="true">*</span></label>
+              </div>
+              <p class="field__msg" id="m-email">Gunakan email institusi Anda (.ac.id, .go.id, .or.id)</p>
+            </div>
+
+            <div class="field combo" id="f-inst">
+              <div class="field__box combo__box">
+                <input class="field__input" id="inst" name="inst" type="text" role="combobox" aria-expanded="false" aria-controls="inst-list" aria-autocomplete="list" autocomplete="off" placeholder=" " aria-describedby="m-inst" required>
+                <label class="field__label" for="inst">Nama Institusi <span class="req" aria-hidden="true">*</span></label>
+                <button class="combo__toggle" type="button" id="inst-toggle" tabindex="-1" aria-label="Buka daftar institusi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+              </div>
+              <p class="field__msg" id="m-inst">Pilih dari daftar atau ketik nama baru untuk mendaftarkan institusi Anda</p>
+
+              <div class="combo__pop" id="inst-pop" hidden>
+                <ul class="combo__list" id="inst-list" role="listbox" aria-label="Daftar institusi"></ul>
+                <div class="combo__empty" id="inst-empty" hidden>
+                  <span class="combo__empty-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M9 10h.01M15 10h.01M9 14h.01M15 14h.01"/></svg></span>
+                  <strong>Institusi Tidak Ditemukan</strong>
+                  <p>Institusi ini belum terdaftar di sistem kami. Untuk saat ini, pendaftaran institusi baru hanya bisa dilakukan lewat tim Nusantics Support.</p>
+                  <div class="combo__empty-actions">
+                    <a class="btn btn--neutral btn--sm" href="mailto:hello@nusantics.com?subject=Pendaftaran%20Institusi%20Baru">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                      Email Support
+                    </a>
+                    <a class="btn btn--primary btn--sm" href="#" id="wa-support">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>
+                      WhatsApp Support
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field" id="f-group">
+              <div class="field__box">
+                <input class="field__input" id="group" name="group" type="text" autocomplete="off" placeholder=" " aria-describedby="m-group" required>
+                <label class="field__label" for="group">Kelompok Studi (Study Group) <span class="req" aria-hidden="true">*</span></label>
+              </div>
+              <p class="field__msg" id="m-group">Anda dapat membuat kelompok studi baru di sini. Gunakan nama yang jelas dan spesifik, mis. nama bidang riset atau nama dosen pembimbing.</p>
+            </div>
+          </div>
+
+          <!-- Langkah 2 -->
+          <div class="step" data-step="2" hidden>
+            <div class="field" id="f-first">
+              <div class="field__box">
+                <input class="field__input" id="first" name="first" type="text" autocomplete="given-name" placeholder=" " aria-describedby="m-first" required>
+                <label class="field__label" for="first">Nama Depan <span class="req" aria-hidden="true">*</span></label>
+              </div>
+              <p class="field__msg" id="m-first" hidden></p>
+            </div>
+            <div class="field" id="f-last">
+              <div class="field__box">
+                <input class="field__input" id="last" name="last" type="text" autocomplete="family-name" placeholder=" ">
+                <label class="field__label" for="last">Nama Belakang</label>
+              </div>
+            </div>
+            <div class="field field--phone" id="f-phone">
+              <div class="field__box">
+                <span class="field__prefix field__prefix--flag"><i class="flag" aria-hidden="true"></i>+62</span>
+                <input class="field__input" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder=" " aria-describedby="m-phone" required>
+                <label class="field__label" for="phone">No. Telepon <span class="req" aria-hidden="true">*</span></label>
+              </div>
+              <p class="field__msg" id="m-phone">Silakan gunakan nomor telepon Anda yang aktif.</p>
+            </div>
+          </div>
+
+          <!-- Langkah 3 -->
+          <div class="step" data-step="3" hidden>
+            <section class="review" aria-labelledby="review-title">
+              <h2 class="review__title" id="review-title">Ringkasan Pendaftaran</h2>
+              <dl class="review__list">
+                <div><dt>Email Institusional</dt><dd id="r-email"></dd></div>
+                <div><dt>Nama Institusi</dt><dd id="r-inst"></dd></div>
+                <div><dt>Kelompok Studi</dt><dd id="r-group"></dd></div>
+                <div><dt>Nama Depan</dt><dd id="r-first"></dd></div>
+                <div><dt>Nama Belakang</dt><dd id="r-last"></dd></div>
+                <div><dt>No. Telepon</dt><dd id="r-phone"></dd></div>
+              </dl>
+            </section>
+          </div>
+
+          <details class="kit" id="kit">
+            <summary>Aktivasi Kit BiomeSeq <span>(optional)</span></summary>
+            <div class="field" id="f-kit">
+              <div class="field__box">
+                <input class="field__input" id="kit-code" name="kit" type="text" autocomplete="off" autocapitalize="characters" placeholder=" ">
+                <label class="field__label" for="kit-code">Kode Aktivasi Kit</label>
+              </div>
+              <p class="field__msg">Kode ada di kartu dalam kemasan kit. Bisa diisi nanti dari dalam dashboard.</p>
+            </div>
+          </details>
+
+          <button class="btn btn--primary" id="next" type="submit">
+            <span class="btn__label">Lanjut Isi Data Diri</span>
+            <span class="btn__spinner" aria-hidden="true"></span>
+          </button>
+          <p class="terms terms--left" id="otp-note" hidden>*OTP verifikasi akan dikirimkan ke email yang tertera di atas</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script src="register.js"></script>
+</body>
+</html>
