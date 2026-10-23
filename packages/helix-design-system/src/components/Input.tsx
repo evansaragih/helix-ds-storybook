@@ -7,7 +7,7 @@ export type InputLayout = 'vertical' | 'horizontal';
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Static label above (vertical) or beside (horizontal) the box; becomes the floating label when `floating` */
   label?: string;
-  /** Show the required asterisk after the label (Figma Show Required) */
+  /** Show the required asterisk after the label (Figma Show Required). In `floating` it is a red dot on the box's top-right corner instead. */
   required?: boolean;
   /** Hint text under the box (Figma Show Hint) */
   hint?: string;
@@ -40,6 +40,11 @@ export function fieldBoxStyle(state: { hovered: boolean; focused: boolean; inval
 
 /** Placeholder color from Figma (Text/Muted); browsers default to a darker grey. Rendered once per field, scoped by class. */
 export const placeholderCss = '.helix-field::placeholder{color:var(--color-text-muted,#9F9F9F);opacity:1}';
+
+/** The required dot's pulse: a ring grows out of the dot and fades. Static for users who prefer reduced motion. */
+const requiredDotCss = `.helix-required-dot::after{content:'';position:absolute;inset:-3px;border-radius:9999px;border:1.5px solid var(--color-destructive,#DC2626);opacity:0;animation:helix-required-pulse 2s cubic-bezier(0.4,0,0.2,1) infinite}
+@keyframes helix-required-pulse{0%{transform:scale(.6);opacity:.7}70%,100%{transform:scale(2.4);opacity:0}}
+@media (prefers-reduced-motion:reduce){.helix-required-dot::after{animation:none}}`;
 
 export const labelText: React.CSSProperties = {
   fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, lineHeight: '20px', letterSpacing: '-0.01px', color: 'var(--color-text-secondary, #49494A)',
@@ -97,18 +102,27 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
         height: floating ? 48 : 36, padding: '0 8px', borderRadius: 8,
         ...fieldBoxStyle({ hovered, focused, invalid: isInvalid, disabled: Boolean(disabled) }),
         ...(floating && !focused && !isInvalid && !disabled ? { boxShadow: '0 1px 2px rgba(89,89,90,0.15)' } : {}),
-        transition: 'border-color 0.15s, box-shadow 0.15s',
+        transition: 'border-color var(--motion-duration-fast) var(--motion-easing-standard), box-shadow var(--motion-duration-fast) var(--motion-easing-standard)',
       }}
     >
+      {floating && required && (
+        <>
+          <style>{requiredDotCss}</style>
+          <span aria-hidden="true" className="helix-required-dot" style={{
+            position: 'absolute', top: -5, right: -5, width: 10, height: 10, boxSizing: 'border-box', borderRadius: 9999, pointerEvents: 'none',
+            backgroundColor: 'var(--color-destructive, #DC2626)', border: '2px solid var(--color-container-primary, #FFFFFF)', boxShadow: '0 0 0 1px var(--color-destructive, #DC2626)',
+          }} />
+        </>
+      )}
       {leading && <><span style={slot}>{leading}</span>{leadingDivider && divider}</>}
       <div style={{ position: 'relative', flex: 1, minWidth: 0, height: '100%', display: 'flex', alignItems: 'center' }}>
         {floating && label && (
           <label htmlFor={inputId} style={{
             position: 'absolute', left: 0, top: lifted ? 6 : '50%', transform: lifted ? 'none' : 'translateY(-50%)',
             fontFamily: 'var(--font-family-body)', fontSize: lifted ? 10 : 13, lineHeight: lifted ? '15.6px' : '20px',
-            color: 'var(--color-text-muted, #9F9F9F)', pointerEvents: 'none', transition: 'all 0.15s',
+            color: 'var(--color-text-muted, #9F9F9F)', pointerEvents: 'none', transition: 'all var(--motion-duration-fast) var(--motion-easing-standard)',
           }}>
-            {label}{required && <span style={{ color: 'var(--color-destructive, #DC2626)' }}> *</span>}
+            {label}
           </label>
         )}
         <style>{placeholderCss}</style>

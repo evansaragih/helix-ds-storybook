@@ -41,7 +41,7 @@ const COPY: Record<EmptyStateType, { title: string; description: string; illustr
   'no-permission':  { title: "You don't have access", description: 'Contact your admin to request access to this page.', illustration: 'no-permission' },
 };
 
-/** A placeholder for lists, tables and search results with no content — no data, no results, an error, or no permission. */
+/** A general state placeholder — pairs an illustration with a message for empty/no-data, no-results, error, and no-permission scenarios today, with room to extend to success/warning flows that need the same illustration + message + action pattern. */
 export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(({
   type = 'no-data',
   size = 'default',

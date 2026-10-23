@@ -12,8 +12,8 @@
     "./styles/fonts.css": "./src/styles/fonts.css"
   },
   "scripts": {
-    "build": "vite build",
-    "dev": "vite"
+    "build": "node scripts/sync-prototype-shared.mjs && vite build",
+    "dev": "node scripts/sync-prototype-shared.mjs && vite"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

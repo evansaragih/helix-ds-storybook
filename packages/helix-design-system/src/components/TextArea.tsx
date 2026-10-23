@@ -58,7 +58,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(({
           boxSizing: 'border-box', width: '100%', minHeight: 100, padding: '8px 12px', borderRadius: 8, outline: 'none',
           resize: resizable ? 'vertical' : 'none',
           fontFamily: 'var(--font-family-body)', fontSize: 13, lineHeight: '20px', letterSpacing: '-0.01px', color: 'var(--color-text-primary, #14141E)',
-          transition: 'border-color 0.15s, box-shadow 0.15s',
+          transition: 'border-color var(--motion-duration-fast) var(--motion-easing-standard), box-shadow var(--motion-duration-fast) var(--motion-easing-standard)',
           ...fieldBoxStyle({ hovered, focused, invalid: isInvalid, disabled: Boolean(disabled) }),
         }}
         {...props}

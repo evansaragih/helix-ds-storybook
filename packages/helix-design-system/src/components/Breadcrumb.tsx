@@ -25,7 +25,7 @@ const crumb = (active: boolean, hovered: boolean): React.CSSProperties => ({
   backgroundColor: hovered ? 'var(--color-container-tertiary, #EEEEEE)' : 'transparent',
   color: active ? 'var(--color-text-primary, #14141E)' : 'var(--color-text-tertiary, #828282)',
   fontFamily: 'var(--font-family-body)', fontWeight: 400, fontSize: 13, lineHeight: '19.2px', letterSpacing: '-0.01px',
-  textDecoration: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background-color 0.15s',
+  textDecoration: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard)',
 });
 
 function Crumb({ item, active, as }: { item: BreadcrumbItem; active?: boolean; as?: 'button' }) {

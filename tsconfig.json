@@ -14,5 +14,5 @@
     "strict": true,
     "types": ["vite/client"]
   },
-  "include": ["src", ".storybook"]
+  "include": ["src", ".storybook", "nusantics-landing-page"]
 }

@@ -88,7 +88,7 @@ export const VerificationCodeInput = forwardRef<HTMLDivElement, VerificationCode
         style={{
           width: 48, height: 48, boxSizing: 'border-box', textAlign: 'center', outline: 'none', borderRadius: 8,
           fontFamily: 'var(--font-family-body)', fontSize: 20, lineHeight: '30px', color: 'var(--color-text-primary, #14141E)',
-          transition: 'border-color 0.15s, box-shadow 0.15s',
+          transition: 'border-color var(--motion-duration-fast) var(--motion-easing-standard), box-shadow var(--motion-duration-fast) var(--motion-easing-standard)',
           ...fieldBoxStyle({ hovered: false, focused: focusIndex === i, invalid: Boolean(error), disabled }),
         }}
       />

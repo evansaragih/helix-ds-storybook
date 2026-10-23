@@ -54,7 +54,7 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(({
       {thickness === 'thick' && size !== 'xxs' && <span aria-hidden="true" style={{ position: 'absolute', width: inner, height: inner, borderRadius: '50%', backgroundColor: 'var(--color-status-brand-bg, #FEF2E9)' }} />}
       <svg width={d} height={d} viewBox={`0 0 ${d} ${d}`} style={{ position: 'absolute', inset: 0, transform: 'rotate(-90deg)' }} aria-hidden="true">
         <circle cx={d / 2} cy={d / 2} r={r} fill="none" stroke="var(--color-container-tertiary, #EEEEEE)" strokeWidth={w} />
-        <circle cx={d / 2} cy={d / 2} r={r} fill="none" stroke="var(--color-brand-primary, #F57E20)" strokeWidth={w} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)} style={{ transition: 'stroke-dashoffset 0.3s ease' }} />
+        <circle cx={d / 2} cy={d / 2} r={r} fill="none" stroke="var(--color-brand-primary, #F57E20)" strokeWidth={w} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)} style={{ transition: 'stroke-dashoffset var(--motion-duration-slow) var(--motion-easing-standard)' }} />
       </svg>
       {(showLabel || children) && (
         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, textAlign: 'center', fontFamily: 'var(--font-family-body)' }}>

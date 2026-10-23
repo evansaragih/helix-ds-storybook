@@ -1,0 +1,111 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/8. Feature Components" />
+
+# 8. Feature Components
+
+Some components carry domain knowledge — an NPWP upload form, a pool-measurement card, an event-status
+badge. They fail the §2.3 admission test on point 3 and belong in a feature lib.
+
+**They are still first-class, still documented, and still visible to designers.** "Not in the design system"
+must never mean "invisible" — that is how the same form gets designed and built three times.
+
+## 8.1 What makes something a feature component
+
+Any one of these is enough:
+
+- Its name contains a product noun (`Npwp`, `Fastq`, `PoolMeasurement`, `EventStatus`).
+- It knows an API shape — request or response types.
+- It encodes a business rule (which statuses are valid, which fields are required by regulation).
+- It is meaningful in exactly one product domain.
+
+A feature component **composes DS components**. That is the intended direction and is not a DS gap.
+
+## 8.2 Where they live
+
+```
+libs/features/<domain>/
+  src/lib/
+    <feature-name>/
+      <feature-name>.tsx
+      <feature-name>.stories.tsx
+      index.ts
+```
+
+| Rule | |
+|---|---|
+| **Naming** | `<Domain><Thing><Kind>` — `UploadNpwpForm`, `PoolMeasurementCard`, `EventStatusBadge`. Never abbreviate the domain noun away |
+| **Dependency direction** | features → design-system. **Never** the reverse |
+| **Cross-domain** | A feature lib never imports another feature lib. Shared pieces move down to the DS (if generic) or to a shared domain lib (if not) |
+| **Styling** | Semantic tokens only, same as the DS (§1.1). A feature component may not introduce its own colours |
+| **State & data** | May call data-access libs, may own its own state. This is exactly what makes it a feature |
+
+**Mechanism:** Nx tags — `scope:feature-<domain>` may depend on `scope:design-system`; the reverse and
+cross-domain edges are blocked by `@nx/enforce-module-boundaries`.
+
+## 8.3 How the designer manages them
+
+Feature components are **not** in the design system library, so they are not published components and they do
+not get a library page. They are designed in the **product file** where they are used.
+
+That is the correct default, and it works because of one property: a feature component is a **composition of
+published DS instances**. When a designer copies that composition into another product file, the DS instances
+stay linked to the library — tokens, styles and future component updates still propagate. Copy-paste of a
+composition is not the anti-pattern here; copy-paste of *detached* layers is.
+
+**Discovery — the part that needs to be deliberate.** A designer needs to know the composition already exists
+before designing a fourth version of it. Three mechanisms, in order of effort:
+
+| Mechanism | What it is |
+|---|---|
+| **The `Features/` Storybook section** (§8.4) | The canonical index. Grouped by domain, rendered, real. A designer browses it the same way an engineer does |
+| **A `Product Patterns` page** in the product file | Recurring compositions documented as *recipes*: a screenshot, which DS components it composes, and a link to its Storybook story. **Not published components** — documentation |
+| **DS intake** (§7.1) | The moment it is needed in a third place |
+
+**Rule:** a feature composition is documented as a pattern the **second** time it appears. The third time, it
+is an intake request, not another copy.
+
+The distinction that keeps this honest: a **library component** is published, versioned and instance-linked.
+A **pattern** is a documented recipe with no publishing and no guarantees. Confusing the two is how design
+systems accumulate half-owned components that nobody will change because nobody knows who uses them.
+
+## 8.4 They appear in Storybook
+
+One unified Storybook, with feature components in their own top-level section:
+
+```
+Charter/
+Foundations/
+Atomic/ · Molecule/ · Organism/ · Template/ · Page/     ← the design system
+Features/
+  Causa/
+  CeKolam/
+  Shared/
+Releases/
+```
+
+**Rules for the `Features/` section:**
+
+- Every feature component gets a story. Same story quality bar as the DS (§6.4) — variants, states, a usage
+  note.
+- The docs page opens with a standard banner: *"Feature component — owned by `<team>`, not part of the
+  design system. No API stability guarantee. If you need this in another domain, raise a DS intake request
+  (§7.1)."*
+- Grouped by **domain**, not by tier. Tiers are a design-system concept; features are organised by who owns
+  them.
+- No `component-registry.json` entry, no Figma parity requirement, no `documentationLinks`. They may have a
+  Figma design, and should link to it if so — but 1:1:1 (§4.1) does not apply.
+
+**Why this matters more than it sounds:** the `Features/` section is the promotion pipeline. When the same
+kind of component shows up in two domains, it is visible, and the third occurrence triggers the rule of three
+(§2.3) instead of a fourth copy.
+
+## 8.5 Promotion: feature → design system
+
+1. A third distinct consumer appears.
+2. Someone raises a DS intake request (§7.1) linking the existing implementations.
+3. Triage accepts → the designer defines it in Figma → it is built in the DS to the full DoD.
+4. Feature copies are replaced and deleted. A codemod ships if the API changed (§7.5).
+
+Promotion is a **rewrite to the DS bar**, not a file move. A feature component has not met the DoD, and
+copying it in imports that debt.

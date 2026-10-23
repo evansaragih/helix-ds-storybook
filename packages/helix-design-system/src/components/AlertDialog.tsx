@@ -70,9 +70,10 @@ export const AlertDialog = forwardRef<HTMLDivElement, AlertDialogProps>(({
   return (
     <RadixAlertDialog.Root open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <RadixAlertDialog.Portal>
-        <RadixAlertDialog.Overlay style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,20,30,0.7)' }} />
+        <RadixAlertDialog.Overlay className="helix-dialog-overlay" style={{ position: 'fixed', inset: 0, zIndex: 1000, backgroundColor: 'rgba(20,20,30,0.7)' }} />
         <RadixAlertDialog.Content
           ref={ref}
+          className="helix-dialog-content"
           style={{
             position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 1001,
             width: 592, maxWidth: 'calc(100vw - 48px)', boxSizing: 'border-box', borderRadius: 12, overflow: 'hidden', border: BORDER,

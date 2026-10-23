@@ -1,0 +1,156 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/7. Contribution & Governance" />
+
+# 7. Contribution & Governance
+
+## 7.1 Intake
+
+```
+Request  →  Triage  →  Design  →  Build  →  Release
+```
+
+**Triage** answers one question: *does this belong in the DS at all?* Apply the §2.3 admission test.
+
+| Outcome | Meaning |
+|---|---|
+| **Accept** | Meets the rule of three, domain-free, designed. Enters the design queue. |
+| **Compose** | Achievable from existing DS components. Stays in the feature; we document the recipe. |
+| **Feature-owned** | Carries domain knowledge. Lives in a feature lib (§8). Not a DS gap. |
+| **Defer** | One consumer today. Revisit at the third. |
+
+## 7.2 Who decides what
+
+| Decision | Owner |
+|---|---|
+| Visual design, variants, tokens | DS Design Owner |
+| API, file layout, implementation | DS Engineering Owner |
+| Does this belong in the DS? | Both, via triage |
+| Cross-cutting change (token tier, naming rule, taxonomy) | RFC |
+
+## 7.3 RFCs
+
+Anything that changes a rule in this charter, or affects more than five components, needs a short RFC:
+problem · proposal · alternatives · migration impact · **the recommended default**.
+
+Review window: three working days. If nobody responds, the owner proceeds with the recommended default and
+records that it went unreviewed. The charter is then updated in the same merge request — an RFC that changes
+a rule and does not update this document has not landed.
+
+## 7.4 Versioning
+
+Semver on `@nusantics/ui-kit/design-system`, driven by changesets.
+
+| Bump | When |
+|---|---|
+| **patch** | bug fix; visual fix within the design's intent |
+| **minor** | new component, new prop, new variant — backwards compatible |
+| **major** | removed or renamed prop or component; changed default; changed DOM structure a consumer could depend on |
+
+Every change ships a changeset. A merge request without one does not merge.
+
+### The changelog is published here
+
+One Storybook page — **Releases** — generated from `CHANGELOG.md` at build time, never hand-edited. Each
+release is one entry with two parts:
+
+```md
+## 2.4.0 — 2026-08-14
+
+**What changed**                          ← plain language, read by everyone
+- Badge gained a `subtle` variant.
+- Select now keeps focus after clearing.
+
+**Upgrade notes**                          ← engineers only; omitted when empty
+- `Dropdown` items API replaces `options`. Codemod: `codemods/v2-dropdown-items-api`.
+```
+
+**What changed** is written for a designer: what is visibly different and what is now possible.
+**Upgrade notes** carries breaking changes, migration steps and codemod links, and disappears entirely on
+releases that have none — which is most of them.
+
+Two pages would mean two things to keep in sync and one of them going stale. One page, two headings.
+
+**Mechanism:** the changeset template has both fields. `What changed` is required; `Upgrade notes` is
+required only for a major.
+
+## 7.5 Deprecation and codemods
+
+Nothing is removed without warning. Three steps, always in this order:
+
+**1. Mark.** `@deprecated` JSDoc naming the replacement. Ships in a minor.
+
+**2. Migrate — we ship the migration, not instructions.** Every breaking change lands with a migration
+artifact in `libs/ui-kit/design-system/migrations/`:
+
+```
+migrations/
+  v2-dropdown-items-api/
+    README.md             # what changes, and what a human must still check
+    transform.ts          # AST codemod — only when the change is mechanical
+    transform.spec.ts     # fixtures in / expected out
+    brief.md              # instructions for an AI agent — only when the change needs judgement
+```
+
+### Codemod or agent?
+
+Both. They are not alternatives; they cover different kinds of change.
+
+| Kind of change | Tool | Why |
+|---|---|---|
+| **Mechanical** — import path rewrite, prop rename, enum value remap, wrapper removal. You can describe it without reading the surrounding code | **AST codemod** (`transform.ts`) | Deterministic, runs on 500 files in seconds, re-runnable, testable with fixtures. Reviewers read **one** file — the transform — instead of 500 diffs |
+| **Semantic** — composition changed, the API expresses something differently, per-call-site judgement | **Agent** (`brief.md`) | No transform can decide these correctly. The brief tells the agent the old shape, the new shape, the traps, and what to leave alone |
+
+**The decision rule:** if you have to open the consuming file to know what the change should be, it is not a
+codemod. If you do not, it is — and writing one is almost always cheaper than reviewing the agent's 500
+diffs.
+
+**Where AI actually helps here:** an agent *writes the transform*. That is the leverage — one authored,
+tested transform instead of five hundred edited files. Ask an agent to migrate 500 files directly and you
+inherit 500 things to review, non-deterministically.
+
+Same technology as public codemod registries — AST transforms via jscodeshift or ast-grep. We do not need the
+registry: our consumers are all in this repository, so the transforms live next to the change that caused
+them.
+
+**Rules:**
+
+- Written **in the same merge request as the breaking change**, never afterwards.
+- A `transform.ts` has fixture tests. A transform nobody trusts does not get run.
+- The `README.md` states explicitly what the migration **cannot** handle, so humans know what to check.
+- We run it across this repository ourselves.
+- Visual snapshots are the acceptance gate for both paths.
+- The changeset's **Upgrade notes** links it.
+
+**3. Remove.** In the next major, once every in-repo consumer is at zero.
+
+The same three steps apply to tokens.
+
+## 7.6 Gen2 policy — closed for extension, open for sanctioned use
+
+Feature work does not stop for the migration, and some gen2 components have no gen3 equivalent yet. So the
+rule is not a blanket freeze:
+
+| | Rule |
+|---|---|
+| ❌ **Never** | Create a new component inside `ui-dashboard` or `ui-landing-page` |
+| ❌ **Never** | Import a gen2 component **that has a gen3 equivalent**, from a file created after ratification |
+| ✅ **Allowed** | Import a **sanctioned** gen2 component — one with no gen3 equivalent yet |
+| ✅ **Allowed** | Bug fixes to sanctioned gen2 components |
+
+**The sanctioned list is data, not policy.** It is derived from the migration tracker: any component whose
+status is not `Done` is sanctioned. As each gen3 component lands, its gen2 counterpart leaves the list
+automatically, and eslint starts rejecting new imports of it.
+
+**Mechanism:** eslint `no-restricted-imports` reading the generated sanctioned list. The list's length is the
+burn-down metric — no separate reporting needed.
+
+This keeps the guarantee that matters (gen2 never grows) without pretending feature delivery can wait for
+the largest components.
+
+**Ratified 2026-08-16 (R2): the gen3 table is out of scope for item 30's cycle 1.** It needs its own scope
+meetings — which capabilities the gen3 table must carry, and what the designer needs to specify that the gen2
+implementation currently only expresses in code — before anything is built. Until then the gen2 table stays
+sanctioned and eslint keeps allowing it; it stays the largest entry on the sanctioned list. The Figma side is
+firmed up regardless (`Table` / `Table Cell` / `Table Row` get a real `❖ ORGANISM` page now), only the code
+build is deferred.

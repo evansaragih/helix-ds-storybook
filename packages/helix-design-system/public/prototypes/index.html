@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prototypes | Helix Design System</title>
+  <meta name="description" content="HTML prototypes built with the Helix Design System.">
+  <link rel="icon" href="/prototypes/_shared/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/prototypes/_shared/theme.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; background: var(--color-bg-page); color: var(--color-text-primary); font-family: var(--font-family-body); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: var(--spacing-32) var(--spacing-48) 80px; }
+    .back { display: inline-block; margin-bottom: var(--spacing-24); font-size: 13px; color: var(--color-text-tertiary); text-decoration: underline; }
+    h1 { margin: 0 0 var(--spacing-8); font-family: var(--font-family-heading); font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+    .lead { margin: 0 0 var(--spacing-32); font-size: 14px; line-height: 1.6; color: var(--color-text-tertiary); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--spacing-24); }
+    .card {
+      display: flex; flex-direction: column; padding: 4px 4px 16px;
+      background: var(--color-container-primary); border: .5px solid var(--color-stroke-subtle); border-radius: 12px;
+      box-shadow: 0 8px 8px rgba(0,0,0,.1);
+    }
+    .preview {
+      display: flex; align-items: center; justify-content: center; height: 128px; margin-bottom: 12px; padding: 16px;
+      background:
+        linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) 0 24px / 100% .5px no-repeat,
+        linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) 0 calc(100% - 24px) / 100% .5px no-repeat,
+        linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) 24px 0 / .5px 100% no-repeat,
+        linear-gradient(var(--color-stroke-subtle), var(--color-stroke-subtle)) calc(100% - 24px) 0 / .5px 100% no-repeat,
+        var(--color-container-secondary);
+      border: .5px solid var(--color-stroke-subtle); border-radius: var(--radius-lg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: var(--color-text-secondary); text-align: center; overflow-wrap: anywhere;
+    }
+    .title { padding: 0 12px; font-size: 16px; font-weight: 500; line-height: 24px; letter-spacing: -.16px; }
+    .count { padding: 0 12px 8px; font-size: 13px; color: var(--color-text-tertiary); }
+    .pages { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0 12px; list-style: none; }
+    .pages a { font-size: 13px; line-height: 22px; color: var(--color-text-secondary); text-decoration: underline; }
+    .pages a:hover { color: var(--color-brand-primary-hover); }
+    a:focus-visible { outline: 2px solid var(--color-brand-primary-ring); outline-offset: 2px; border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="back" href="/">Helix Design System</a>
+    <h1>Prototypes</h1>
+    <p class="lead">HTML mockups built with Helix tokens. Each card is a folder under <code>/prototypes</code>.</p>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="p1">
+        <div class="preview">nusantics-landing-page/</div>
+        <h2 class="title" id="p1">Nusantics Landing Page</h2>
+        <div class="count">3 pages</div>
+        <ul class="pages">
+          <li><a href="/prototypes/nusantics-landing-page/draft-2/index.html">Landing page (Draft 2)</a></li>
+          <li><a href="/prototypes/nusantics-landing-page/draft-2/product.html">Product page (Draft 2)</a></li>
+          <li><a href="/prototypes/nusantics-landing-page/index.html">Landing page (Draft 1)</a></li>
+        </ul>
+      </section>
+
+      <section class="card" aria-labelledby="p2">
+        <div class="preview">nusantics-research-dashboard/</div>
+        <h2 class="title" id="p2">Nusantics Research Dashboard</h2>
+        <div class="count">3 pages</div>
+        <ul class="pages">
+          <li><a href="/prototypes/nusantics-research-dashboard/login.html">Login</a></li>
+          <li><a href="/prototypes/nusantics-research-dashboard/register.html">Registration</a></li>
+          <li><a href="/prototypes/nusantics-research-dashboard/otp.html">OTP verification</a></li>
+        </ul>
+      </section>
+
+      <section class="card" aria-labelledby="p3">
+        <div class="preview">plotly-workspace/</div>
+        <h2 class="title" id="p3">Plotly Workspace</h2>
+        <div class="count">6 pages</div>
+        <ul class="pages">
+          <li><a href="/prototypes/plotly-workspace/nusantics-beranda-mock.html">Home (Beranda)</a></li>
+          <li><a href="/prototypes/plotly-workspace/nusantics-run-mock.html">Run list</a></li>
+          <li><a href="/prototypes/plotly-workspace/nusantics-run-empty-mock.html">Run list, empty</a></li>
+          <li><a href="/prototypes/plotly-workspace/nusantics-run-credit-mock.html">Run list, out of credit</a></li>
+          <li><a href="/prototypes/plotly-workspace/nusantics-analisis-lanjutan-mock.html">Advanced analysis</a></li>
+          <li><a href="/prototypes/plotly-workspace/biomeinsight-viewer-mock.html">BiomeInsight viewer</a></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

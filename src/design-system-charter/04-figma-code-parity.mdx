@@ -1,0 +1,220 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/4. Figma ↔ Code Parity" />
+
+# 4. Figma ↔ Code Parity
+
+This is the section that makes designers and engineers speak the same language.
+
+## 4.1 The 1:1:1 rule
+
+> **One public Figma component set ↔ one code file ↔ one Storybook story set.**
+
+| Face | Identity |
+|---|---|
+| Figma | one **component set** named `Group / Name` |
+| Code | one file `lib/{tier}/{name}.tsx` |
+| Storybook | one story set titled `{Tier}/{Name}` |
+
+A public Figma component with no code file is a **backlog item**. A code file with no Figma component is a
+**violation** — it means undesigned UI shipped.
+
+## 4.1b Family pages: one folder, one file per set
+
+A family page (§5.1) can hold several public component sets, not just one. §4.1's 1:1 rule still applies **per
+set** — each set still gets exactly one file — the only open question is whether those files sit flat under
+`lib/{tier}/` or share a subfolder.
+
+**Rule:** promote to a subfolder only when the page's sets genuinely **compose one another** — one set's design
+imports or nests another (`InputUpload` composes `Dropzone`; `AvatarGroup` wraps `Avatar`). Each set still gets
+its own file inside the folder, barrel-exported via `index.ts`. Independent siblings that don't compose each
+other (`ProgressBar` vs `ProgressCircle`) stay flat — separate files, no shared folder, even where Figma groups
+them on one page.
+
+**Tier:** a family folder's tier is the **highest tier among its members**. Composition is what creates the
+folder, and the composing member sets the ceiling — `Avatar` alone would be atomic, but `AvatarGroup`/
+`AvatarLabelGroup` compose multiple `Avatar`s into a molecule, so the whole `avatar/` folder lives under
+`molecule/`. This only fires when composition is present; a family whose members are same-tier siblings that
+don't compose each other still gets the folder (for organization), at that one tier, no promotion:
+
+```
+lib/atomic/menu-item/
+  ├─ menu-item.tsx        ↔ Figma set "Menu Item"
+  ├─ menu-header.tsx      ↔ Figma set "Menu Header"
+  ├─ menu-sub-header.tsx  ↔ Figma set "Menu Sub Header"
+  └─ index.ts             (barrel)
+```
+
+## 4.2 Public parents map to code. Internals map to nothing.
+
+This is how designers already work, and it is correct — keep it.
+
+A designer builds a component from private sub-parts: `_alert` holds the base anatomy, a container layer adds
+the rounded/square variant, and the public parent assembles them. **Only the public parent maps to code.**
+
+| Figma | Code |
+|---|---|
+| `Alert` (public component set) | `lib/molecule/alert.tsx`, exported |
+| `_alert` (private base) | internal JSX inside that same file — no export, no registry entry, no story |
+
+**Rules:**
+
+- Public components have no prefix. Private sub-parts are prefixed `_`.
+- `_`-prefixed components are **never** published as part of the library API, never appear in the registry,
+  never get a story.
+- An engineer implementing `Alert` reads only the public parent's properties. Whether the designer built it
+  from one layer or six is a Figma implementation detail, exactly as the component's internal JSX is a code
+  implementation detail.
+
+This mirrors §2.7 precisely: `DropdownItem` is an export of `dropdown.tsx` because it is meaningless alone;
+`_alert` is internal to `Alert` for the same reason.
+
+## 4.3 Every prop a consumer needs lives on the parent
+
+**Rule:** if a variation matters to a consumer, it is a **variant property on the public parent**, whatever
+the internal structure. The parent's variants configure the nested instances; consumers never reach inside.
+
+Figma supports this two ways:
+
+| Mechanism | Use when |
+|---|---|
+| **Declare a variant property on the parent**, and wire each parent variant to configure the nested instance | Default. The prop name is chosen deliberately and matches the code prop |
+| **Expose properties from nested instances** (Figma's nested-instance property exposure) | Only when the child's property name is already exactly the right public prop name — pure pass-through |
+
+Prefer the first. Exposed nested properties inherit the child's naming, which is how `_alert`'s internal
+vocabulary leaks into the public API and stops matching code.
+
+**Test:** open the public parent, look at its properties panel. That list, and only that list, is the
+component's props in code. If an engineer has to open `_alert` to find a variation, the parent is incomplete.
+
+## 4.4 Naming rule
+
+Figma is Title Case with `/` grouping; code is kebab-case. The mapping must be **mechanical**:
+
+```
+Figma  "Buttons / Icon Pill"  →  code  atomic/button  (kind="icon-pill")
+Figma  "Switch Button"         →  code  molecule/switch
+```
+
+**Rule:** `figmaName.split('/').last → kebab-case` equals the code file name, **or** the difference is
+recorded in the registry (§4.7). There is no third option.
+
+Component-set names are unique within the library. Nothing is named `Old`, `v2` or `Copy`.
+
+## 4.5 Variants are properties, not components
+
+**Rule:** a variation of one component is a **variant property** on one component set. Never a separate
+component distinguished by its name path.
+
+`Alert / Error` and `Alert / Success` as two components means severity cannot be toggled, cannot map to a
+prop, and cannot be read by tooling. One `Alert` set with `Status = Info · Success · Warning · Error` can do
+all three.
+
+### Variant property ↔ prop mapping
+
+The Figma variant property **names and values** are the component's prop names and values.
+
+| Figma property | Prop |
+|---|---|
+| `Variant` = `Primary` / `Secondary` | `variant="primary" \| "secondary"` |
+| `Size` = `Small` / `Medium` / `Large` | `size="sm" \| "md" \| "lg"` |
+| `State` = `Default` / `Hover` / `Focus` / `Active` / `Disabled` / `Loading` / `Error` | rendered state, **not** a prop (except `disabled`, `loading`, `error`) |
+
+`State` is never a prop except where genuinely controlled (`disabled`, `loading`, `error`). Hover, focus and
+active are CSS.
+
+**State vocabulary.** The full set is `Default · Hover · Focus · Active · Disabled · Loading · Error`. A
+component only needs the states its real interaction model has — a static/decorative component may have none
+beyond `Default`; a button needs most of them. Whichever subset applies, name them from this list exactly;
+don't invent synonyms (`Pressed`, `Highlighted`, `Invalid`, …).
+
+**`Error` here means the component's own validation/interaction failure** (a form control rejecting the value
+it was given — red border, error message) — distinct from a *content*-state error (data failed to load), which
+is §6.8 `D7`'s concern, not this one. A component can legitimately have both: `State=Error` for "you typed
+something invalid" and a separate empty/error content state for "the service backing this field is down."
+
+**`Active` means the transient pressed state** — mousedown/touchstart until release — distinct from `Hover`
+(pointer over, not pressed) and `Focus` (keyboard/programmatic focus ring). It is not a persistent value state:
+a nav item that stays visually "current" after being clicked is a `Selected`/`Current` variant property, not
+`State=Active`.
+
+### 4.5b Property names must not shadow reserved identifiers
+
+This rule applies to **every** `componentPropertyDefinitions` entry on the public parent — `VARIANT`,
+`BOOLEAN`, `TEXT`, and `INSTANCE_SWAP` alike, not just variant dimensions. A boolean toggle or a text override
+becomes a prop exactly the same way a variant does; a name collision doesn't care which property type produced
+it.
+
+**Rule:** a Figma property name that, once turned into a prop (§4.5's own mapping — strip the `#nodeId`
+suffix, camelCase), equals `key`, `ref`, `children`, `dangerouslySetInnerHTML`, `className`, `class`, or
+`style` is **never allowed**, no exceptions. These collide with either a structural React identifier or the
+`className`/root-element escape hatch §2.8 already reserves — the resulting prop is type-incompatible with
+what the component's root element already expects in virtually every real case. A Figma `Style` variant
+(visual style, e.g. `Primary`/`Secondary`) is the recurring instance of this: name it `Kind`/`Hierarchy` in
+Figma so it maps to `variant` per §2.8, not `Style` → `style`.
+
+A wider set of names — global HTML attributes and common native element attributes (`id`, `title`, `role`,
+`hidden`, `type`, `value`, `disabled`, `href`, and others; full list in §2.8's appendix) — only collide when
+the Figma property's *meaning* diverges from the native attribute's own meaning. A boolean `Disabled` property
+mapping to `disabled: boolean` is correct, not a collision; a `Type` variant with values unrelated to the
+native `type` attribute's own meaning is. This half needs a human read, not a mechanical name match — see
+§2.8.
+
+## 4.6 Descriptions carry usage, not credit
+
+The Figma `description` field is what Dev Mode and every AI agent read first. It answers *when do I use this,
+and what do I use instead*. Attribution belongs on the cover page.
+
+**Template:**
+```
+<one line: what it is>. Use for <situation>. Do not use for <situation> — use <other component>.
+```
+
+No `Code:` import line — that was a manual substitute for a Dev-Mode-generated snippet (§4.7) and required a
+code path that doesn't exist yet at design time. The Figma↔code binding lives in `component-registry.json`
+(§4.7) instead, which is validated rather than free-text.
+
+## 4.7 The Component Registry is the binding
+
+Figma **Code Connect is not available on our plan** (Figma Professional). The Figma ↔ code binding therefore
+lives **in the repository**, where it is version-controlled, reviewable, and directly greppable by agents.
+
+**Rule:** every public Figma component set has an entry in `component-registry.json`. No entry → the
+component is not Done (§6).
+
+```jsonc
+{
+  "codePath": "lib/atomic/button.tsx",
+  "export": "Button",
+  "tier": "atomic",
+  "figmaComponentSet": "Buttons / Button",
+  "figmaKey": "e3f8e2074238be62dc40f73207e2ca2c94259f95",   // stable published id; survives renames
+  "figmaNodeUrl": "https://www.figma.com/design/GWzBKGr…?node-id=…",
+  "storyId": "atomic-button--docs",
+  "propMap": { "Variant": "variant", "Size": "size", "State": null }
+}
+```
+
+### What this recovers, and what it does not
+
+| Code Connect gives you | Our replacement | Parity |
+|---|---|---|
+| "Which code component is this frame?" for agents | registry lookup — a JSON file agents grep | ✅ equal, arguably better: in-repo and diffable |
+| Generated snippet inside Figma Dev Mode | none — retired 2026-09; the `Code:` description line was manual, unvalidated, and duplicated the registry | ❌ accepted gap |
+| Figma → docs link | component `documentationLinks` → the Storybook story URL | ✅ available on Professional |
+| Storybook → Figma link | `addon-designs` `parameters.design` (§4.8) | ✅ equal |
+| Drift detection | `design-system-docs-sync --registry-check`: registry vs Figma vs barrel exports (§9) | ✅ equal |
+
+The only genuine loss is auto-generated snippets rendered inside Figma.
+
+### Direction of travel
+
+`docs/reference/*` stays the machine-readable index until the registry and this Storybook are live. Then the
+registry becomes the source of truth for *which component exists*, Storybook for *how it behaves*, and
+`docs/reference/*` is generated from both rather than written. It is consumed by five skills, so it is
+regenerated, not deleted, and the paths stay.
+
+## 4.8 Every story links to its frame
+
+**Rule:** every story sets `parameters.design` to its Figma node URL. One line per story, and it is what
+makes side-by-side review possible without opening two applications.

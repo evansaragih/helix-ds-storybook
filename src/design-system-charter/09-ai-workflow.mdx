@@ -1,0 +1,290 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/9. AI Workflow" />
+
+# 9. AI Workflow
+
+AI agents are contributors here, held to the same Definition of Done as anyone else. This section lists the
+skills, and — more importantly — the standard workflows that call them.
+
+<div
+  style={{
+    padding: '12px 16px',
+    border: '1px solid #f0b429',
+    borderRadius: 8,
+    background: 'rgba(240,180,41,0.08)',
+  }}
+>
+  Skills marked <b>Proposed</b> do not exist yet. They are listed so the kickoff
+  can agree what is worth building and in what order — not as a commitment to
+  build all of them.
+</div>
+
+## 9.1 What makes agents safe here
+
+1. **Deterministic component resolution** — `component-registry.json` (§4.7) and this Storybook, not prose
+   docs. An agent looks a component up; it does not infer one.
+2. **Enforced rules, not documented rules** — an agent follows a lint error every time and a markdown
+   convention only sometimes. This is why every rule in this charter names a mechanism.
+3. **Generated reference, not written reference** — `docs/reference/*` is regenerated from code and Figma, so
+   it cannot drift from either.
+4. **Agents propose, humans ratify** — an agent may draft a component, a migration, an API diff. Merging is a
+   human decision and the DoD is the checklist.
+
+## 9.2 Skills for the product designer
+
+| Skill             | Status     | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ----------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `figma-inventory` | **Exists** | Enumerates every published component set and variable collection. The audit tool — what is actually published, what is duplicated, what is orphaned                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `token-sync`      | **Exists** | The token pipeline, one call: hygiene-checks Figma variables, exports, diffs against `token.json`, and proposes a tiered replacement (clear/ambiguous/no-match) for every removed token — a mechanical match pass + LLM reasoning pass folded together, so the designer reviews and acknowledges instead of searching from scratch. `--finalize` writes the FE-facing report from whatever's acknowledged so far. Static review app at `docs/artefact/token-resolution/index.html` — designer-run end to end. `--from-external` writes that same report from a diff artifact plus a freeform designer resolution doc, for a diff too large for `index.html` to be usable |
+| `component-check` | **Exists** | One call, complete report: for one component, Figma hygiene (naming, detached values) plus its full Figma↔code alignment (charter §6.8), tiered Design-side/Engineering-side so each role reads what they can act on. The "ready for dev" verdict gates on designer-only (D) codes; engineering/parity codes are reported but never block it. `--all`/`--changed-since` batch the same check across the library and write the tracker — the routine drift check                                                                                                                                                                                                          |
+
+## 9.3 Skills for the frontend engineer
+
+| Skill                                 | Status     | What it does                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `design-system-figma-context`         | **Exists** | Turns a Figma frame URL, a bare component name, a Figma page name (batch), or a code file path into a standardized context block, then generates or updates the component                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `design-system-spec-context`          | **Exists** | Same, from a prose spec                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `design-system-code-gen`              | **Exists** | Generates a library component from a resolved context block — component, Storybook story (all variants, `parameters.design`), and registry entry in one pass. This is the one "translate Figma to code" package; nothing downstream re-generates the story or registry separately                                                                                                                                                                                                                                                                                                                                                                          |
+| `design-system-docs-sync`             | **Exists** | Regenerates `docs/reference/*` after components or tokens change. `--backfill-registry` seeds `component-registry.json` for components that predate it; `--registry-check` validates the registry against the barrel exports and Figma (read-only), including a `DEPRECATED IN FIGMA` category (§9.5 W5) that gates on the registry's own `tier` field, not a new one; `--prune-registry` removes an entry once its file is confirmed deleted (W5 step 7)                                                                                                                                                                                                  |
+| `figma-build` · `figma-feature-build` | **Exists** | Implements a component or a full feature from a Figma frame, for the legacy `ui-dashboard`/`ui-landing-page` libraries. Not for `nusantics-research-dashboard` — that app uses `design-system` exclusively; use `design-system-figma-context` there instead                                                                                                                                                                                                                                                                                                                                                                                                |
+| `component-check`                     | **Exists** | §9.4.1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `ds-migration`                        | **Exists** | Applies an old→new API mapping (§7.5) across `apps/**` + `libs/feature-*/**` — mechanical grep-and-replace where unambiguous, an agent brief everywhere else. `--from-token-report` reads a `token-sync` report; `--component <name>` generates the component's own before/after signature table (diffing a git ref against `HEAD`) and migrates every rename for it in one run; `--api <old> <new>` is the fallback for a single quick rename; `--deprecate <name> [--replacement <name>]` (§9.4.3, §9.5 W5) is the same idea for a component being retired instead of renamed — a tiered swap with a replacement named, a plain usage-report without one |
+
+## 9.4 Skill details
+
+Skills that need more than a line are documented here.
+
+### 9.4.1 `component-check`
+
+One job, asked at two moments by two roles: does Figma agree with code for this component, per the charter,
+and is the Figma side itself clean? A designer runs it right after finishing work in Figma; an engineer runs
+the batch form as the periodic drift check — same scan, same report, different scope. This merges what used
+to be three separate skills (a Figma hygiene linter, a designer-only quick-status card, and an engineer-run
+batch tracker writer) into one, so getting the complete picture on one component never needs more than one
+call.
+
+**What it does, per component:**
+
+1. Reads the Figma side — public component set, its variant properties and values, description, status chip,
+   plus a hygiene pass (detached values, naming) scoped to the component and its page (via `figma-inventory`).
+2. Reads the code side — exported props and their types, story variants, tokens used, registry entry (via
+   `design-system-docs-sync --registry-check` rather than re-implementing that diff).
+3. Diffs them against the 32 `D`/`E`/`P` checklist codes (§6.8), tiered Design-side (gates the verdict) /
+   Engineering-side (reported, never blocks).
+4. For `--all`/`--changed-since`/`--page` only: writes the result into `docs/reference/component-alignment.md`
+   — the ongoing charter-alignment tracker — with a proposed `RESOLUTION` and a one-line note per open code.
+
+**Invocations:**
+
+| Invocation                               | Use                                                                                 |
+| ---------------------------------------- | ----------------------------------------------------------------------------------- |
+| `component-check <name>`                 | the complete single-component report — hygiene + full alignment + verdict, no write |
+| `component-check --page-check <name>`    | hygiene only, no anchor component, no code side                                     |
+| `component-check --page <name>`          | full alignment diff for every component on one page, writes the tracker             |
+| `component-check --all`                  | the full pre-fill that seeds the tracker                                            |
+| `component-check --changed-since <date>` | routine drift check — what moved in Figma or code since the last run                |
+| `component-check` (no argument)          | whole-library hygiene sweep — expensive, monthly/pre-release only                   |
+
+**Why it changes the economics:** without it, aligning the component set means a human opening two
+applications once per component, or a designer and an engineer each running a different tool and comparing
+notes across two conversations. With it, one call produces a filled grid a human reviews and looks only at
+flagged cells.
+
+**Boundaries:** never edits Figma, never edits component source, never sets a row to `Done`. It proposes;
+humans dispose. Not the gen2→gen3 migration tracker — that's a separate engineering classification tracked in
+`docs/maintenance/details/24-gen2-gen3-migration-research/gen2-gen3-component-map.md`.
+
+### 9.4.2 `ds-migration --component`
+
+`component-check` answers "does Figma agree with code, right now." This entry point answers the next
+question, asked once a component's row is realigned: "concretely, what changed in the public API, and which
+of those changes are safe to auto-migrate" — then migrates them, in the same call. This used to be two skills
+(a report generator, then a separate migration runner reading that report); folding the report-generation into
+`ds-migration` itself means a component realignment goes report-then-execute in one run instead of one skill
+handing a file to another.
+
+**What it does:** diffs the component's public API (props, component name, import path) between a git ref and
+current `HEAD`, classifies each concrete change as mechanical (1:1 identifier swap) or needs-agent-brief
+(shape changed) — same two-tier vocabulary `--api` already uses — then runs the normal `--plan`/`--apply`
+pipeline against that mapping.
+
+**Boundaries:** the report-generation step is read-only (diffs git history, never edits Figma or component
+source); `--apply` writes only to `apps/**`/`libs/feature-*/**` consumers, same scope as every other
+`ds-migration` entry point.
+
+For a single quick rename, `ds-migration --api <old> <new>` directly is still simpler — worth reaching for
+`--component` only when a realignment produced more than one rename to migrate.
+
+### 9.4.3 `ds-migration --deprecate`
+
+`design-system-docs-sync --registry-check`'s `DEPRECATED IN FIGMA` category (via `component-check`'s `E14`)
+answers "what's now sitting under `❖ DEPRECATED` in Figma." This entry point answers what to do about it:
+migrate consumers off a component that isn't getting a new shape, it's going away.
+
+**What it does:** with `--replacement <name>` given, generates a mapping the same way `--component` does
+(diffing the deprecated component's public API against its replacement's), but tiers most of it toward
+agent-brief by default — a full component swap is rarely a 1:1 identifier rename — then runs the normal
+`--plan`/`--apply` pipeline against it. Without `--replacement`, skips mapping generation entirely and emits
+only a usage-site report (file, line, current props) — there is nothing to migrate a site _to_, so nothing is
+queued for auto-apply.
+
+**Boundaries:** same posture as every other `ds-migration` entry point — `--plan` (default) reports, never
+writes; `--apply` touches only `apps/**`/`libs/feature-*/**`. Never edits Figma. Never deletes the component
+itself — that's §7.5's Remove step, run once this entry point's own report shows zero remaining consumers.
+
+## 9.5 Standard workflows
+
+Two domains sync from Figma to code — **components** and **tokens** — each covering a new, edited, or
+deleted change without the engineer needing to pre-classify which kind it is before syncing. Five workflows,
+numbered in order:
+
+| # | Workflow | Domain |
+|---|---|---|
+| W1 | Component Sync | Component — new, styling/variant/structure edit, breaking API change, gen2→gen3 migration, or feature-component promotion, all one shared table |
+| W2 | New component, code-led | Component — the one exception where the actor order inverts (spec before design) |
+| W3 | Token Sync | Token — new, edited, or removed variable, all one loop |
+| W4 | Routine drift check | Both — the periodic library-wide sweep |
+| W5 | Component deprecated | Component — the one exception where nothing is being synced, it's being retired |
+
+W1 replaces what used to be five separate component workflows (new-component, restyle, breaking change,
+gen2→gen3, feature-promotion) with one shared table differing only in what triggers step 1 — see the trigger
+variants below it. Each step names the actor and the skill. **Bold** marks a human decision point.
+
+### W1 · Component Sync
+
+The shared path for a new component, a styling/variant/structure change, a breaking API change, a gen2→gen3
+migration, or a feature-component promotion. The mechanics are identical in every case; only the trigger
+(step 1) and an occasional extra cleanup step (step 5) differ — see the trigger variants below.
+
+| #   | Actor    | Step                                                                                                                              | Skill                                      |
+| --- | -------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| 1   | Both     | **Trigger + gate** — see variants below. Any major change is discussed here, before sync, not after                               | `component-check <name>`                   |
+| 2   | Engineer | Sync — generate or update, same call either way                                                                                   | `design-system-figma-context <name\|page>` |
+| 3   | Engineer | Migrate consumers if the public API changed — no diff at all if it didn't, which **is** the confirmation nothing needed to change | `ds-migration --component <name>`          |
+| 4   | Engineer | **Review the visual snapshot diff** — the real gate, regardless of trigger                                                        | —                                          |
+| 5   | Engineer | Changeset (`patch`/`minor`/`major` per §7.4); cleanup below if the trigger calls for it                                           | `design-system-docs-sync`                  |
+
+**Trigger variants (step 1):**
+
+| Trigger                                                                                                         | Before step 1                                                                                                                                                                                                                                                                    | Extra at step 5                                                                                                                         |
+| --------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| New component, design-led (the default path)                                                                    | Designer: **intake** — admission test (§2.3) → **triage:** Accept/Compose/Feature-owned/Defer (§7.1) → design on the right tier page, DoD design half (§6.1) → set status `Ready for Dev`                                                                                        | —                                                                                                                                       |
+| Designer changes styling, a variant, or structure (the most frequent trigger, and the one that silently drifts) | Designer changes the component in Figma, publishes, confirms it's token-driven not a detached value, hands off: component name + what changed                                                                                                                                    | —                                                                                                                                       |
+| Breaking API change                                                                                             | Engineer: **RFC if it affects more than five components (§7.3)**; implement, keep the old API `@deprecated`                                                                                                                                                                      | Changeset carries `Upgrade notes` linking the migration; §7.5 governs removing the old API in the next major once consumers are at zero |
+| Gen2 → gen3 migration                                                                                           | Tracker row is `Ready for Dev` (§10); confirm alignment is still current — mechanism undecided, see the migration-research folder's "Under revision" banner; close the gen3 gap first if `PARTIAL`/`MISSING-BUILD` (this trigger's own step 1–2, i.e. treat as design-led above) | **Delete the gen2 file in the same MR**; tracker row → `Done`                                                                           |
+| Promoting a feature component into the DS                                                                       | Third consumer appears → intake request (§8.5); **triage: agree the generic API**, stripped of domain knowledge; then treat as design-led above — a rewrite to the DS bar, not a file move                                                                                       | Replace and delete the feature copies                                                                                                   |
+
+> If step 2 needs a code change for a pure colour or spacing change, the component is not token-driven. Fix
+> that, not the value. A pure token change may legitimately produce no diff at all at step 2.
+
+> Step 2 takes the bare component name — it resolves the Figma node itself (via `figma-inventory`), no URL
+> hunting required. The same skill also accepts a Figma page name to batch-apply every component that changed
+> on it, or a code file path to resolve the other direction — see `design-system-figma-context`'s own
+> `resolve-figma-target.md`.
+
+> Step 3 is for a change with more than one rename. A single rename skips straight to
+> `ds-migration --api <old> <new>` — `--component` for one pair is pure overhead.
+
+### W2 · New component, code-led
+
+A spec exists but no design. A rescue path, not the norm — and it always ends with a design.
+
+| #   | Actor    | Step                                               | Skill                        |
+| --- | -------- | -------------------------------------------------- | ---------------------------- |
+| 1   | Engineer | Turn the spec into a context block                 | `design-system-spec-context` |
+| 2   | Engineer | Generate, story, self-review                       | `design-system-code-gen`     |
+| 3   | Designer | **Design it in Figma to match, or reject the API** | —                            |
+| 4   | Both     | Reconcile, then continue at W1 step 4              | `component-check`            |
+
+> A component that stays code-only violates §4.1. This path is not finished until the Figma side exists.
+
+### W3 · Token Sync
+
+Almost entirely designer-driven now — an engineer only re-enters once a `token-resolution-report.md` exists.
+Steps 1–2 are a **loop**, not a line: the designer repeats them as often as Figma keeps moving. Steps 3+ only
+happen once the designer decides they're ready to hand off whatever's confirmed so far — never gated on
+finishing the whole queue.
+
+| #   | Actor    | Step                                                                                                                                                                                                                                                                                                                                                                                    | Skill                                       |
+| --- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| 1   | Designer | Add / rename / re-value a variable in Figma, publish. Then in one call: hygiene-check, export → **writes `token-new.json`** (never `token.json` directly), diff against `token.json`, and get a tiered replacement proposal (clear/ambiguous/no-match) for every removed token — mechanical match pass + LLM reasoning pass, pre-filled before the designer ever opens the review queue | `token-sync`                                |
+| 2   | Designer | Sweep the queue: accept, override, or snooze — bulk-accept the clear tier, only ambiguous/no-match need real attention                                                                                                                                                                                                                                                                  | `docs/artefact/token-resolution/index.html` |
+| 3   | Designer | Generate the FE-facing report from whatever's acknowledged so far                                                                                                                                                                                                                                                                                                                       | `token-sync --finalize`                     |
+| 4   | Designer | **Commit** `docs/artefact/token-resolution/*` + `token-new.json`                                                                                                                                                                                                                                                                                                                        | —                                           |
+| 5   | Engineer | Promote the reviewed `token-new.json` → `token.json`                                                                                                                                                                                                                                                                                                                                    | `token-sync --target token.json`            |
+| 6   | Engineer | Rebuild tokens (all brands), rebuild Storybook for the 3 UI-kit libs                                                                                                                                                                                                                                                                                                                    | —                                           |
+| 7   | Designer | **Review visual snapshots** — `design-system` / `ui-dashboard` / `ui-landing-page`, scoped to stories touching resolved tokens                                                                                                                                                                                                                                                          | —                                           |
+| 8   | Engineer | Migrate consumers outside `libs/ui-kit` (`apps/**`, `libs/feature-*/**`) per the report                                                                                                                                                                                                                                                                                                 | `ds-migration --from-token-report`          |
+| 9   | Engineer | Regenerate token reference docs                                                                                                                                                                                                                                                                                                                                                         | `design-system-docs-sync`                   |
+| 10  | Both     | Changeset. A **renamed or removed** token is breaking — §7.5 applies                                                                                                                                                                                                                                                                                                                    | —                                           |
+
+> Steps 1–2 assume the `index.html` loop. When the diff is too large for that to be a usable review surface,
+> the designer instead reviews a diff Artifact and hands back a freeform resolution doc — `token-sync
+--from-external` reconciles the two into the same `token-resolution-report.md`, so step 3 onward is
+> unchanged either way.
+
+> Step 7's visual review has no automated runner wired for all three libs yet — `design-system` has one on an
+> unmerged branch (`@storybook/test-runner` + `jest-image-snapshot`, `nx run <lib>:visual-test`), `ui-dashboard`
+> and `ui-landing-page` don't. Until that lands and gets extended to all three, review manually: `npx nx run
+>
+> <lib>:storybook` per lib (or the composed `storybook-host`), using each lib's existing brand-theme toolbar,
+scoped to stories touching the tokens in the report — not a blind full sweep.
+
+### W4 · Routine drift check
+
+Before a release, or monthly — whichever comes first. Same logic as W1 step 1's
+single-component check, run at library scope instead of one component: designer-changed-something → check it
+now uses `component-check <name>`; periodic sweep → the same skill's batch modes.
+
+| #   | Actor    | Step                                         | Skill                                      |
+| --- | -------- | -------------------------------------------- | ------------------------------------------ |
+| 1   | Engineer | What moved in Figma or code since last time? | `component-check --changed-since`          |
+| 2   | Engineer | Registry vs barrel vs Figma                  | `design-system-docs-sync --registry-check` |
+| 3   | Designer | Library hygiene (§5.4)                       | `component-check` (no argument)            |
+| 4   | Both     | **Triage findings** — fix now, or open a row | —                                          |
+
+### W5 · Component deprecated
+
+Three granularities, three signals — the signal is picked by scope, not by preference, because only one of
+them is actually available at each scope:
+
+| Scope | Signal | Why this one |
+|---|---|---|
+| One **variant** value, rest of the set still active | Nothing to write anywhere — `component-check <name>`'s existing P3 (variant parity) already flags a code-only value live | The set is still published; a live prop diff is enough on its own |
+| One **component set** on a page that has other active sets (e.g. `Buttons` holds `Button`, `Button Utility`, `Icon Pill`, `Button Group` — retiring just one) | A `Deprecated: <replacement>` (or `Deprecated: none`) line as the first line of *that set's own* description | The page can't move — its siblings are still live. Never split the family across two pages to flag one set: it breaks §5.1's "one page = one family" rule and desyncs the registry's `figmaComponentSet` string (`{page} / {name}`) for nothing |
+| Whole **page/family** retiring (every set on it) | Move the page under `❖ DEPRECATED`, and still put the `Deprecated: <replacement>` line on each set (the page move alone doesn't carry the replacement name) | One physical move instead of N separate description edits; `figma-inventory`'s tier tracking (§4.7/§5.1b) then surfaces it for the whole page in one batch pass |
+
+**The description line is the one signal every downstream skill actually reads.** The page move is a
+Figma-organization convenience for the whole-page case, never a requirement — it additionally earns a free
+batch flag through `design-system-docs-sync --registry-check`'s `DEPRECATED IN FIGMA` category (§9.4's
+registry-tier vs. live-tier diff), but `component-check <name>` and its batch modes read the description
+directly regardless, so a single set on a shared page is caught the exact same way as a whole retired page —
+no separate mechanism needed for either.
+
+| #   | Actor    | Step                                                                                                                                                                            | Skill                                                             |
+| --- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 1   | Designer | Write `Deprecated: <replacement>` (or `Deprecated: none`) as the description's first line on the retiring set(s). Move the page under `❖ DEPRECATED` too, but only if every set on it is retiring | — |
+| 2   | Both     | **Gate** — batch report surfaces every component carrying a `Deprecated:` line, plus its current consumer count | `component-check --changed-since` / `--all`                       |
+| 3   | Engineer | **Mark** (§7.5) — `@deprecated` JSDoc naming the replacement. A manual edit, same as W1's breaking-API-change trigger's own "keep the old API with `@deprecated`" step — nothing to generate here. Minor bump | —                                                                 |
+| 4   | Engineer | **Migrate** — replacement named: tiered mechanical/agent-brief swap; no replacement: usage-report only, nothing exists to migrate to                                            | `ds-migration --deprecate <name> [--replacement <name>]` (§9.4.3) |
+| 5   | Engineer | **Review the visual snapshot diff** on whatever got migrated                                                                                                                    | —                                                                 |
+| 6   | Both     | Repeat step 4 across releases until consumers hit zero                                                                                                                          | —                                                                 |
+| 7   | Engineer | **Remove** (§7.5) — delete code + story, prune the registry entry, delete the Figma node (the set, and the page too if it was moved and is now empty). Major bump              | `design-system-docs-sync --prune-registry`                        |
+
+> Never reuse `❖ EXCLUDED` for this — it already means "never becomes a component" (a CSS override, or
+> already covered by a host component's own primitive); `❖ DEPRECATED` means "was built, now retired." Two
+> different findings, two different tiers.
+
+> The Figma node — set or page — stays put through steps 1–6. Deleting it early is the same violation as
+> naming something `Old`/`v2`/`Copy` (§5.4), just via deletion instead of renaming. It only disappears at
+> step 7, alongside the code.
+
+## 9.6 How a skill earns its place
+
+Same bar as a component:
+
+1. It replaces work that is currently manual and repetitive.
+2. Its output is **reviewable** — a diff, a file, a table. Never an unverifiable assertion.
+3. It is documented with its gotchas, so the next person does not rediscover them.
+4. It has one job. A skill that "syncs everything" cannot be trusted or debugged.

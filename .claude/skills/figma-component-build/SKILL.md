@@ -88,6 +88,8 @@ touching the real component: build both with `createSlot()` under the
 same name, combine, check `componentPropertyDefinitions` has exactly one
 entry for that name.
 
+**Cloning a whole VARIANT via the API is also unsafe when it holds a SLOT (confirmed 2026-10-20 on `_input-field base`).** `variantComponent.clone()` demotes the nested SLOT to a plain FRAME (no `SLOT` node left) *and* drops the `visible` property references on sibling nodes (e.g. `Show Leading Content` on `_leading content small` read back `{}`). The set's `componentPropertyDefinitions` stay intact, so it looks harmless until you inspect the clone. Do not add variants to a set with a slot by scripted `clone()`. Instead ask the user to duplicate the variant in Figma's own UI (select a variant, click the + / Duplicate), which keeps slot and refs, then rename and restyle the new variants by script. Test on a throwaway clone and delete it before touching the real set.
+
 **Side effects of that re-combine to watch for, every time:**
 - **Any existing property with no *live* `componentPropertyReferences` on
   a child node gets silently dropped** by the combine, even if it was a
@@ -778,3 +780,11 @@ variable this build required. If the component is destined for the
 Storybook/code side too, hand off to `helix-design-system`'s new-component
 workflow — but only if code work was actually requested (see scope
 discipline above).
+
+## Migrating instances off a variant axis you are about to delete (learned 2026-10-20, Field State/Filled/Floating)
+
+- **Baseline first.** Before touching any instance, screenshot every direct host (component sets/frames that contain instances of the component) at a fixed `maxDimension`, download and hash them, and compare byte for byte after each step (`PIL.ImageChops.difference(...).getbbox()` locates a diff). Comparing instance width/height alone missed a real regression (nested frames lost a FILL override and the inner box shrank while the instance size stayed the same).
+- **Recipe that was pixel-identical for top-level instances:** capture the nested base instance's non-slot properties and the sizing (`layoutSizingHorizontal/Vertical`) of its frames by name-path, `instance.setProperties({State:'Default', ...})` to a surviving variant of the same set, re-apply the captured nested properties, re-apply the captured sizing, then verify sizes, texts and hash.
+- **Instances nested inside other instances** (instance-level variant overrides): use `instance.swapComponent(survivor)`; `setProperties` leaves dangling nodes (`findOne` then throws "node with id ... does not exist"). A list of targets computed up front goes stale after the first change: re-scan for the next target each time. Handles from `indexOf` on `children` are different objects, so `indexOf` returns -1.
+- **Downstream breakage:** swapping a Field instance inside host component H replaces the nested node ids. Instances of H elsewhere that had overrides on those nested nodes (here `Show Trailing Content` on the nested base in a Select variant) silently lose them. Only hosts you baselined are covered, so list and baseline the consumers of the hosts too, or restore the overrides by hand.
+- Deleting a variant that instances still point to is destructive; migrate every instance first, then verify by re-scan.

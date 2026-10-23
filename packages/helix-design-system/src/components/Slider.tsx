@@ -102,7 +102,7 @@ export const Slider = forwardRef<HTMLSpanElement, SliderProps>(({
         {...aria}
         onFocus={(e) => setFocused(e.currentTarget.matches(':focus-visible'))}
         onBlur={() => setFocused(false)}
-        style={{ position: 'relative', display: 'block', width: 20, height: 20, boxSizing: 'border-box', borderRadius: 9999, transition: 'box-shadow 0.15s, background-color 0.15s, border-color 0.15s', ...thumb }}
+        style={{ position: 'relative', display: 'block', width: 20, height: 20, boxSizing: 'border-box', borderRadius: 9999, transition: 'box-shadow var(--motion-duration-fast) var(--motion-easing-standard), background-color var(--motion-duration-fast) var(--motion-easing-standard), border-color var(--motion-duration-fast) var(--motion-easing-standard)', ...thumb }}
       >
         {showBubble && (
           <span aria-hidden="true" style={{ position: 'absolute', bottom: 'calc(100% + 9px)', left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', pointerEvents: 'none' }}>

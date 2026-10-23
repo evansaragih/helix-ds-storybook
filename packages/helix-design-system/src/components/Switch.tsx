@@ -78,14 +78,14 @@ export const Switch = forwardRef<HTMLButtonElement, SwitchProps>(({
             position: 'relative', flexShrink: 0, width: t.w, height: t.h, padding: 0, borderRadius: 9999, boxSizing: 'border-box',
             border: invalid ? '1px solid var(--primitive-red-70, #991B1B)' : 'none',
             backgroundColor: bg, opacity: disabled ? 0.4 : 1, cursor: disabled ? 'not-allowed' : 'pointer',
-            outline: 'none', boxShadow: focused ? `0 0 0 3px ${BRAND}` : undefined, transition: 'background-color 0.15s, box-shadow 0.15s',
+            outline: 'none', boxShadow: focused ? `0 0 0 3px ${BRAND}` : undefined, transition: 'background-color var(--motion-duration-fast) var(--motion-easing-standard), box-shadow var(--motion-duration-fast) var(--motion-easing-standard)',
           }}
           {...props}
         >
           <span style={{
             position: 'absolute', top: '50%', left: checked ? t.w - t.thumb - t.pad - (invalid ? 1 : 0) : t.pad - (invalid ? 1 : 0),
             width: t.thumb, height: t.thumb, borderRadius: '50%', backgroundColor: '#FFFFFF',
-            transform: 'translateY(-50%)', boxShadow: '0 1px 2px rgba(0,0,0,0.2)', transition: 'left 0.15s',
+            transform: 'translateY(-50%)', boxShadow: '0 1px 2px rgba(0,0,0,0.2)', transition: 'left var(--motion-duration-fast) var(--motion-easing-standard)',
           }} />
         </button>
         {(label || supportingText) && (

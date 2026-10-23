@@ -113,7 +113,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
       onClick={() => { const el = listRef.current; if (el) el.scrollBy({ left: dir * Math.max(120, el.clientWidth * 0.6), behavior: 'smooth' }); }}
       style={{
         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, width: itemH, height: itemH, padding: 0, border: 'none', borderRadius: 8, background: 'transparent',
-        color: 'var(--color-text-secondary, #49494A)', cursor: (dir === -1 ? edge.start : edge.end) ? 'default' : 'pointer', opacity: (dir === -1 ? edge.start : edge.end) ? 0.4 : 1, transition: 'opacity 0.15s',
+        color: 'var(--color-text-secondary, #49494A)', cursor: (dir === -1 ? edge.start : edge.end) ? 'default' : 'pointer', opacity: (dir === -1 ? edge.start : edge.end) ? 0.4 : 1, transition: 'opacity var(--motion-duration-fast) var(--motion-easing-standard)',
       }}
     >
       {dir === -1 ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
@@ -139,7 +139,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({
             display: 'inline-flex', alignItems: 'center', gap: vertical ? 8 : 6, flexShrink: 0, boxSizing: 'border-box', height: itemH,
             padding: vertical ? '8px 12px' : `${H[size].py}px 12px`, border: 'none', borderLeft: look === 'bordered' ? '3px solid transparent' : 'none', borderRadius: look === 'line' ? 0 : radius,
             fontFamily: 'var(--font-family-body)', fontWeight: 500, fontSize: font, lineHeight: 1.3, letterSpacing: '-0.01px', whiteSpace: 'nowrap',
-            cursor: 'pointer', outline: 'none', transition: 'color 0.15s, background-color 0.15s, box-shadow 0.15s',
+            cursor: 'pointer', outline: 'none', transition: 'color var(--motion-duration-fast) var(--motion-easing-standard), background-color var(--motion-duration-fast) var(--motion-easing-standard), box-shadow var(--motion-duration-fast) var(--motion-easing-standard)',
           }}
         >
           {tab.icon && <span style={{ display: 'flex', width: 16, height: 16, flexShrink: 0 }}>{tab.icon}</span>}

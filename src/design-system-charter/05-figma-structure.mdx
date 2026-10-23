@@ -1,0 +1,128 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/5. Figma File Structure" />
+
+# 5. Figma File Structure
+
+Structure in Figma is not decoration. It decides what an engineer can find, what tooling can enumerate, and
+what a designer accidentally publishes.
+
+## 5.1 Page structure
+
+```
+00. Cover
+01. Brand Guideline
+02. Docs Globals            ← documentation chrome (never published as library components)
+---
+❖ FOUNDATION
+  ↳ Color
+  ↳ Typography
+  ↳ Spacing & Radius
+  ↳ Shadow & Effects
+  ↳ Grid
+---
+  ↳ Icons
+  ↳ Brand Assets
+---
+❖ ATOMIC
+  ↳ Buttons · Checkboxes · Dividers · …          one page per component family
+---
+❖ MOLECULE
+  ↳ Selects · Date Pickers · Dialogs · …
+---
+❖ ORGANISM
+  ↳ Tables · Sidebars · Navbars · …
+---
+❖ TEMPLATE
+  ↳ Dashboard Shell · Auth Shell
+---
+❖ PAGE
+  ↳ Error States · Maintenance
+---
+🗑 Trash                     ← nothing here is ever published
+```
+
+**The page groups are the code tiers.** One vocabulary on both sides. If code says `organism/table` and Figma
+says only `Tables`, somebody has to hold the mapping in their head — which is the problem this charter
+exists to remove. The tier test (§2.2) is objective, so a designer can apply it without guessing, and
+re-tiering is a page move.
+
+This also replaces the idea of a separate `PATTERNS` section. Patterns are templates and pages; naming them
+separately creates a sixth category that maps to nothing in code.
+
+**Rules:**
+
+- One page per **component family** (`Buttons`, `Selects`, `Tables`) within its tier — not one page per
+  component. A family page holds the public component sets plus their `_`-prefixed internals.
+- `❖`-prefixed dividers group sections. Numbered prefixes keep documentation pages in order.
+- `Trash` exists so designers can park work, but nothing in it may be published. Publishing state, not page
+  location, decides what is in the library — so check it at publish time rather than assuming.
+
+## 5.1b Tier is a page group, never part of the name
+
+The component keeps its plain name: `Buttons / Button`, not `Atomic / Buttons / Button`.
+
+| Where tier is recorded | |
+|---|---|
+| Figma | the page group it sits under |
+| Code | the folder `lib/{tier}/` |
+| Registry | the `tier` field |
+| Storybook | the story title prefix |
+
+Putting the tier in the component name means re-tiering renames a component — which breaks every instance,
+breaks the registry mapping, and lives in designers' layer lists forever. The page group carries the same
+information and costs nothing to change.
+
+**Ratified 2026-08-16 (R1):** one file, one library — not a separate marketing file or a `ui-marketing` lib.
+Marketing/landing components sit under whichever tier the §2.2 test returns, same as everything else.
+
+## 5.2 Component page anatomy
+
+Every component family page has the same five zones, in this order. **Header and Variants are required for
+every page; Anatomy, States and Usage are recommended but optional for now** — they take real designer time to
+produce and aren't blocking today; revisit once there's headroom to make them mandatory.
+
+| Zone | Required? | Contains |
+|---|---|---|
+| **1. Header** | Required | Component name · status chip · owner · link to the Storybook story |
+| **2. Anatomy** | Optional | The component annotated with its part names — these names become the code's slot/prop names |
+| **3. Variants** | Required | The published component set, all variant properties visible |
+| **4. States** | Optional | default · hover · focus · active · disabled · loading · error (§4.5), plus content states where applicable: empty · loading (data) · error (data) · long text / overflow (§6.8 `D7`) |
+| **5. Usage** | Optional | Do / Don't pairs, and what to use instead |
+
+Private `_`-prefixed sub-parts sit **below** zone 5, visually separated. They are build material, not
+documentation.
+
+## 5.3 Status
+
+Use the existing `Docs / StatusBar` statuses — `Draft` · `To Review` · `Ready for Dev` ·
+`Work In Progress` · `Updated` · `On Hold`. The same vocabulary appears in the migration tracker, so a
+designer reads one set of words in both places.
+
+Status is set on the component page header. A component with no status chip is `Draft`.
+
+## 5.4 Publishing rules
+
+| Rule | Why |
+|---|---|
+| Only **public** component sets are published | `_`-prefixed internals in the picker make engineers implement the wrong thing |
+| **No documentation chrome** in the library | `Docs / StatusBar`, `Cover Template` and similar must not appear in the component picker |
+| **Unique names** across the whole library | Two components named `Divider` make every reference ambiguous — for designers, engineers and tooling alike |
+| **One casing convention: Title Case** | `Avatar Group`, not `Avatar group` or `avatar-group` |
+| **Publish descriptions with the component** | §4.6 — the description is the API doc that Dev Mode shows |
+| **Nothing named `Old` / `v2` / `Copy`** | Deprecate through the tracker, then delete. Never through the name |
+
+## 5.5 Variables
+
+Live in this file, not in individual product files (§1). Collection names are plain ASCII — they become
+filesystem paths in the export.
+
+## 5.6 What tooling expects
+
+The `figma-inventory` skill (§9) enumerates published component sets and variable collections through the
+Plugin API. Everything above exists so that enumeration returns a clean, unambiguous list:
+
+- unique names → the registry can key on them
+- `_` prefix → tooling can filter internals without a maintained exclusion list
+- one page per family → the page name is a usable grouping in the tracker
+- published ⊆ public → what tooling sees is what engineers may use

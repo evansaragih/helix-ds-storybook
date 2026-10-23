@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nusantics | Draft 2</title>
+  <meta name="description" content="Nusantics Landing Page, Draft 2, built from Figma frame 27:2311.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <!-- Marketing Navbar (state: onTop) -->
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a class="nav__logo" href="#top" aria-label="Nusantics home">
+          <img class="nav__logo-light" src="assets/nav-logo.svg" alt="Nusantics" width="131" height="16">
+          <img class="nav__logo-dark" src="assets/nav-logo-dark.svg" alt="" width="131" height="16" aria-hidden="true">
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-audience">For Lab<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-audience" role="menu" aria-label="For Lab" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="#products">For Lab</a>
+                <a class="nav-menu__item" role="menuitem" href="#products">For Clinic</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="#about">About Us</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-products">Products &amp; Solutions<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-products" role="menu" aria-label="Products &amp; Solutions" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="#products">Human Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="#products">Animal Diagnostics</a>
+                <div class="nav-menu__divider" role="separator"></div>
+                <a class="nav-menu__item" role="menuitem" href="#products">Product Pipeline</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="#career">Career</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-knowledge">Knowledge Hub<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-knowledge" role="menu" aria-label="Knowledge Hub" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="#knowledge">Paper &amp; Publications</a>
+                <a class="nav-menu__item" role="menuitem" href="#knowledge">Blog</a>
+              </div>
+            </div>
+          </div>
+          <div class="nav-dd nav-dd--end">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-language"><img class="nav-flag" src="../assets/flag-gb.svg" alt="" width="14" height="14"> EN<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-language" role="menu" aria-label="EN" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="#" lang="en">English</a>
+                <a class="nav-menu__item" role="menuitem" href="#" lang="id">Bahasa Indonesia</a>
+              </div>
+            </div>
+          </div>
+          <a class="btn btn--soft nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
+          <a class="btn btn--primary" href="#contact">Contact Us</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero carousel (Figma Slide 1: 93:70532, Slide 2: 93:70426, Slide 3: 93:70479) -->
+      <section class="hero" id="top" aria-label="Featured" aria-roledescription="carousel">
+        <div class="hero__slides" aria-live="off">
+        <div class="hero__slide hero__slide--1 is-active" role="group" aria-roledescription="slide" aria-label="1 of 3">
+          <div class="hero__body">
+            <div class="hero__copy">
+              <p class="hero__kicker hero-item" style="--i:0">Microbiome</p>
+              <h2 class="hero__title hero-item" style="--i:1">Turn complex DNA data into <br>Microbiome insights</h2>
+              <div class="hero-item" style="--i:2"><a class="btn btn--glass" href="#products">Learn More</a></div>
+            </div>
+            <article class="cc cc--bordered hero__card hero-item" style="--i:3" aria-label="BiomeSeq 16s rRNA PCR Kit">
+              <div class="cc__body"><img class="hero__card-img" src="assets/hero-product-3.png" alt=""></div>
+              <div class="cc__footer">
+                <p class="hero__card-name">BiomeSeq 16s rRNA PCR Kit</p>
+                <a class="btn btn--primary" href="product.html">Read More</a>
+              </div>
+            </article>
+          </div>
+          <img class="hero__orn" src="assets/ornament-rounded-dark.svg" alt="" width="44" height="44" aria-hidden="true">
+        </div>
+        <div class="hero__slide hero__slide--2" role="group" aria-roledescription="slide" aria-label="2 of 3">
+          <div class="hero__body">
+            <div class="hero__copy">
+              <p class="hero__kicker hero-item" style="--i:0">HPV</p>
+              <h1 class="hero__title hero-item" style="--i:1">Eradicating cervical cancer, <br>one screening at a time</h1>
+              <div class="hero-item" style="--i:2"><a class="btn btn--glass" href="#products">Learn More</a></div>
+            </div>
+            <article class="cc cc--bordered hero__card hero-item" style="--i:3" aria-label="PathoScan hrHPV qPCR Kit">
+              <div class="cc__body"><img class="hero__card-img" src="assets/hero-product-1.png" alt=""></div>
+              <div class="cc__footer">
+                <p class="hero__card-name hero__card-name--nowrap">PathoScan hrHPV<br>qPCR Kit</p>
+                <a class="btn btn--primary" href="#products">Read More</a>
+              </div>
+            </article>
+          </div>
+          <img class="hero__orn" src="assets/ornament-rounded-dark.svg" alt="" width="44" height="44" aria-hidden="true">
+        </div>
+        <div class="hero__slide hero__slide--3" data-nav="light" role="group" aria-roledescription="slide" aria-label="3 of 3">
+          <div class="hero__body">
+            <div class="hero__copy">
+              <p class="hero__kicker hero-item" style="--i:0">Shrimp</p>
+              <h2 class="hero__title hero-item" style="--i:1">How Early Detection Helps Shrimp Farmers Avoid Losses</h2>
+              <div class="hero-item" style="--i:2"><a class="btn btn--white" href="#products">Learn More</a></div>
+            </div>
+            <article class="cc cc--bordered hero__card hero-item" style="--i:3" aria-label="ShrimProtect AHPND/EMS">
+              <div class="cc__body"><img class="hero__card-img" src="assets/hero-product-2.png" alt=""></div>
+              <div class="cc__footer">
+                <p class="hero__card-name hero__card-name--nowrap">ShrimProtect<br>AHPND/EMS</p>
+                <a class="btn btn--primary" href="#products">Read More</a>
+              </div>
+            </article>
+          </div>
+          <img class="hero__orn" src="assets/ornament-rounded-dark.svg" alt="" width="44" height="44" aria-hidden="true">
+        </div>
+        </div>
+        <div class="dots" id="hero-dots"></div>
+      </section>
+
+      <div class="content">
+      <div class="ornaments" aria-hidden="true"></div>
+
+      <!-- Find the right test -->
+      <section class="section section--stack" id="products" aria-labelledby="fields-title">
+        <header class="section__head section__head--center">
+          <div class="section__text">
+            <h2 class="section__title" id="fields-title">Find the right test for your field</h2>
+            <p class="section__desc">Pick a field to see its applications, test kits and supported sample types.</p>
+          </div>
+        </header>
+        <div class="fields">
+          <div class="field-group">
+            <h3 class="sub-title">Core Technology</h3>
+            <div class="field-row field-row--center">
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar" src="assets/icon-core.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Microbiome</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar" src="assets/icon-core.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Mastermix</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+            </div>
+          </div>
+          <div class="field-group">
+            <h3 class="sub-title">Human Diagnostics</h3>
+            <div class="field-row">
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar" src="../assets/field-reproductive-icon.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Reproductive Health</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar" src="../assets/field-respiratory-icon.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Respiratory</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar avatar--contain" src="../assets/field-human-icon.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Bloodborne Disease (HBV)</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+            </div>
+          </div>
+          <div class="field-group">
+            <h3 class="sub-title">Animal Diagnostics</h3>
+            <div class="field-row field-row--center">
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar" src="assets/icon-core.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Shrimp</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Our Partners -->
+      <section class="section section--stack" aria-labelledby="partners-title">
+        <header class="section__head section__head--center">
+          <div class="section__text"><h2 class="section__title" id="partners-title">Our Partners</h2></div>
+        </header>
+        <div class="partners">
+          <div class="partners__row"><img src="../assets/partner-1.png" alt="East Ventures"><img src="../assets/partner-2.png" alt="Illumina"><img src="../assets/partner-3.png" alt="Biofarma"><img src="../assets/partner-4.png" alt="Kemenkes"></div>
+          <div class="partners__row"><img src="../assets/partner-5.png" alt="Innoquest"><img src="../assets/partner-6.png" alt="Diagnos Clinical Laboratory"><img src="../assets/partner-7.png" alt="Bio Medika"><img src="../assets/partner-8.png" alt="Mandaya Hospital Group"></div>
+        </div>
+        <div class="dots dots--static" aria-hidden="true"><span class="dots__on"></span><span></span><span></span></div>
+      </section>
+
+      <!-- Media Coverage -->
+      <section class="section" aria-labelledby="media-title">
+        <header class="section__head">
+          <div class="section__text">
+            <h2 class="section__title" id="media-title">Media Coverage</h2>
+            <p class="section__desc">Recent coverage of our recovery, leadership and new products.</p>
+          </div>
+          <a class="btn btn--outline" href="#">See more</a>
+        </header>
+        <div class="cards-3">
+          <article class="news-card"><img class="avatar" src="assets/media-logo-1.png" alt="">
+            <div class="card-copy card-copy--8"><h3 class="news-card__title news-card__title--16">Making a comeback: Nusantics’ CEO on playbook for resilience and agility</h3><p class="news-card__desc">When Nusantics launched its first PCR test kits for Covid-19 in 2020, it seemed destined to be a biotech success story. However, behind the scenes, the company was waging a battle against forces threatening its very existence.</p></div></article>
+          <article class="news-card"><img class="avatar" src="assets/media-logo-1.png" alt="">
+            <div class="card-copy card-copy--8"><h3 class="news-card__title news-card__title--16">New CEO of Indonesia-based Nusantics eyes profitability by 2025</h3><p class="news-card__desc">The CEO reflects on the company’s near-collapse after Covid-19 and its climb back to stability.</p></div></article>
+          <article class="news-card"><img class="avatar" src="assets/media-logo-3.png" alt="">
+            <div class="card-copy card-copy--8"><h3 class="news-card__title news-card__title--16">Indonesia’s Nusantics turns around, launches new products</h3><p class="news-card__desc">After overcoming near-bankruptcy, Indonesian genetics and biotechnology startup Nusantara Genetics (Nusantics) achieved a ninefold increase in EBITDA and reduced its net losses to one-fifth of previous level.</p></div></article>
+        </div>
+      </section>
+
+      <!-- News Highlight -->
+      <section class="section" aria-labelledby="news-title">
+        <header class="section__head">
+          <div class="section__text">
+            <h2 class="section__title" id="news-title">News Highlight</h2>
+            <p class="section__desc">Peer-reviewed evidence and plain-language guides from our scientists.</p>
+          </div>
+          <a class="btn btn--outline" href="#">See more</a>
+        </header>
+        <div class="hub">
+          <article class="paper paper--featured">
+            <div class="paper__media"><img src="assets/news-feature.png" alt=""></div>
+            <div class="paper__foot">
+              <p class="paper__date">September 18, 2025</p>
+              <h3 class="paper__title">Urinary detection of high-risk HPV DNA to enhance cervical cancer screening in developing countries</h3>
+              <p class="paper__sum">Across 876 samples, the hrHPV ReadyMix qPCR Kit reached 96.55% sensitivity on cervical swabs and 98.48% diagnostic accuracy on self-collected urine.</p>
+            </div>
+          </article>
+          <div class="hub__stack">
+            <article class="paper">
+              <div class="paper__media"><img src="assets/news-side-1.png" alt=""></div>
+              <div class="paper__foot">
+                <p class="paper__date">September 18, 2025</p>
+                <h3 class="paper__title">Nusantics Luncurkan PathoScan hrHPV qPCR Kit untuk Skrining/Pemeriksaan HPV dengan Menggunakan Urine dan Swab Serviks</h3>
+                <p class="paper__sum">Untuk mendukung Rencana Aksi Nasional (RAN) Eliminasi Kanker Leher Rahim di Indonesia (tahun 2023-2030) oleh Kementerian Kesehatan Republik Indonesia, melalui kapabilitas utama dalam hal bioteknologi dan molecular diagnostics menggunakan metode PCR dan NGS, Nusantics memberikan solusi alat skrining dengan teknologi tingkat tinggi PathoScan hrHPV qPCR Kit yang mampu mendeteksi 14 Jenis HPV  risiko tinggi (hr) yaitu HPV 16, 18, 52 dan lainnya (31,33,35,39,45,51,56,58,59,66, dan 68)</p>
+              </div>
+            </article>
+            <article class="paper">
+              <div class="paper__media"><img src="assets/news-side-2.png" alt=""></div>
+              <div class="paper__foot">
+                <p class="paper__date">September 18, 2025</p>
+                <h3 class="paper__title">CeKolam by Nusantics: A Modern Solution to Boost Shrimp Production in Indonesia</h3>
+                <p class="paper__sum">Indonesia is one of the world’s largest shrimp exporters, making a significant contribution to the global economy through the production of high-quality shrimp. However, the shrimp farming industry in Indonesia often faces various challenges, particularly disease outbreaks that can diminish both the quality and quantity of shrimp production. Diseases such as White Spot Syndrome Virus (WSSV), Acute Hepatopancreatic Necrosis Disease (AHPND), Enterocytozoon Hepatopenae (EHP), Infectious Myonecrosis Virus (IMNV), Infectious Hypodermal and Hematopoietic Necrosis Virus (IHHNV), Taura Syndrome Virus (TSV), and Decapod Iridescent Virus 1 (DIV-1) frequently cause mass mortality and hinder shrimp growth.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Knowledge Hub -->
+      <section class="section" id="knowledge" aria-labelledby="hub-title">
+        <header class="section__head">
+          <div class="section__text">
+            <h2 class="section__title" id="hub-title">Knowledge Hub</h2>
+            <p class="section__desc">Recent coverage of our recovery, leadership and new products.</p>
+          </div>
+          <a class="btn btn--outline" href="#">See more</a>
+        </header>
+        <div class="cards-3">
+          <article class="news-card"><img class="avatar avatar--contain" src="assets/hub-logo-1.png" alt="">
+            <div class="card-copy card-copy--8"><h3 class="news-card__title">Making a comeback: Nusantics’ CEO on playbook for resilience and agility</h3><p class="news-card__desc">When Nusantics launched its first PCR test kits for Covid-19 in 2020, it seemed destined to be a biotech success story. However, behind the scenes, the company was waging a battle against forces threatening its very existence.</p></div></article>
+          <article class="news-card"><img class="avatar avatar--contain" src="assets/hub-logo-2.png" alt="">
+            <div class="card-copy card-copy--8"><h3 class="news-card__title">New CEO of Indonesia-based Nusantics eyes profitability by 2025</h3><p class="news-card__desc">The CEO reflects on the company’s near-collapse after Covid-19 and its climb back to stability.</p></div></article>
+          <article class="news-card"><img class="avatar avatar--contain" src="assets/hub-logo-3.png" alt="">
+            <div class="card-copy card-copy--8"><h3 class="news-card__title">Indonesia’s Nusantics turns around, launches new products</h3><p class="news-card__desc">After overcoming near-bankruptcy, Indonesian genetics and biotechnology startup Nusantara Genetics (Nusantics) achieved a ninefold increase in EBITDA and reduced its net losses to one-fifth of previous level.</p></div></article>
+        </div>
+      </section>
+
+      <!-- Blog -->
+      <section class="section section--blog" aria-labelledby="blog-title">
+        <header class="section__head">
+          <div class="section__text">
+            <h2 class="section__title" id="blog-title">Blog</h2>
+            <p class="section__desc">Recent coverage of our recovery, leadership and new products.</p>
+          </div>
+          <a class="btn btn--outline" href="#">See more</a>
+        </header>
+        <div class="blog">
+          <div class="blog__row blog__row--wide-first">
+            <article class="blog-card"><img class="blog-card__img" src="assets/blog-1.png" alt=""><span class="blog-card__fade"></span>
+              <div class="blog-card__copy"><h3 class="news-card__title">PCR: A Fast and Accurate<br>Detection Technology in Modern Healthcare</h3><p class="news-card__desc">Every organism, including disease-causing viruses and bacteria, carries genetic material in the form of DNA or RNA. This genetic material holds information that can be used to identify an organism, including pathogens present in a biological sample.</p></div></article>
+            <article class="blog-card"><img class="blog-card__img" src="assets/blog-2.png" alt=""><span class="blog-card__fade"></span>
+              <div class="blog-card__copy"><h3 class="news-card__title">Optimize Shrimp Health with A Structured Monitoring Schedule</h3><p class="news-card__desc news-card__desc--plain">A ninefold increase in EBITDA and net losses cut to one-fifth of the previous level.</p></div></article>
+          </div>
+          <div class="blog__row blog__row--wide-last">
+            <article class="blog-card"><img class="blog-card__img" src="assets/blog-3.png" alt=""><span class="blog-card__fade"></span>
+              <div class="blog-card__copy"><h3 class="news-card__title">Beware of These HPV Types – Some Can Be Fatal!</h3><p class="news-card__desc">Did you know that there are more than 200 types of Human Papillomavirus (HPV) that can infect humans? According to the CDC, most HPV infections are harmless and resolve on their own within a few months. However, certain types, such as high-risk HPV, can cause cancer, including cervical cancer, oropharyngeal cancer, and anal cancer. In fact, WHO reports that HPV is the cause of nearly 99% of cervical cancer cases worldwide, making it a primary concern in reproductive health.</p></div></article>
+            <article class="blog-card"><img class="blog-card__img" src="assets/blog-4.png" alt=""><span class="blog-card__fade"></span>
+              <div class="blog-card__copy"><h3 class="news-card__title">Consume These 5 Foods and Beverages to Fight HPV!</h3><p class="news-card__desc">Did you know that a healthy diet can prevent the progression of HPV, the primary cause of cervical cancer, which ranks as the second-highest cancer case in Indonesia? Absolutely! This effort must, of course, be paired with early screening. Let’s explore how the nutrients in the foods and beverages we consume can serve as a weapon against cervical cancer.</p></div></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Join the team -->
+      <section class="join" id="career" aria-labelledby="join-title">
+        <div class="join__intro">
+          <div class="join__img">
+            <span class="join__back-wrap"><img class="join__back" src="assets/team-back.png" alt=""></span>
+            <img class="join__front" src="assets/team-front.png" alt="Two Nusantics scientists in lab coats">
+          </div>
+          <div class="section__text">
+            <h2 class="section__title" id="join-title">Join the team</h2>
+            <p class="section__desc">Help us make molecular diagnostics accessible across Indonesia.</p>
+          </div>
+          <a class="btn btn--soft" href="#">See more</a>
+        </div>
+        <div class="jobs">
+          <article class="job"><span class="badge">Commmercial (AnimalDx)</span>
+            <div class="card-copy card-copy--8"><h3 class="job__title">Sales Admin (Part Time)</h3><p class="job__meta">Part-Time · Jakarta</p></div><a class="job__apply" href="#">Apply for this role</a></article>
+          <article class="job"><span class="badge">Finance, Accounting, &amp; Tax</span>
+            <div class="card-copy card-copy--8"><h3 class="job__title">Finance, Accounting &amp; Tax Manager</h3><p class="job__meta">Part-Time · Jakarta</p></div><a class="job__apply" href="#">Apply for this role</a></article>
+          <article class="job job--start"><span class="badge">Supply Chain Management</span>
+            <div class="card-copy card-copy--8"><h3 class="job__title">Inventory Management Staff</h3><p class="job__meta">Part-Time · Jakarta</p></div><a class="job__apply" href="#">Apply for this role</a></article>
+        </div>
+      </section>
+      </div><!-- /.content -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="cc cc--gray footer" id="contact">
+      <div class="footer__inner">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <img src="assets/footer-logo.svg" alt="Nusantics" width="218" height="27">
+            <p>Founded in 2020, Nusantics changed the molecular diagnostics landscape in Indonesia.</p>
+          </div>
+          <nav class="footer__col" aria-label="Footer menu" id="about">
+            <p class="footer__head">Menu</p>
+            <a href="#">For Lab</a><a href="#">For Clinic</a><a href="#about">About Us</a><a href="#">Product Pipeline</a><a href="#">Human Diagnostics</a><a href="#">Animal Diagnostics</a><a href="#career">Career</a>
+          </nav>
+          <div class="footer__col footer__col--find">
+            <p class="footer__head">Find Us</p>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Mon - Sat : 8am - 9pm</p>
+              <address>i3L Campus @ Lvl. 3<br>Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung,<br>Jakarta Timur 13210</address>
+            </div>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Contact Us</p>
+              <a href="mailto:nusantics@support.com">nusantics@support.com</a>
+              <a href="tel:+628888888888">(+62) 888 8888 8888</a>
+            </div>
+          </div>
+        </div>
+        <hr class="footer__rule">
+        <div class="footer__bottom">
+          <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
+            <a href="#">Privacy Policy</a><a href="#">Terms of Service</a></p>
+          <div class="footer__social">
+            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
+            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

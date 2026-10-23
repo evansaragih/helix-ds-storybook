@@ -10,7 +10,7 @@ export function EmptyStateSection() {
     <ComponentDocPage
       slug="empty-state"
       title="Empty States"
-      description="A placeholder for lists, tables and search results with no content — no data, no results, an error, or no permission."
+      description="A general state placeholder — pairs an illustration with a message. Covers empty/no-data, no-results, error, and no-permission scenarios today, with room to extend to success/warning flows that need the same pattern."
       usage={[
         { heading: 'Say why, then what next', body: 'Explain why it is empty in one line and offer the action that fills it.' },
         { heading: 'Match the scenario', body: 'Pick the Type that fits — each ships with an illustration and sensible default text.' },

@@ -1,0 +1,93 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/3. Assets" />
+
+# 3. Assets
+
+Icons, logos, illustrations, imagery and fonts. Assets drift more quietly than components — the same logo in
+four `public/` folders looks fine until three of them are a year old.
+
+## 3.1 The four kinds
+
+| Kind | Examples | Lives in | Delivered as |
+|---|---|---|---|
+| **Icons** | `ChevronDown`, `Search`, `Upload` | `libs/ui-icons` | React components, one export each |
+| **Brand assets** | logos, wordmarks, login imagery, favicons | `libs/assets/{shared,nusantics,causa,cekolam}` | static imports |
+| **Illustrations** | empty states, error art, onboarding | `libs/assets/*` | static imports |
+| **Content media** | photos, videos, large marketing imagery | the consuming app's `public/` | URL reference |
+
+**The dividing line:** anything the design system or more than one app depends on is a lib. Anything that is
+page content, or large enough that bundling it is wrong, stays in `public/`. Convention-path files
+(`favicon.ico`, `robots.txt`, `opengraph-image`) always stay per-app — the framework requires them there.
+
+## 3.2 Icons
+
+Icons are the only asset an atomic component may compose (§2.2), so they need the strictest rules.
+
+| Rule | |
+|---|---|
+| **One source** | Every icon in the product comes from `libs/ui-icons`. No inline `<svg>` in a component, no per-app icon folder, no direct icon-library imports in app code |
+| **Naming** | `<Name>Icon` in PascalCase, matching the Figma icon name: `chevron-down` → `ChevronDownIcon` |
+| **Size grid** | 16 · 20 · 24 px. An icon that only exists at 17px is a design bug, not a new size |
+| **Colour** | `fill="currentColor"` / `stroke="currentColor"`. **No hardcoded colours in an icon, ever** — the icon inherits from its context, which is what makes it brand-agnostic |
+| **Geometry** | Square viewBox, consistent optical padding, strokes outlined before export |
+| **Export** | One `.tsx` per icon, individually exported. Never a single barrel with an inline sprite — that defeats tree-shaking |
+| **Sourcing** | Third-party icon sets may seed the library, but every icon we ship is vendored into `ui-icons` and reviewed. Apps never import a third-party icon package directly |
+
+**Figma side:** icons live on an `Assets / Icons` page as published components, one per icon, named to match
+the code export. The icon page is the source; `ui-icons` is generated from it.
+
+**Mechanism:** eslint bans inline `<svg>` in `libs/ui-kit/design-system` and `apps/*`, and bans direct
+imports of third-party icon packages outside `libs/ui-icons`.
+
+## 3.3 Brand assets
+
+Logos and brand imagery are per-brand, and brand isolation matters — a Causa app must not be able to
+accidentally ship the CeKolam logo.
+
+```
+libs/assets/
+  assets-shared/     ← genuinely brand-neutral
+  assets-nusantics/
+  assets-causa/
+  assets-cekolam/
+```
+
+| Rule | |
+|---|---|
+| **Static import, not path string** | `import logo from '@nusantics/assets-causa/logo-full.svg'` — the bundler fingerprints and optimises it, and a missing file is a build error rather than a 404 |
+| **Brand isolation** | Nx tags stop `scope:causa` depending on `assets-cekolam` |
+| **Naming** | `<what>-<variant>.<ext>`: `logo-full.svg`, `logo-mark.svg`, `logo-full-inverse.svg` |
+| **One copy** | An asset appearing in two app `public/` folders is a bug. Move it down |
+| **Formats** | SVG for anything vector. Raster only when it must be raster, and then with dimensions and a modern format |
+
+## 3.4 Illustrations
+
+Illustrations are consumed **by** DS components but are not **part of** them. `EmptyState` takes an
+illustration as a prop; it does not hardcode one. This keeps the DS free of megabytes of art and lets a brand
+supply its own.
+
+## 3.5 Fonts
+
+Loaded once, by the token layer, alongside the typography tokens that reference them. Never per-app, never
+per-Storybook. A font family name appearing in an app is a violation — apps use typography utility classes.
+
+## 3.6 Figma parity for assets
+
+Same principle as components (§4.1), one step looser:
+
+- Icons are **1:1** — one Figma icon component ↔ one `ui-icons` export. Enforced, because icons are numerous
+  and drift invisibly.
+- Brand assets and illustrations are **1:1 by filename**, tracked in the asset lib's README rather than the
+  component registry.
+- Content media has no Figma parity requirement.
+
+## 3.7 Adding an asset
+
+1. Designer adds it to the relevant Figma page and publishes.
+2. Whoever needs it runs the export (icons) or exports the file (brand assets, illustrations).
+3. It lands in the correct lib per §3.1, named per the rules above.
+4. For icons: the new export appears in the icon gallery story automatically.
+
+**Rule:** an asset used by exactly one app, once, still goes in the app. Assets follow the same rule of three
+as components (§2.3) — resist the urge to promote everything.

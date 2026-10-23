@@ -692,6 +692,48 @@ p { margin: 0; }
   animation: helix-dialog-content-hide var(--motion-duration-base) var(--motion-easing-standard);
 }
 
+/* ================================================================
+ * MOTION — shared enter / exit for floating panels
+ * Popover, Select, Dropdown and Tooltip content all get `className="helix-pop"`.
+ * Radix keeps the node mounted until the exit animation ends, so the exit
+ * has to be a real CSS animation on [data-state="closed"]. Direction comes
+ * from Radix's data-side; the panel drifts 4px away from its trigger.
+ * Durations / easings are the --motion-* tokens above — never hard-code.
+ * ================================================================ */
+@keyframes helix-pop-in {
+  from { opacity: 0; transform: translate(var(--helix-pop-x, 0), var(--helix-pop-y, 0)) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes helix-pop-out {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translate(var(--helix-pop-x, 0), var(--helix-pop-y, 0)) scale(0.97); }
+}
+.helix-pop {
+  transform-origin: var(--radix-popover-content-transform-origin, var(--radix-dropdown-menu-content-transform-origin, var(--radix-tooltip-content-transform-origin, center)));
+}
+.helix-pop[data-side="top"]    { --helix-pop-y: 4px; }
+.helix-pop[data-side="bottom"] { --helix-pop-y: -4px; }
+.helix-pop[data-side="left"]   { --helix-pop-x: 4px; }
+.helix-pop[data-side="right"]  { --helix-pop-x: -4px; }
+.helix-pop[data-state="open"],
+.helix-pop[data-state="delayed-open"],
+.helix-pop[data-state="instant-open"] {
+  animation: helix-pop-in var(--motion-duration-base) var(--motion-easing-decelerate);
+}
+.helix-pop[data-state="closed"] {
+  animation: helix-pop-out var(--motion-duration-fast) var(--motion-easing-standard);
+}
+
+/* Reduced motion — one switch for every component. Entrance/exit animations
+ * are dropped (Radix then unmounts immediately) and transitions collapse to
+ * an instant state change. Essential loops (spinners) are left alone. */
+@media (prefers-reduced-motion: reduce) {
+  .helix-pop,
+  .helix-dialog-overlay,
+  .helix-dialog-content { animation: none !important; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+}
+
 @keyframes trace-border {
   from { stroke-dashoffset: 9999; }
   to   { stroke-dashoffset: 0; }

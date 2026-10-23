@@ -1,0 +1,72 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Charter/0. Overview" />
+
+# Nusantics Design System — Charter
+
+The rules we work by. This is the permanent guideline for everyone who touches the design system — product
+designers, frontend engineers, and AI agents.
+
+**Status: RATIFIED 2026-08-17**, with one deliberate exception. Kickoff (item 30 Track 0) closed all `OPEN`
+items but §2.5 (import surface) — that one stays <b style={{color:'#c2410c'}}>OPEN</b> by decision, not by
+oversight: the spike is deferred to cycle 2, and the interim deep-import rule stays in force until it runs.
+DS Design Owner: **Evan**. DS Engineering Owner: **Robby**.
+
+<div style={{padding:'12px 16px', border:'1px solid #f0b429', borderRadius:8, background:'rgba(240,180,41,0.08)'}}>
+<b>What this document is not.</b> The charter never describes today's problems. Current violations,
+migration gaps and cleanup tasks live in <code>docs/maintenance/details/24-gen2-gen3-migration-research/figma-code-audit.md</code>,
+which is deleted when the migration ends. If you find "we currently have X broken" written here, move it
+there.
+</div>
+
+## Why this exists
+
+We run two generations of UI libraries and one Figma library. Designers and engineers describe the same
+component with different names, different variants and different tokens. This charter defines the shared
+language so that:
+
+1. Every foundation, token and component means exactly one thing in Figma, in code, and in Storybook.
+2. A designer and an engineer can hand work to each other without a meeting.
+3. An AI agent can resolve "which component is this?" deterministically, not by guessing.
+
+## The rule behind every rule
+
+> **A convention only exists if something enforces it.**
+
+Every section names both the **rule** and the **mechanism** — a lint rule, a hook, a generator, a skill, a
+review gate. A rule with no mechanism is a wish, and we do not write wishes down here.
+
+Enforcement runs **locally** — eslint, the pre-push hook, and skills invoked on demand. We do not push
+routine checks into CI.
+
+## Sections
+
+| # | Section | Owns |
+|---|---|---|
+| 1 | [Token Architecture](?path=/docs/charter-1-token-architecture--docs) | Tiers, naming, modes, the Figma → code pipeline |
+| 2 | [Taxonomy & Public API](?path=/docs/charter-2-taxonomy-public-api--docs) | The five tiers, prop conventions, what is exported |
+| 3 | [Assets](?path=/docs/charter-3-assets--docs) | Icons, logos, illustrations, fonts — where each lives |
+| 4 | [Figma ↔ Code Parity](?path=/docs/charter-4-figma-code-parity--docs) | 1:1:1 naming, variant↔prop mapping, the component registry |
+| 5 | [Figma File Structure](?path=/docs/charter-5-figma-file-structure--docs) | Pages, component page anatomy, publishing rules |
+| 6 | [Definition of Done](?path=/docs/charter-6-definition-of-done--docs) | The per-component quality bar |
+| 7 | [Contribution & Governance](?path=/docs/charter-7-contribution-governance--docs) | Intake, review, versioning, deprecation, codemods |
+| 8 | [Feature Components](?path=/docs/charter-8-feature-components--docs) | What lives outside the DS, and how it stays discoverable |
+| 9 | [AI Workflow](?path=/docs/charter-9-ai-workflow--docs) | Skills, and the standard workflows that call them |
+| 10 | [Migration Protocol](?path=/docs/charter-10-migration-protocol--docs) | How gen2 → gen3 runs |
+
+## Roles
+
+| Role | Accountable for |
+|---|---|
+| **DS Design Owner** | Figma library: component set structure, variant properties, tokens, descriptions |
+| **DS Engineering Owner** | Code library: public API, DoD enforcement, release, codemods |
+| **Contributors** | Follow the DoD; raise an RFC when a rule blocks them |
+
+Ties are broken by the two owners jointly. If they cannot agree, the default written in this charter wins and
+the disagreement becomes an RFC.
+
+## Scope
+
+Governs `@nusantics/ui-kit/design-system` and `@nusantics/ui-kit/ui-tokens`.
+Companion libraries (`charts-plotly`, `maps`, `pdf-preview`) follow §1 (tokens) and §6 (DoD) but keep their
+own APIs — the DS references them, it does not absorb them.

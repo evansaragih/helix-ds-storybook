@@ -200,9 +200,10 @@ export const componentChangelogs: ComponentChangelog[] = [
   },
   {
     id: 'emptystates', category: 'Molecule', name: 'Empty States', status: 'stable',
-    description: 'Placeholder shown when a list, search, or section has no content yet — pairs an icon and message with an optional primary/secondary call-to-action. Has a compact variant for smaller containers.',
+    description: 'A general state placeholder — pairs an illustration with a message and an optional primary/secondary call-to-action. Covers empty/no-data, no-results, error, and no-permission scenarios today, with room to extend to success/warning flows that need the same pattern. Has a compact variant for smaller containers.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-10-16', version: '0.0.1', summary: 'Reframed the component description from a narrow "no-data/no-results" placeholder to a general state placeholder, matching a Figma rename of the component set from "Empty State" to "State" — intended to extend to success/warning flows later. Component export and prop API are unchanged (EmptyState, EmptyStateType, etc.) — this is a docs/description-only change.' },
     ],
   },
   {
@@ -211,6 +212,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with state stories.' },
       { date: '2026-07-27', version: '0.0.1', summary: 'Added a "Filled" state (non-floating sizes only): a field with a value now keeps the focus-colored border plus a subtle shadow even when not focused, matching Figma\'s new "State=Filled" variant. Added a Filled story.' },
+      { date: '2026-10-15', version: '0.0.1', summary: 'Floating + `required` now marks the field with a red dot on the box\'s top-right corner instead of an asterisk in the label.' },
     ],
   },
   {
@@ -418,6 +420,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Selectable Checkbox or Radio row with title and description.',
     changelog: [
       { date: '2026-10-08', version: '0.0.1', summary: 'Rebuilt from Figma Item page.' },
+      { date: '2026-10-16', version: '0.0.1', summary: 'Hover now matches Figma: the white card turns grey (Colors/Surface/Hover) and the shell keeps its shadow, so the grey outline on hover is gone. Selected still shows the brand edge.' },
     ],
   },
   {
