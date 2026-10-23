@@ -226,9 +226,7 @@ finishing the whole queue.
 
 > Step 7's visual review has no automated runner wired for all three libs yet — `design-system` has one on an
 > unmerged branch (`@storybook/test-runner` + `jest-image-snapshot`, `nx run <lib>:visual-test`), `ui-dashboard`
-> and `ui-landing-page` don't. Until that lands and gets extended to all three, review manually: `npx nx run
->
-> <lib>:storybook` per lib (or the composed `storybook-host`), using each lib's existing brand-theme toolbar,
+> and `ui-landing-page` don't. Until that lands and gets extended to all three, review manually: `npx nx run <lib>:storybook` per lib (or the composed `storybook-host`), using each lib's existing brand-theme toolbar,
 scoped to stories touching the tokens in the report — not a blind full sweep.
 
 ### W4 · Routine drift check
