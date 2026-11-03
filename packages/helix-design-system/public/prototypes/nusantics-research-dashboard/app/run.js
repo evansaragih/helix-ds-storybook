@@ -1,8 +1,8 @@
-/* Run page — list + preview (nusantics-run-mock.html) and the separate empty state (nusantics-run-empty-mock.html).
+/* Run page — list + preview (run.html) and the separate empty state (run-empty.html).
    body[data-mode="list" | "empty"]. Language comes from the shared shell (HelixShell.onLang). */
 (function(){
   var MODE=document.body.dataset.mode||'list';
-  var ANALYSIS='nusantics-analisis-lanjutan-mock.html';
+  var ANALYSIS='analisis-lanjutan.html';
   var $=function(s,r){return (r||document).querySelector(s)};
   var esc=function(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
 
@@ -25,7 +25,7 @@
       s3:'Analisis',s3d:'Jika ada yang ingin diubah, kembali ke step yang sesuai. Setelah konfirmasi, pipeline dimulai dan kredit langsung dipotong.',
       emptyT:'Belum ada run',emptyD:'Mulai analisis sampel pertama Anda dengan membuat run baru. Setiap run memakai kredit sesuai jumlah sampel yang dianalisis.',
       open:function(n){return 'Pilih run '+n},
-      guide:'Panduan',nrT:'Buat Run Baru',nrS:'Konfigurasikan run sebelum mulai pengisian sampel',nrName:'Nama Run',nrNameErr:'Nama run wajib diisi',nrHint:'Kit menentukan jumlah sampel maksimum yang dapat dianalisis dalam satu run',nrKit:'Kit yang Digunakan',nrKitOpt:function(n){return 'BiomeSeq '+n+' reaksi'},nrNeed1:'Kit ini membutuhkan hingga ',nrNeed2:function(n){return n+' kredit'},nrNeed3:'. Saldo Anda cukup untuk menyelesaikan run ini.',nrGo:'Lanjut ke Pipeline',okT:function(n){return 'BiomeSeq 16S — '+n+' Reaksi terdeteksi'},okP:function(n){return n+' kredit akan ditambahkan ke akun Anda.'},dlgT:'Di mana Anda dapat menemukan SKU BiomeSeq Anda?',dlgP:'Temukan kode alfanumerik 16-digit di bagian belakang kartu aktivasi yang ada di dalam Kit BiomeSeq Anda. Cari kode alfanumerik 16-digit yang tercetak di belakang kartu aktivasi di dalam kotak kit Anda.',dlgHelp:'Butuh Bantuan?',dlgClose:'Tutup',skuWhere:'Di mana kode SKU saya?',buyQ:'Belum punya kit? ',buy:'Beli di sini',supQ:'Kode tidak terbaca? Hubungi Support',sup:'WhatsApp Support',gT:'Punya kit BiomeSeq? Kredit-mu sudah menunggu',gP:'Setiap kit BiomeSeq 16S rRNA NGS Kit Bundle yang Anda beli sudah termasuk kredit untuk analisis di Nusantics Research Dashboard. Masukkan kode SKU dari lembar insert produk di dalam kotak kit Anda untuk mengaktifkan kreditnya.',
+      guide:'Panduan',nrKitPh:'Pilih kit',nrKitNeed:'Kit wajib dipilih',nrLow:'Saldo kredit tidak mencukupi',lowT:'Kredit tidak cukup untuk kit ini',lowP:function(k,b){return 'BiomeSeq '+k+' reaksi butuh '+k+' kredit, saldo Anda '+b+' kredit (kurang '+(k-b)+'). Redeem Kode SKU untuk menambah kredit, atau pilih kit dengan jumlah reaksi lebih sedikit.'},leadT:'Hanya Lead yang Dapat Membuat Run',leadD:'Kelompok studi Anda memerlukan persetujuan Lead untuk membuat run baru. Hubungi Lead Anda untuk memulai run ini.',leadRole:'Lead • Genetika dan Bioteknologi Molekuler',contact:'Hubungi',skuNone:'Kode SKU tidak ditemukan. Periksa kembali kode pada kemasan kit BiomeSeq Anda.',skuErrT:'Kode SKU tidak valid',skuErrP:'Kode yang Anda masukkan tidak ditemukan. Periksa kembali dan coba lagi.',skuOkT:'Kode SKU berhasil ditukarkan',skuOkP:function(n){return n+' kredit telah ditambahkan ke akun Anda.'},nrNameTip:'Beri nama yang mudah dikenali, misalnya nama praktikum atau proyek.',nrT:'Buat Run Baru',nrS:'Konfigurasikan run sebelum mulai pengisian sampel',nrName:'Nama Run',nrNameErr:'Nama run wajib diisi',nrHint:'Kit menentukan jumlah sampel maksimum yang dapat dianalisis dalam satu run',nrKit:'Kit yang Digunakan',nrKitOpt:function(n){return 'BiomeSeq '+n+' reaksi'},nrNeed1:'Kit ini membutuhkan hingga ',nrNeed2:function(n){return n+' kredit'},nrNeed3:'. Saldo Anda cukup untuk menyelesaikan run ini.',nrGo:'Lanjut ke Pipeline',okT:function(n){return 'BiomeSeq 16S — '+n+' Reaksi terdeteksi'},okP:function(n){return n+' kredit akan ditambahkan ke akun Anda.'},dlgT:'Di mana Anda dapat menemukan SKU BiomeSeq Anda?',dlgP:'Temukan kode alfanumerik 16-digit di bagian belakang kartu aktivasi yang ada di dalam Kit BiomeSeq Anda. Cari kode alfanumerik 16-digit yang tercetak di belakang kartu aktivasi di dalam kotak kit Anda.',dlgHelp:'Butuh Bantuan?',dlgClose:'Tutup',skuWhere:'Di mana kode SKU saya?',buyQ:'Belum punya kit? ',buy:'Beli di sini',supQ:'Kode tidak terbaca? Hubungi Support',sup:'WhatsApp Support',gT:'Punya kit BiomeSeq? Kredit-mu sudah menunggu',gP:'Setiap kit BiomeSeq 16S rRNA NGS Kit Bundle yang Anda beli sudah termasuk kredit untuk analisis di Nusantics Research Dashboard. Masukkan kode SKU dari lembar insert produk di dalam kotak kit Anda untuk mengaktifkan kreditnya.',
       howT:'Cara menemukan kode SKU-mu:',how1:'Buka kotak kit BiomeSeq',how2:'Cari lembar insert produk, biasanya terselip di bagian atas kotak',how3:'Kode SKU tercetak di lembar tersebut, formatnya diawali dengan "NUS-BQ002"',
       noteP:'Kode terlihat seperti: NUS-BQ002.48-260601-ABC',kitAlt:'Kotak kit BiomeSeq dengan lembar insert berisi kode SKU',
       creditLeft:'Kredit Tersisa',history:'Lihat Riwayat Kredit',active:'kredit aktif',sku:'Kode SKU BiomeSeq',skuHelp:'Kredit dipotong hanya untuk sampel yang lolos validasi, jadi Anda masih bisa melanjutkan jika jumlah sampel aktual lebih sedikit.',
@@ -49,7 +49,7 @@
       s3:'Analysis',s3d:'If anything needs changing, go back to the relevant step. Once confirmed, the pipeline starts and the credits are deducted right away.',
       emptyT:'No runs yet',emptyD:'Start your first sample analysis by creating a new run. Each run uses credits based on the number of samples analysed.',
       open:function(n){return 'Select run '+n},
-      guide:'Guide',nrT:'Create New Run',nrS:'Configure the run before you start entering samples',nrName:'Run Name',nrNameErr:'Run name is required',nrHint:'The kit sets the maximum number of samples that can be analysed in one run',nrKit:'Kit Used',nrKitOpt:function(n){return 'BiomeSeq '+n+' reactions'},nrNeed1:'This kit needs up to ',nrNeed2:function(n){return n+' credits'},nrNeed3:'. Your balance is enough to complete this run.',nrGo:'Continue to Pipeline',okT:function(n){return 'BiomeSeq 16S — '+n+' reactions detected'},okP:function(n){return n+' credits will be added to your account.'},dlgT:'Where can you find your BiomeSeq SKU?',dlgP:'Find the 16-character alphanumeric code on the back of the activation card inside your BiomeSeq Kit. Look for the 16-character alphanumeric code printed on the back of the activation card in your kit box.',dlgHelp:'Need help?',dlgClose:'Close',skuWhere:'Where is my SKU code?',buyQ:"Don't have a kit yet? ",buy:'Buy here',supQ:"Can't read the code? Contact Support",sup:'WhatsApp Support',gT:'Got a BiomeSeq kit? Your credits are already waiting',gP:'Every BiomeSeq 16S rRNA NGS Kit Bundle you buy already includes credits for analysis in the Nusantics Research Dashboard. Enter the SKU code from the product insert inside your kit box to activate them.',
+      guide:'Guide',nrKitPh:'Select a kit',nrKitNeed:'Choose a kit',nrLow:'Not enough credits',lowT:'Not enough credits for this kit',lowP:function(k,b){return 'BiomeSeq '+k+' reactions needs '+k+' credits, you have '+b+' (short by '+(k-b)+'). Redeem an SKU code to add credits, or pick a kit with fewer reactions.'},leadT:'Only a Lead Can Create Runs',leadD:'Your study group needs its Lead to approve new runs. Contact your Lead to start this run.',leadRole:'Lead • Genetics and Molecular Biotechnology',contact:'Contact',skuNone:'SKU code not found. Check the code on your BiomeSeq kit packaging.',skuErrT:'Invalid SKU code',skuErrP:'The code you entered was not found. Check it and try again.',skuOkT:'SKU code redeemed',skuOkP:function(n){return n+' credits have been added to your account.'},nrNameTip:'Use a name that is easy to recognise, such as the course or project name.',nrT:'Create New Run',nrS:'Configure the run before you start entering samples',nrName:'Run Name',nrNameErr:'Run name is required',nrHint:'The kit sets the maximum number of samples that can be analysed in one run',nrKit:'Kit Used',nrKitOpt:function(n){return 'BiomeSeq '+n+' reactions'},nrNeed1:'This kit needs up to ',nrNeed2:function(n){return n+' credits'},nrNeed3:'. Your balance is enough to complete this run.',nrGo:'Continue to Pipeline',okT:function(n){return 'BiomeSeq 16S — '+n+' reactions detected'},okP:function(n){return n+' credits will be added to your account.'},dlgT:'Where can you find your BiomeSeq SKU?',dlgP:'Find the 16-character alphanumeric code on the back of the activation card inside your BiomeSeq Kit. Look for the 16-character alphanumeric code printed on the back of the activation card in your kit box.',dlgHelp:'Need help?',dlgClose:'Close',skuWhere:'Where is my SKU code?',buyQ:"Don't have a kit yet? ",buy:'Buy here',supQ:"Can't read the code? Contact Support",sup:'WhatsApp Support',gT:'Got a BiomeSeq kit? Your credits are already waiting',gP:'Every BiomeSeq 16S rRNA NGS Kit Bundle you buy already includes credits for analysis in the Nusantics Research Dashboard. Enter the SKU code from the product insert inside your kit box to activate them.',
       howT:'How to find your SKU code:',how1:'Open the BiomeSeq kit box',how2:'Look for the product insert, usually tucked in at the top of the box',how3:'The SKU code is printed on that sheet and starts with "NUS-BQ002"',
       noteP:'The code looks like: NUS-BQ002.48-260601-ABC',kitAlt:'BiomeSeq kit box with the insert sheet showing the SKU code',
       creditLeft:'Remaining Credits',history:'View Credit History',active:'active credits',sku:'BiomeSeq SKU code',skuHelp:'Credits are deducted only for samples that pass validation, so you can still continue if the actual number of samples is lower.',
@@ -72,6 +72,7 @@
     lock:'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4',
     gear:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z',
     play:'M6 4l14 8-14 8z',
+    chat:'M3 21l1.7-5A9 9 0 1 1 8 19.3L3 21z',
     check:'m7.5 12.5 3 3 6-6.5',
     tri:'M12 3 2 21h20L12 3zM12 10v5M12 18h.01',
     headset:'M4 14v-2a8 8 0 0 1 16 0v2M4 14h3v5H5a1 1 0 0 1-1-1v-4zM20 14h-3v5h2a1 1 0 0 0 1-1v-4z',
@@ -107,7 +108,7 @@
   }
   var state={page:1,per:10,sel:null};
   /* mock credit balance shared between pages (?credit=0 forces the no-credit flow) */
-  var CREDIT_KEY='nusantics-credit-v2', CREDIT_PAGE='nusantics-run-credit-mock.html';
+  var IDENT_PAGE='identifikasi.html', CREDIT_KEY='nusantics-credit-v2', CREDIT_PAGE='run-credit.html';
   function getCredit(){
     try{var v=localStorage.getItem(CREDIT_KEY); return v===null?0:+v;}catch(e){return 0;}
   }
@@ -129,8 +130,7 @@
   }
   function headBar(){
     return '<h2 class="rn-title" id="rnAllT">'+t('all')+'</h2><div class="rn-head-meta">'+
-      '<span class="rn-chip rn-chip--blue">'+t('total',RUNS.length)+'</span><span class="rn-chip rn-chip--green">'+t('done',count('done'))+'</span>'+
-      '<span class="rn-chip rn-chip--amber">'+t('proc',count('proc'))+'</span><span class="rn-chip rn-chip--red">'+t('fail',count('fail'))+'</span></div>'+
+      '<span class="rn-chip rn-chip--neutral" tabindex="0">'+t('total',RUNS.length)+'<span class="rn-chip__tip" role="tooltip">'+t('done',count('done'))+', '+t('proc',count('proc'))+', '+t('fail',count('fail'))+'</span></span></div>'+
       '<div class="rn-head-actions"><button class="rn-ib" type="button" aria-label="'+t('filter')+'">'+ico('filter')+'</button>'+
       '<button class="rn-btn rn-btn--primary" type="button" data-create>'+ico('plus')+t('create')+'</button></div>';
   }
@@ -188,6 +188,17 @@
       (r?'<div class="rn-card__foot"><a class="rn-btn rn-btn--primary rn-btn--block" href="'+ANALYSIS+'">'+t('detail')+ico('arrow')+'</a></div>':'')+'</section>';
   }
 
+  /* ───────── Toast ───────── */
+  var toastHost;
+  function toast(kind,title,text){
+    if(!toastHost){toastHost=document.createElement('div'); toastHost.className='rn-toasts'; toastHost.setAttribute('aria-live','polite'); document.body.appendChild(toastHost);}
+    var el=document.createElement('div'); el.className='rn-toast rn-toast--'+kind; el.setAttribute('role',kind==='error'?'alert':'status');
+    el.innerHTML='<span class="rn-toast__ic">'+(kind==='error'?solid('fail'):solid('done'))+'</span><div class="rn-toast__tx"><b>'+esc(title)+'</b><p>'+esc(text)+'</p></div><button class="rn-toast__x" type="button" aria-label="'+t_('dlgClose')+'">'+ico('x')+'</button>';
+    var gone=false, close=function(){if(gone) return; gone=true; el.classList.add('is-out'); setTimeout(function(){el.remove()},200)};
+    el.querySelector('.rn-toast__x').onclick=close; toastHost.appendChild(el); setTimeout(close,6000);
+  }
+  var t_=function(k){return t(k)};
+
   /* ───────── Illustration (same anatomy + idle motion as Helix Illustration "lab-flask") ───────── */
   var FLASK='<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M80 139C96.5685 139 110 136.761 110 134C110 131.239 96.5685 129 80 129C63.4315 129 50 131.239 50 134C50 136.761 63.4315 139 80 139Z" fill="#14171E" fill-opacity="0.08"/><path d="M70 32V72L38 122C34.6667 127.333 36 130 42 130H118C124 130 125.333 127.333 122 122L90 72V32H70Z" fill="#FEF2E9" stroke="#14171E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M64 32H96" stroke="#14171E" stroke-width="2.5" stroke-linecap="round"/><path d="M51 104H109L122 122C125.333 127.333 124 130 118 130H42C36 130 34.6667 127.333 38 122L51 104Z" fill="#F57E20"/><path d="M74 117.5C75.933 117.5 77.5 115.933 77.5 114C77.5 112.067 75.933 110.5 74 110.5C72.067 110.5 70.5 112.067 70.5 114C70.5 115.933 72.067 117.5 74 117.5Z" fill="#FEF2E9"/><path d="M92 123.8C93.5464 123.8 94.8 122.546 94.8 121C94.8 119.454 93.5464 118.2 92 118.2C90.4536 118.2 89.2 119.454 89.2 121C89.2 122.546 90.4536 123.8 92 123.8Z" fill="#FEF2E9"/><path d="M80 83C81.6569 83 83 81.6569 83 80C83 78.3431 81.6569 77 80 77C78.3431 77 77 78.3431 77 80C77 81.6569 78.3431 83 80 83Z" fill="#476142"/><path d="M72 54.5C73.3807 54.5 74.5 53.3807 74.5 52C74.5 50.6193 73.3807 49.5 72 49.5C70.6193 49.5 69.5 50.6193 69.5 52C69.5 53.3807 70.6193 54.5 72 54.5Z" fill="#476142"/><path d="M24 44L26.4 49.6L32 52L26.4 54.4L24 60L21.6 54.4L16 52L21.6 49.6L24 44Z" fill="#476142"/><path d="M132 51.5C133.933 51.5 135.5 49.933 135.5 48C135.5 46.067 133.933 44.5 132 44.5C130.067 44.5 128.5 46.067 128.5 48C128.5 49.933 130.067 51.5 132 51.5Z" fill="#F57E20"/></svg>';
   function illo(svg){   /* tag each path by role so CSS can float the body, twinkle the sparkle, drift the dots, rise the bubbles */
@@ -212,7 +223,7 @@
   var creditMsg=null, dlgOpen=false, dlgOpener=null, okDlg=null;   /* okDlg = {n} while the redeem-success alert is up */   /* {ok:bool, text} after a redeem attempt */
   function gcard(icon,title,right,body,o){
     o=o||{};
-    return '<section class="rn-gcard'+(o.white?' rn-gcard--white':'')+'"><div class="rn-gcard__head">'+(icon?'<span class="rn-tile'+(o.amber?' rn-tile--amber':'')+'">'+ico(icon)+'</span>':'')+'<h2 class="rn-gtitle">'+title+'</h2>'+(right?'<span class="rn-gright">'+right+'</span>':'')+'</div><div class="rn-gcard__body"><div class="rn-gcard__in">'+body+'</div></div></section>';
+    return '<section class="rn-gcard'+(o.white?' rn-gcard--white':'')+(o.hero?' rn-gcard--hero':'')+'"><div class="rn-gcard__head">'+(icon?'<span class="rn-tile'+(o.amber?' rn-tile--amber':'')+'">'+ico(icon)+'</span>':'')+'<h2 class="rn-gtitle">'+title+'</h2>'+(right?'<span class="rn-gright">'+right+'</span>':'')+'</div><div class="rn-gcard__body"><div class="rn-gcard__in">'+body+'</div></div></section>';
   }
   function gi(icon,title,badge){   /* Group Item row (Figma): grey shell, white body; tile | title | badge | arrow, all on one line */
     return '<a class="rn-gi" href="#"><span class="rn-gi__in"><span class="rn-gi__tile">'+ico(icon)+'</span><b class="rn-gi__t">'+title.trim()+'</b><span class="rn-gi__badge">'+ico(icon==='cart'?'cart':'headset')+badge+'</span><span class="rn-gi__go">'+ico('arrow')+'</span></span></a>';
@@ -225,13 +236,13 @@
       gi('cart',t('buyQ'),t('buy'))+gi('headset',t('supQ'),t('sup'))+'</div>';
     var msg=creditMsg?'<p class="rn-help rn-help--'+(creditMsg.ok?'ok':'err')+'" id="rnSkuMsg" role="'+(creditMsg.ok?'status':'alert')+'">'+creditMsg.text+'</p>':'';
     var redeem='<div class="rn-credit__n"><b>'+n+'</b><span>'+t('active')+'</span></div>'+
-      '<div class="rn-fld"><div class="rn-float rn-float--lead'+(creditMsg&&!creditMsg.ok?' is-invalid':'')+'"><button class="rn-float__help" type="button" data-dlg="open" aria-haspopup="dialog" aria-label="'+t('skuWhere')+'"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v5M12 8h.01"/></svg></button><input class="rn-input" id="rnSku" type="text" autocomplete="off" spellcheck="false" required'+(creditMsg&&!creditMsg.ok?' aria-invalid="true" aria-describedby="rnSkuMsg"':'')+'><label for="rnSku">'+t('sku')+'</label><span class="rn-req" aria-hidden="true"></span></div>'+msg+
+      '<div class="rn-fld"><div class="rn-float rn-float--lead'+(creditMsg&&!creditMsg.ok?' is-invalid':'')+(creditMsg&&creditMsg.v?' is-filled':'')+'"><button class="rn-float__help" type="button" data-dlg="open" aria-haspopup="dialog" aria-label="'+t('skuWhere')+'"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v5M12 8h.01"/></svg></button><input class="rn-input" id="rnSku" type="text" autocomplete="off" spellcheck="false" required value="'+esc(creditMsg&&creditMsg.v||'')+'"'+(creditMsg&&!creditMsg.ok?' aria-invalid="true" aria-describedby="rnSkuMsg"':'')+'><label for="rnSku">'+t('sku')+'</label><span class="rn-req" aria-hidden="true"></span></div>'+msg+
       '<p class="rn-help">'+t('skuHelp')+'</p></div>'+
       '<button class="rn-btn rn-btn--primary rn-btn--block rn-redeem" type="button" data-redeem>'+t('redeem')+'</button>';
     var steps=[['gear','f1'],['flask','f2'],['play','f3']].map(function(s){
       return '<li class="rn-fstep"><span class="rn-fstep__ic">'+fico(s[0])+'</span><div class="rn-fstep__tx"><span class="rn-fstep__st"><span class="rn-lock">'+fico('lock')+t('locked')+'</span></span><h4>'+t(s[1])+'</h4><p>'+t(s[1]+'d')+'</p></div></li>';
     }).join('');
-    var right='<div class="rn-col2">'+gcard('coin',t('creditLeft'),'<a href="#">'+t('history')+ico('arrow')+'</a>',redeem,{white:true,amber:true})+
+    var right='<div class="rn-col2">'+gcard('coin',t('creditLeft'),'<a class="rn-hero-go" href="kredit.html" aria-label="'+t('history')+'">'+ico('arrow')+'</a>',redeem,{white:true,hero:true})+
       '<section class="rn-gcard"><div class="rn-gcard__body"><div class="rn-gcard__in"><h2 class="rn-gtitle" style="white-space:normal">'+t('afterT')+'</h2><ol class="rn-flow">'+steps+'</ol></div></div></section></div>';
     var ok=okDlg?'<div class="rn-modal" data-dlg="okscrim"><div class="rn-modal__box rn-modal__box--alert" role="alertdialog" aria-modal="true" aria-labelledby="rnOkT" aria-describedby="rnOkP">'+
       '<div class="rn-modal__in"><div class="rn-alert__state"><span class="rn-il" aria-hidden="true">'+FLASK_HTML+'</span><div class="rn-alert__txt"><h2 id="rnOkT">'+t('okT',okDlg.n)+'</h2><p id="rnOkP">'+t('okP',okDlg.n)+'</p></div></div></div>'+
@@ -266,14 +277,14 @@
     leave(doCloseOk);
   }
   function doCloseOk(){
-    setCredit(getCredit()+okDlg.n); okDlg=null; render();   /* "akan ditambahkan" — the credit lands once the alert is dismissed */
+    var added=okDlg.n; setCredit(getCredit()+added); okDlg=null; render(); toast('success',t('skuOkT'),t('skuOkP',added));   /* "akan ditambahkan" — the credit lands once the alert is dismissed */
     var b=$('[data-redeem]',host); if(b) b.focus();
   }
   function redeemSku(){
     var el=$('#rnSku'), v=(el?el.value:'').trim().toUpperCase();
     var m=v.match(/^NUS-BQ002\.(\d{1,3})-\d{6}-[A-Z]{3}$/);   /* simulated: the real check happens server-side */
     if(m){okDlg={n:+m[1]}; creditMsg=null; render(); var x=$('.rn-modal__x',host); if(x) x.focus(); return;}
-    creditMsg={ok:false,text:t('skuBad')};
+    creditMsg={ok:false,text:t('skuNone'),v:v}; toast('error',t('skuErrT'),t('skuErrP'));
     render();
     var f=$('#rnSku',host); if(f) f.focus();
   }
@@ -300,7 +311,7 @@
   function select(i,kbd){state.sel=(state.sel===i?null:i); render(); if(kbd){var b=host.querySelector('.rn-row[data-i="'+i+'"] .rn-sel'); if(b) b.focus();}}   /* only keyboard users need focus put back after the re-render */
   host.addEventListener('click',function(e){
     var cr=e.target.closest('[data-create]');
-    if(cr){ if(getCredit()<=0) location.href=CREDIT_PAGE; else nrOpen(cr); return; }
+    if(cr){ if(ROLE==='lead'&&getCredit()<=0) location.href=CREDIT_PAGE; else nrOpen(cr); return; }
     if(e.target.closest('[data-redeem]')){ redeemSku(); return; }
     var d=e.target.closest('[data-dlg]');
     if(d){ var k=d.dataset.dlg; if(k==='ok'||(k==='okscrim'&&e.target===d)){closeOk(); return;} if(k==='okscrim') return; if(k==='open'){dlgOpener=d; setDlg(true);} else if(k==='close'||(k==='scrim'&&e.target===d)) setDlg(false); return; }
@@ -317,20 +328,41 @@
   /* ───────── Create run dialog (credit > 0) ───────── */
   var nrMount=document.createElement('div'), nr=null, nrTrigger=null, nrLeaving=false;
   document.body.appendChild(nrMount);
+  var ROLE=(function(){var m=location.search.match(/[?&]role=(\w+)/); try{ if(m) sessionStorage.setItem('nrd-role',m[1]); return sessionStorage.getItem('nrd-role')||'lead'; }catch(e){return m?m[1]:'lead'}})();
+  var low=function(){return nr.kit&&getCredit()<nr.kit};
   function nrCallout(){
-    return '<span class="rn-nr-ic">'+ico('check')+'</span><p>'+t('nrNeed1')+'<b>'+t('nrNeed2',nr.kit)+'</b>'+t('nrNeed3')+'</p>';
+    var bal=getCredit();
+    if(!nr.kit) return '';
+    if(bal>=nr.kit) return '<div class="rn-nr-ok"><span class="rn-nr-ic">'+ico('check')+'</span><p>'+t('nrNeed1')+'<b>'+t('nrNeed2',nr.kit)+'</b>'+t('nrNeed3')+'</p></div>';
+    return '<div class="rn-nr-ok rn-nr-ok--bad"><span class="rn-nr-ic">'+ico('tri')+'</span><div><b>'+t('lowT')+'</b><p>'+t('lowP',nr.kit,bal)+'</p></div></div>';
+  }
+  function leadDialog(){
+    return '<div class="rn-modal" data-nr="scrim"><div class="rn-modal__box" role="dialog" aria-modal="true" aria-labelledby="rnNrT"><div class="rn-nr-lead"><div class="rn-nr-lead__in"><span class="rn-nr-lock">'+fico('lock')+'</span>'+
+      '<div class="rn-nr-lead__tx"><h2 id="rnNrT">'+t('leadT')+'</h2><p>'+t('leadD')+'</p></div>'+
+      '<div class="rn-nr-lead__who"><span class="rn-nr-av">DA</span><div><b>dr. Andi Gunawan</b><span>'+t('leadRole')+'</span></div><a class="rn-btn rn-btn--tint" href="#" data-nr="close">'+ico('chat')+t('contact')+'</a></div></div>'+
+      '<button class="rn-modal__x rn-modal__x--abs" type="button" data-nr="close" aria-label="'+t('dlgClose')+'">'+ico('x')+'</button></div>'+
+      '<div class="rn-modal__foot rn-modal__foot--end"><button class="rn-btn" type="button" data-nr="close">'+t('dlgClose')+'</button></div></div></div>';
   }
   function nrRender(){
     if(!nr){nrMount.innerHTML=''; return;}
+    if(nr.lead){nrMount.innerHTML=leadDialog(); return;}
+    var bal=getCredit(), isLow=low(), kitBad=isLow||nr.kitErr;
     var kits=[48,96,192].map(function(k){var on=nr.kit===k; return '<button class="rn-sel2__o'+(on?' is-on':'')+'" type="button" role="option" data-kit="'+k+'" aria-selected="'+on+'"><span>'+t('nrKitOpt',k)+'</span>'+(on?ico('check'):'')+'</button>'}).join('');
+    var lowBody='<div class="rn-credit__n"><b>'+bal+'</b><span>'+t('active')+'</span></div>'+
+      '<div class="rn-fld"><div class="rn-float rn-float--lead'+(nr.skuErr?' is-invalid':'')+(nr.sku?' is-filled':'')+'"><span class="rn-float__help" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 11v5M12 8h.01"/></svg></span><input class="rn-input" id="nrSku" type="text" autocomplete="off" spellcheck="false" value="'+esc(nr.sku||'')+'"><label for="nrSku">'+t('sku')+'</label></div>'+
+      (nr.skuErr?'<p class="rn-help rn-help--err" role="alert">'+t('skuNone')+'</p>':'')+'<p class="rn-help">'+t('skuHelp')+'</p></div>'+
+      '<button class="rn-btn rn-btn--primary rn-btn--block rn-redeem" type="button" data-nr="redeem">'+t('redeem')+'</button>';
+    var okBody='<div class="rn-credit__n"><b>'+bal+'</b><span>'+t('active')+'</span></div>'+(nr.kit?'<div id="nrCallout">'+nrCallout()+'</div>':'');
     nrMount.innerHTML='<div class="rn-modal" data-nr="scrim"><div class="rn-modal__box rn-modal__box--wide" role="dialog" aria-modal="true" aria-labelledby="rnNrT">'+
       '<div class="rn-modal__head rn-nr-head"><span class="rn-nr-tile">'+fico('doc')+'</span><div class="rn-nr-ht"><h2 id="rnNrT">'+t('nrT')+'</h2><p>'+t('nrS')+'</p></div><button class="rn-modal__x" type="button" data-nr="close" aria-label="'+t('dlgClose')+'">'+ico('x')+'</button></div>'+
       '<div class="rn-modal__body rn-nr-body"><div class="rn-nr-cols">'+
-      '<section class="rn-nr-card"><canvas class="rn-dots" aria-hidden="true"></canvas><div class="rn-gcard__head"><span class="rn-tile rn-tile--amber">'+ico('coin')+'</span><h2 class="rn-gtitle">'+t('creditLeft')+'</h2><span class="rn-gright"><a href="#">'+t('history')+ico('arrow')+'</a></span></div>'+
-      '<div class="rn-gcard__body"><div class="rn-gcard__in"><div class="rn-credit__n"><b>'+getCredit()+'</b><span>'+t('active')+'</span></div><div class="rn-nr-ok" id="nrCallout">'+nrCallout()+'</div></div></div></section>'+
+      '<section class="rn-nr-card'+(isLow?' rn-nr-card--low':'')+'">'+(isLow?'':'<canvas class="rn-dots" aria-hidden="true"></canvas>')+'<div class="rn-gcard__head"><span class="rn-tile'+(isLow?'':' rn-tile--amber')+'">'+ico('coin')+'</span><h2 class="rn-gtitle">'+t('creditLeft')+'</h2><span class="rn-gright">'+(isLow?'<a class="rn-hero-go" href="kredit.html" aria-label="'+t('history')+'">'+ico('arrow')+'</a>':'<a href="kredit.html">'+t('history')+ico('arrow')+'</a>')+'</span></div>'+
+      '<div class="rn-gcard__body"><div class="rn-gcard__in">'+(isLow?lowBody:okBody)+'</div></div></section>'+
       '<div class="rn-nr-form">'+
-        '<div class="rn-nf"><label for="nrName">'+t('nrName')+' <span class="rn-nf__req" aria-hidden="true">*</span></label><input class="rn-nf__in'+(nr.err?' is-invalid':'')+'" id="nrName" type="text" autocomplete="off" required value="'+esc(nr.name)+'"'+(nr.err?' aria-invalid="true" aria-describedby="nrNameErr"':'')+'>'+(nr.err?'<p class="rn-help rn-help--err" id="nrNameErr" role="alert">'+t('nrNameErr')+'</p>':'')+'<p class="rn-help">'+t('nrHint')+'</p></div>'+
-        '<div class="rn-nf"><label for="nrKit">'+t('nrKit')+' <span class="rn-nf__req" aria-hidden="true">*</span></label><div class="rn-sel2"><button class="rn-sel2__t" id="nrKit" type="button" aria-haspopup="listbox" aria-expanded="false"><span class="rn-sel2__v">'+t('nrKitOpt',nr.kit)+'</span>'+ico('down')+'</button><div class="rn-sel2__pop" hidden><div class="rn-sel2__list" role="listbox" aria-labelledby="nrKit">'+kits+'</div></div></div></div>'+
+        '<div class="rn-nf"><label for="nrName">'+t('nrName')+' <span class="rn-nf__req" aria-hidden="true">*</span> <span class="rn-tip" tabindex="0" role="img" aria-label="'+esc(t('nrNameTip'))+'">'+ico('info')+'<span class="rn-tip__b" role="tooltip">'+esc(t('nrNameTip'))+'</span></span></label><input class="rn-nf__in'+(nr.err?' is-invalid':'')+'" id="nrName" type="text" autocomplete="off" required value="'+esc(nr.name)+'"'+(nr.err?' aria-invalid="true" aria-describedby="nrNameErr"':'')+'>'+(nr.err?'<p class="rn-help rn-help--err" id="nrNameErr" role="alert">'+t('nrNameErr')+'</p>':'')+'<p class="rn-help">'+t('nrHint')+'</p></div>'+
+        '<div class="rn-nf"><label for="nrKit">'+t('nrKit')+' <span class="rn-nf__req" aria-hidden="true">*</span></label><div class="rn-sel2"><button class="rn-sel2__t'+(kitBad?' is-bad':'')+'" id="nrKit" type="button" aria-haspopup="listbox" aria-expanded="false"'+(kitBad?' aria-invalid="true"':'')+'><span class="rn-sel2__v'+(nr.kit?'':' ph')+'">'+(nr.kit?t('nrKitOpt',nr.kit):t('nrKitPh'))+'</span>'+ico('down')+'</button><div class="rn-sel2__pop" hidden><div class="rn-sel2__list" role="listbox" aria-labelledby="nrKit">'+kits+'</div></div></div>'+
+          (isLow?'<p class="rn-help rn-help--err rn-help--ic" role="alert">'+solid('fail')+t('nrLow')+'</p>':(nr.kitErr?'<p class="rn-help rn-help--err" role="alert">'+t('nrKitNeed')+'</p>':''))+'</div>'+
+        (isLow?nrCallout():'')+
       '</div>'+
       '</div></div>'+
       '<div class="rn-modal__foot rn-modal__foot--end"><button class="rn-btn rn-btn--quiet" type="button" data-nr="close">'+t('dlgClose')+'</button><button class="rn-btn rn-btn--primary" type="button" data-nr="go">'+t('nrGo')+ico('arrow')+'</button></div></div></div>';
@@ -356,7 +388,7 @@
   }
   function nrDots(){var cv=$('.rn-dots',nrMount); if(cv) paintDots(cv);}
   window.addEventListener('resize',nrDots);
-  function nrOpen(trigger){nr={name:'',kit:192,err:false}; nrTrigger=trigger; nrRender(); var i=$('#nrName',nrMount); if(i) i.focus();}
+  function nrOpen(trigger){nr=ROLE==='lead'?{name:'',kit:null,err:false}:{lead:true}; nrTrigger=trigger; nrRender(); var i=$('#nrName',nrMount)||$('.rn-modal__x',nrMount); if(i) i.focus();}
   function nrClose(){
     if(!nr||nrLeaving) return;
     var m=$('.rn-modal',nrMount), done=function(){nrLeaving=false; nr=null; nrRender(); if(nrTrigger&&document.body.contains(nrTrigger)) nrTrigger.focus();};
@@ -365,17 +397,26 @@
   }
   function nrGo(){
     var el=$('#nrName',nrMount); nr.name=el?el.value:nr.name;
-    if(!nr.name.trim()){nr.err=true; nrRender(); var i=$('#nrName',nrMount); if(i) i.focus(); return;}
-    nrClose();   /* the pipeline page is not built yet */
+    nr.err=!nr.name.trim(); nr.kitErr=!nr.kit;
+    if(nr.err||nr.kitErr||low()){nrRender(); var f=nr.err?$('#nrName',nrMount):$('#nrKit',nrMount); if(f) f.focus(); return;}
+    try{sessionStorage.setItem('nrd-run',JSON.stringify({name:nr.name.trim(),kit:nr.kit}))}catch(e){}
+    location.href=IDENT_PAGE;
+  }
+  function nrRedeem(){
+    var el=$('#nrSku',nrMount), v=(el?el.value:'').trim().toUpperCase(), m=v.match(/^NUS-BQ002\.(\d{1,3})-\d{6}-[A-Z]{3}$/);
+    nr.sku=v;
+    if(m){setCredit(getCredit()+ +m[1]); nr.skuErr=false; nr.sku=''; toast('success',t('skuOkT'),t('skuOkP',+m[1]));}
+    else{nr.skuErr=true; toast('error',t('skuErrT'),t('skuErrP'));}
+    nrRender(); var f=$(nr.skuErr?'#nrSku':'#nrKit',nrMount); if(f) f.focus();
   }
   nrMount.addEventListener('click',function(e){
     var ko=e.target.closest('.rn-sel2__o'); if(ko){kitPick(+ko.dataset.kit); return;}
     if(e.target.closest('#nrKit')){kitToggle(!kitOpen()); return;}
     if(kitOpen()&&!e.target.closest('.rn-sel2__pop')) kitToggle(false);
     var d=e.target.closest('[data-nr]'); if(!d) return;
-    var k=d.dataset.nr; if(k==='close'||(k==='scrim'&&e.target===d)) nrClose(); else if(k==='go') nrGo();
+    var k=d.dataset.nr; if(k==='close'||(k==='scrim'&&e.target===d)) nrClose(); else if(k==='go') nrGo(); else if(k==='redeem') nrRedeem();
   });
-  nrMount.addEventListener('input',function(e){ if(e.target.id==='nrName'){nr.name=e.target.value;} });
+  nrMount.addEventListener('input',function(e){ if(e.target.id==='nrName'){nr.name=e.target.value;} if(e.target.id==='nrSku'){nr.sku=e.target.value; e.target.parentNode.classList.toggle('is-filled',!!e.target.value);} });
   /* Select: trigger + popover list, like the Helix Select (single) */
   function kitPop(){return $('.rn-sel2__pop',nrMount)}
   function kitOpen(){return !!(nr&&nr.kitOpen)}
@@ -390,10 +431,8 @@
     }
   }
   function kitPick(v){
-    nr.kit=v; kitToggle(false);
-    $('.rn-sel2__v',nrMount).textContent=t('nrKitOpt',v);
-    [].forEach.call(nrMount.querySelectorAll('.rn-sel2__o'),function(o){var on=+o.dataset.kit===v; o.classList.toggle('is-on',on); o.setAttribute('aria-selected',on); var ck=o.querySelector('svg'); if(on&&!ck) o.insertAdjacentHTML('beforeend',ico('check')); if(!on&&ck) ck.remove();});
-    var c=$('#nrCallout',nrMount); if(c) c.innerHTML=nrCallout();
+    var el=$('#nrName',nrMount); if(el) nr.name=el.value;
+    nr.kit=v; nr.kitOpen=false; nr.kitErr=false; nrRender();
     var tr=$('#nrKit',nrMount); if(tr) tr.focus();
   }
   nrMount.addEventListener('keydown',function(e){
@@ -406,7 +445,7 @@
     } else if(e.target.id==='nrKit'&&(e.key==='ArrowDown'||e.key==='ArrowUp')){e.preventDefault(); kitToggle(true);}
   });
   window.addEventListener('resize',function(){ if(kitOpen()) kitToggle(false); });
-  nrMount.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.id==='nrName') nrGo(); });
+  nrMount.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.id==='nrName') nrGo(); if(e.key==='Enter'&&e.target.id==='nrSku') nrRedeem(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&nr){ if(kitOpen()){kitToggle(false); var tr=$('#nrKit',nrMount); if(tr) tr.focus();} else nrClose(); } });
 
   /* breadcrumb label + language */
