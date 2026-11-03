@@ -799,6 +799,11 @@ b,strong{font-weight:500}
   .pysheet__foot .btn{flex:none}
 }
 @media (prefers-reduced-motion:reduce){.pysheet[open],.pysheet::backdrop{animation:none}}
+/* Mobile: drop the Tambak/Sampel/Testing/Bulan summary from the footer — it ate the scroll area; keep only the "why Lanjut is disabled" hint */
+@media (max-width:640px){
+  .bar__sum .bgp{display:none}
+  .bar__sum:not(:has(.bar__hint:not([hidden]))){display:none}
+}
 </style>
 </head>
 <body>
