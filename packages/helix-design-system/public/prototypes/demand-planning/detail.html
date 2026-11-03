@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="id" data-brand="cekolam">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CeKolam – Detail Demand Planning</title>
+<meta name="description" content="Detail satu versi FISHPOND_DEMAND_PLAN: periode, tambak, isi rencana, rincian per minggu dan per penyakit, serta riwayat versi penuh.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== tokens + reset (same tokens as the create form, kept in sync by hand) ===== */
+:root{
+  --hx-font:'Rubik',system-ui,sans-serif;
+  --hx-font-heading:'Quicksand',var(--hx-font);
+  --hx-primary:#eb7323;--hx-primary-hover:#b2571a;--hx-primary-pressed:#7c431d;
+  --hx-selected:#fdf1e9;--hx-dark:#575756;
+  --hx-text:#14141e;--hx-text-subtle:#49494a;--hx-text-subtler:#828282;
+  --hx-surface:#fff;--hx-surface-subtle:#f7f7f7;--hx-stroke:#eeeeee;
+  --hx-shadow:rgba(89,89,90,.15);--hx-shadow-btn:0 1px 4px var(--hx-shadow);--hx-inner:inset 0 1px 0 rgba(255,255,255,.4);
+  --red:#991b1b;--red-bg:#fee2e2;--green:#12843c;--green-bg:#e9f9ef;--amber:#a66800;--amber-bg:#fef5e7;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:var(--hx-font);font-size:13px;line-height:20px;color:var(--hx-text);background:#fff;-webkit-font-smoothing:antialiased;letter-spacing:-.01px}
+h1,h2,h3,h4{font-family:var(--hx-font-heading);font-weight:700;margin:0;letter-spacing:0}
+p,ol,ul{margin:0;padding:0}
+ol,ul{list-style:none}
+a{color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
+[hidden]{display:none!important}
+.ic{width:1em;height:1em;flex:none;fill:currentColor}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ===== app shell (identical to the create form's) ===== */
+.app{display:flex;height:100vh;min-height:640px;background:#fff}
+.sidebar{width:240px;min-width:240px;flex:none;display:flex;flex-direction:column;background:#fff;overflow:hidden;transition:width .2s,min-width .2s}
+.sidebar.collapsed{width:62px;min-width:62px}
+.sb-head{display:flex;align-items:center;justify-content:space-between;padding:20px 16px 12px;min-height:58px}
+.sidebar.collapsed .sb-head{padding:20px 12px 0;min-height:0;justify-content:flex-start}
+.logo{display:flex;align-items:center;height:26px}
+.logo-full{display:block;width:131px;height:16px}
+.logo-mark{display:none;width:38px;height:38px;border-radius:8px;background:var(--hx-surface-subtle);box-shadow:var(--hx-inner);place-items:center}
+.logo-mark img{width:20px;height:20px}
+.sidebar.collapsed .logo{height:38px}
+.sidebar.collapsed .logo-full,.sidebar.collapsed .pill,.sidebar.collapsed .label,.sidebar.collapsed .user-name,.sidebar.collapsed .user .ib{display:none}
+.sidebar.collapsed .logo-mark{display:grid}
+.pill{display:inline-flex;align-items:center;padding:2px 6px;border-radius:9999px;background:var(--hx-primary);color:#fff;font-size:8px;line-height:12px;font-weight:500;white-space:nowrap}
+.sb-nav{flex:1;display:flex;flex-direction:column;gap:6px;padding:12px;min-height:0}
+.sidebar.collapsed .sb-nav{padding:20px 12px 12px;gap:4px}
+.sb-foot{display:flex;flex-direction:column;gap:16px;padding:12px}
+.nav-group{display:flex;flex-direction:column}
+.nav-item{display:flex;align-items:center;gap:8px;height:36px;padding:8px 12px;border-radius:8px;font-weight:500;color:var(--hx-text-subtle);text-decoration:none;transition:background .15s,color .15s;width:100%;position:relative}
+.sidebar.collapsed .nav-item{width:36px;padding:0;justify-content:center}
+.nav-item .ic{font-size:16px;color:#393a3b}
+.nav-item:hover{background:var(--hx-surface-subtle);color:var(--hx-text)}
+.nav-item[aria-current="page"],.nav-sub-item.is-active{background:var(--hx-selected);color:var(--hx-primary);font-weight:600}
+.nav-item[aria-current="page"] .ic{color:var(--hx-primary)}
+.nav-chev{margin-left:auto;font-size:14px;transition:transform .15s;flex:none;color:#9f9f9f}
+.nav-group[data-open="true"]>.nav-item .nav-chev{transform:rotate(180deg)}
+.nav-sub{display:flex;flex-direction:column;gap:2px;padding:4px 0 4px 44px;margin:0}
+.nav-sub-item{display:block;padding:7px 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--hx-text-subtle);text-decoration:none}
+.nav-sub-item:hover{background:var(--hx-surface-subtle);color:var(--hx-text)}
+.sidebar.collapsed .nav-sub,.sidebar.collapsed .nav-chev{display:none}
+.label{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.user{display:flex;align-items:center;gap:8px;min-height:52px;padding:8px 12px;border-radius:6px}
+.sidebar.collapsed .user{min-height:36px;padding:0;justify-content:center}
+.user-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.avatar{width:36px;height:36px;flex:none;border-radius:50%;background:#fff;border:.5px solid var(--hx-stroke);display:grid;place-items:center}
+.avatar span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:var(--hx-primary-hover);color:#fff;font-weight:500;font-size:12px}
+@media (max-width:820px){.sidebar{display:none}}
+
+.frame{flex:1;min-width:0;padding:8px 8px 8px 0;display:flex}
+.body{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--hx-surface-subtle);border:1px solid var(--hx-stroke);border-radius:16px;overflow:hidden}
+.navbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-bottom:1px solid var(--hx-stroke);background:var(--hx-surface-subtle);flex:none}
+.nav-left,.nav-right{display:flex;align-items:center;gap:12px;min-width:0}
+.nav-div{width:1px;height:32px;flex:none;background:var(--hx-stroke)}
+.crumb{display:inline-flex;align-items:center;gap:6px;padding:4px 6px;border-radius:8px;color:var(--hx-text-subtler);text-decoration:none;min-width:0}
+.crumb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crumb:hover{background:#eee}
+.ib{display:inline-grid;place-items:center;position:relative;border:.5px solid var(--hx-stroke);border-radius:8px;background:#fff;box-shadow:var(--hx-shadow-btn);color:var(--hx-text);width:36px;height:36px}
+.ib:hover{background:var(--hx-surface-subtle)}
+.ib img{width:14px;height:14px}
+.ib--ghost{border-color:transparent;background:transparent;box-shadow:none}
+.org-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;height:36px;padding:8px 12px;border:1px solid #393a3b;border-radius:6px;background:var(--hx-dark);color:#fff}
+.org-btn:hover{background:#49494a}
+
+/* ===== page: plain content container ===== */
+.dp-page{flex:1;min-width:0;min-height:0;display:flex;padding:12px}
+.cc{display:flex;flex-direction:column;min-height:0;min-width:0;flex:1;background:#fff;border:1px solid var(--hx-stroke);border-radius:12px;box-shadow:0 1px 2px var(--hx-shadow);overflow:hidden}
+
+/* header: identity + actions, wraps instead of forcing the page wider */
+.dt-head{flex:none;display:flex;flex-wrap:wrap;row-gap:8px;align-items:flex-start;justify-content:space-between;gap:16px;padding:16px;border-bottom:1px solid var(--hx-stroke)}
+.dt-head__info{flex:1 1 260px;min-width:0}
+.dt-head__actions{display:flex;flex:none;flex-wrap:wrap;gap:8px}
+.dt-ident{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.dt-code{font-size:20px;line-height:28px}
+.dt-sub{color:var(--hx-text-subtle);overflow-wrap:anywhere;margin-top:2px}
+.dt-badge{display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:500}
+.dt-badge--active{background:var(--green-bg);color:var(--green)}
+.dt-badge--superseded{background:var(--hx-surface-subtle);color:var(--hx-text-subtler)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 12px;border-radius:6px;border:1px solid transparent;white-space:nowrap;text-decoration:none}
+.btn--ghost{background:#fff;border-color:var(--hx-stroke);color:var(--hx-text-subtler)}
+.btn--ghost:hover{background:#eee}
+.btn--primary{background:var(--hx-primary);border-color:var(--hx-primary-pressed);color:#fff}
+.btn--primary:hover{background:var(--hx-primary-hover)}
+
+.dt-body{flex:1;min-width:0;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:16px;padding:16px}
+.dt-body>*{flex:none}
+
+/* badge group row */
+.dt-bgps{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.dt-bgp{display:inline-flex;align-items:center;gap:8px;flex:0 1 auto;min-width:0;max-width:100%;padding:4px 12px 4px 4px;border-radius:9999px;background:var(--hx-surface-subtle);color:var(--hx-text-subtle);font-size:12px}
+.dt-bgp>span:last-child{overflow-wrap:anywhere}
+.dt-bgp__k{display:inline-flex;align-items:center;padding:3px 8px;border-radius:9999px;background:#fff;box-shadow:0 0 0 .5px var(--hx-stroke);font-weight:500;white-space:nowrap}
+.dt-bgp--brand{background:var(--hx-selected);color:var(--hx-primary-hover)}
+.dt-bgp--brand .dt-bgp__k{background:var(--hx-primary);color:#fff;box-shadow:none}
+.dt-bgp--success{background:var(--green-bg);color:var(--green)}
+.dt-bgp--success .dt-bgp__k{background:var(--green);color:#fff;box-shadow:none}
+.dt-bgp--warning{background:var(--amber-bg);color:var(--amber)}
+.dt-bgp--warning .dt-bgp__k{background:#f59e0b;color:#fff;box-shadow:none}
+
+.dt-card{flex:none;border:1px solid var(--hx-stroke);border-radius:12px;background:#fff;overflow:hidden}
+.dt-card__head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--hx-stroke)}
+.dt-card__title{font-size:14px}
+.dt-card__note{font-size:12px;color:var(--hx-text-subtler)}
+
+.dt-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.dt-m{display:flex;flex-direction:column;gap:2px;padding:16px;min-width:0}
+.dt-m+.dt-m{border-left:1px solid var(--hx-stroke)}
+.dt-m__k{font-size:12px;font-weight:500;color:var(--hx-text-subtle)}
+.dt-m__v{font-size:28px;line-height:36px;font-weight:700;font-variant-numeric:tabular-nums}
+.dt-m__s{font-size:12px;color:var(--hx-text-subtler)}
+.dt-m--now .dt-m__v{color:var(--hx-primary-hover)}
+.dt-m--down .dt-m__v{color:var(--amber)}
+
+.dt-tbl-wrap{overflow-x:auto;max-width:100%}
+.dt-tbl{width:100%;min-width:420px;border-collapse:collapse}
+.dt-tbl th,.dt-tbl td{padding:10px 16px;text-align:left;font-size:13px}
+.dt-tbl thead th{background:var(--hx-surface-subtle);font-weight:500;color:var(--hx-text-subtle);border-bottom:1px solid var(--hx-stroke);white-space:nowrap}
+.dt-tbl tbody tr+tr td,.dt-tbl tbody tr+tr th{border-top:1px solid var(--hx-stroke)}
+.dt-tbl tfoot td,.dt-tbl tfoot th{padding:10px 16px;font-weight:500;background:var(--hx-surface-subtle);border-top:1px solid var(--hx-stroke)}
+.dt-tbl .num{text-align:right;font-variant-numeric:tabular-nums}
+.dt-wk-lock{display:inline-block;margin-left:6px;padding:2px 6px;border-radius:6px;background:var(--amber-bg);color:var(--amber);font-size:11px;font-weight:500}
+
+.dt-peny-block{padding:12px 16px;border-top:1px solid var(--hx-stroke)}
+.dt-peny-block:first-child{border-top:0}
+.dt-peny-block__h{font-size:12px;font-weight:500;color:var(--hx-text-subtle);margin-bottom:8px}
+.dt-chips{display:flex;flex-wrap:wrap;gap:6px}
+.dt-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:9999px;background:var(--hx-selected);color:var(--hx-primary-hover);font-size:11px;font-weight:500}
+.dt-chip b{font-weight:700}
+
+.dt-farm{padding:16px}
+.dt-farm__name{font-weight:500;font-size:14px}
+.dt-farm__sub{display:block;font-size:12px;color:var(--hx-text-subtler);margin-top:2px}
+.dt-farm__meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
+.db-status{display:inline-flex;align-items:center;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:500}
+.db-status--budidaya{background:var(--green-bg);color:var(--green)}
+.db-status--off{background:var(--hx-surface-subtle);color:var(--hx-text-subtler)}
+.db-status--other{background:var(--amber-bg);color:var(--amber)}
+.db-kind{font-size:12px;color:var(--hx-text-subtler)}
+.db-pic{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--hx-text-subtle)}
+.db-pic__av{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--hx-primary-hover);color:#fff;font-size:9px;font-weight:600}
+
+.dt-history{display:flex;flex-direction:column;gap:10px;padding:16px}
+.dt-plan{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:12px;border:1px solid var(--hx-stroke);border-radius:12px;background:#fff;text-decoration:none}
+.dt-plan:hover{border-color:var(--hx-primary);box-shadow:0 0 0 3px rgba(235,115,35,.08)}
+.dt-plan.is-current{border-color:var(--hx-primary);box-shadow:0 0 0 3px rgba(235,115,35,.12)}
+.dt-plan__id{flex:1 1 260px;min-width:220px;display:flex;flex-direction:column;gap:6px}
+.dt-plan__code{font-weight:700;font-size:13px}
+.dt-plan__viewing{color:var(--hx-primary-hover);font-weight:500}
+.dt-plan__meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--hx-text-subtler)}
+.dt-plan__stats{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-left:auto}
+.dt-stat{display:flex;flex-direction:column;gap:2px;min-width:60px}
+.dt-stat__k{font-size:11px;color:var(--hx-text-subtler)}
+.dt-stat__v{font-weight:500;font-variant-numeric:tabular-nums}
+.dt-stat__v--muted{color:var(--hx-text-subtler);font-weight:400}
+.dt-warn{color:var(--amber);font-size:12px}
+
+@media (max-width:640px){
+  .dt-strip{grid-template-columns:minmax(0,1fr)}
+  .dt-m+.dt-m{border-left:0;border-top:1px solid var(--hx-stroke)}
+  .dt-m__v{font-size:22px;line-height:28px}
+  .dt-tbl{min-width:0}
+  .dt-tbl thead{display:none}
+  .dt-tbl tbody tr{display:flex;flex-direction:column;border-bottom:1px solid var(--hx-stroke);padding:4px 0}
+  .dt-tbl tbody td,.dt-tbl tbody th{display:flex;justify-content:space-between;gap:12px;padding:6px 16px;border:0!important;text-align:right}
+  .dt-tbl tbody td::before{content:attr(data-label);font-weight:500;color:var(--hx-text);text-align:left}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-plan" viewBox="0 0 24 24"><path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1V3a1 1 0 0 1 1-1zM5 10v9h14v-9zm3 2h3v3H8z"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 2h6v2h-1v5.2l5.4 9A2 2 0 0 1 17.7 21H6.3a2 2 0 0 1-1.7-2.8L10 9.2V4H9zm2 2v5.8L8.1 15h7.8L13 9.8V4z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 3h2v16h14v2H4zm5 9h3v6H9zm5-5h3v11h-3z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 14 14"><path d="M7 14c.97 0 1.75-.78 1.75-1.75H5.25C5.25 13.22 6.03 14 7 14zm5.89-4.09c-.53-.57-1.52-1.42-1.52-4.22 0-2.13-1.49-3.83-3.5-4.24V.88a.875.875 0 0 0-1.75 0v.57C4.12 1.86 2.63 3.56 2.63 5.69c0 2.8-.99 3.65-1.52 4.22-.16.17-.24.38-.24.59 0 .45.35.88.88.88h10.49c.52 0 .87-.43.88-.88 0-.21-.07-.42-.23-.59z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 14 14"><path fill-rule="evenodd" d="M3.09 4.84a.5.5 0 0 1 .72 0L7 7.93l3.09-3.09a.5.5 0 0 1 .72.72l-3.5 3.5a.5.5 0 0 1-.72 0l-3.5-3.5a.5.5 0 0 1 0-.72z"/></symbol>
+  <symbol id="i-updown" viewBox="0 0 12 12"><path fill-rule="evenodd" d="M6 1.8a.6.6 0 0 1 .42.18l1.8 1.8a.6.6 0 0 1-.85.85L6 3.25 4.62 4.62a.6.6 0 0 1-.85-.85l1.8-1.8A.6.6 0 0 1 6 1.8zM3.78 7.38a.6.6 0 0 1 .84 0L6 8.75l1.38-1.37a.6.6 0 0 1 .85.85l-1.8 1.8a.6.6 0 0 1-.85 0l-1.8-1.8a.6.6 0 0 1 0-.85z"/></symbol>
+  <symbol id="i-prev" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.2 2.5-5.5 5.5-5.5s5.5 2.3 5.5 5.5"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.3c2.6.3 4.5 2.3 4.5 5.2"/></g></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="14" height="14" rx="1.5"/><path d="M4 8v11a1.5 1.5 0 0 0 1.5 1.5H17"/></g></symbol>
+  <symbol id="i-package" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5 12 3l8.5 4.5V16.5L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></g></symbol>
+  <symbol id="i-microscope" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20h8M11 20v-3.5a4.5 4.5 0 1 1 3-7.9L10.5 12"/><path d="M8.5 8 6 5.5 7.5 4l2.5 2.5"/><path d="M5 20h.01"/></g></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-2.5-1.5L13 21l-2.5-1.5L8 21l-2-1.5z"/><path d="M9 8h6M9 12h6M9 16h4"/></g></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1h-.2a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h0a1.7 1.7 0 0 0 1-1.6v-.2a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v0a1.7 1.7 0 0 0 1.6 1h.2a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></g></symbol>
+</defs></svg>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
+    <div class="sb-head">
+      <a class="logo" href="#" aria-label="CeKolam">
+        <img class="logo-full" src="assets/wordmark-default.svg" alt="CeKolam">
+        <span class="logo-mark"><img src="assets/mark-default.svg" alt="CeKolam"></span>
+      </a>
+      <span class="pill">Staging</span>
+    </div>
+    <nav class="sb-nav" aria-label="Menu utama">
+      <div class="nav-group" data-open="true">
+        <button class="nav-item nav-trig" type="button" aria-expanded="true" aria-controls="sub-customer">
+          <svg class="ic"><use href="#i-users"/></svg><span class="label">Customer Management</span>
+          <svg class="ic nav-chev" aria-hidden="true"><use href="#i-chev"/></svg>
+        </button>
+        <ul class="nav-sub" id="sub-customer">
+          <li><a class="nav-sub-item" href="#">Tambak</a></li>
+          <li><a class="nav-sub-item" href="#">Payer</a></li>
+          <li><a class="nav-sub-item" href="#">Kontak</a></li>
+          <li><a class="nav-sub-item is-active" href="#" aria-current="page">Demand Planning</a></li>
+          <li><a class="nav-sub-item" href="#">Tugas Saya</a></li>
+        </ul>
+      </div>
+      <a class="nav-item" href="#"><svg class="ic"><use href="#i-book"/></svg><span class="label">Sampling Kit Production</span></a>
+      <div class="nav-group" data-open="false">
+        <button class="nav-item nav-trig" type="button" aria-expanded="false" aria-controls="sub-order">
+          <svg class="ic"><use href="#i-package"/></svg><span class="label">Order Management</span>
+          <svg class="ic nav-chev" aria-hidden="true"><use href="#i-chev"/></svg>
+        </button>
+        <ul class="nav-sub" id="sub-order" hidden>
+          <li><a class="nav-sub-item" href="#">Order List</a></li>
+          <li><a class="nav-sub-item" href="#">Delivery to Lab</a></li>
+          <li><a class="nav-sub-item" href="#">Sales Order Request</a></li>
+        </ul>
+      </div>
+      <a class="nav-item" href="#"><svg class="ic"><use href="#i-microscope"/></svg><span class="label">Research Project</span></a>
+      <a class="nav-item" href="#"><svg class="ic"><use href="#i-flask"/></svg><span class="label">Laboratory</span></a>
+      <a class="nav-item" href="#"><svg class="ic"><use href="#i-list"/></svg><span class="label">Daftar Testing</span></a>
+      <a class="nav-item" href="#"><svg class="ic"><use href="#i-receipt"/></svg><span class="label">Invoice</span></a>
+      <a class="nav-item" href="#"><svg class="ic"><use href="#i-chart"/></svg><span class="label">Analytics</span></a>
+      <a class="nav-item" href="#"><svg class="ic"><use href="#i-settings"/></svg><span class="label">Miscellanous</span></a>
+    </nav>
+    <div class="sb-foot">
+      <div class="user"><div class="avatar" aria-hidden="true"><span>AG</span></div><span class="user-name">dr. Andi Gunawan</span><button class="ib" type="button" aria-label="Menu akun" style="width:24px;height:24px"><svg class="ic" style="color:#9f9f9f"><use href="#i-updown"/></svg></button></div>
+    </div>
+  </aside>
+
+  <div class="frame">
+    <div class="body">
+      <header class="navbar">
+        <div class="nav-left">
+          <button class="ib" type="button" id="sbToggle" aria-controls="sidebar" aria-expanded="true" aria-label="Ciutkan sidebar"><img src="assets/ic-panel.svg" alt=""></button>
+          <span class="nav-div" aria-hidden="true"></span>
+          <a class="crumb" href="#"><svg class="ic" style="font-size:12px;color:#828282" aria-hidden="true"><use href="#i-plan"/></svg><span>Demand Planning</span></a>
+          <span aria-hidden="true" style="color:#828282">/</span>
+          <span class="crumb" aria-current="page" style="color:var(--hx-text);font-weight:500" id="crumbId">Detail</span>
+        </div>
+        <div class="nav-right">
+          <button class="ib ib--ghost" type="button" aria-label="Notifikasi"><svg class="ic" style="color:#9f9f9f"><use href="#i-bell"/></svg></button>
+          <button class="org-btn" type="button" aria-label="Organisasi: PT Cekolam Indonesia"><span style="flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PT Cekolam Indonesia</span><svg class="ic"><use href="#i-down"/></svg></button>
+        </div>
+      </header>
+
+      <main class="dp-page">
+        <div class="cc">
+          <header class="dt-head">
+            <div class="dt-head__info">
+              <div class="dt-ident"><span class="dt-code" id="dtCode">—</span><span class="dt-badge" id="dtStatusBadge">—</span></div>
+              <p class="dt-sub" id="dtSub"></p>
+            </div>
+            <div class="dt-head__actions">
+              <a class="btn btn--ghost" href="#"><svg class="ic" aria-hidden="true"><use href="#i-prev"/></svg>Kembali</a>
+              <a class="btn btn--primary" id="dtReviseLink" href="#" hidden>Revisi rencana ini</a>
+            </div>
+          </header>
+
+          <div class="dt-body">
+            <div class="dt-bgps" id="dtBgps" role="list"></div>
+
+            <div class="dt-card"><div class="dt-strip" id="dtStrip"></div></div>
+
+            <div class="dt-card">
+              <div class="dt-card__head"><h2 class="dt-card__title">Isi rencana</h2><span class="dt-card__note">Proyeksi yang diterima sales dari customer</span></div>
+              <div class="dt-tbl-wrap"><table class="dt-tbl" id="dtIsi"></table></div>
+            </div>
+
+            <div class="dt-card" id="dtWeeklyCard" hidden>
+              <div class="dt-card__head"><h2 class="dt-card__title">Rincian per minggu</h2><span class="dt-card__note">Minggu yang tidak dirinci masuk "Sisa bulan" — tidak pernah ditebak per minggu</span></div>
+              <div class="dt-tbl-wrap"><table class="dt-tbl" id="dtWeekly"></table></div>
+            </div>
+
+            <div class="dt-card" id="dtPenyakitCard" hidden>
+              <div class="dt-card__head"><h2 class="dt-card__title">Rincian testing per penyakit</h2><span class="dt-card__note" id="dtPenyakitNote"></span></div>
+              <div id="dtPenyakitBody"></div>
+            </div>
+
+            <div class="dt-card">
+              <div class="dt-card__head"><h2 class="dt-card__title">Tambak</h2></div>
+              <div id="dtFarm"></div>
+            </div>
+
+            <div class="dt-card">
+              <div class="dt-card__head"><h2 class="dt-card__title">Riwayat versi</h2><span class="dt-card__note" id="dtHistoryNote"></span></div>
+              <div class="dt-history" id="dtHistory"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var sb=document.getElementById('sidebar'), tg=document.getElementById('sbToggle');
+  if(tg&&sb) tg.addEventListener('click',function(){
+    var c=sb.classList.toggle('collapsed'); tg.setAttribute('aria-expanded',String(!c));
+  });
+  Array.prototype.slice.call(document.querySelectorAll('.nav-trig')).forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var group=btn.closest('.nav-group'), sub=document.getElementById(btn.getAttribute('aria-controls'));
+      var open=group.getAttribute('data-open')==='true';
+      group.setAttribute('data-open',String(!open));
+      btn.setAttribute('aria-expanded',String(!open));
+      if(sub) sub.hidden=open;
+    });
+  });
+})();
+</script>
+<script src="dp-data.js"></script>
+<script>
+/* Detail of one FISHPOND_DEMAND_PLAN version (?id=FDP-…), Phase 1 — rebuilt against
+   feature-spec.md §9 (the plan detail page). Shows exactly the version requested — whatever its
+   status — plus the full version history for that tambak+month (§5.3's two worked examples are
+   fully visible here: not just current state, but the fact that it changed, and from what), and,
+   new in this rebuild, each broken-out week's own disease breakdown (R-6) — the create form has
+   always been able to record this, but the detail page never rendered it until now. */
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var esc=function(x){return String(x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  var initials=function(n){return (n||'?').split(' ').map(function(w){return w[0]}).join('').slice(0,2).toUpperCase()};
+
+  var id=new URLSearchParams(location.search).get('id');
+  var plan=(id&&DP.FDP.getPlan(id))||DP.FDP.listPlans({status:'ACTIVE'})[0];
+  var farm=DP.farmById(plan.farm);
+  var ya=plan.response==='ya';
+  var weekly=plan.weekly||[];
+  var remainder=DP.FDP.remainderOf(plan);
+  var history=DP.FDP.historyFor(plan.farm,plan.year,plan.month);
+  var monthLabel=DP.MONTHS[plan.month]+' '+plan.year;
+
+  function bgp(k,v,variant){
+    return '<span class="dt-bgp'+(variant?' dt-bgp--'+variant:'')+'" role="listitem"><span class="dt-bgp__k">'+esc(k)+'</span><span>'+esc(v)+'</span></span>';
+  }
+  function diseaseChips(obj){
+    var keys=Object.keys(obj||{}).filter(function(d){return obj[d]>0});
+    if(!keys.length) return '';
+    return '<div class="dt-chips">'+keys.map(function(d){return '<span class="dt-chip">'+esc(d)+' <b>'+obj[d]+'</b></span>';}).join('')+'</div>';
+  }
+
+  document.title='CeKolam – '+plan.id;
+  $('#dtCode').textContent=plan.id;
+  $('#dtStatusBadge').textContent=plan.status==='ACTIVE'?'Aktif':'Digantikan';
+  $('#dtStatusBadge').className='dt-badge '+(plan.status==='ACTIVE'?'dt-badge--active':'dt-badge--superseded');
+  $('#dtSub').innerHTML='Dicatat oleh <span class="db-pic"><span class="db-pic__av">'+esc(initials(plan.recordedBy))+'</span>'+esc(plan.recordedBy)+'</span> · '+esc(plan.recordedAtLabel)+
+    (plan.supersedes?' · merevisi <a href="detail.html?id='+encodeURIComponent(plan.supersedes)+'">'+esc(plan.supersedes)+'</a>':'');
+  $('#crumbId').textContent=plan.id;
+
+  var active=history.filter(function(p){return p.status==='ACTIVE';})[0];
+  if(active){
+    $('#dtReviseLink').hidden=false;
+    if(active.id===plan.id){
+      $('#dtReviseLink').href='buat.html?farm='+encodeURIComponent(plan.farm)+'&lockFarm=1';
+      $('#dtReviseLink').textContent='Revisi rencana ini';
+    }else{
+      $('#dtReviseLink').href='detail.html?id='+encodeURIComponent(active.id);
+      $('#dtReviseLink').textContent='Lihat versi aktif untuk direvisi';
+    }
+  }
+
+  $('#dtBgps').innerHTML=
+    bgp('Bulan',monthLabel)+
+    bgp('Tambak',farm.name+' · '+farm.code)+
+    bgp('Akan ada sampel?',ya?'Ya':'Tidak',ya?'success':'warning')+
+    (ya?bgp('Jumlah sampel',plan.samples,'brand')+bgp('Jumlah testing',plan.tests,'brand'):'');
+
+  $('#dtStrip').innerHTML=ya
+    ? '<div class="dt-m dt-m--now"><span class="dt-m__k">Jumlah sampel (sebulan)</span><span class="dt-m__v">'+plan.samples+'</span>'+
+        '<span class="dt-m__s">'+(weekly.length?weekly.length+' minggu dirinci':'Belum dirinci per minggu')+'</span></div>'+
+      '<div class="dt-m"><span class="dt-m__k">Jumlah testing (sebulan)</span><span class="dt-m__v">'+plan.tests+'</span>'+
+        '<span class="dt-m__s">'+Object.keys(plan.testsByDisease||{}).filter(function(d){return plan.testsByDisease[d]>0}).length+' penyakit dirinci</span></div>'+
+      '<div class="dt-m"><span class="dt-m__k">Sisa bulan</span><span class="dt-m__v">'+remainder.samples+' / '+remainder.tests+'</span>'+
+        '<span class="dt-m__s">Sampel / testing di luar minggu yang dirinci</span></div>'
+    : '<div class="dt-m dt-m--down"><span class="dt-m__k">Akan ada sampel?</span><span class="dt-m__v">Tidak</span>'+
+        '<span class="dt-m__s">Lihat Kenapa di bawah</span></div>'+
+      '<div class="dt-m"><span class="dt-m__k">Dicatat</span><span class="dt-m__v" style="font-size:16px">'+esc(plan.recordedAtLabel)+'</span>'+
+        '<span class="dt-m__s">oleh '+esc(plan.recordedBy)+'</span></div>';
+
+  $('#dtIsi').innerHTML='<tbody>'+
+    '<tr><th scope="row">Akan ada sampel?</th><td class="num" data-label="Jawaban">'+(ya?'Ya':'Tidak')+'</td></tr>'+
+    (ya
+      ? '<tr><th scope="row">Jumlah sampel (sebulan)</th><td class="num" data-label="Jumlah sampel">'+plan.samples+'</td></tr>'+
+        '<tr><th scope="row">Jumlah testing (sebulan)</th><td class="num" data-label="Jumlah testing">'+plan.tests+'</td></tr>'
+      : '<tr><th scope="row">Kenapa</th><td data-label="Kenapa" style="text-align:left">'+esc(plan.kenapa||'–')+'</td></tr>')+
+    '</tbody>';
+
+  $('#dtWeeklyCard').hidden=!(ya&&weekly.length);
+  if(ya&&weekly.length){
+    var rows=weekly.map(function(w){
+      var locked=DP.FDP.isLockedWeek(w.weekStart);
+      return '<tr><th scope="row">'+esc(DP.FDP.weekRangeLabel(DP.FDP.fromIso(w.weekStart)))+(locked?'<span class="dt-wk-lock">Terkunci</span>':'')+'</th>'+
+        '<td class="num" data-label="Sampel">'+w.samples+'</td><td class="num" data-label="Testing">'+w.tests+'</td></tr>';
+    }).join('');
+    $('#dtWeekly').innerHTML='<thead><tr><th scope="col">Minggu</th><th scope="col" class="num">Sampel</th><th scope="col" class="num">Testing</th></tr></thead>'+
+      '<tbody>'+rows+'</tbody><tfoot><tr><th scope="row">Sisa bulan (tidak dirinci)</th>'+
+      '<td class="num">'+remainder.samples+'</td><td class="num">'+remainder.tests+'</td></tr></tfoot>';
+  }
+
+  /* Rincian testing per penyakit — whole-month AND, new in this rebuild, each broken-out week's
+     own breakdown (R-6: "optional at the whole-month level and, independently, optional per
+     broken-out week"). Shown as separate labelled blocks so it's clear which total each belongs to. */
+  var wholeDis=plan.testsByDisease||{}, wholeKeys=Object.keys(wholeDis).filter(function(d){return wholeDis[d]>0});
+  var weeksWithDis=weekly.filter(function(w){return Object.keys(w.testsByDisease||{}).some(function(d){return w.testsByDisease[d]>0});});
+  $('#dtPenyakitCard').hidden=!ya||(!wholeKeys.length&&!weeksWithDis.length);
+  if(ya&&(wholeKeys.length||weeksWithDis.length)){
+    var wholeTotal=wholeKeys.reduce(function(s,d){return s+wholeDis[d];},0);
+    $('#dtPenyakitNote').textContent=(wholeKeys.length?wholeTotal+' dari '+plan.tests+' testing sebulan':'')+
+      (weeksWithDis.length?(wholeKeys.length?' · ':'')+weeksWithDis.length+' minggu dirinci per penyakit':'');
+    var html='';
+    if(wholeKeys.length){
+      html+='<div class="dt-peny-block"><p class="dt-peny-block__h">Sebulan ('+wholeTotal+' dari '+plan.tests+' testing)</p>'+diseaseChips(wholeDis)+'</div>';
+    }
+    weeksWithDis.forEach(function(w){
+      var sum=Object.keys(w.testsByDisease).reduce(function(s,d){return s+(w.testsByDisease[d]||0);},0);
+      html+='<div class="dt-peny-block"><p class="dt-peny-block__h">'+esc(DP.FDP.weekRangeLabel(DP.FDP.fromIso(w.weekStart)))+' ('+sum+' dari '+w.tests+' testing minggu ini)</p>'+diseaseChips(w.testsByDisease)+'</div>';
+    });
+    $('#dtPenyakitBody').innerHTML=html;
+  }
+
+  $('#dtFarm').innerHTML=
+    '<div class="dt-farm"><span class="dt-farm__name">'+esc(farm.name)+
+      '<span class="dt-farm__sub">'+esc(farm.code)+' · '+esc(farm.kab)+', '+esc(farm.prov)+'</span></span>'+
+      '<div class="dt-farm__meta">'+
+        '<span class="db-status db-status--'+(farm.status==='budidaya'?'budidaya':farm.status==='off'?'off':'other')+'">'+DP.STATUS_LABEL[farm.status]+'</span>'+
+        '<span class="db-kind">'+esc(farm.region)+'</span><span class="db-kind">'+farm.ponds+' kolam</span>'+
+        '<span class="db-pic"><span class="db-pic__av">'+esc(initials(farm.pic))+'</span>'+esc(farm.pic)+'</span>'+
+      '</div></div>';
+
+  $('#dtHistoryNote').textContent=history.length+' versi untuk '+farm.name+' · '+monthLabel;
+  $('#dtHistory').innerHTML=history.map(function(p){
+    var isThis=p.id===plan.id;
+    return '<a class="dt-plan'+(isThis?' is-current':'')+'" href="detail.html?id='+encodeURIComponent(p.id)+'">'+
+      '<div class="dt-plan__id"><span class="dt-plan__code">'+esc(p.id)+(isThis?' <span class="dt-plan__viewing">(sedang dilihat)</span>':'')+'</span>'+
+        '<div class="dt-plan__meta">'+
+          '<span class="db-status db-status--'+(p.status==='ACTIVE'?'budidaya':'off')+'">'+(p.status==='ACTIVE'?'Aktif':'Digantikan')+'</span>'+
+          '<span class="db-pic"><span class="db-pic__av">'+esc(initials(p.recordedBy))+'</span>'+esc(p.recordedBy)+'</span>'+
+          '<span>'+esc(p.recordedAtLabel)+'</span>'+
+        '</div></div>'+
+      '<div class="dt-plan__stats">'+
+        (p.response==='ya'
+          ? '<div class="dt-stat"><span class="dt-stat__k">Sampel</span><span class="dt-stat__v">'+p.samples+'</span></div>'+
+            '<div class="dt-stat"><span class="dt-stat__k">Testing</span><span class="dt-stat__v">'+p.tests+'</span></div>'+
+            (p.weekly&&p.weekly.length?'<div class="dt-stat"><span class="dt-stat__k">Minggu</span><span class="dt-stat__v dt-stat__v--muted">'+p.weekly.length+' dirinci</span></div>':'')
+          : '<span class="dt-warn">Tidak: '+esc((p.kenapa||'').slice(0,40))+((p.kenapa||'').length>40?'…':'')+'</span>')+
+      '</div></a>';
+  }).join('');
+})();
+</script>
+</body>
+</html>
