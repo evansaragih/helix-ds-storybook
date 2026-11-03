@@ -188,6 +188,28 @@ button{cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inhe
   .dt-tbl tbody td,.dt-tbl tbody th{display:flex;justify-content:space-between;gap:12px;padding:6px 16px;border:0!important;text-align:right}
   .dt-tbl tbody td::before{content:attr(data-label);font-weight:500;color:var(--hx-text);text-align:left}
 }
+/* Mobile: the page itself never scrolls — only the content container does */
+@media (max-width:640px){
+  html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+  .app{height:100vh;height:100dvh;min-height:0}
+}
+/* Breadcrumb: one line, truncate with ellipsis so the right-hand controls keep their space */
+.nav-left{flex:1 1 0;min-width:0;overflow:hidden}
+.nav-right{flex:none}
+.nav-left>*{flex:none}
+.nav-left>.crumb{flex:0 10 auto;min-width:0}
+.nav-left>.crumb[aria-current]{flex:0 1 auto}
+.crumb>span,.crumb[aria-current]{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media (max-width:640px){
+  .nav-right{flex:0 1 auto;min-width:0}
+  .org-btn{min-width:0;max-width:132px;padding:8px}
+}
+.crumb[aria-current]{display:block}
+@media (max-width:640px){
+  .nav-left{gap:4px}
+  .nav-right{gap:4px}
+  .org-btn{max-width:120px}
+}
 </style>
 </head>
 <body>
