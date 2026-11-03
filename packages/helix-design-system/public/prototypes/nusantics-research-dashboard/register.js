@@ -1,167 +1,130 @@
-// Registration: 3 steps (institution -> personal data -> review), then OTP.
-(() => {
-  const INSTITUTIONS = [
-    { name: 'Institut Teknologi Bandung', domain: 'itb.ac.id' },
-    { name: 'Institut Pertanian Bogor', domain: 'apps.ipb.ac.id' },
-    { name: 'Institut Teknologi Sepuluh Nopember', domain: 'its.ac.id' },
-    { name: 'Universitas Indonesia', domain: 'ui.ac.id' },
-    { name: 'Universitas Gadjah Mada', domain: 'ugm.ac.id' },
-    { name: 'Universitas Airlangga', domain: 'unair.ac.id' },
-    { name: 'Universitas Brawijaya', domain: 'ub.ac.id' },
-    { name: 'Universitas Padjadjaran', domain: 'unpad.ac.id' },
-    { name: 'Universitas Diponegoro', domain: 'undip.ac.id' },
-    { name: 'Universitas Hasanuddin', domain: 'unhas.ac.id' },
-    { name: 'Universitas Sebelas Maret', domain: 'uns.ac.id' },
-    { name: 'Badan Riset dan Inovasi Nasional (BRIN)', domain: 'brin.go.id' },
-  ];
-  const STEP_BUTTON = { 1: 'Lanjut Isi Data Diri', 2: 'Lanjut Review Data', 3: 'Buat Akun & Verifikasi' };
-  const DESC_NEW = 'Daftarkan diri dan buat kelompok studi baru di institusi Anda! Jika sudah terdaftar, minta Lead kelompok Anda untuk mengundang, jadi tidak perlu mendaftar ulang.';
-  const DESC_REVIEW = 'Periksa kembali data Anda sebelum membuat akun. Kode verifikasi akan dikirim ke email institusional Anda.';
-  const EMAIL_RE = /^[^\s@]+@([^\s@]+\.(?:ac\.id|go\.id|or\.id))$/i;
+(function(){
+  var A=Auth, I=A.I, root=A.$('#root');
+  var d=A.store.get('regdata')||{}; var seed=A.store.get('reg')||{};
+  var S={step:1, email:d.email||seed.email||'', inst:d.inst||'', instNew:!!d.instNew, group:d.group||'', first:d.first||'', last:d.last||'', phone:d.phone||'', file:'', err:{}, open:false, q:''};
+  var save=function(){A.store.set('regdata',{email:S.email,inst:S.inst,instNew:S.instNew,group:S.group,first:S.first,last:S.last,phone:S.phone})};
+  var DUP='811111111111';
+  var tip=function(t){return '<span class="tip" tabindex="0" role="img" aria-label="'+A.esc(t)+'">'+I.info+'<span class="tip__b" role="tooltip">'+A.esc(t)+'</span></span>'};
+  var domOf=function(e){return (e.split('@')[1]||'').toLowerCase()};
+  var instByDomain=function(e){var x=domOf(e); return A.INSTITUTIONS.filter(function(i){return i.d===x})[0]};
 
-  const $ = (id) => document.getElementById(id);
-  const form = $('reg-form'), next = $('next'), back = $('back'), toastEl = $('toast');
-  const email = $('email'), inst = $('inst'), group = $('group'), first = $('first'), last = $('last'), phone = $('phone');
-  const pop = $('inst-pop'), list = $('inst-list'), empty = $('inst-empty');
-  const stepEls = [...document.querySelectorAll('.step')];
-  const stepperItems = [...document.querySelectorAll('.stepper__item')];
-
-  let step = 1, selected = null, active = -1, toastTimer = null;
-
-  const toast = (text) => {
-    toastEl.textContent = text; toastEl.hidden = false;
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => { toastEl.hidden = true; }, 3600);
-  };
-
-  // ---- field messages ----
-  const hints = {};
-  const msgOf = (input) => $(input.getAttribute('aria-describedby'));
-  function setState(input, state, text) {
-    const field = input.closest('.field'), msg = msgOf(input);
-    if (!(input.id in hints)) hints[input.id] = msg ? msg.textContent : '';
-    field.classList.toggle('field--error', state === 'error');
-    field.classList.toggle('field--success', state === 'success');
-    input.setAttribute('aria-invalid', state === 'error' ? 'true' : 'false');
-    if (!msg) return;
-    msg.textContent = text ?? hints[input.id];
-    msg.hidden = !msg.textContent;
+  function stepper(){
+    var n=S.step, c=function(i){return i<n?'is-done':i===n?'is-now':''};
+    var dot=function(i){return '<span class="dot '+c(i)+'">'+(i<n?I.check:i)+'</span>'};
+    return '<div class="steps" aria-label="Langkah '+n+' dari 3"><div class="steps__row">'+dot(1)+'<i></i>'+dot(2)+'<i></i>'+dot(3)+'</div><div class="steps__lbl"><span>Institusi dan<br>Kelompok Studi</span><span>Data Diri Anda</span><span>Review Data</span></div></div>';
   }
-  const clear = (input) => setState(input, 'idle');
+  function fld(id,label,req,tooltip,inner,msg,hint){
+    return '<div class="field"><label for="'+id+'">'+label+(req?' <span class="req" aria-hidden="true">*</span>':'')+(tooltip?' '+tip(tooltip):'')+'</label>'+inner+(msg?'<p class="err" id="'+id+'-e" role="alert">'+A.esc(msg)+'</p>':(hint?'<p class="hint">'+hint+'</p>':''))+'</div>';
+  }
+  var box=function(id,inner,bad,dis){return '<div class="box'+(bad?' is-error':'')+(dis?' is-disabled':'')+'">'+inner+'</div>'};
+  var inp=function(id,ph,v,bad,extra){return '<input id="'+id+'" name="'+id+'" placeholder="'+ph+'" value="'+A.esc(v)+'" autocomplete="off"'+(bad?' aria-invalid="true" aria-describedby="'+id+'-e"':'')+(extra||'')+'>'};
+  var upload=function(){return '<div class="field"><span class="lbl" id="kl">Aktivasi Kit BiomeSeq (optional)</span><div class="file">'+I.cloud+'<span id="fn">'+(S.file?A.esc(S.file):'No file chosen')+'</span><label class="btn" style="cursor:pointer">Browse<input class="sr" id="kit" type="file" accept="image/*,.pdf" aria-labelledby="kl"></label></div></div>'};
 
-  // ---- email / institution ----
-  const domainOf = (v) => { const m = EMAIL_RE.exec(v.trim()); return m ? m[1].toLowerCase() : ''; };
-  const matchByDomain = (d) => INSTITUTIONS.find((i) => d === i.domain || d.endsWith('.' + i.domain));
-
-  function checkDomainHint() {
-    const d = domainOf(email.value);
-    const hit = d && matchByDomain(d);
-    if (hit) {
-      setState(email, 'success', 'Domain email sesuai dengan ' + hit.name);
-      if (!selected && !inst.value.trim()) choose(hit, false);
-    } else clear(email);
+  function body1(){
+    var e=S.err, picked=S.inst;
+    var list=A.INSTITUTIONS.filter(function(i){return !S.q||i.n.toLowerCase().indexOf(S.q.toLowerCase())>-1});
+    var exact=A.INSTITUTIONS.some(function(i){return i.n.toLowerCase()===S.q.trim().toLowerCase()});
+    var opts=list.map(function(i){return '<button type="button" class="cb__o'+(i.n===picked?' is-on':'')+'" role="option" aria-selected="'+(i.n===picked)+'" data-inst="'+A.esc(i.n)+'">'+A.esc(i.n)+'</button>'}).join('')+
+      (S.q.trim()&&!exact?'<button type="button" class="cb__o cb__o--new" role="option" data-new="'+A.esc(S.q.trim())+'">Daftarkan “'+A.esc(S.q.trim())+'” sebagai institusi baru</button>':'')+
+      (!list.length&&!S.q.trim()?'<div class="cb__o ph">Tidak ada institusi</div>':'');
+    return fld('email','Email Institusional',1,'Gunakan email institusi Anda (.ac.id, .go.id, .or.id)',box('email',inp('email','nama@institusi.ac.id',S.email,e.email,' type="email" inputmode="email"'),e.email),e.email)+
+      fld('instb','Nama Institusi',1,'Pilih dari daftar atau ketik nama baru untuk mendaftarkan institusi Anda',
+        '<div class="cb'+(S.open?' is-open':'')+'" id="cb">'+box('instb','<button class="cb__t" id="instb" type="button" aria-haspopup="listbox" aria-expanded="'+S.open+'"'+(e.inst?' aria-invalid="true"':'')+'><span class="'+(picked?'':'ph')+'">'+(A.esc(picked)||'Cari nama institusi...')+'</span>'+I.chev+'</button>',e.inst)+
+        '<div class="cb__p" '+(S.open?'':'hidden')+'><div class="cb__s">'+I.search+'<input id="q" placeholder="Cari nama institusi..." aria-label="Cari nama institusi" value="'+A.esc(S.q)+'" autocomplete="off"></div><div class="cb__l" role="listbox">'+opts+'</div></div></div>',e.inst)+
+      fld('group','Kelompok Studi (Study Group)',1,'Anda dapat membuat kelompok studi baru di sini. Gunakan nama yang jelas dan spesifik, mis. nama bidang riset atau nama dosen pembimbing.',
+        box('group',inp('group','Nama kelompok studi',S.group,e.group,picked?'':' disabled'),e.group,!picked),e.group)+
+      upload();
+  }
+  function body2(){
+    var e=S.err;
+    return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'+
+      fld('first','Nama Depan',1,'',box('first',inp('first','Nama depan',S.first,e.first,' autocomplete="given-name"'),e.first),e.first)+
+      fld('last','Nama Belakang',0,'',box('last',inp('last','Nama belakang',S.last,0,' autocomplete="family-name"'),0))+'</div>'+
+      fld('phone','No. Telepon',1,'',box('phone','<span class="pre">+62</span>'+inp('phone','8xx xxxx xxxx',S.phone,e.phone,' type="tel" inputmode="tel"'),e.phone),e.phone,'Silakan gunakan nomor telepon Anda yang aktif.')+upload();
+  }
+  function body3(){
+    return '<section class="sum" aria-labelledby="st"><h2 id="st">Ringkasan Pendaftaran</h2><dl><div><dt>Email Institusional</dt><dd>'+A.esc(S.email)+'</dd></div><div><dt>Nama Institusi</dt><dd>'+A.esc(S.inst)+'</dd></div><div><dt>Kelompok Studi</dt><dd>'+A.esc(S.group)+'</dd></div>'+
+      '<div class="two"><div><dt>Nama Depan</dt><dd>'+A.esc(S.first)+'</dd></div><div><dt>Nama Belakang</dt><dd>'+(A.esc(S.last)||'-')+'</dd></div></div><div><dt>No. Telepon</dt><dd>+62'+A.esc(A.normPhone(S.phone))+'</dd></div></dl></section>';
+  }
+  function render(focus){
+    var cta=['','Lanjut Isi Data Diri','Lanjut Review Data','Buat Akun & Verifikasi'][S.step];
+    root.className='form form--tight'; root.style.gap='12px';
+    root.innerHTML='<a class="back" href="#" id="bk">'+I.back+'Kembali</a>'+
+      '<header class="head head--dark"><h1>Pendaftaran Akun</h1><p>Daftarkan diri dan buat kelompok studi baru di institusi Anda! Setelah terdaftar, minta Lead kelompok untuk mengundang, jadi tidak perlu mendaftar ulang.</p></header>'+
+      stepper()+'<form class="stack" id="f" novalidate>'+[0,body1,body2,body3][S.step]()+'<button class="btn btn--primary" type="submit" style="margin-top:0">'+cta.replace('&','&amp;')+'</button>'+(S.step>1?'<p class="note">*OTP verifikasi akan dikirimkan ke email yang tertera di atas</p>':'')+'</form>';
+    if(focus){var f=A.$(focus,root); if(f){f.focus(); try{f.setSelectionRange(f.value.length,f.value.length)}catch(x){}}}
   }
 
-  function renderList(query) {
-    const q = query.trim().toLowerCase();
-    const items = INSTITUTIONS.filter((i) => i.name.toLowerCase().includes(q));
-    list.innerHTML = '';
-    items.forEach((i, idx) => {
-      const li = document.createElement('li');
-      li.className = 'combo__opt'; li.role = 'option'; li.id = 'opt-' + idx; li.textContent = i.name;
-      li.setAttribute('aria-selected', selected === i ? 'true' : 'false');
-      li.addEventListener('mousedown', (e) => { e.preventDefault(); choose(i, true); });
-      list.appendChild(li);
-    });
-    list.hidden = items.length === 0;
-    empty.hidden = items.length !== 0 || !q;
-    active = -1;
-    return items;
+  /* ── validation ── */
+  function checkDomain(){   /* email domain must belong to the chosen (existing) institution */
+    var m=instByDomain(S.email);
+    if(m&&S.inst&&!S.instNew&&m.n!==S.inst){ A.toast({kind:'error',title:'Domain Email Tidak Sesuai Institusi',text:'Email Anda (@'+domOf(S.email)+') terdaftar untuk '+m.n+', bukan “'+S.inst+'”. Pilih institusi yang sesuai atau gunakan email institusional yang benar.'}); return false; }
+    if(m&&S.inst&&S.instNew){ A.toast({kind:'error',title:'Domain Email Tidak Sesuai Institusi',text:'Email Anda (@'+domOf(S.email)+') terdaftar untuk '+m.n+', bukan “'+S.inst+'”. Pilih institusi yang sesuai atau gunakan email institusional yang benar.'}); return false; }
+    return true;
   }
-  function openPop() { renderList(selected ? '' : inst.value); pop.hidden = list.hidden && empty.hidden; inst.setAttribute('aria-expanded', String(!pop.hidden)); }
-  function closePop() { pop.hidden = true; inst.setAttribute('aria-expanded', 'false'); inst.removeAttribute('aria-activedescendant'); }
-  function choose(i, fromList) {
-    selected = i; inst.value = i.name; clear(inst); closePop();
-    if (fromList) inst.focus();
+  function v1(){
+    var e={};
+    if(!S.email.trim()) e.email='Email institusi wajib diisi'; else if(!A.okEmail(S.email)||!A.instEmail(S.email)) e.email='Gunakan email institusi Anda (.ac.id, .go.id, .or.id).';
+    if(!S.inst) e.inst='Nama institusi wajib diisi';
+    if(S.inst&&!S.group.trim()) e.group='Nama kelompok studi wajib diisi';
+    S.err=e; if(!Object.keys(e).length&&!checkDomain()){S.err={email:' '}; }
+    return !Object.keys(S.err).length;
   }
-  function moveActive(delta) {
-    const opts = [...list.children]; if (!opts.length) return;
-    active = (active + delta + opts.length) % opts.length;
-    opts.forEach((o, k) => o.classList.toggle('is-active', k === active));
-    inst.setAttribute('aria-activedescendant', opts[active].id);
-    opts[active].scrollIntoView({ block: 'nearest' });
+  function v2(){
+    var e={}, n=A.normPhone(S.phone);
+    if(!S.first.trim()) e.first='Nama depan wajib diisi';
+    if(!S.phone.trim()) e.phone='Nomor telepon wajib diisi';
+    else if(!/^8\d{9,12}$/.test(n)) e.phone='Nomor telepon tidak valid. Masukkan 10–13 digit nomor aktif tanpa spasi atau simbol.';
+    else if(n===DUP) e.phone='Nomor telepon ini sudah terdaftar di akun lain. Gunakan nomor lain atau masuk dengan akun yang sudah ada.';
+    S.err=e; return !Object.keys(e).length;
   }
 
-  inst.addEventListener('focus', openPop);
-  inst.addEventListener('input', () => { selected = null; clear(inst); renderList(inst.value); pop.hidden = list.hidden && empty.hidden; inst.setAttribute('aria-expanded', String(!pop.hidden)); });
-  inst.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowDown') { e.preventDefault(); if (pop.hidden) openPop(); moveActive(1); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); moveActive(-1); }
-    else if (e.key === 'Enter' && !pop.hidden && active >= 0) { e.preventDefault(); const o = INSTITUTIONS.filter((i) => i.name.toLowerCase().includes(inst.value.trim().toLowerCase()))[active]; if (o) choose(o, false); }
-    else if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); closePop(); }
-  });
-  inst.addEventListener('blur', () => setTimeout(closePop, 120));
-  $('inst-toggle').addEventListener('mousedown', (e) => { e.preventDefault(); if (pop.hidden) { inst.focus(); openPop(); } else closePop(); });
-  $('wa-support').addEventListener('click', (e) => { e.preventDefault(); toast('Tautan WhatsApp Support belum tersambung di mockup ini.'); });
-
-  email.addEventListener('input', () => { clear(email); });
-  email.addEventListener('blur', checkDomainHint);
-  group.addEventListener('input', () => clear(group));
-  first.addEventListener('input', () => clear(first));
-  phone.addEventListener('input', () => clear(phone));
-
-  // ---- validation ----
-  const normPhone = () => phone.value.replace(/[\s-]/g, '').replace(/^0/, '');
-  function validate() {
-    const bad = [];
-    const fail = (input, text) => { setState(input, 'error', text); bad.push(input); };
-    if (step === 1) {
-      const v = email.value.trim();
-      if (!v) fail(email, 'Email institusional wajib diisi.');
-      else if (!EMAIL_RE.test(v)) fail(email, 'Gunakan email institusi dengan domain .ac.id, .go.id, atau .or.id');
-      if (!selected) fail(inst, inst.value.trim() ? 'Institusi tidak ada di daftar. Pilih dari daftar atau hubungi Nusantics Support.' : 'Nama institusi wajib dipilih.');
-      if (!group.value.trim()) fail(group, 'Nama kelompok studi wajib diisi.');
-    } else if (step === 2) {
-      if (!first.value.trim()) fail(first, 'Nama depan wajib diisi.');
-      if (!normPhone()) fail(phone, 'Nomor telepon wajib diisi.');
-      else if (!/^8\d{8,11}$/.test(normPhone())) fail(phone, 'Nomor telepon tidak valid. Contoh: 812 3456 7890');
+  /* ── events ── */
+  root.addEventListener('input',function(e){
+    var t=e.target, id=t.id;
+    if(id==='q'){S.q=t.value; render(); A.$('#q',root).focus(); return;}
+    if(id==='kit') return;
+    if(['email','group','first','last','phone'].indexOf(id)>-1){
+      S[id]=t.value; if(S.err[id]){delete S.err[id]; t.closest('.box').classList.remove('is-error'); var m=A.$('#'+id+'-e',root); if(m) m.remove();}
+      if(id==='email'&&!S.inst){var hit=instByDomain(S.email); if(hit){S.inst=hit.n; S.instNew=false; render('#email');}}   /* institution detected from the domain */
+      save();
     }
-    if (bad.length) bad[0].focus();
-    return bad.length === 0;
-  }
-
-  // ---- steps ----
-  function show(n) {
-    step = n;
-    stepEls.forEach((el) => { el.hidden = Number(el.dataset.step) !== n; });
-    stepperItems.forEach((el, i) => {
-      el.classList.toggle('is-done', i + 1 < n);
-      el.classList.toggle('is-current', i + 1 === n);
-      if (i + 1 === n) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
-    });
-    next.querySelector('.btn__label').textContent = STEP_BUTTON[n];
-    $('otp-note').hidden = n === 1;
-    $('reg-desc').textContent = n === 3 ? DESC_REVIEW : DESC_NEW;
-    const target = stepEls[n - 1].querySelector('input'); if (target) target.focus({ preventScroll: true });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  function fillReview() {
-    $('r-email').textContent = email.value.trim();
-    $('r-inst').textContent = selected.name;
-    $('r-group').textContent = group.value.trim();
-    $('r-first').textContent = first.value.trim();
-    $('r-last').textContent = last.value.trim() || '—';
-    $('r-phone').textContent = '+62' + normPhone();
-  }
-
-  back.addEventListener('click', (e) => { if (step > 1) { e.preventDefault(); show(step - 1); } });
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!validate()) return;
-    if (step < 3) { if (step === 2) fillReview(); show(step + 1); return; }
-    next.setAttribute('aria-busy', 'true'); next.querySelector('.btn__label').textContent = 'Membuat akun…';
-    try { sessionStorage.setItem('nrd.identity', JSON.stringify({ mode: 'email', value: email.value.trim() })); } catch (err) { /* storage blocked: otp page falls back to a sample value */ }
-    toast('Akun dibuat. Mengirim kode verifikasi…');
-    setTimeout(() => { window.location.href = 'otp.html'; }, 1100);
   });
+  root.addEventListener('change',function(e){ if(e.target.id==='kit'){S.file=e.target.files[0]?e.target.files[0].name:''; A.$('#fn',root).textContent=S.file||'No file chosen';} });
+  root.addEventListener('click',function(e){
+    var t=e.target;
+    if(t.closest('#bk')){e.preventDefault(); if(S.step>1){S.step--; S.err={}; render();} else location.href='login.html'; return;}
+    if(t.closest('#instb')){S.open=!S.open; S.q=''; render(S.open?'#q':'#instb'); return;}
+    var o=t.closest('[data-inst]'), nw=t.closest('[data-new]');
+    if(o){S.inst=o.dataset.inst; S.instNew=false; S.open=false; delete S.err.inst; save(); render('#instb'); return;}
+    if(nw){S.inst=nw.dataset.new; S.instNew=true; S.open=false; delete S.err.inst; save(); render('#group');
+      A.toast({kind:'success',title:'Institusi Baru Berhasil Didaftarkan',text:'“'+S.inst+'” telah berhasil didaftarkan. Anda bisa lanjutkan mendaftarkan kelompok studi Anda di institusi ini.'}); return;}
+    if(S.open&&!t.closest('#cb')){S.open=false; render();}
+  });
+  root.addEventListener('keydown',function(e){ if(e.key==='Escape'&&S.open){S.open=false; render('#instb');} });
+  root.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(S.step===1){ if(!v1()){render(); var f=A.$('.is-error input,.is-error button',root); if(f) f.focus(); return;} S.step=2; S.err={}; save(); render(); }
+    else if(S.step===2){ if(!v2()){render(); var g=A.$('.is-error input',root); if(g) g.focus(); return;} S.step=3; save(); render(); }
+    else verifyDialog();
+  });
+
+  function verifyDialog(){
+    var via='wa', wa='0812-xxxx-x'+A.normPhone(S.phone).slice(-2);
+    var html='<div class="dlg__body"><span class="dlg__ic">'+I.circlecheck+'</span><div><h2 class="dlg__t" id="dlgT">Pilih Metode Verifikasi</h2><p class="dlg__d">Kode OTP 6-digit akan dikirimkan ke kontak yang Anda pilih.</p></div>'+
+      '<div role="radiogroup" aria-label="Metode verifikasi" class="stack" style="gap:12px">'+
+      '<button class="opt is-on" type="button" role="radio" aria-checked="true" data-via="wa"><span class="opt__in"><span class="opt__tile">'+I.wa+'</span><span class="opt__tx"><b>WhatsApp</b><span>Kirim ke nomor '+A.esc(wa)+'</span></span><span class="radio"></span></span></button>'+
+      '<button class="opt" type="button" role="radio" aria-checked="false" data-via="email"><span class="opt__in"><span class="opt__tile opt__tile--dark">'+I.mail+'</span><span class="opt__tx"><b>Email</b><span>Kirim ke email institusional Anda</span></span><span class="radio"></span></span></button></div></div>'+
+      '<div class="dlg__f"><button class="btn btn--quiet" type="button" data-close>Batal</button><button class="btn btn--primary" type="button" id="send" data-autofocus>Kirim Kode OTP</button></div>';
+    var dg=A.dialog({html:html});
+    dg.el.addEventListener('click',function(e){
+      var o=e.target.closest('[data-via]');
+      if(o){via=o.dataset.via; [].forEach.call(dg.el.querySelectorAll('.opt'),function(x){var on=x===o; x.classList.toggle('is-on',on); x.setAttribute('aria-checked',on);}); return;}
+      if(e.target.closest('#send')){
+        A.store.set('otp',{flow:'register',via:via,to:via==='wa'?'+62'+A.normPhone(S.phone):S.email.toLowerCase()});
+        location.href='otp.html';
+      }
+    });
+  }
+  render();
 })();

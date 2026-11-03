@@ -1,4 +1,4 @@
-/* Nusantics dashboard shell — shared by nusantics-beranda-mock.html and nusantics-analisis-lanjutan-mock.html.
+/* Nusantics dashboard shell — shared by beranda.html and analisis-lanjutan.html.
    Source of truth: Figma "Dashboard Layout" (Sidebar State=Expanded/Collapsed + Dashboard Navbar).
    Rendered by shell.js; every class is prefixed hx- so it never collides with a page's own CSS. */
 
@@ -94,6 +94,7 @@
 .hx-menu-item[aria-checked="true"]{color:var(--hx-primary);font-weight:500}
 .hx-menu-item svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;visibility:hidden}
 .hx-menu-item[aria-checked="true"] svg{visibility:visible}
+.hx-btn[hidden]{display:none}
 .hx-btn--run{min-width:150px}
 .hx-btn--run .hx-txt{flex:none;overflow:visible}
 .hx-btn--dark{width:180px;border-color:#393a3b;background:var(--hx-dark);color:#fff}
@@ -158,3 +159,4 @@
 .hx-sk--b{border-radius:12px}
 .hx-sk-layer{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--hx-surface);border-radius:inherit;overflow:hidden}
 @media (prefers-reduced-motion:reduce){.hx-sk{animation:none}.hx-enter>*{animation:none!important}}
+.hx-lang,#langMenu{display:none!important}   /* the new Figma navbar has no language switch */

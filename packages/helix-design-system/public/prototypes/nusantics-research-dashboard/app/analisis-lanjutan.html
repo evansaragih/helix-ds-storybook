@@ -227,8 +227,8 @@
   .taxa[data-legend="bottom"], .al-wrap[data-legend="bottom"] { flex-direction: column; } .taxa[data-legend="top"], .al-wrap[data-legend="top"] { flex-direction: column-reverse; } .taxa[data-legend="left"], .al-wrap[data-legend="left"] { flex-direction: row-reverse; }
   .al-wrap { display: flex; flex-direction: row; gap: 14px; padding: 10px 12px 14px; box-sizing: border-box; min-height: 100%; }
   .al-plot { flex: 1; min-width: 0; }
-  .tx-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  .tx-cols { flex: 1; min-height: 240px; display: flex; align-items: stretch; gap: var(--gap, 2px); }
+  .tx-main { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-x: auto; }   /* many samples scroll inside the plot, never under the legend */
+  .tx-cols { flex: 1; min-height: 240px; display: flex; align-items: stretch; gap: var(--gap, 2px); width: max-content; min-width: 100%; }
   .tx-col { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: var(--bw, 14px); }
   .tx-col .vbar { flex: 1; width: var(--bw, 14px); display: flex; flex-direction: column; background: #f4f4f4; }
   .tx-col .vbar i { display: block; width: 100%; }
@@ -238,7 +238,7 @@
   .bar { flex: 1; display: flex; height: 100%; }
   .bar i { display: block; height: 100%; }
   .bar i:hover { filter: brightness(1.12); }
-  .legend { flex-shrink: 0; font-size: 9px; color: #444; }
+  .legend { flex-shrink: 0; font-size: 9px; color: #444; position: relative; z-index: 1; background: var(--surface); }
   .taxa[data-legend="bottom"] .legend, .taxa[data-legend="top"] .legend, .al-wrap[data-legend="bottom"] .legend, .al-wrap[data-legend="top"] .legend { border-top: 1px solid var(--border); padding-top: 10px; }
   .taxa[data-legend="right"] .legend, .taxa[data-legend="left"] .legend, .al-wrap[data-legend="right"] .legend, .al-wrap[data-legend="left"] .legend { width: 170px; align-self: flex-start; }
   .taxa[data-legend="right"] .legend ul, .taxa[data-legend="left"] .legend ul, .al-wrap[data-legend="right"] .legend ul, .al-wrap[data-legend="left"] .legend ul { grid-template-columns: 1fr; }
@@ -516,7 +516,7 @@
     <header data-hx-navbar></header>
     <!-- page specific part of the shared navbar: breadcrumb (+ language switch) -->
     <template id="hx-breadcrumb"><nav class="crumbs" aria-label="Breadcrumb">
-          <a class="crumb" href="nusantics-beranda-mock.html"><svg class="hx-i" style="font-size:12px;color:#828282" aria-hidden="true"><use href="#hx-i-dashboard"/></svg><span data-i18n="bc.home">Home</span></a><img src="assets/ic-chev-right.svg" alt="">
+          <a class="crumb" href="beranda.html"><svg class="hx-i" style="font-size:12px;color:#828282" aria-hidden="true"><use href="#hx-i-dashboard"/></svg><span data-i18n="bc.home">Home</span></a><img src="assets/ic-chev-right.svg" alt="">
           <button class="crumb crumb-more" id="crumbMore" type="button" aria-label="Show 1 hidden page" data-i18n-label="bc.hidden" aria-haspopup="menu" aria-expanded="false" aria-controls="crumbMenu">···</button><img src="assets/ic-chev-right.svg" alt="">
           <a class="crumb current" aria-current="page"><svg class="i" viewBox="0 0 24 24" style="width:12px;height:12px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="bc.apps">Applications</span></a>
         </nav></template>
@@ -1009,11 +1009,14 @@
   // ── top right of the tab bar: metadata version + run name, with a skeleton while it "loads" ──
   const runMeta = $('#runMeta');
   function showRunMeta() {
-    const run = '20260901-appconfigtrimprefix';
-    $('#metaVer').textContent = 'Metadata Version 1'; $('#metaRun').textContent = `Run Name: ${run}`; $('#metaRun').title = run;
+    let info = null; try { info = JSON.parse(sessionStorage.getItem('nrd-workspace') || 'null'); } catch (e) { /* storage unavailable */ }
+    const run = (info && info.run) || '20260901-appconfigtrimprefix';
+    $('#metaVer').textContent = 'Metadata Version ' + ((info && info.version) || 1); $('#metaRun').textContent = `Run Name: ${run}`; $('#metaRun').title = run;
     runMeta.setAttribute('aria-busy', 'false');
   }
   runMeta.setAttribute('aria-busy', 'true');   // skeleton until the (mock) request resolves
+  // the dark arrow beside the tabs goes back to the run's result step
+  document.querySelector('.tab-back').addEventListener('click', () => { location.href = 'konfirmasi.html?view=done'; });
   setTimeout(showRunMeta, 1400);
 
   // ── live summary under each chart title (badge = rank/metric, then two parts) ──

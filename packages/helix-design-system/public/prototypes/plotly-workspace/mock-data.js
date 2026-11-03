@@ -40,7 +40,8 @@
   const pick = (arr) => arr[Math.floor(rand() * arr.length)];
 
   // ── sample roster + metadata ────────────────────────────────────────────────
-  const N_SAMPLES = 22;
+  const N_SUBJECTS = 40;               // 40 subjects x 2 timepoints = 80 samples (shows the viewer with many samples)
+  const N_SAMPLES = N_SUBJECTS * 2;
   const GROUPS = ['Control', 'Treatment'];
   const TIMEPOINTS = ['Baseline', 'Week 8'];
   const SITES = ['Jakarta', 'Bandung', 'Surabaya'];
@@ -48,7 +49,7 @@
 
   const SAMPLES = [];
   const METADATA = {};
-  const N_SUBJECTS = 11;
+
   for (let s = 1; s <= N_SUBJECTS; s++) {
     const subjectId = 'SUBJ' + String(s).padStart(2, '0');
     const group = GROUPS[s % 2];
