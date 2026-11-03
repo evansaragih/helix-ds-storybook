@@ -804,10 +804,10 @@ b,strong{font-weight:500}
   .bar__sum .bgp{display:none}
   .bar__sum:not(:has(.bar__hint:not([hidden]))){display:none}
 }
-/* Mobile: the card scrolls as one — header stays pinned, body AND footer (hint + buttons) scroll together; footer sits at the end of the content */
+/* Mobile: the whole card scrolls as one page — header (title + stepper), body AND footer all move together; footer sits at the end of the content */
 @media (max-width:640px){
   .card{overflow-y:auto;overscroll-behavior:contain}
-  .card__head{position:sticky;top:0;z-index:3;flex:none;background:#fff}
+  .card__head{position:static;flex:none;background:#fff}
   .card__body{flex:1 0 auto;overflow:visible}
   .card__foot{flex:none;position:static;border-top:1px solid var(--hx-stroke)}
 }
@@ -826,6 +826,17 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
 .bar__sum:not(:has(.bar__hint:not([hidden]))){display:none}
 .card__foot{justify-content:flex-end}
 .bar__sum{margin-right:auto}
+/* Mobile (final): the PAGE scrolls — not the card. Navbar stays pinned, header/body/footer flow as one document, footer sits at the end of the content */
+@media (max-width:640px){
+  html,body{height:auto;overflow:visible;overscroll-behavior:auto}
+  .app{height:auto;min-height:100vh;min-height:100dvh}
+  .body{overflow:clip}                      /* clip (not hidden): keeps the rounded corners without making a scroll container, so the sticky navbar still works */
+  .navbar{position:sticky;top:0;z-index:20;border-radius:16px 16px 0 0}
+  .dp-page{flex:1 0 auto;overflow:visible}
+  .card{flex:1 0 auto;overflow:clip}
+  .card__head{border-radius:12px 12px 0 0}
+  .card__foot{border-radius:0 0 12px 12px}
+}
 </style>
 </head>
 <body>
