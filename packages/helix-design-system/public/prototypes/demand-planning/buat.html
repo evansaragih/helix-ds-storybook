@@ -776,6 +776,29 @@ b,strong{font-weight:500}
   .nav-right{gap:4px}
   .org-btn{max-width:120px}
 }
+/* Weekly disease breakdown Sheet: right panel on desktop, bottom sheet on mobile (Sheet DS spec) */
+.pa--btn .acc__chev{transform:rotate(-90deg)}
+.pa--btn .acc__trig{cursor:pointer}
+@keyframes dp-sheet-right{from{transform:translateX(100%)}to{transform:none}}
+.pysheet{position:fixed;inset:0 0 0 auto;margin:0;width:384px;max-width:100vw;height:100vh;height:100dvh;max-height:none;padding:0;border:0;border-left:1px solid var(--hx-stroke);border-radius:0;background:#fff;box-shadow:0 1px 2px rgba(89,89,90,.15);overflow:hidden;flex-direction:column}
+.pysheet[open]{display:flex;animation:dp-sheet-right var(--motion-duration-slow) var(--motion-easing-decelerate)}
+.pysheet::backdrop{background:rgba(20,20,30,.7);animation:dp-fade var(--motion-duration-base) var(--motion-easing-standard)}
+.pysheet__head{display:flex;align-items:flex-start;gap:8px;padding:12px 12px 8px;border-bottom:1px solid var(--hx-stroke);flex:none}
+.pysheet__txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.pysheet__title{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.16px}
+.pysheet__desc{margin:0;font-size:13px;line-height:19.2px;color:var(--hx-text-subtle)}
+.pysheet__x{display:flex;align-items:center;justify-content:center;flex:none;width:26px;height:26px;padding:0;border:0;border-radius:8px;background:var(--hx-surface-subtle);box-shadow:inset 0 1px 0 rgba(255,255,255,.4);color:var(--hx-text-subtle);cursor:pointer}
+.pysheet__x:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(245,126,32,.7)}
+.pysheet__body{flex:1;min-height:0;overflow-y:auto;padding:12px}
+.pysheet__body .pa__in{padding:0}
+.pysheet__foot{display:flex;justify-content:flex-end;gap:8px;padding:12px;background:var(--hx-surface-subtle);border-top:1px solid var(--hx-stroke);flex:none}
+@media (max-width:640px){
+  .pysheet{inset:auto 0 0 0;width:100%;height:auto;max-height:80vh;max-height:80dvh;border-left:0;border-top:1px solid var(--hx-stroke)}
+  .pysheet[open]{animation-name:dp-sheet-bottom}
+  .pysheet__foot{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  .pysheet__foot .btn{flex:none}
+}
+@media (prefers-reduced-motion:reduce){.pysheet[open],.pysheet::backdrop{animation:none}}
 </style>
 </head>
 <body>
@@ -1045,6 +1068,15 @@ b,strong{font-weight:500}
     <button class="btn btn--ghost" value="cancel" id="clearCancel" autofocus>Batal</button>
     <button class="btn btn--destructive" value="confirm" id="clearConfirm">Ya, hapus semua</button>
   </form>
+</dialog>
+
+<dialog class="pysheet" id="pySheet" aria-labelledby="pySheetTitle" aria-describedby="pySheetDesc">
+  <div class="pysheet__head">
+    <div class="pysheet__txt"><h2 class="pysheet__title" id="pySheetTitle"></h2><p class="pysheet__desc" id="pySheetDesc"></p></div>
+    <button class="pysheet__x" type="button" aria-label="Tutup" id="pySheetX"><svg class="ic" style="font-size:14px" aria-hidden="true"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="pysheet__body" id="pySheetBody"></div>
+  <div class="pysheet__foot"><button class="btn btn--primary" type="button" id="pySheetDone">Selesai</button></div>
 </dialog>
 
 <div class="toastr" id="toastr" aria-live="polite"><div class="toastr__box" id="toastrBox"></div></div>
@@ -1500,6 +1532,10 @@ b,strong{font-weight:500}
   }
   function paHtml(k){
     var info=paInfo(k), open=!!ACC_OPEN[k]&&!info.dis, id='pa-'+(k==='month'?'m':k), sm=k!=='month';
+    if(sm) return '<div class="acc pa pa--sm pa--btn" data-k="'+esc(k)+'" data-state="closed">'+
+      '<button class="acc__trig" type="button" data-act="pa-sheet" data-k="'+esc(k)+'" aria-haspopup="dialog"'+(info.dis?' disabled':'')+'>'+
+        '<span class="acc__title">Rincian penyakit minggu ini<span class="acc__opt">Opsional</span></span>'+
+        '<span class="acc__sum" data-sum></span>'+ico('i-chev','acc__chev')+'</button></div>';
     return '<div class="acc pa'+(sm?' pa--sm':'')+'" data-k="'+esc(k)+'" data-state="'+(open?'open':'closed')+'">'+
       '<h4 style="margin:0"><button class="acc__trig" type="button" data-act="pa-toggle" data-k="'+esc(k)+'" id="'+id+'-t" aria-expanded="'+open+'" aria-controls="'+id+'"'+(info.dis?' disabled':'')+'>'+
         '<span class="acc__title">'+(sm?'Rincian penyakit minggu ini':'Rincian testing per penyakit (sebulan)')+'<span class="acc__opt">Opsional</span></span>'+
@@ -1508,14 +1544,14 @@ b,strong{font-weight:500}
   }
   function paMountAll(){ $$('.pa-host').forEach(function(host){ host.innerHTML=paHtml(host.dataset.k); }); paPaintAll(); }
   /* in-place: header summary, meter, "Isi sisa", over message — safe while typing */
-  function paPaint(k){
-    var root=$('.pa[data-k="'+k+'"]'); if(!root) return;
+  function paPaint(k){ $$('.pa[data-k="'+k+'"]').forEach(function(root){ paPaintRoot(root,k); }); }
+  function paPaintRoot(root,k){
     var info=paInfo(k), left=info.t-info.sum;
-    var s=$('[data-sum]',root); s.textContent=info.txt; s.classList.toggle('is-empty',!info.n);
+    var s=$('[data-sum]',root); if(s){ s.textContent=info.txt; s.classList.toggle('is-empty',!info.n); }
     root.classList.toggle('is-err',info.over);
-    var trig=$('.acc__trig',root); trig.disabled=info.dis;
-    if(info.dis&&root.dataset.state==='open'){root.dataset.state='closed'; trig.setAttribute('aria-expanded','false');}
-    var m=$('[data-meter]',root);
+    var trig=$('.acc__trig',root);
+    if(trig){ trig.disabled=info.dis; if(info.dis&&root.dataset.state==='open'){root.dataset.state='closed'; trig.setAttribute('aria-expanded','false');} }
+    var m=$('[data-meter]',root); if(!m) return;
     m.classList.toggle('is-over',info.over); m.classList.toggle('is-full',!info.over&&info.t>0&&left===0);
     $('[data-mtxt]',root).innerHTML='<b>'+info.sum+'</b> dari <b>'+info.t+'</b> testing dirinci';
     $('[data-mleft]',root).textContent=info.over?'Melebihi '+(-left):(left===0&&info.t>0?'Pas':'Sisa '+left);
@@ -1524,7 +1560,7 @@ b,strong{font-weight:500}
     $('[data-over]',root).innerHTML=info.over?co('error','Melebihi jumlah testing','Jumlah per penyakit melebihi testing ('+info.t+') sebesar '+(-left)+'. Kurangi salah satunya.'):'';
   }
   function paPaintAll(){ $$('.pa').forEach(function(r){paPaint(r.dataset.k)}); }
-  function paRebuildBody(k){ var root=$('.pa[data-k="'+k+'"]'); $('.pa__in',root).innerHTML=paBody(k); paPaint(k); updateSummary(); }
+  function paRebuildBody(k){ var inn=$('.pa[data-k="'+k+'"] .pa__in'); inn.innerHTML=paBody(k); paPaint(k); updateSummary(); }
   function paSet(k,d,v,fromInput){
     v=clamp(v); byOf(k)[d]=v;
     var row=$('.pa[data-k="'+k+'"] .ps-row[data-d="'+d+'"]');
@@ -1535,6 +1571,7 @@ b,strong{font-weight:500}
   document.addEventListener('click',function(e){
     var b=e.target.closest('[data-act^="pa-"]'); if(!b||b.disabled) return;
     var a=b.dataset.act, k=b.dataset.k, d=b.dataset.d;
+    if(a==='pa-sheet'){ openPySheet(k); return; }
     if(a==='pa-toggle'){
       var root=$('.pa[data-k="'+k+'"]'); ACC_OPEN[k]=root.dataset.state!=='open';
       root.dataset.state=ACC_OPEN[k]?'open':'closed'; b.setAttribute('aria-expanded',String(ACC_OPEN[k])); return;
@@ -1548,6 +1585,25 @@ b,strong{font-weight:500}
   document.addEventListener('input',function(e){ var t=e.target.closest('[data-act="pa-num"]'); if(t&&t.value!=='') paSet(t.dataset.k,t.dataset.d,+t.value,true); });
   document.addEventListener('change',function(e){ var t=e.target.closest('[data-act="pa-num"]'); if(t) paSet(t.dataset.k,t.dataset.d,+t.value); });
   document.addEventListener('focusin',function(e){ if(e.target.matches&&e.target.matches('.ps-in')) e.target.select(); });
+
+  /* weekly disease breakdown lives in a Sheet (right on desktop, bottom on mobile); edits apply live, same as the monthly accordion */
+  var pyDlg=$('#pySheet'), pyKey=null, pyOpener=null;
+  function openPySheet(k){
+    pyKey=k; pyOpener=document.activeElement;
+    var wm=weekMeta(k), wl=wm?weekOfMonthLabel(wm):{main:DP.FDP.weekRangeLabel(DP.FDP.fromIso(k)),sub:''};
+    $('#pySheetTitle').textContent='Rincian penyakit · '+wl.main;
+    $('#pySheetDesc').textContent=(wl.sub?wl.sub+' · ':'')+'Opsional — jumlah testing per penyakit untuk minggu ini.';
+    $('#pySheetBody').innerHTML='<div class="pa pa--sheet" data-k="'+esc(k)+'"><div class="pa__in">'+paBody(k)+'</div></div>';
+    paPaint(k); pyDlg.showModal();
+  }
+  pyDlg.addEventListener('close',function(){
+    $('#pySheetBody').innerHTML=''; var k=pyKey; pyKey=null;
+    if(k){ paPaint(k); updateSummary(); }
+    if(pyOpener&&document.contains(pyOpener)) pyOpener.focus();
+  });
+  $('#pySheetX').addEventListener('click',function(){pyDlg.close()});
+  $('#pySheetDone').addEventListener('click',function(){pyDlg.close()});
+  pyDlg.addEventListener('click',function(e){ if(e.target===pyDlg) pyDlg.close(); });
 
   $('#kenapa').addEventListener('input',function(e){PLAN.kenapa=e.target.value; updateSummary();});
 
