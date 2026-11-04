@@ -841,9 +841,9 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
 .fld{gap:12px}
 .fld__head{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .fld__l{display:flex;align-items:center;gap:6px;min-width:0}
-.fld__h{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.01px;color:var(--hx-text-subtler)}
-.fld__c{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.01px;color:var(--hx-text-subtler);white-space:nowrap}
-.fld__info{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;padding:0;border:0;border-radius:6px;background:none;color:var(--hx-text-subtler);cursor:pointer}
+.fld__h{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.01px;color:var(--hx-muted)}
+.fld__c{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.01px;color:var(--hx-muted);white-space:nowrap}
+.fld__info{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;padding:0;border:0;border-radius:6px;background:none;color:var(--hx-muted);cursor:pointer}
 .fld__info:hover{color:var(--hx-text-subtle)}
 .fld__info:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(245,126,32,.7)}
 .fld__info .ic{width:14px;height:14px}
@@ -858,6 +858,56 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
 .wk-grp__h{display:flex;align-items:baseline;gap:8px}
 .wk-grp__t{font-size:13px;line-height:20px;font-weight:500;color:var(--hx-text)}
 .wk-grp__s{font-size:10px;line-height:15.6px;color:var(--hx-text-subtler)}
+/* Revise notice = Callout (info) inside the Tambak container, replacing the dashed amber chip */
+#reviseFlag{margin-top:12px}
+#reviseFlag:empty{display:none}
+#reviseFlag .co__d{margin:0 0 0 34px;color:var(--hx-text-subtle)}
+#reviseFlag .co__d b{font-weight:500;color:var(--hx-text)}
+/* Callout warning (DS): warning bg + amber tile */
+.co--warning{background:#fef5e7}.co--warning .co__tile{background:#f59e0b}
+/* Step 2 desktop: Perkiraan + (below it) Rincian penyakit stack in the left column; weekly Rincian spans the right column */
+@media (min-width:1100px){
+  html[data-step="2"] .card__body{grid-template-rows:auto minmax(0,1fr);row-gap:12px}
+  html[data-step="2"] #planCard{grid-area:1/1}
+  html[data-step="2"] #penyCard{grid-area:2/1;min-height:0;max-height:none}
+  html[data-step="2"] #detailCard{grid-area:1/2/3/3}
+}
+/* Bulanan (no weekly Rincian): Perkiraan | Rincian penyakit side by side; with "Tidak" Perkiraan spans the row */
+@media (min-width:1100px){
+  html[data-step="2"] .card__body:has(#detailCard[hidden]):has(#penyCard:not([hidden]))>#planCard{grid-area:1/1}
+  html[data-step="2"] .card__body:has(#detailCard[hidden]):has(#penyCard:not([hidden]))>#penyCard{grid-area:1/2}
+}
+/* Step 1 = ONE container: Tambak, then Bulan/Granularitas (side by side on wide screens, stacked otherwise) */
+.sec__badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.s1-blk{display:flex;flex-direction:column;gap:12px;min-width:0}
+.s1-blk--period{padding-top:16px;border-top:1px solid var(--hx-stroke)}
+@media (min-width:1100px){
+  html[data-step="1"] .card__body{display:flex;flex-direction:column;align-items:stretch}
+  html[data-step="1"] #scopeCard{flex:0 1 auto;max-height:100%;min-height:0}
+  html[data-step="1"] #scopeCard>.sec__body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:24px;align-items:start;overflow-y:auto;min-height:0}
+  .s1-blk--period{padding:0 0 0 24px;border-top:0;border-left:1px solid var(--hx-stroke)}
+}
+/* DS Field: heading + supporting text (gap 6) over the items (gap 12). Heading/supporting colour = --color-text-muted */
+:root{--hx-muted:#9f9f9f}
+.fld__top{display:flex;flex-direction:column;gap:6px}
+.fld__s{margin:0;font-size:13px;line-height:19.2px;font-weight:400;letter-spacing:-.01px;color:var(--hx-muted)}
+#scopeHint:empty{display:none}
+/* ===== DS alignment (Field wrapper + Button Group) =====
+   Field wrapper label = Input label style (13/20, 400, Text/Secondary); description = 13/19.2 Text/Tertiary — not the disabled-looking Text/Muted.
+   Button Group (Figma 2885:101644): joined segmented outline buttons, 0.5px Stroke/Subtle, radius 6 on the outer corners, 8/12 padding, min-width 36, Body/Small-helper 13/19.2 Text/Subtle. */
+.fld{gap:8px}
+.fld__top{gap:2px}
+.fld__h,.fld__c{font-size:13px;line-height:20px;font-weight:400;letter-spacing:-.01px;color:var(--hx-text-subtle)}
+.fld__s{font-size:13px;line-height:19.2px;color:var(--hx-text-subtler)}
+.fld__info{color:var(--hx-text-subtler)}
+.bgrp{display:flex;align-self:stretch;width:100%}   /* full width, items share it equally */
+.bgrp__i{position:relative;flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;min-width:36px;padding:8px 12px;margin-right:-1px;border:.5px solid var(--hx-stroke);background:var(--hx-surface-subtle);color:var(--hx-text-subtle);font-size:13px;line-height:19.2px;letter-spacing:-.13px;cursor:pointer;box-shadow:var(--hx-shadow-btn);transition:background var(--motion-duration-fast) var(--motion-easing-standard),color var(--motion-duration-fast) var(--motion-easing-standard)}
+.bgrp__i:first-child{border-radius:6px 0 0 6px}
+.bgrp__i:last-child{border-radius:0 6px 6px 0;margin-right:0}
+.bgrp__i input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.bgrp__i:hover{background:#eee}
+.bgrp__i:has(input:checked){z-index:1;background:var(--hx-selected);border-color:var(--hx-primary);color:var(--hx-primary-hover);font-weight:500}
+.bgrp__i:has(input:focus-visible){z-index:2;box-shadow:0 0 0 3px rgba(245,126,32,.4)}
 </style>
 </head>
 <body>
@@ -969,8 +1019,13 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
           <div class="card__body" id="cardBody">
             <!-- Step 1 -->
             <section class="sec" id="scopeCard">
-              <header class="sec__head"><h2 class="sec__title">Tambak</h2><span class="badge" id="scopeBadge">Belum dipilih</span></header>
+              <header class="sec__head"><h2 class="sec__title">Tambak &amp; Bulan</h2><span class="sec__badges"><span class="badge" id="scopeBadge">Belum dipilih</span><span class="badge badge--lead"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg><span id="periodBadge"></span></span></span></header>
               <div class="sec__body">
+               <div class="s1-blk fld" id="tambakBlk" role="group" aria-labelledby="tambakH">
+                <div class="fld__top">
+                  <div class="fld__head"><div class="fld__l"><p class="fld__h" id="tambakH">Tambak</p></div></div>
+                  <p class="fld__s">Pilih satu tambak. Cari nama, kode, atau kabupaten di dalam dropdown.</p>
+                </div>
                 <div class="sel">
                   <label class="sr-only" for="farmBtn">Tambak</label>
                   <button class="sel__btn" id="farmBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
@@ -978,20 +1033,16 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
                   </button>
                   <div id="reviseFlag"></div>
                 </div>
-                <p class="f__hint" id="scopeHint">Pilih satu tambak. Cari nama, kode, atau kabupaten di dalam dropdown.</p>
-              </div>
-            </section>
-
-            <section class="sec" id="periodCard">
-              <header class="sec__head"><h2 class="sec__title">Bulan</h2><span class="badge badge--lead"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg><span id="periodBadge"></span></span></header>
-              <div class="sec__body">
-                <div class="f">
-                  <label class="f__k">Granularitas</label>
-                  <div class="seg" role="radiogroup" aria-label="Granularitas">
-                    <label class="seg__opt"><input type="radio" name="gran" value="bulanan" checked><span>Bulanan</span></label>
-                    <label class="seg__opt"><input type="radio" name="gran" value="mingguan"><span>Mingguan</span></label>
-                  </div>
-                  <p class="f__hint" id="granHint">Pilih bulan — perkiraan diisi untuk sebulan penuh.</p>
+                <p class="f__hint" id="scopeHint"></p>
+               </div>
+               <div class="s1-blk s1-blk--period fld" id="periodCard" role="group" aria-labelledby="bulanH">
+                <div class="fld__top">
+                  <div class="fld__head"><div class="fld__l"><p class="fld__h" id="bulanH">Bulan</p></div></div>
+                  <p class="fld__s" id="granHint">Pilih bulan — perkiraan diisi untuk sebulan penuh.</p>
+                </div>
+                <div class="bgrp" role="radiogroup" aria-label="Granularitas">
+                  <label class="bgrp__i"><input type="radio" name="gran" value="bulanan" checked><span>Bulanan</span></label>
+                  <label class="bgrp__i"><input type="radio" name="gran" value="mingguan"><span>Mingguan</span></label>
                 </div>
                 <div class="f" id="granBulanan" role="radiogroup" aria-label="Bulan rencana">
                   <div class="opts" id="monthOpts"></div>
@@ -1007,6 +1058,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
                   </div>
                   <div class="wk-groups" id="weekChecklist"></div>
                 </div>
+               </div>
               </div>
             </section>
 
@@ -1062,19 +1114,28 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
               </div>
             </section>
 
+            <section class="sec" id="penyCard" hidden>
+              <header class="sec__head">
+                <div style="flex:1;min-width:0">
+                  <h2 class="sec__title">Rincian penyakit sebulan</h2>
+                  <p class="f__hint">Testing per penyakit untuk sebulan penuh</p>
+                </div>
+              </header>
+              <div class="sec__body">
+                <div class="pa-host" id="penyOpen" data-k="month"></div>
+              </div>
+            </section>
+
             <section class="sec" id="detailCard" hidden>
               <header class="sec__head">
                 <div style="flex:1;min-width:0">
-                  <h2 class="sec__title">Rincian</h2>
-                  <p class="f__hint">Opsional — per penyakit dan per minggu</p>
+                  <h2 class="sec__title">Rincian per minggu</h2>
+                  <p class="f__hint">Jumlah per minggu dan rincian penyakitnya</p>
                 </div>
               </header>
               <div class="sec__body">
                 <div class="bd-right" id="detailForm">
-                  <div class="pa-host" id="penyOpen" data-k="month"></div>
-
                   <div class="f" id="weekReconcile" hidden>
-                    <label class="f__k">Rincian per minggu</label>
                     <div class="wk-row wk-row--head" aria-hidden="true"><span>Minggu</span><span>Sampel</span><span>Testing</span></div>
                     <div id="weekRows" style="display:flex;flex-direction:column;gap:10px"></div>
                     <div class="remainder" id="remainderBox"></div>
@@ -1105,7 +1166,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
             <button class="btn btn--link btn--link-sec" type="button" id="clearAll" hidden>Kosongkan</button>
             <button class="btn btn--ghost" type="button" id="back" hidden><svg class="ic" aria-hidden="true"><use href="#i-prev"/></svg><span id="backLabel">Kembali</span></button>
             <button class="btn btn--primary" type="button" id="next"><span id="nextLabel">Lanjut</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
-            <button class="btn btn--primary" type="button" id="submit" hidden>Submit rencana<svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <button class="btn btn--primary" type="button" id="submit" hidden><span id="submitLabel">Submit rencana</span><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
           </footer>
         </div>
       </main>
@@ -1209,6 +1270,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
      which weeks are picked (PLAN.weekly) is never reset by toggling it back and forth, and Step 2
      always asks for the whole-month totals regardless of GRAN. */
   var GRAN='bulanan';
+  var WEEKLY_STASH=[];   // weeks ticked in Mingguan, parked while Granularitas is Bulanan (locked weeks are never parked — they must stay in the plan)
   var PENY_OPEN=false;
   var OPEN_WEEK_PENY={};                                 // weekStart -> bool, which weekly peny panels are open
   /* Weeks already recorded on the version being revised, captured once at prefill time. Purely
@@ -1296,7 +1358,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     $('#farmBtn').setAttribute('aria-disabled',String(FARM_LOCKED));
     $('#scopeHint').textContent=FARM_LOCKED
       ?'Tambak tidak bisa diubah saat merevisi rencana yang sudah ada.'
-      :f?f.kab+', '+f.prov+' · '+f.ponds+' kolam':'Pilih satu tambak. Cari nama, kode, atau kabupaten di dalam dropdown.';
+      :f?f.kab+', '+f.prov+' · '+f.ponds+' kolam':'';
     $('#planFarmName').textContent=f?f.name:'—';
     $('#planPeriodName').textContent=DP.MONTHS[PERIOD.month]+' '+PERIOD.year;
     syncExisting();
@@ -1328,9 +1390,17 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
   function syncExisting(){
     EXISTING=FARM?DP.FDP.activeFor(FARM,PERIOD.year,PERIOD.month):null;
     var flag=$('#reviseFlag');
-    flag.innerHTML=EXISTING
-      ? '<span class="revise-flag">'+ico('i-warn')+'Sudah ada rencana aktif ('+(EXISTING.response==='ya'?'Ya':'Tidak')+') — lanjut akan membuat revisi baru</span>'
-      : '';
+    if(EXISTING){
+      var ya=EXISTING.response==='ya', mon=DP.MONTHS[PERIOD.month]+' '+PERIOD.year;
+      var cur=ya?'Ya · '+EXISTING.samples+' sampel · '+EXISTING.tests+' testing':'Tidak ada sampel'+(EXISTING.kenapa?' · '+EXISTING.kenapa:'');
+      flag.innerHTML='<div class="co co--warning" role="note"><div class="co__row"><span class="co__tile">'+ico('i-warn')+'</span>'+
+        '<p class="co__t">Sudah ada rencana aktif untuk '+esc(mon)+'</p></div>'+
+        '<p class="co__d"><b>Saat ini:</b> '+esc(cur)+' — dicatat '+esc(EXISTING.recordedAtLabel||'')+(EXISTING.recordedBy?' oleh '+esc(EXISTING.recordedBy):'')+'.</p>'+
+        '<p class="co__d">Isian di langkah berikutnya sudah terisi dari rencana ini. Menyimpan akan membuat revisi baru, dan versi sebelumnya tetap ada di riwayat.</p></div>';
+    } else flag.innerHTML='';
+    var rev=!!EXISTING;
+    var nl=$('#nextLabel'); if(nl) nl.textContent=rev?'Lanjut revisi':'Lanjut';
+    var sl=$('#submitLabel'); if(sl) sl.textContent=rev?'Submit revisi':'Submit rencana';
   }
   /* shared by the initial load (FARM may arrive pre-set via ?farm=) and picking a tambak from the
      popover — both must pre-fill Step 2 from the current ACTIVE version the same way (N-1) */
@@ -1339,6 +1409,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
      itself a pre-fill, so one tambak's data never leaks into another. */
   var PREFILLED=false;
   function prefillPlanFromExisting(){
+    WEEKLY_STASH=[];
     if(EXISTING){
       PLAN={response:EXISTING.response,samples:EXISTING.samples||0,tests:EXISTING.tests||0,
         weekly:(EXISTING.weekly||[]).map(function(w){return {weekStart:w.weekStart,samples:w.samples,tests:w.tests,testsByDisease:JSON.parse(JSON.stringify(w.testsByDisease||{}))}}),
@@ -1361,7 +1432,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
      A plan covers one month, so weeks picked for another month are dropped; `keepWeek` is the week whose tick caused the switch. */
   function setPeriod(p,keepWeek){
     if(periodKey(p)===periodKey(PERIOD)) return;
-    var g=GRAN;
+    var g=GRAN; WEEKLY_STASH=[];
     PERIOD={year:p.year,month:p.month}; PLAN.weekly=[]; INHERITED_WEEKS=[]; OPEN_WEEK_PENY={};
     onFarmChanged();
     if(keepWeek){ GRAN=g; if(!weekRow(keepWeek)){PLAN.weekly.push({weekStart:keepWeek,samples:0,tests:0,testsByDisease:{}}); sortWeekly();} syncGran(); renderWeekChecklist(); renderWeekReconcile(); updateSummary(); }
@@ -1381,7 +1452,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     sortWeekly(); renderWeekChecklist(); renderWeekReconcile();
   }
   /* week number inside its month (W1..W5) — drives the avatar placeholder + its accent colour */
-  function weekNo(iso){var m=weekMeta(iso); return m?Math.floor((m.start.getDate()-1)/7)+1:null;}
+  function weekNo(iso){var m=weekMeta(iso), d=m?m.start:DP.FDP.fromIso(iso); return Math.floor((d.getDate()-1)/7)+1;}   // started (locked) weeks aren't in ALL_WEEKS — derive from the Monday's date
   function weekAvatar(iso){var n=weekNo(iso); return '<span class="av av--'+(n||0)+'" aria-hidden="true">'+(n||'')+'</span>';}
   function renderWeekChecklist(){
     var host=$('#weekChecklist');
@@ -1393,8 +1464,8 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     PLAN.weekly.filter(function(w){return isFrozen(w.weekStart);}).forEach(function(w){
       var mo=DP.FDP.monthOfWeek(w.weekStart), k=periodKey(mo); (byMonth[k]||(byMonth[k]=[])).push(
         '<label class="card-opt card-opt--locked"><input type="checkbox" checked disabled>'+
-        '<span class="card-opt__pad"><span class="card-opt__card">'+weekAvatar(w.weekStart)+'<span class="card-opt__t">'+esc(DP.FDP.weekRangeLabel(DP.FDP.fromIso(w.weekStart)))+
-        '<span class="card-opt__s">Terkunci — sudah berjalan</span></span><span class="cbx">'+ico('i-check')+'</span></span></span></label>');
+        '<span class="card-opt__pad"><span class="card-opt__card">'+weekAvatar(w.weekStart)+'<span class="card-opt__t">'+esc('W'+weekNo(w.weekStart)+' '+DP.MONTHS[mo.month]+' '+mo.year)+
+        '<span class="card-opt__s">'+esc(DP.FDP.weekRangeLabel(DP.FDP.fromIso(w.weekStart)))+' · Terkunci</span></span><span class="cbx">'+ico('i-check')+'</span></span></span></label>');
     });
     ALL_WEEKS.filter(function(wk){return !isFrozen(DP.FDP.iso(wk.start));}).forEach(function(wk){
       var iso=DP.FDP.iso(wk.start), on=!!weekRow(iso), monthKey=weekMonthKey(wk);
@@ -1423,7 +1494,12 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     if(GRAN==='mingguan') renderWeekChecklist();
   }
   document.addEventListener('change',function(e){
-    if(e.target.name==='gran'){GRAN=e.target.value; syncGran(); updateSummary();}
+    if(e.target.name==='gran'){
+      GRAN=e.target.value;
+      if(GRAN==='bulanan'){ WEEKLY_STASH=PLAN.weekly.filter(function(w){return !isFrozen(w.weekStart)}); PLAN.weekly=PLAN.weekly.filter(function(w){return isFrozen(w.weekStart)}); }
+      else if(WEEKLY_STASH.length){ WEEKLY_STASH.forEach(function(w){ if(!weekRow(w.weekStart)) PLAN.weekly.push(w); }); WEEKLY_STASH=[]; sortWeekly(); }
+      syncGran(); renderWeekReconcile(); updateSummary();
+    }
     else if(e.target.name==='period'){ var q=e.target.value.split('-'); setPeriod({year:+q[0],month:+q[1]}); }
   });
 
@@ -1466,7 +1542,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
       var locked=isFrozen(w.weekStart);
       var tag=isLocked(w.weekStart)?'Terkunci':(isInherited(w.weekStart)?'Dari revisi sebelumnya':'');
       var psum=weekPenySum(w), open=!!OPEN_WEEK_PENY[w.weekStart];
-      var wm=weekMeta(w.weekStart), wl=wm?weekOfMonthLabel(wm):{main:DP.FDP.weekRangeLabel(DP.FDP.fromIso(w.weekStart)),sub:''};
+      var wm=weekMeta(w.weekStart), wl=wm?weekOfMonthLabel(wm):(function(){var mo=DP.FDP.monthOfWeek(w.weekStart);return {main:'W'+weekNo(w.weekStart)+' '+DP.MONTHS[mo.month]+' '+mo.year,sub:DP.FDP.weekRangeLabel(DP.FDP.fromIso(w.weekStart))};})();
       /* each week = Content Container (Surface Gray, Content Style Floating): header = avatar + "Wn Bulan Tahun" + date range */
       var row='<div class="cc-wk" data-w="'+esc(w.weekStart)+'">'+
         '<div class="cc-wk__head">'+weekAvatar(w.weekStart)+'<div class="cc-wk__t"><b>'+esc(wl.main)+'</b>'+(wl.sub?'<span>'+esc(wl.sub)+'</span>':'')+'</div>'+(tag?'<span class="wk-tag">'+tag+'</span>':'')+'</div>'+
@@ -1538,7 +1614,8 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     $('#nTests').classList.toggle('err',low||high);
     renderPenyakit(); renderWeekReconcile(); updateSummary();
   }
-  function syncDetail(){ var d=$('#detailCard'); if(!d) return; var ya=PLAN.response==='ya'; d.hidden=STEP!==2; $('#detailForm').hidden=!ya; $('#detailEmpty').hidden=ya; }
+  /* weekly Rincian only when Granularitas = Mingguan (locked weeks from an earlier version keep it visible) */
+  function syncDetail(){ var d=$('#detailCard'); if(!d) return; var ya=PLAN.response==='ya'; $('#penyCard').hidden=!(STEP===2&&ya); d.hidden=STEP!==2||!(GRAN==='mingguan'||PLAN.weekly.length>0); $('#detailForm').hidden=!ya; $('#detailEmpty').hidden=ya; }
   function syncResponse(){
     var ya=PLAN.response==='ya';
     $$('#respSeg input').forEach(function(i){i.checked=i.value===PLAN.response});
@@ -1625,7 +1702,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     var info=paInfo(k), sm=k!=='month';
     return '<div class="acc pa'+(sm?' pa--sm':'')+' pa--btn" data-k="'+esc(k)+'" data-state="closed">'+
       '<button class="acc__trig" type="button" data-act="pa-sheet" data-k="'+esc(k)+'" aria-haspopup="dialog"'+(info.dis?' disabled':'')+'>'+
-        '<span class="acc__title">'+(sm?'Rincian penyakit minggu ini':'Rincian testing per penyakit (sebulan)')+'<span class="acc__opt">Opsional</span></span>'+
+        '<span class="acc__title">'+(sm?'Rincian penyakit minggu ini':'Testing per penyakit')+'<span class="acc__opt">Opsional</span></span>'+
         '<span class="acc__sum" data-sum></span>'+ico('i-chev','acc__chev')+'</button></div>';
   }
   function paMountAll(){ $$('.pa-host').forEach(function(host){ host.innerHTML=paHtml(host.dataset.k); }); paPaintAll(); }
