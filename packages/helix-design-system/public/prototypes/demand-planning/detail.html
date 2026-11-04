@@ -402,7 +402,7 @@ button{cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inhe
   if(active){
     $('#dtReviseLink').hidden=false;
     if(active.id===plan.id){
-      $('#dtReviseLink').href='buat.html?farm='+encodeURIComponent(plan.farm)+'&lockFarm=1';
+      $('#dtReviseLink').href='buat.html?farm='+encodeURIComponent(plan.farm)+'&lockFarm=1&period='+plan.year+'-'+plan.month;
       $('#dtReviseLink').textContent='Revisi rencana ini';
     }else{
       $('#dtReviseLink').href='detail.html?id='+encodeURIComponent(active.id);

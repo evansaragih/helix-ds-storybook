@@ -15,7 +15,8 @@ window.DP=(function(){
   var PENYAKIT=['AHPND','WSSV','IMNV','EHP','TSV','YHV','IHHNV','DIV1','CMNV'];
   var SALES=['Fatchur','Bu Siti'];
   var STATUS_LABEL={budidaya:'Budidaya',hatchery:'Hatchery/Nursery',pakan:'Perusahaan Pakan',distributor:'Perusahaan Distributor/Probiotik',off:'Off'};
-  var TODAY={year:2026,month:9,day:19};   // 19 Oktober 2026
+  /* v3: follows the real clock (the original froze it at 19 Oktober 2026) */
+  var TODAY=(function(){var d=new Date(); return {year:d.getFullYear(),month:d.getMonth(),day:d.getDate()};})();
 
   var REGIONS={
     'Indonesia Barat · Lab Jakarta':['Jawa Timur','Jawa Tengah','Jawa Barat','Lampung','Sumatera Selatan'],
@@ -294,16 +295,21 @@ window.DP=(function(){
     /* next month as a whole — the only eligible Bulan for creating/revising a plan */
     function nextMonthPeriod(){var m=TODAY.month+1,y=TODAY.year; if(m>11){m=0;y++;} return {year:y,month:m};}
 
-    /* Eligible Mingguan weeks: real Monday–Sunday weeks whose Monday falls within the plan's own
-       Bulan (next month) — never a week attributed to a different month, even one that mostly
-       overlaps next month (P-6, revised). A week belongs to "the month containing its Monday". */
-    function eligibleWeeks(){
+    /* v3: eligible Bulan = the current month and the one after it */
+    function eligibleMonths(){
       var nm=nextMonthPeriod();
+      return [{year:TODAY.year,month:TODAY.month,kind:'current'},{year:nm.year,month:nm.month,kind:'next'}];
+    }
+
+    /* Eligible Mingguan weeks (v3): real Monday–Sunday weeks that have not started yet and whose Monday
+       falls in the current month OR next month. A week belongs to "the month containing its Monday"
+       (P-6/P-7), so weeks stay separated per month; one plan still covers a single month (P-8). */
+    function eligibleWeeks(){
+      var ms=eligibleMonths(), nm=ms[1];
       var cur=addDays(mondayOf(todayDate()),7), out=[];
       while(cur.getFullYear()<nm.year||(cur.getFullYear()===nm.year&&cur.getMonth()<=nm.month)){
-        if(cur.getFullYear()===nm.year&&cur.getMonth()===nm.month){
-          out.push({start:new Date(cur),end:addDays(cur,6),belongsTo:{year:cur.getFullYear(),month:cur.getMonth()}});
-        }
+        var inScope=ms.some(function(m){return m.year===cur.getFullYear()&&m.month===cur.getMonth();});
+        if(inScope) out.push({start:new Date(cur),end:addDays(cur,6),belongsTo:{year:cur.getFullYear(),month:cur.getMonth()}});
         cur=addDays(cur,7);
       }
       return out;
@@ -446,7 +452,7 @@ window.DP=(function(){
       PLANS=buildPlans();
     }
 
-    return {nextMonthPeriod:nextMonthPeriod,eligibleWeeks:eligibleWeeks,weekRangeLabel:weekRangeLabel,
+    return {nextMonthPeriod:nextMonthPeriod,eligibleMonths:eligibleMonths,eligibleWeeks:eligibleWeeks,weekRangeLabel:weekRangeLabel,
       isLockedWeek:isLockedWeek,monthOfWeek:monthOfWeek,weeksSameMonth:weeksSameMonth,
       iso:iso,fromIso:fromIso,fmtDay:fmtDay,
       activeFor:activeFor,historyFor:historyFor,weeklySum:weeklySum,remainderOf:remainderOf,
