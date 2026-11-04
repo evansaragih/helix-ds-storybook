@@ -478,6 +478,52 @@
   .btn-md.primary:hover { background: var(--brand-hover); }
   .btn-md:disabled { opacity: .5; cursor: not-allowed; }
 
+  /* Download image dialog (Figma: "Unduh Gambar") */
+  .idlg { width: 860px; }
+  .idlg .adlg-foot { justify-content: flex-end; gap: 12px; }
+  .idlg .adlg-head { padding-bottom: 12px; }
+  .idlg-body { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 12px; background: var(--surface); }
+  .idlg-col { min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+  .idlg-f { display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .idlg-l { font-size: 13px; line-height: 19.2px; font-weight: 500; letter-spacing: -.13px; color: var(--text-subtle); }
+  .idlg-sel > button { width: 100%; height: 36px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); box-shadow: 0 1px 2px rgba(89,89,90,.15); font-size: 13px; letter-spacing: -.01px; color: var(--text); text-align: left; transition: border-color .15s, box-shadow .15s; }
+  .idlg-sel > button:hover { border-color: var(--border-strong); }
+  .idlg-sel > button:focus-visible, .idlg-sel > button[aria-expanded="true"] { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(245,126,32,.15); }
+  .idlg-sel > button svg { width: 16px; height: 16px; flex: none; transition: transform .2s; }
+  .idlg-sel > button[aria-expanded="true"] svg { transform: rotate(180deg); }
+  .idlg-list { position: absolute; z-index: 5; left: 0; right: 0; top: calc(100% + 6px); padding: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 4px 8px rgba(89,89,90,.15), 0 12px 24px rgba(89,89,90,.15); animation: idlg-pop .16s cubic-bezier(.16,1,.3,1) backwards; list-style: none; }
+  .idlg-list[hidden] { display: none; }
+  .idlg-list:focus-visible { outline: none; }
+  .idlg-list li { height: 40px; display: flex; align-items: center; padding: 0 12px; border-radius: 8px; font-size: 13px; letter-spacing: -.01px; color: var(--text); cursor: pointer; }
+  .idlg-list li:hover, .idlg-list li.is-hot { background: var(--bg); }
+  .seg { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); box-shadow: 0 1px 2px rgba(89,89,90,.15); }
+  .seg button { flex: 1; height: 34px; font-size: 13px; letter-spacing: -.01px; color: var(--text-subtle); border-left: 1px solid var(--border); transition: background .15s, color .15s; }
+  .seg button:first-child { border-left: 0; }
+  .seg button:hover:not([aria-checked="true"]):not(:disabled) { background: var(--bg); }
+  .seg button[aria-checked="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .seg button:disabled { opacity: .45; cursor: not-allowed; }
+  .seg button:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+  .fname { display: flex; align-items: center; height: 36px; padding: 0 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); box-shadow: 0 1px 2px rgba(89,89,90,.15); font-size: 13px; letter-spacing: -.01px; cursor: text; transition: border-color .15s, box-shadow .15s; position: relative; overflow: hidden; }
+  .fname:hover { border-color: var(--border-strong); }
+  .fname:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(245,126,32,.15); }
+  .fname-in { display: inline-grid; min-width: 4px; max-width: calc(100% - 44px); height: 100%; }   /* the hidden ::after copy of the text sizes the input to its content */
+  .fname-in::after { content: attr(data-v); padding-right: 1px; grid-area: 1 / 1; visibility: hidden; white-space: pre; overflow: hidden; font: inherit; letter-spacing: inherit; }
+  .fname-in input { grid-area: 1 / 1; width: 100%; min-width: 0; height: 100%; border: 0; outline: 0; background: none; font: inherit; letter-spacing: inherit; color: var(--text); }
+  .fname-ext { flex: none; color: #9f9f9f; }
+  .idlg-ph { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .idlg-sz { font-size: 13px; color: #9f9f9f; font-variant-numeric: tabular-nums; }
+  .idlg-prev { position: relative; flex: 1; min-height: 200px; max-height: 230px; display: grid; place-items: center; padding: 36px 12px 12px; background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 2px rgba(89,89,90,.15); overflow: hidden; }
+  .idlg-prev img { max-width: 100%; max-height: 100%; width: auto; height: auto; display: block; }
+  .idlg-chip { position: absolute; left: 12px; top: 12px; padding: 2px 8px; border-radius: 9999px; background: var(--bg); font-size: 10px; line-height: 15.6px; color: var(--text-subtle); }
+  .idlg-prev.is-empty::after { content: attr(data-empty); font-size: 13px; color: #9f9f9f; }
+  @keyframes idlg-pop { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+  .idlg-scrim-in { animation: idlg-fade .2s ease-out backwards; }
+  .idlg-scrim-in .adlg { animation: idlg-rise .34s cubic-bezier(.16,1,.3,1) backwards; }
+  @keyframes idlg-fade { from { opacity: 0; } }
+  @keyframes idlg-rise { from { opacity: 0; transform: translateY(10px) scale(.96); } }
+  @media (max-width: 880px) { .idlg-body { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .idlg-list, .idlg-scrim-in, .idlg-scrim-in .adlg { animation: none; } }
+
   /* dialog */
   .scrim { position: fixed; inset: 0; background: rgba(20,20,30,.55); display: none; align-items: flex-start; justify-content: center; padding: 60px 16px 24px; z-index: 50; }
   .scrim.show { display: flex; }
@@ -559,7 +605,7 @@
             </div>
           </div>
           <div class="side-actions">
-            <button class="dl-btn primary"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Plot (PNG)</button>
+            <button class="dl-btn primary js-dl-img" type="button" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Image</button>
             <button class="dl-btn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Data (TSV)</button>
           </div></div>
         </div>
@@ -591,7 +637,7 @@
               <div class="select"><select id="colorBy"><option value="">-none-</option></select></div></div>
           </div>
           <div class="side-actions">
-            <button class="dl-btn primary"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Plot (PNG)</button>
+            <button class="dl-btn primary js-dl-img" type="button" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Image</button>
             <button class="dl-btn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Data (TSV)</button>
           </div></div>
         </div>
@@ -671,7 +717,7 @@
               <div class="select"><select id="alBracket"><option value="pvalue" selected>Adjusted p-value</option><option value="stars">Asterisks (*)</option></select></div></div>
           </div>
           <div class="side-actions">
-            <button class="dl-btn primary"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Plot (PNG)</button>
+            <button class="dl-btn primary js-dl-img" type="button" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Image</button>
             <button class="dl-btn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Data (TSV)</button>
           </div></div>
         </div>
@@ -714,7 +760,7 @@
                 <span class="tt-arrow" aria-hidden="true"></span></div></div>
           </div>
           <div class="side-actions">
-            <button class="dl-btn primary"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Plot (PNG)</button>
+            <button class="dl-btn primary js-dl-img" type="button" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Image</button>
             <button class="dl-btn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Data (TSV)</button>
           </div></div>
         </div>
@@ -753,7 +799,7 @@
                 <span class="tt-arrow" aria-hidden="true"></span></div></div>
           </div>
           <div class="side-actions">
-            <button class="dl-btn primary"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Plot (PNG)</button>
+            <button class="dl-btn primary js-dl-img" type="button" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Image</button>
             <button class="dl-btn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Data (TSV)</button>
           </div></div>
         </div>
@@ -784,7 +830,7 @@
               <div class="select"><select id="upN"></select></div></div>
           </div>
           <div class="side-actions">
-            <button class="dl-btn primary"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Plot (PNG)</button>
+            <button class="dl-btn primary js-dl-img" type="button" aria-haspopup="dialog"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Image</button>
             <button class="dl-btn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 21h16"/></svg>Data (TSV)</button>
           </div></div>
         </div>
@@ -855,6 +901,33 @@
     </div>
     <div class="adlg-main"><ul id="adList"></ul></div>
     <div class="adlg-foot"><button class="btn-md primary" id="adClose" type="button">Close</button></div>
+  </div>
+</div>
+<div class="adlg-scrim" id="imgScrim" hidden>
+  <div class="adlg idlg" role="dialog" aria-modal="true" aria-labelledby="imgTitle" aria-describedby="imgDesc">
+    <div class="adlg-head">
+      <div class="ad-lead"><div class="ad-text"><h3 id="imgTitle">Download Image</h3><p id="imgDesc">Set the format, background, resolution, and file name before downloading.</p></div></div>
+      <button class="ad-x" id="imgX" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="idlg-body">
+      <div class="idlg-col">
+        <div class="idlg-f idlg-sel"><span class="idlg-l" id="imgFmtL">Format</span>
+          <button id="imgFmt" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="imgFmtL imgFmtV"><span id="imgFmtV"></span><svg class="i" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+          <ul class="idlg-list" id="imgFmtList" role="listbox" aria-labelledby="imgFmtL" tabindex="-1" hidden></ul>
+        </div>
+        <div class="idlg-f"><span class="idlg-l" id="imgBgL">Background</span>
+          <div class="seg" id="imgBg" role="radiogroup" aria-labelledby="imgBgL"><button type="button" role="radio" data-v="transparent">Transparent</button><button type="button" role="radio" data-v="white">White</button></div></div>
+        <div class="idlg-f"><span class="idlg-l" id="imgResL">Resolution</span>
+          <div class="seg" id="imgRes" role="radiogroup" aria-labelledby="imgResL"><button type="button" role="radio" data-v="2">2x</button><button type="button" role="radio" data-v="3">3x</button><button type="button" role="radio" data-v="5">5x</button><button type="button" role="radio" data-v="10">10x</button></div></div>
+        <div class="idlg-f"><label class="idlg-l" for="imgName">File Name</label>
+          <div class="fname" id="imgNameBox"><span class="fname-in" id="imgSizer"><input id="imgName" type="text" autocomplete="off" spellcheck="false" maxlength="80"></span><span class="fname-ext" id="imgExt" aria-hidden="true"></span></div></div>
+      </div>
+      <div class="idlg-col">
+        <div class="idlg-ph"><span class="idlg-l">Preview</span><span class="idlg-sz" id="imgSize" aria-live="polite"></span></div>
+        <div class="idlg-prev" id="imgPrev"><span class="idlg-chip" id="imgChip"></span><img id="imgPrevImg" alt=""></div>
+      </div>
+    </div>
+    <div class="adlg-foot"><button class="btn-md" id="imgCancel" type="button">Cancel</button><button class="btn-md primary" id="imgGo" type="button">Download</button></div>
   </div>
 </div>
 <div class="sel-menu" id="crumbMenu" role="menu" aria-label="Hidden pages" hidden><button class="sel-opt crumb-item" role="menuitem" type="button"><svg class="i" viewBox="0 0 24 24" style="width:12px;height:12px"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/><path d="M17 3v6M14 6h6"/></svg><span data-i18n="bc.center">App Center</span></button></div>
@@ -1538,6 +1611,15 @@
     if (r === undefined) for (const [re, f] of ID_PATTERNS) { const m = k.match(re); if (m) { r = f(m); break; } }
     return r === undefined || r === k ? str : str.replace(k, () => r);
   }
+  Object.assign(ID_PHRASES, {   // download image dialog
+    'Image': 'Gambar', 'Download Image': 'Unduh Gambar', 'Set the format, background, resolution, and file name before downloading.': 'Atur format, latar, resolusi, dan nama file sebelum mengunduh.',
+    'Format': 'Format', 'Background': 'Latar Belakang', 'Transparent': 'Transparan', 'White': 'Putih', 'Resolution': 'Resolusi', 'File Name': 'Nama File', 'Preview': 'Preview',
+    'Cancel': 'Batal', 'Download': 'Unduh',
+    'PNG (transparent, lossless)': 'PNG (transparan, lossless)', 'JPEG (solid background, small size)': 'JPEG (latar solid, ukuran kecil)',
+    'WebP (transparent, small size)': 'WebP (transparan, ukuran kecil)', 'SVG (vector, always sharp)': 'SVG (vektor, selalu tajam)',
+    'No chart to download': 'Tidak ada grafik untuk diunduh', 'Open a tab that shows a plot first, then try again.': 'Buka tab yang menampilkan plot terlebih dahulu, lalu coba lagi.',
+    'Download failed': 'Unduhan gagal', 'The image could not be created in this format or size. Try another format or a lower resolution.': 'Gambar tidak dapat dibuat dalam format atau ukuran ini. Coba format lain atau resolusi lebih rendah.'
+  });
   function locText(n) {
     const par = n.parentNode; if (!par || /^(SCRIPT|STYLE|TEXTAREA)$/.test(par.nodeName) || (par.nodeName === 'OPTION' && !par.hasAttribute('value'))) return;
     const cur = n.nodeValue; if (n.__id === cur) return;
@@ -1579,6 +1661,141 @@
     document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = tr(el.dataset.i18n); });
     document.querySelectorAll('[data-i18n-label]').forEach((el) => { const t = tr(el.dataset.i18nLabel); el.setAttribute('aria-label', t); if (el.classList.contains('nav-item')) el.title = t; });
   }
+
+  // ── Download image dialog ("Image" button under each plot): format / background / resolution / file name + live preview, real file download ──
+  const L = (k) => k;   // English literals: the body localiser (MutationObserver + ID_PHRASES) translates them when the language is Indonesian
+  const IMG_FMT = {
+    png:  { mime: 'image/png',     ext: 'png',  label: 'PNG (transparent, lossless)',          alpha: true,  bpp: 0.10 },
+    jpeg: { mime: 'image/jpeg',    ext: 'jpg',  label: 'JPEG (solid background, small size)',  alpha: false, bpp: 0.035 },
+    webp: { mime: 'image/webp',    ext: 'webp', label: 'WebP (transparent, small size)',       alpha: true,  bpp: 0.025 },
+    svg:  { mime: 'image/svg+xml', ext: 'svg',  label: 'SVG (vector, always sharp)',           alpha: true,  vector: true },
+  };
+  const IMG_NAMES = { rare: 'rarefaction-curve', taxa: 'taxa-bar-plot', alpha: 'alpha-diversity', pcoa: 'pcoa', upgma: 'upgma', perm: 'permanova' };
+  const imgScrim = $('#imgScrim'), imgState = { fmt: 'png', bg: 'transparent', res: 3, name: '', svg: null, opener: null, defName: 'plot' };
+  const imgEffBg = () => (imgState.fmt === 'jpeg' ? 'white' : imgState.bg);   // JPEG has no alpha channel
+  const imgSafeName = () => (imgState.name.replace(/[\\/:*?"<>|\u0000-\u001f]/g, '').trim().replace(/^\.+|\.+$/g, '') || imgState.defName).slice(0, 80);
+
+  // Serialise the plot's <svg> with the computed paint/font styles baked in, so the file looks the same outside this page's CSS.
+  function imgSerializeHtml(el, bg) {
+    const w = Math.max(1, Math.ceil(Math.max(el.scrollWidth, el.getBoundingClientRect().width))), h = Math.max(1, Math.ceil(Math.max(el.scrollHeight, el.getBoundingClientRect().height)));
+    const clone = el.cloneNode(true), src = [el, ...el.querySelectorAll('*')], dst = [clone, ...clone.querySelectorAll('*')];
+    src.forEach((n, i) => { const cs = getComputedStyle(n); let t = ''; for (let k = 0; k < cs.length; k++) t += `${cs[k]}:${cs.getPropertyValue(cs[k])};`; dst[i].setAttribute('style', t); dst[i].removeAttribute('class'); dst[i].removeAttribute('id'); });
+    clone.style.width = w + 'px'; clone.style.height = h + 'px'; clone.style.overflow = 'visible'; clone.style.maxHeight = 'none'; clone.style.maxWidth = 'none';
+    const xml = new XMLSerializer().serializeToString(clone);
+    const str = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${bg === 'white' ? '<rect width="100%" height="100%" fill="#fff"/>' : ''}<foreignObject x="0" y="0" width="${w}" height="${h}">${xml}</foreignObject></svg>`;
+    return { str, w, h };
+  }
+  function imgSerialize(svg, bg) {
+    if (svg.namespaceURI !== 'http://www.w3.org/2000/svg') return imgSerializeHtml(svg, bg);
+    const clone = svg.cloneNode(true), src = [svg, ...svg.querySelectorAll('*')], dst = [clone, ...clone.querySelectorAll('*')];
+    const props = ['fill', 'stroke', 'stroke-width', 'stroke-dasharray', 'stroke-linecap', 'stroke-linejoin', 'opacity', 'fill-opacity', 'stroke-opacity', 'font-family', 'font-size', 'font-weight', 'text-anchor', 'dominant-baseline', 'letter-spacing'];
+    src.forEach((el, i) => { const cs = getComputedStyle(el); props.forEach((pr) => { const v = cs.getPropertyValue(pr); if (v) dst[i].style.setProperty(pr, v); }); });
+    const r = svg.getBoundingClientRect(), w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+    clone.removeAttribute('style'); clone.removeAttribute('class');
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg'); clone.setAttribute('width', w); clone.setAttribute('height', h);
+    if (!clone.getAttribute('viewBox')) clone.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    if (bg === 'white') {
+      const vb = clone.getAttribute('viewBox').split(/[\s,]+/).map(Number), bgr = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      bgr.setAttribute('x', vb[0]); bgr.setAttribute('y', vb[1]); bgr.setAttribute('width', vb[2]); bgr.setAttribute('height', vb[3]); bgr.setAttribute('fill', '#fff');
+      clone.insertBefore(bgr, clone.firstChild);
+    }
+    return { str: new XMLSerializer().serializeToString(clone), w, h };
+  }
+  const imgBytes = (n, l) => (n >= 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1024))} KB`).replace('.', l === 'id' ? ',' : '.');
+  function imgPaint() {
+    const f = IMG_FMT[imgState.fmt], bg = imgEffBg();
+    $('#imgFmtV').textContent = L(f.label);
+    $('#imgExt').textContent = '.' + f.ext;
+    document.querySelectorAll('#imgFmtList li').forEach((li) => { li.setAttribute('aria-selected', li.dataset.v === imgState.fmt); });
+    document.querySelectorAll('#imgBg button').forEach((b) => { b.setAttribute('aria-checked', b.dataset.v === bg); b.tabIndex = b.dataset.v === bg ? 0 : -1; b.disabled = b.dataset.v === 'transparent' && !f.alpha; });
+    document.querySelectorAll('#imgRes button').forEach((b) => { b.setAttribute('aria-checked', +b.dataset.v === imgState.res); b.tabIndex = +b.dataset.v === imgState.res ? 0 : -1; b.disabled = !!f.vector; });
+    $('#imgChip').textContent = L(bg === 'white' ? 'White' : 'Transparent');
+    const prev = $('#imgPrev'), img = $('#imgPrevImg');
+    if (imgState.svg) {
+      const o = imgSerialize(imgState.svg, bg); imgState.ser = o;
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(o.str); prev.classList.remove('is-empty');
+      const bytes = f.vector ? new Blob([o.str]).size : o.w * o.h * imgState.res * imgState.res * f.bpp * (bg === 'white' && imgState.fmt === 'png' ? .9 : 1);
+      $('#imgSize').textContent = '~' + imgBytes(bytes, lang);
+    }
+    $('#imgSizer').dataset.v = $('#imgName').value;
+  }
+  function imgBuildList() {
+    $('#imgFmtList').innerHTML = Object.entries(IMG_FMT).map(([k, f]) => `<li role="option" id="imgOpt-${k}" data-v="${k}">${esc(L(f.label))}</li>`).join('');
+  }
+  function imgFmtOpen(open, hot) {
+    const list = $('#imgFmtList'), btn = $('#imgFmt'); list.hidden = !open; btn.setAttribute('aria-expanded', open);
+    if (open) { const items = [...list.children], i = Math.max(0, items.findIndex((li) => li.dataset.v === (hot || imgState.fmt))); items.forEach((li, j) => li.classList.toggle('is-hot', j === i)); btn.setAttribute('aria-activedescendant', items[i].id); list.focus(); }
+    else { btn.removeAttribute('aria-activedescendant'); }
+  }
+  function imgPick(k) { imgState.fmt = k; imgFmtOpen(false); $('#imgFmt').focus(); imgPaint(); }
+  function openImgDlg(btn) {
+    const panel = btn.closest('.tab-panel'), id = panel ? panel.id.replace('panel-', '') : '', body = panel && panel.querySelector('.chart-body');
+    const svgs = body ? [...body.querySelectorAll('svg')].filter((v) => { const r = v.getBoundingClientRect(); return r.width > 120 && r.height > 80; }) : [];
+    svgs.sort((a, b) => { const A = a.getBoundingClientRect(), B = b.getBoundingClientRect(); return B.width * B.height - A.width * A.height; });
+    if (!svgs.length && body && body.firstElementChild && body.firstElementChild.matches('.taxa') && body.firstElementChild.getBoundingClientRect().height > 80) svgs.push(body.firstElementChild);   // Taxa Bar Plot is HTML, not SVG
+    if (!svgs.length) { return showToast({ title: L('No chart to download'), text: L('Open a tab that shows a plot first, then try again.') }); }
+    Object.assign(imgState, { svg: svgs[0], opener: btn, defName: IMG_NAMES[id] || id || 'plot' }); imgState.name = imgState.defName;
+    $('#imgName').value = imgState.name; imgBuildList(); imgFmtOpen(false);
+    imgScrim.hidden = false; imgScrim.classList.add('idlg-scrim-in'); closeNav(null); imgPaint(); $('#imgFmt').focus();
+  }
+  function closeImgDlg() {
+    if (imgScrim.hidden) return; imgFmtOpen(false); imgScrim.hidden = true; imgScrim.classList.remove('idlg-scrim-in'); imgState.svg = null;
+    const o = imgState.opener; imgState.opener = null; if (o && o.focus) o.focus();
+  }
+  async function imgDownload() {
+    const f = IMG_FMT[imgState.fmt], bg = imgEffBg(), o = imgSerialize(imgState.svg, bg), file = `${imgSafeName()}.${f.ext}`;
+    let blob;
+    try {
+      if (f.vector) blob = new Blob(['<?xml version="1.0" encoding="UTF-8"?>\n' + o.str], { type: f.mime });
+      else {
+        let sc = imgState.res; while (sc > 1 && (o.w * sc > 16000 || o.h * sc > 16000)) sc--;   // stay inside the browser's canvas limit
+        const img = new Image(); await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(o.str); });
+        const cv = document.createElement('canvas'); cv.width = o.w * sc; cv.height = o.h * sc; const cx = cv.getContext('2d');
+        if (bg === 'white') { cx.fillStyle = '#fff'; cx.fillRect(0, 0, cv.width, cv.height); }
+        cx.drawImage(img, 0, 0, cv.width, cv.height);
+        blob = await Promise.race([new Promise((ok) => cv.toBlob(ok, f.mime, 0.92)), new Promise((ok) => setTimeout(ok, 8000, null))]);   // never hang if a browser stalls on an encoder
+      }
+      if (!blob || blob.type !== f.mime) throw new Error('encode');   // some browsers silently fall back to PNG for formats they cannot encode
+    } catch (err) { return showToast({ title: L('Download failed'), text: L('The image could not be created in this format or size. Try another format or a lower resolution.') }); }
+    const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = file; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000); closeImgDlg();
+  }
+  document.addEventListener('click', (e) => { const b = e.target.closest('.js-dl-img'); if (b) { e.stopPropagation(); openImgDlg(b); } });
+  imgScrim.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const li = e.target.closest('#imgFmtList li'), seg = e.target.closest('#imgBg button, #imgRes button');
+    if (li) return imgPick(li.dataset.v);
+    if (e.target.closest('#imgFmt')) return imgFmtOpen($('#imgFmtList').hidden);
+    if (!e.target.closest('#imgFmtList')) imgFmtOpen(false);
+    if (seg && !seg.disabled) { if (seg.parentNode.id === 'imgBg') imgState.bg = seg.dataset.v; else imgState.res = +seg.dataset.v; return imgPaint(); }
+    if (e.target.closest('#imgNameBox')) $('#imgName').focus();
+    if (e.target === imgScrim || e.target.closest('#imgX, #imgCancel')) closeImgDlg();
+    if (e.target.closest('#imgGo')) imgDownload();
+  });
+  $('#imgName').addEventListener('input', (e) => { imgState.name = e.target.value; $('#imgSizer').dataset.v = e.target.value; });
+  $('#imgName').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); imgDownload(); } });
+  imgScrim.addEventListener('keydown', (e) => {
+    const list = $('#imgFmtList'), open = !list.hidden;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); if (open) { imgFmtOpen(false); $('#imgFmt').focus(); } else closeImgDlg(); return; }
+    if (open || (e.target.id === 'imgFmt' && /^(ArrowDown|ArrowUp)$/.test(e.key))) {
+      const items = [...list.children]; let i = items.findIndex((li) => li.classList.contains('is-hot')); if (i < 0) i = items.findIndex((li) => li.dataset.v === imgState.fmt);
+      if (!open) { e.preventDefault(); return imgFmtOpen(true); }
+      if (/^(ArrowDown|ArrowUp|Home|End)$/.test(e.key)) { e.preventDefault(); i = e.key === 'Home' ? 0 : e.key === 'End' ? items.length - 1 : (i + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length; items.forEach((li, j) => li.classList.toggle('is-hot', j === i)); $('#imgFmt').setAttribute('aria-activedescendant', items[i].id); return; }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); return imgPick(items[i].dataset.v); }
+      if (e.key === 'Tab') imgFmtOpen(false);
+    }
+    const seg = e.target.closest && e.target.closest('.seg');
+    if (seg && /^(ArrowRight|ArrowLeft)$/.test(e.key)) {   // radio-group arrows
+      e.preventDefault(); const bs = [...seg.querySelectorAll('button:not(:disabled)')], i = bs.indexOf(e.target), n = bs[(i + (e.key === 'ArrowRight' ? 1 : -1) + bs.length) % bs.length]; n.click(); n.focus(); return;
+    }
+    if (e.key === 'Tab') {   // keep focus inside the dialog
+      const f = [...imgScrim.querySelectorAll('button:not(:disabled), input')].filter((x) => x.offsetParent !== null && x.tabIndex >= 0), a = f[0], z = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    }
+  });
+  document.addEventListener('click', () => imgFmtOpen(false));
+  window.addEventListener('resize', () => { if (!imgScrim.hidden) imgPaint(); });
+  const _applyLang = applyLang; applyLang = function () { _applyLang(); if (!imgScrim.hidden) { imgBuildList(); imgPaint(); } };
 
   // nav popovers (breadcrumb "…", language, runs): one open at a time, click outside / Esc closes
   const navPops = [];
