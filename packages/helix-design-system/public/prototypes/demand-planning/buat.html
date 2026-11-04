@@ -837,6 +837,27 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
   .card__head{border-radius:12px 12px 0 0}
   .card__foot{border-radius:0 0 12px 12px}
 }
+/* Field (DS): heading 16/24 500 muted + info icon (Tooltip) + counter on the right */
+.fld{gap:12px}
+.fld__head{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fld__l{display:flex;align-items:center;gap:6px;min-width:0}
+.fld__h{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.01px;color:var(--hx-text-subtler)}
+.fld__c{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.01px;color:var(--hx-text-subtler);white-space:nowrap}
+.fld__info{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;padding:0;border:0;border-radius:6px;background:none;color:var(--hx-text-subtler);cursor:pointer}
+.fld__info:hover{color:var(--hx-text-subtle)}
+.fld__info:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(245,126,32,.7)}
+.fld__info .ic{width:14px;height:14px}
+.tip{position:absolute;z-index:30;top:calc(100% + 8px);left:0;width:max-content;max-width:min(320px,100%);padding:8px 12px;border-radius:8px;background:#fff;color:var(--hx-text);font-size:13px;line-height:20px;letter-spacing:-.01px;box-shadow:0 4px 16px rgba(89,89,90,.2),0 0 0 1px var(--hx-stroke)}
+.tip[hidden]{display:none}
+.tip__a{position:absolute;top:-4px;width:10px;height:10px;background:#fff;transform:rotate(45deg);box-shadow:-1px -1px 0 var(--hx-stroke)}
+@media (prefers-reduced-motion:no-preference){.tip:not([hidden]){animation:dp-fade var(--motion-duration-base) var(--motion-easing-standard)}}
+/* Bulan: eligible months (current + next) as selectable Group Items; weeks grouped per month */
+#monthOpts{grid-template-columns:minmax(0,1fr)}
+.wk-groups{display:flex;flex-direction:column;gap:16px}
+.wk-grp{display:flex;flex-direction:column;gap:8px}
+.wk-grp__h{display:flex;align-items:baseline;gap:8px}
+.wk-grp__t{font-size:13px;line-height:20px;font-weight:500;color:var(--hx-text)}
+.wk-grp__s{font-size:10px;line-height:15.6px;color:var(--hx-text-subtler)}
 </style>
 </head>
 <body>
@@ -936,10 +957,10 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
           <header class="card__head">
             <div style="display:flex;flex-direction:column;gap:2px">
               <h1 class="card__h1" id="pageTitle" tabindex="-1">Buat Demand Planning</h1>
-              <p class="card__sub" id="pageSub">Tentukan bulan dan tambak untuk rencana ini.</p>
+              <p class="card__sub" id="pageSub">Tentukan tambak dan bulan untuk rencana ini.</p>
             </div>
             <div class="dss" role="list" aria-label="Langkah">
-              <div class="dss__side" role="none"><div class="dss__i" role="listitem" id="st1" data-s="in-progress" aria-current="step"><div class="dss__top"><span class="dss__m" aria-hidden="true">1</span></div><span class="dss__l"><span class="dss__cap">Step 1</span><span class="dss__t">Bulan &amp; Tambak</span></span></div><i class="dss__ln dss__ln--1" aria-hidden="true"></i></div>
+              <div class="dss__side" role="none"><div class="dss__i" role="listitem" id="st1" data-s="in-progress" aria-current="step"><div class="dss__top"><span class="dss__m" aria-hidden="true">1</span></div><span class="dss__l"><span class="dss__cap">Step 1</span><span class="dss__t">Tambak &amp; Bulan</span></span></div><i class="dss__ln dss__ln--1" aria-hidden="true"></i></div>
               <div class="dss__i" role="listitem" id="st2" data-s="pending"><div class="dss__top"><span class="dss__m" aria-hidden="true">2</span></div><span class="dss__l"><span class="dss__cap">Step 2</span><span class="dss__t">Perkiraan</span></span></div>
               <div class="dss__side dss__side--end" role="none"><i class="dss__ln dss__ln--2" aria-hidden="true"></i><div class="dss__i" role="listitem" id="st3" data-s="pending"><div class="dss__top"><span class="dss__m" aria-hidden="true">3</span></div><span class="dss__l"><span class="dss__cap">Step 3</span><span class="dss__t">Konfirmasi</span></span></div></div>
             </div>
@@ -947,31 +968,6 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
 
           <div class="card__body" id="cardBody">
             <!-- Step 1 -->
-            <section class="sec" id="periodCard">
-              <header class="sec__head"><h2 class="sec__title">Bulan</h2><span class="badge badge--lead"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg><span id="periodBadge"></span></span></header>
-              <div class="sec__body">
-                <div class="f">
-                  <label class="f__k">Granularitas</label>
-                  <div class="seg" role="radiogroup" aria-label="Granularitas">
-                    <label class="seg__opt"><input type="radio" name="gran" value="bulanan" checked><span>Bulanan</span></label>
-                    <label class="seg__opt"><input type="radio" name="gran" value="mingguan"><span>Mingguan</span></label>
-                  </div>
-                  <p class="f__hint" id="granHint">Isi perkiraan untuk sebulan penuh.</p>
-                </div>
-                <div class="gi gi--static" id="granBulanan" role="group" aria-label="Bulan rencana">
-                  <span class="gi__pad"><span class="gi__card">
-                    <span class="gi__tile" aria-hidden="true"><svg class="ic"><use href="#i-calendar"/></svg></span>
-                    <span class="gi__txt"><b id="periodMonthLabel"></b><span>Bulan depan — satu-satunya bulan yang bisa dibuat/direvisi saat ini</span></span>
-                  </span></span>
-                </div>
-                <div class="f" id="granMingguan" hidden>
-                  <label class="f__k">Minggu</label>
-                  <p class="f__hint">Centang minggu (Senin–Minggu) dalam bulan ini yang mau dirinci. Minggu dari revisi sebelumnya tetap bisa diubah selama belum berjalan; minggu yang sudah berjalan tidak bisa diubah lagi.</p>
-                  <div class="opts opts--2" id="weekChecklist"></div>
-                </div>
-              </div>
-            </section>
-
             <section class="sec" id="scopeCard">
               <header class="sec__head"><h2 class="sec__title">Tambak</h2><span class="badge" id="scopeBadge">Belum dipilih</span></header>
               <div class="sec__body">
@@ -983,6 +979,34 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
                   <div id="reviseFlag"></div>
                 </div>
                 <p class="f__hint" id="scopeHint">Pilih satu tambak. Cari nama, kode, atau kabupaten di dalam dropdown.</p>
+              </div>
+            </section>
+
+            <section class="sec" id="periodCard">
+              <header class="sec__head"><h2 class="sec__title">Bulan</h2><span class="badge badge--lead"><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg><span id="periodBadge"></span></span></header>
+              <div class="sec__body">
+                <div class="f">
+                  <label class="f__k">Granularitas</label>
+                  <div class="seg" role="radiogroup" aria-label="Granularitas">
+                    <label class="seg__opt"><input type="radio" name="gran" value="bulanan" checked><span>Bulanan</span></label>
+                    <label class="seg__opt"><input type="radio" name="gran" value="mingguan"><span>Mingguan</span></label>
+                  </div>
+                  <p class="f__hint" id="granHint">Pilih bulan — perkiraan diisi untuk sebulan penuh.</p>
+                </div>
+                <div class="f" id="granBulanan" role="radiogroup" aria-label="Bulan rencana">
+                  <div class="opts" id="monthOpts"></div>
+                </div>
+                <div class="f fld" id="granMingguan" role="group" aria-labelledby="wkFldH" hidden>
+                  <div class="fld__head">
+                    <div class="fld__l">
+                      <p class="fld__h" id="wkFldH">Minggu</p>
+                      <button class="fld__info" type="button" id="wkInfoBtn" aria-label="Info pilihan minggu" aria-describedby="wkTip" aria-expanded="false"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg></button>
+                    </div>
+                    <p class="fld__c" id="wkCount"></p>
+                    <div class="tip" id="wkTip" role="tooltip" hidden>Centang minggu (Senin–Minggu) dalam bulan ini yang mau dirinci. Minggu dari revisi sebelumnya tetap bisa diubah selama belum berjalan; minggu yang sudah berjalan tidak bisa diubah lagi.<i class="tip__a" aria-hidden="true"></i></div>
+                  </div>
+                  <div class="wk-groups" id="weekChecklist"></div>
+                </div>
               </div>
             </section>
 
@@ -1094,7 +1118,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     <span class="adlg__tile" aria-hidden="true"><svg class="ic" style="font-size:24px"><use href="#i-trash"/></svg></span>
     <div>
       <h2 class="adlg__title" id="clearTitle">Hapus semua data yang sudah diisi?</h2>
-      <p class="adlg__desc" id="clearDesc">Jawaban, jumlah sampel/testing, rincian minggu dan penyakit, serta kolom Kenapa yang sudah diisi akan dikosongkan. Bulan dan tambak tidak berubah. Tindakan ini tidak dapat dibatalkan.</p>
+      <p class="adlg__desc" id="clearDesc">Jawaban, jumlah sampel/testing, rincian minggu dan penyakit, serta kolom Kenapa yang sudah diisi akan dikosongkan. Tambak dan bulan tidak berubah. Tindakan ini tidak dapat dibatalkan.</p>
     </div>
     <button class="adlg__x" type="button" aria-label="Tutup" id="clearX"><svg class="ic" style="font-size:14px" aria-hidden="true"><use href="#i-x"/></svg></button>
   </div>
@@ -1160,7 +1184,14 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
   var testCap=function(samples){return samples*TESTS_PER_SAMPLE};   // sampel 1 → 9, sampel 2 → 18, …
   var testsTooMany=function(samples,tests){return tests>testCap(samples)};
 
-  var PERIOD=DP.FDP.nextMonthPeriod();
+  /* Eligible Bulan = the current month and the next one (follows the real clock via dp-data.js) */
+  var MONTHS_OK=DP.FDP.eligibleMonths();
+  function periodKey(p){return p.year+'-'+p.month}
+  var PERIOD=(function(){
+    var want=new URLSearchParams(location.search).get('period');
+    var hit=MONTHS_OK.filter(function(m){return periodKey(m)===want})[0]||MONTHS_OK[0];
+    return {year:hit.year,month:hit.month};
+  })();
   var ALL_WEEKS=DP.FDP.eligibleWeeks();                 // P-6/P-7: full flat list, never month-filtered
   var qs=new URLSearchParams(location.search);
   var qsFarm=qs.get('farm');
@@ -1238,8 +1269,14 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
   /* ───────── Step 1 · Bulan (fixed) ───────── */
   function renderPeriod(){
     var label=DP.MONTHS[PERIOD.month]+' '+PERIOD.year;
-    $('#periodMonthLabel').textContent=label;
     var pb=$('#periodBadge'); if(pb) pb.textContent=label;
+    $('#monthOpts').innerHTML=MONTHS_OK.map(function(m){
+      var on=periodKey(m)===periodKey(PERIOD), dis=FARM_LOCKED&&!on;
+      return '<label class="card-opt'+(dis?' card-opt--disabled':'')+'"><input type="radio" name="period" value="'+periodKey(m)+'"'+(on?' checked':'')+(dis?' disabled':'')+'>'+
+        '<span class="card-opt__pad"><span class="card-opt__card"><span class="gi__tile" aria-hidden="true">'+ico('i-calendar')+'</span>'+
+        '<span class="card-opt__t">'+esc(DP.MONTHS[m.month]+' '+m.year)+'<span class="card-opt__s">'+(m.kind==='current'?'Bulan ini':'Bulan depan')+'</span></span>'+
+        '<span class="rb" aria-hidden="true"></span></span></span></label>';
+    }).join('');
 
   }
 
@@ -1320,6 +1357,15 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     prefillPlanFromExisting();
     renderAll();
   }
+  /* Changing Bulan re-resolves the ACTIVE version for FARM+PERIOD (and pre-fills from it) just like changing Tambak.
+     A plan covers one month, so weeks picked for another month are dropped; `keepWeek` is the week whose tick caused the switch. */
+  function setPeriod(p,keepWeek){
+    if(periodKey(p)===periodKey(PERIOD)) return;
+    var g=GRAN;
+    PERIOD={year:p.year,month:p.month}; PLAN.weekly=[]; INHERITED_WEEKS=[]; OPEN_WEEK_PENY={};
+    onFarmChanged();
+    if(keepWeek){ GRAN=g; if(!weekRow(keepWeek)){PLAN.weekly.push({weekStart:keepWeek,samples:0,tests:0,testsByDisease:{}}); sortWeekly();} syncGran(); renderWeekChecklist(); renderWeekReconcile(); updateSummary(); }
+  }
 
   /* ───────── Step 2 · weekly checklist (P-6/P-7/P-8/P-9) ───────── */
   function weekOfMonthLabel(wk){
@@ -1328,6 +1374,8 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
   }
   function toggleWeek(iso,on){
     if(isFrozen(iso)) return;   // time-locked weeks are never toggleable — defensive, checkbox is already disabled
+    var wm=weekMeta(iso);
+    if(on&&wm&&periodKey(wm.belongsTo)!==periodKey(PERIOD)){ setPeriod(wm.belongsTo,iso); return; }
     if(on){ if(!weekRow(iso)) PLAN.weekly.push({weekStart:iso,samples:0,tests:0,testsByDisease:{}}); }
     else { PLAN.weekly=PLAN.weekly.filter(function(w){return w.weekStart!==iso}); delete OPEN_WEEK_PENY[iso]; }
     sortWeekly(); renderWeekChecklist(); renderWeekReconcile();
@@ -1338,24 +1386,32 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
   function renderWeekChecklist(){
     var host=$('#weekChecklist');
     var lockKey=lockedMonthKey();
-    /* Only genuinely time-locked weeks (P-9) are shown here, disabled — an inherited-but-still-
-       upcoming week belongs in the normal toggleable list below, pre-checked and fully editable
-       (P-10 clarified: inheritance alone never makes a week read-only, only the time lock does). */
-    var frozenHtml=PLAN.weekly.filter(function(w){return isFrozen(w.weekStart);}).map(function(w){
-      return '<label class="card-opt card-opt--locked"><input type="checkbox" checked disabled>'+
+    /* Weeks stay separated per month (a week belongs to the month of its Monday). Only genuinely time-locked weeks (P-9)
+       are shown disabled; an inherited-but-upcoming week sits in the normal list, pre-checked and editable (P-10). */
+    var byMonth={};
+    MONTHS_OK.forEach(function(m){byMonth[periodKey(m)]=[];});
+    PLAN.weekly.filter(function(w){return isFrozen(w.weekStart);}).forEach(function(w){
+      var mo=DP.FDP.monthOfWeek(w.weekStart), k=periodKey(mo); (byMonth[k]||(byMonth[k]=[])).push(
+        '<label class="card-opt card-opt--locked"><input type="checkbox" checked disabled>'+
         '<span class="card-opt__pad"><span class="card-opt__card">'+weekAvatar(w.weekStart)+'<span class="card-opt__t">'+esc(DP.FDP.weekRangeLabel(DP.FDP.fromIso(w.weekStart)))+
-        '<span class="card-opt__s">Terkunci — sudah berjalan</span></span><span class="cbx">'+ico('i-check')+'</span></span></span></label>';
-    }).join('');
-    var openHtml=ALL_WEEKS.filter(function(wk){return !isFrozen(DP.FDP.iso(wk.start));}).map(function(wk){
+        '<span class="card-opt__s">Terkunci — sudah berjalan</span></span><span class="cbx">'+ico('i-check')+'</span></span></span></label>');
+    });
+    ALL_WEEKS.filter(function(wk){return !isFrozen(DP.FDP.iso(wk.start));}).forEach(function(wk){
       var iso=DP.FDP.iso(wk.start), on=!!weekRow(iso), monthKey=weekMonthKey(wk);
-      var disabled=!on&&lockKey&&monthKey!==lockKey;
+      var disabled=!on&&((lockKey&&monthKey!==lockKey)||(FARM_LOCKED&&monthKey!==periodKey(PERIOD)));
       var lbl=weekOfMonthLabel(wk);
       var sub=isInherited(iso)?lbl.sub+' · sudah tercatat sebelumnya':lbl.sub;
-      return '<label class="card-opt'+(disabled?' card-opt--disabled':'')+'"><input type="checkbox" value="'+iso+'"'+(on?' checked':'')+(disabled?' disabled':'')+' data-act="wk-toggle">'+
+      byMonth[monthKey].push('<label class="card-opt'+(disabled?' card-opt--disabled':'')+'"><input type="checkbox" value="'+iso+'"'+(on?' checked':'')+(disabled?' disabled':'')+' data-act="wk-toggle">'+
         '<span class="card-opt__pad"><span class="card-opt__card">'+weekAvatar(iso)+'<span class="card-opt__t">'+esc(lbl.main)+'<span class="card-opt__s">'+esc(sub)+'</span></span>'+
-        '<span class="cbx">'+ico('i-check')+'</span></span></span></label>';
+        '<span class="cbx">'+ico('i-check')+'</span></span></span></label>');
+    });
+    host.innerHTML=MONTHS_OK.map(function(m){
+      var items=byMonth[periodKey(m)]||[];
+      return '<div class="wk-grp" role="group" aria-label="'+esc(DP.MONTHS[m.month]+' '+m.year)+'">'+
+        '<div class="wk-grp__h"><span class="wk-grp__t">'+esc(DP.MONTHS[m.month]+' '+m.year)+'</span><span class="wk-grp__s">'+(m.kind==='current'?'Bulan ini':'Bulan depan')+'</span></div>'+
+        (items.length?'<div class="opts opts--2">'+items.join('')+'</div>':'<p class="f__hint">Tidak ada minggu yang bisa dipilih.</p>')+'</div>';
     }).join('');
-    host.innerHTML=frozenHtml+openHtml;
+    $('#wkCount').textContent=PLAN.weekly.length?PLAN.weekly.length+' dipilih':'';
   }
   function syncGran(){
     $$('input[name="gran"]').forEach(function(i){i.checked=i.value===GRAN});
@@ -1363,11 +1419,12 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     $('#granMingguan').hidden=GRAN!=='mingguan';
     $('#granHint').textContent=GRAN==='mingguan'
       ?'Centang minggu yang mau dirinci — jumlahnya diisi di langkah berikutnya.'
-      :'Isi perkiraan untuk sebulan penuh.';
+      :'Pilih bulan — perkiraan diisi untuk sebulan penuh.';
     if(GRAN==='mingguan') renderWeekChecklist();
   }
   document.addEventListener('change',function(e){
     if(e.target.name==='gran'){GRAN=e.target.value; syncGran(); updateSummary();}
+    else if(e.target.name==='period'){ var q=e.target.value.split('-'); setPeriod({year:+q[0],month:+q[1]}); }
   });
 
   /* ───────── per-week disease breakdown (R-6) ───────── */
@@ -1639,6 +1696,22 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
   $('#pySheetDone').addEventListener('click',function(){pyDlg.close()});
   pyDlg.addEventListener('click',function(e){ if(e.target===pyDlg) pyDlg.close(); });
 
+  /* Field info Tooltip (DS Tooltip look): hover / focus / tap on the info icon, Esc or outside tap closes */
+  (function(){
+    var btn=$('#wkInfoBtn'), tip=$('#wkTip'), pin=false;
+    function place(){ var a=$('.tip__a',tip), hb=btn.getBoundingClientRect(), hd=tip.parentNode.getBoundingClientRect(); a.style.left=Math.round(hb.left+hb.width/2-hd.left-5)+'px'; }
+    function show(){ tip.hidden=false; btn.setAttribute('aria-expanded','true'); place(); }
+    function hide(){ tip.hidden=true; btn.setAttribute('aria-expanded','false'); pin=false; }
+    btn.addEventListener('mouseenter',show);
+    btn.addEventListener('mouseleave',function(){ if(!pin) hide(); });
+    btn.addEventListener('focus',show);
+    btn.addEventListener('blur',function(){ if(!pin) hide(); });
+    btn.addEventListener('click',function(){ if(pin){ hide(); } else { pin=true; show(); } });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!tip.hidden) hide(); });
+    document.addEventListener('click',function(e){ if(!tip.hidden&&!e.target.closest('#wkInfoBtn')&&!e.target.closest('#wkTip')) hide(); });
+    window.addEventListener('resize',function(){ if(!tip.hidden) place(); });
+  })();
+
   $('#kenapa').addEventListener('input',function(e){PLAN.kenapa=e.target.value; updateSummary();});
 
   /* ───────── Steps ───────── */
@@ -1684,7 +1757,7 @@ html[data-step="1"] .card__body>.sec>.sec__head,html[data-step="2"] .card__body>
     $('#back').hidden=n===1;
     $('#backLabel').textContent=confirm?'Kembali ubah':'Kembali';
     $('#submit').hidden=!confirm;
-    $('#pageSub').textContent=n===1?'Tentukan bulan dan tambak untuk rencana ini.':n===2?'Perkirakan jumlah sampel dan jumlah testing. Rincian per minggu dan per penyakit bersifat opsional.':'Periksa kembali rencana sebelum dikirim. Pada langkah ini data tidak bisa diubah.';
+    $('#pageSub').textContent=n===1?'Tentukan tambak dan bulan untuk rencana ini.':n===2?'Perkirakan jumlah sampel dan jumlah testing. Rincian per minggu dan per penyakit bersifat opsional.':'Periksa kembali rencana sebelum dikirim. Pada langkah ini data tidak bisa diubah.';
     if(confirm) renderReview();
     updateSummary();
     $('#pageTitle').focus();
