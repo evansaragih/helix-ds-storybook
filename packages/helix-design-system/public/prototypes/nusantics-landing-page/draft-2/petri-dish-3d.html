@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nusantics — Product Pipeline 3D Petri Dish (Live & Loop Generator)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Rubik:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="assets/petri-3d/petri-assets.js"></script>
+  <style>
+    :root {
+      --bg-top: #26394a;
+      --bg-mid: #475970;
+      --bg-bot: #607089;
+      --brand-orange: #f57e20;
+      --brand-cyan: #38bdf8;
+      --font-heading: 'Quicksand', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #16222f;
+      color: #ffffff;
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    .studio-toolbar {
+      width: 100%;
+      max-width: 1280px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(15, 23, 34, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 20;
+      font-size: 13px;
+    }
+
+    .studio-toolbar__title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+
+    .studio-badge {
+      background: rgba(56, 189, 248, 0.16);
+      color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .studio-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .studio-btn {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .studio-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .studio-btn--active {
+      background: rgba(245, 126, 32, 0.22);
+      border-color: #f57e20;
+      color: #ffffff;
+    }
+
+    /* Figma Section 240:3439 (1280 x 613) */
+    .pipeline-intro-section {
+      position: relative;
+      width: 1280px;
+      height: 613px;
+      background:
+        radial-gradient(65% 85% at 74% 58%, rgba(114, 134, 165, 0.42) 0%, rgba(72, 90, 114, 0.0) 75%),
+        radial-gradient(50% 70% at 92% 18%, rgba(30, 45, 62, 0.55) 0%, rgba(30, 45, 62, 0.0) 70%),
+        linear-gradient(180deg, #283c4f 0%, #4b5c73 32%, #5f6f88 68%, #617089 100%);
+      display: flex;
+      align-items: flex-start;
+      padding: 64px 80px;
+      gap: 64px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+      margin-top: 20px;
+      border-radius: 4px;
+    }
+
+    .pipeline-intro-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(420px 300px at 78% 58%, rgba(56, 189, 248, 0.10), transparent 72%),
+        radial-gradient(520px 380px at 18% 22%, rgba(20, 32, 46, 0.42), transparent 70%);
+      pointer-events: none;
+    }
+
+    .intro-copy {
+      position: relative;
+      z-index: 2;
+      width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      color: #ffffff;
+      letter-spacing: -0.01px;
+    }
+
+    .intro-heading {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 31px;
+      line-height: 37.2px;
+      color: #ffffff;
+    }
+
+    .intro-paragraph {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: rgba(255, 255, 255, 0.94);
+    }
+
+    /* Node 225:25218 (image 19) -> x=683, y=177, width=597, height=370 */
+    .intro-petri-stage {
+      position: absolute;
+      left: 668px;
+      top: 162px;
+      width: 612px;
+      height: 390px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #petriCanvas,
+    #petriVideo {
+      width: 597px;
+      height: 370px;
+      display: block;
+      border-radius: 6px;
+    }
+
+    #petriCanvas {
+      cursor: grab;
+    }
+
+    #petriCanvas:active {
+      cursor: grabbing;
+    }
+
+    #petriVideo {
+      display: none;
+      object-fit: cover;
+    }
+
+    /* Standalone Studio Export Mode (1200 x 744) */
+    body.capture-mode {
+      background: transparent;
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+
+    body.capture-mode .studio-toolbar,
+    body.capture-mode .intro-copy {
+      display: none !important;
+    }
+
+    body.capture-mode .pipeline-intro-section {
+      width: 1200px;
+      height: 744px;
+      margin: 0;
+      padding: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background:
+        radial-gradient(62% 72% at 52% 54%, rgba(108, 128, 158, 0.35) 0%, rgba(69, 86, 108, 0.0) 75%),
+        linear-gradient(180deg, #47586f 0%, #586880 42%, #607089 100%);
+    }
+
+    body.capture-mode.capture-transparent .pipeline-intro-section,
+    body.capture-mode.capture-transparent .pipeline-intro-section::before {
+      background: transparent !important;
+    }
+
+    body.capture-mode.capture-dark .pipeline-intro-section {
+      background:
+        radial-gradient(60% 68% at 50% 54%, rgba(36, 62, 88, 0.55) 0%, rgba(15, 24, 36, 0.0) 75%),
+        linear-gradient(180deg, #162433 0%, #1e3144 50%, #24394e 100%) !important;
+    }
+
+    body.capture-mode .intro-petri-stage {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1200px;
+      height: 744px;
+    }
+
+    body.capture-mode #petriCanvas {
+      width: 1200px;
+      height: 744px;
+    }
+  </style>
+</head>
+<body>
+  <header class="studio-toolbar">
+    <div class="studio-toolbar__title">
+      <span>Nusantics Product Pipeline — Intro 3D Petri Dish</span>
+      <span class="studio-badge">Seamless 6.0s Loop (60 FPS)</span>
+    </div>
+    <div class="studio-controls">
+      <button class="studio-btn studio-btn--active" id="btnViewSection" type="button">Live 3D Section (1280×613)</button>
+      <button class="studio-btn" id="btnViewVideo" type="button">Preview .MP4 Video Loop</button>
+      <button class="studio-btn" id="btnViewCloseup" type="button">Close-up 3D (1200×744)</button>
+      <button class="studio-btn" id="btnToggleMotion" type="button">Pause Motion</button>
+      <a class="studio-btn" href="assets/petri-dish-loop.mp4" download="nusantics-petri-dish-loop.mp4">Download Seamless .MP4</a>
+    </div>
+  </header>
+
+  <section class="pipeline-intro-section" id="introSection" data-node-id="240:3439">
+    <div class="intro-copy" data-node-id="240:3441">
+      <h2 class="intro-heading" data-node-id="240:3442">
+        Our Future Innovation<br />in Human and Animal Health
+      </h2>
+      <p class="intro-paragraph" data-node-id="240:3443">
+        The COVID-19 pandemic has underscored the critical importance of molecular diagnosis as a cornerstone in the battle against infectious diseases. Moreover, in the field of oncology, molecular diagnosis empowers clinicians to pinpoint specific genetic mutations and biomarkers linked with various cancer types. These tests not only facilitate the prevention of further spread but also enable tailored treatment strategies, thereby enhancing patient outcomes, mitigating the risk of unnecessary therapies, and reducing the burden on our healthcare system.
+      </p>
+      <p class="intro-paragraph" data-node-id="240:3444">
+        Additionally, rapid and precise molecular diagnosis holds immense potential for farmers in averting substantial operational losses caused by pathogens.
+      </p>
+      <p class="intro-paragraph" data-node-id="240:3445">
+        In this pursuit, we remain steadfast in our commitment to advancing healthcare outcomes in both human and animal health through new product innovation.
+      </p>
+    </div>
+
+    <div class="intro-petri-stage" data-node-id="225:25218">
+      <canvas id="petriCanvas" width="1200" height="744"></canvas>
+      <video id="petriVideo" src="assets/petri-dish-loop.mp4" autoplay muted loop playsinline></video>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('petriCanvas');
+      const ctx = canvas.getContext('2d', { alpha: true });
+      const W = 1200;
+      const H = 744;
+      const LOOP_DURATION = 6.0; // 6.00s exact harmonic loop (360 frames @ 60fps)
+      const TWO_PI = Math.PI * 2;
+
+      const params = new URLSearchParams(window.location.search);
+      const isCapture = params.get('capture') === '1';
+      const bgMode = params.get('bg') || 'section';
+      if (isCapture) {
+        document.body.classList.add('capture-mode');
+        if (bgMode === 'transparent') document.body.classList.add('capture-transparent');
+        if (bgMode === 'dark') document.body.classList.add('capture-dark');
+      }
+
+      const assetSources = window.PETRI_ASSETS || {};
+      const images = {};
+      const imageNames = [
+        'petri_dish_clean',
+        'badge_lungs',
+        'badge_uterus',
+        'badge_fish',
+        'badge_livestock',
+        'badge_cancer_cells',
+        'badge_shrimp',
+        'badge_pathogens',
+        'badge_blood_cells',
+        'badge_frosted_orb'
+      ];
+
+      let allLoaded = false;
+      const dishBuffer = document.createElement('canvas');
+      dishBuffer.width = W;
+      dishBuffer.height = H;
+      const dishCtx = dishBuffer.getContext('2d');
+
+      // Separate layer for the 6 Genomic Barcode Columns so they can shift with internal 3D depth parallax!
+      const lanesBuffer = document.createElement('canvas');
+      lanesBuffer.width = W;
+      lanesBuffer.height = H;
+      const lanesCtx = lanesBuffer.getContext('2d');
+
+      // Separate layer for the upper glass rim specular so it sits ABOVE the genomic lanes!
+      const rimOverlayBuffer = document.createElement('canvas');
+      rimOverlayBuffer.width = W;
+      rimOverlayBuffer.height = H;
+      const rimOverlayCtx = rimOverlayBuffer.getContext('2d');
+
+      const GENOMIC_COLS = [
+        { y0: 242, l0: 344, r0: 421, y1: 520, l1: 297, r1: 391, color: '#38bdf8', color2: '#f57e20', phase: 0.0 },
+        { y0: 215, l0: 426, r0: 501, y1: 540, l1: 397, r1: 491, color: '#34d399', color2: '#38bdf8', phase: 1.05 },
+        { y0: 228, l0: 506, r0: 578, y1: 535, l1: 497, r1: 583, color: '#f57e20', color2: '#ec4899', phase: 2.10 },
+        { y0: 220, l0: 582, r0: 654, y1: 512, l1: 587, r1: 673, color: '#60a5fa', color2: '#34d399', phase: 3.15 },
+        { y0: 222, l0: 658, r0: 731, y1: 548, l1: 678, r1: 764, color: '#a78bfa', color2: '#38bdf8', phase: 4.20 },
+        { y0: 246, l0: 735, r0: 808, y1: 522, l1: 769, r1: 868, color: '#f57e20', color2: '#34d399', phase: 5.25 }
+      ];
+
+      function buildStaticSublayers(cleanImg) {
+        // Extract the 6 genomic columns into lanesBuffer with soft feathered outer edges
+        lanesCtx.clearRect(0, 0, W, H);
+        lanesCtx.save();
+        lanesCtx.beginPath();
+        for (const col of GENOMIC_COLS) {
+          lanesCtx.moveTo(col.l0 - 2, col.y0);
+          lanesCtx.lineTo(col.r0 + 2, col.y0);
+          lanesCtx.lineTo(col.r1 + 2, col.y1);
+          lanesCtx.lineTo(col.l1 - 2, col.y1);
+          lanesCtx.closePath();
+        }
+        lanesCtx.clip();
+        lanesCtx.drawImage(cleanImg, 0, 0, W, H);
+        lanesCtx.restore();
+
+        // Extract the outer glass rim and front glass wall into rimOverlayBuffer
+        rimOverlayCtx.clearRect(0, 0, W, H);
+        rimOverlayCtx.save();
+        // Outer ellipse minus inner barcode court
+        rimOverlayCtx.beginPath();
+        rimOverlayCtx.rect(0, 0, W, H);
+        // Cut out interior court so only the glass rim & front wall remain
+        rimOverlayCtx.ellipse(592, 428, 345, 198, 0, 0, TWO_PI, true);
+        rimOverlayCtx.clip('evenodd');
+        rimOverlayCtx.drawImage(cleanImg, 0, 0, W, H);
+        rimOverlayCtx.restore();
+      }
+
+      const loadPromises = imageNames.map((name) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            images[name] = img;
+            resolve(img);
+          };
+          img.src = assetSources[name] || ('assets/petri-3d/' + name + '.png');
+        });
+      });
+
+      window.petriReadyPromise = Promise.all(loadPromises).then(() => {
+        buildStaticSublayers(images.petri_dish_clean);
+        allLoaded = true;
+      });
+
+      // Floating 3D Diagnostic Spheres
+      // Each sphere has its exact Figma anchor (x, y) and 3D elevation (z), plus rich 3D orbital motion
+      const DIAGNOSTIC_SPHERES = [
+        {
+          id: 'frosted_orb',
+          imgKey: 'badge_frosted_orb',
+          x: 385, y: 474, z: 38, r: 35,
+          ampX: 5.5, ampY: 13.0, ampScale: 0.045,
+          freq: 1, phase: 0.4,
+          rimColor: 'rgba(186, 230, 253, 0.55)',
+          glowColor: 'rgba(56, 189, 248, 0.24)',
+          hasTether: false
+        },
+        {
+          id: 'shrimp',
+          imgKey: 'badge_shrimp',
+          x: 564, y: 223, z: 54, r: 33,
+          ampX: 6.0, ampY: 14.5, ampScale: 0.055,
+          freq: 1, phase: 1.8,
+          rimColor: 'rgba(251, 146, 60, 0.68)',
+          glowColor: 'rgba(245, 126, 32, 0.32)',
+          hasTether: true,
+          tetherDrop: 46
+        },
+        {
+          id: 'cancer_cells',
+          imgKey: 'badge_cancer_cells',
+          x: 432, y: 295, z: 66, r: 38,
+          ampX: 6.5, ampY: 16.0, ampScale: 0.058,
+          freq: 1, phase: 3.1,
+          rimColor: 'rgba(244, 114, 182, 0.64)',
+          glowColor: 'rgba(236, 72, 153, 0.30)',
+          hasTether: true,
+          tetherDrop: 52
+        },
+        {
+          id: 'pathogens',
+          imgKey: 'badge_pathogens',
+          x: 515, y: 169, z: 82, r: 36,
+          ampX: 7.0, ampY: 15.5, ampScale: 0.060,
+          freq: 1, phase: 4.5,
+          rimColor: 'rgba(125, 211, 252, 0.70)',
+          glowColor: 'rgba(56, 189, 248, 0.32)',
+          hasTether: true,
+          tetherDrop: 64
+        },
+        {
+          id: 'fish',
+          imgKey: 'badge_fish',
+          x: 662, y: 281, z: 76, r: 44,
+          ampX: 6.8, ampY: 16.5, ampScale: 0.062,
+          freq: 1, phase: 2.5,
+          rimColor: 'rgba(96, 165, 250, 0.70)',
+          glowColor: 'rgba(56, 189, 248, 0.34)',
+          hasTether: true,
+          tetherDrop: 58
+        },
+        {
+          id: 'lungs',
+          imgKey: 'badge_lungs',
+          x: 565, y: 344, z: 98, r: 49,
+          ampX: 7.2, ampY: 18.5, ampScale: 0.068,
+          freq: 1, phase: 0.0,
+          rimColor: 'rgba(253, 186, 116, 0.78)',
+          glowColor: 'rgba(245, 126, 32, 0.38)',
+          hasTether: true,
+          tetherDrop: 66
+        },
+        {
+          id: 'livestock',
+          imgKey: 'badge_livestock',
+          x: 748, y: 447, z: 88, r: 54,
+          ampX: 7.5, ampY: 17.5, ampScale: 0.065,
+          freq: 1, phase: 5.1,
+          rimColor: 'rgba(110, 231, 183, 0.68)',
+          glowColor: 'rgba(52, 211, 153, 0.32)',
+          hasTether: true,
+          tetherDrop: 62
+        },
+        {
+          id: 'blood_cells',
+          imgKey: 'badge_blood_cells',
+          x: 597, y: 102, z: 118, r: 29,
+          ampX: 6.5, ampY: 15.0, ampScale: 0.055,
+          freq: 1, phase: 1.2,
+          rimColor: 'rgba(252, 165, 165, 0.68)',
+          glowColor: 'rgba(244, 63, 94, 0.28)',
+          hasTether: false
+        },
+        {
+          id: 'uterus',
+          imgKey: 'badge_uterus',
+          x: 713, y: 154, z: 112, r: 49,
+          ampX: 7.8, ampY: 18.0, ampScale: 0.066,
+          freq: 1, phase: 3.7,
+          rimColor: 'rgba(165, 243, 252, 0.78)',
+          glowColor: 'rgba(56, 189, 248, 0.38)',
+          hasTether: true,
+          tetherDrop: 78
+        }
+      ];
+
+      // Translucent 3D Bokeh & Frosted Micro-Orbs
+      const BOKEH_ORBS = [
+        { x: 774, y: 162, z: 84,  r: 36, type: 'cyan',  ampX: 8, ampY: 14, phase: 2.9 },
+        { x: 455, y: 84,  z: 126, r: 18, type: 'pearl', ampX: 7, ampY: 13, phase: 0.7 },
+        { x: 804, y: 114, z: 122, r: 18, type: 'pearl', ampX: 7, ampY: 14, phase: 4.2 },
+        { x: 583, y: 128, z: 96,  r: 13, type: 'pearl', ampX: 5, ampY: 11, phase: 2.1 },
+        { x: 382, y: 289, z: 50,  r: 14, type: 'pearl', ampX: 5, ampY: 11, phase: 5.4 },
+        { x: 284, y: 432, z: 28,  r: 20, type: 'blue',  ampX: 5, ampY: 9,  phase: 1.5 },
+        { x: 866, y: 364, z: 34,  r: 10, type: 'cyan',  ampX: 5, ampY: 11, phase: 3.8 }
+      ];
+
+      // Rising bioluminescent micro-particles inside the dish volume
+      const BIO_PARTICLES = Array.from({ length: 34 }, (_, i) => {
+        const colIdx = i % 6;
+        const col = GENOMIC_COLS[colIdx];
+        const tCol = ((i * 0.37) % 1.0);
+        const yBase = col.y0 + (col.y1 - col.y0) * (0.12 + 0.78 * tCol);
+        const l = col.l0 + (col.l1 - col.l0) * tCol;
+        const r = col.r0 + (col.r1 - col.r0) * tCol;
+        const xBase = l + (r - l) * (0.18 + 0.64 * ((i * 0.618) % 1.0));
+        return {
+          x: xBase,
+          y: yBase,
+          liftPx: 55 + (i % 4) * 18,
+          r: 2.2 + (i % 3) * 1.1,
+          color: i % 3 === 0 ? '#7dd3fc' : (i % 3 === 1 ? '#f57e20' : '#6ee7b7'),
+          phase: (i / 34) * TWO_PI
+        };
+      });
+
+      let pointerX = 0;
+      let pointerY = 0;
+      let smoothPointerX = 0;
+      let smoothPointerY = 0;
+
+      if (!isCapture) {
+        window.addEventListener('pointermove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+          const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+          pointerX = Math.max(-1, Math.min(1, nx));
+          pointerY = Math.max(-1, Math.min(1, ny));
+        });
+      }
+
+      const CX = 592;
+      const CY = 432;
+
+      // Apply 3D plane affine transform around (CX, CY) with elevation parallax zPlane
+      function applyPlaneTransform(targetCtx, transform, zPlane) {
+        const { tiltX, tiltY, spinZ, floatX, floatY, scaleBreath } = transform;
+        // Parallax offset from zPlane elevation
+        const px = floatX + tiltY * zPlane * 0.26;
+        const py = floatY - tiltX * zPlane * 0.24;
+
+        // 3D foreshortening & skew from orbital pitch (tiltX) and roll (tiltY)
+        const sx = scaleBreath * (1.0 + tiltY * 0.012);
+        const sy = scaleBreath * (1.0 + tiltX * 0.022);
+        const skewX = spinZ * 0.35 + tiltY * 0.028;
+        const skewY = -spinZ * 0.18 + tiltX * 0.010;
+
+        targetCtx.translate(CX + px, CY + py);
+        targetCtx.transform(sx, skewY, skewX, sy, 0, 0);
+        targetCtx.translate(-CX, -CY);
+      }
+
+      // Map a 3D point (x, y, z) to screen coordinates matching applyPlaneTransform
+      function projectPoint3D(x, y, z, transform) {
+        const { tiltX, tiltY, spinZ, floatX, floatY, scaleBreath } = transform;
+        const px = floatX + tiltY * z * 0.26;
+        const py = floatY - tiltX * z * 0.24;
+
+        const sx = scaleBreath * (1.0 + tiltY * 0.012);
+        const sy = scaleBreath * (1.0 + tiltX * 0.022);
+        const skewX = spinZ * 0.35 + tiltY * 0.028;
+        const skewY = -spinZ * 0.18 + tiltX * 0.010;
+
+        const dx = x - CX;
+        const dy = y - CY;
+        return {
+          sx: CX + px + dx * sx + dy * skewX,
+          sy: CY + py + dx * skewY + dy * sy,
+          scale: (sx + sy) * 0.5 * (1.0 + z * 0.0006)
+        };
+      }
+
+      // Render dynamic sequencing waves, rim speculars, and sphere shadows onto dishBuffer
+      function renderDishLayers(phaseAngle, sphereStates, transform) {
+        dishCtx.clearRect(0, 0, W, H);
+        dishCtx.drawImage(images.petri_dish_clean, 0, 0, W, H);
+
+        // 1. Animate bioluminescent fluorescence waves inside each of the 6 genomic columns
+        dishCtx.save();
+        dishCtx.globalCompositeOperation = 'screen';
+
+        for (let c = 0; c < GENOMIC_COLS.length; c++) {
+          const col = GENOMIC_COLS[c];
+          dishCtx.save();
+          dishCtx.beginPath();
+          dishCtx.moveTo(col.l0, col.y0);
+          dishCtx.lineTo(col.r0, col.y0);
+          dishCtx.lineTo(col.r1, col.y1);
+          dishCtx.lineTo(col.l1, col.y1);
+          dishCtx.closePath();
+          dishCtx.clip();
+
+          // Primary harmonic wave sweeping along column c
+          const waveT = 0.5 + 0.44 * Math.sin(phaseAngle + col.phase);
+          const waveY = col.y0 + (col.y1 - col.y0) * waveT;
+          const waveRadius = 72;
+
+          const grad = dishCtx.createLinearGradient(0, waveY - waveRadius, 0, waveY + waveRadius);
+          grad.addColorStop(0.0, 'rgba(0, 0, 0, 0)');
+          grad.addColorStop(0.32, col.color + '55');
+          grad.addColorStop(0.50, '#ffffff88');
+          grad.addColorStop(0.68, col.color2 + '55');
+          grad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
+
+          dishCtx.fillStyle = grad;
+          dishCtx.fillRect(280, col.y0, 600, col.y1 - col.y0);
+
+          // Secondary 2x harmonic laser read-head band shimmer
+          const waveT2 = 0.5 + 0.45 * Math.cos(phaseAngle * 2.0 - col.phase * 1.2);
+          const waveY2 = col.y0 + (col.y1 - col.y0) * waveT2;
+          const bandGrad = dishCtx.createLinearGradient(0, waveY2 - 12, 0, waveY2 + 12);
+          bandGrad.addColorStop(0.0, 'rgba(0, 0, 0, 0)');
+          bandGrad.addColorStop(0.5, col.color + '99');
+          bandGrad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
+          dishCtx.fillStyle = bandGrad;
+          dishCtx.fillRect(280, waveY2 - 12, 600, 24);
+
+          dishCtx.restore();
+        }
+
+        // 2. Orbiting specular highlights along the borosilicate glass rim & bottom caustic
+        const rimAngle1 = phaseAngle;
+        const rx1 = 592 + 408 * Math.cos(rimAngle1);
+        const ry1 = 425 + 258 * Math.sin(rimAngle1);
+        const rimGrad1 = dishCtx.createRadialGradient(rx1, ry1, 4, rx1, ry1, 145);
+        rimGrad1.addColorStop(0.0, 'rgba(224, 242, 254, 0.46)');
+        rimGrad1.addColorStop(0.45, 'rgba(56, 189, 248, 0.18)');
+        rimGrad1.addColorStop(1.0, 'rgba(56, 189, 248, 0.0)');
+        dishCtx.fillStyle = rimGrad1;
+        dishCtx.beginPath();
+        dishCtx.arc(rx1, ry1, 145, 0, TWO_PI);
+        dishCtx.fill();
+
+        const rimAngle2 = -phaseAngle + Math.PI * 0.65;
+        const rx2 = 592 + 395 * Math.cos(rimAngle2);
+        const ry2 = 445 + 248 * Math.sin(rimAngle2);
+        const rimGrad2 = dishCtx.createRadialGradient(rx2, ry2, 4, rx2, ry2, 130);
+        rimGrad2.addColorStop(0.0, 'rgba(255, 255, 255, 0.36)');
+        rimGrad2.addColorStop(0.5, 'rgba(125, 211, 252, 0.15)');
+        rimGrad2.addColorStop(1.0, 'rgba(56, 189, 248, 0.0)');
+        dishCtx.fillStyle = rimGrad2;
+        dishCtx.beginPath();
+        dishCtx.arc(rx2, ry2, 130, 0, TWO_PI);
+        dishCtx.fill();
+
+        const causticPulse = 0.16 + 0.10 * Math.sin(phaseAngle * 2.0);
+        const causticGrad = dishCtx.createRadialGradient(585, 625, 10, 585, 625, 230);
+        causticGrad.addColorStop(0.0, `rgba(125, 211, 252, ${causticPulse.toFixed(3)})`);
+        causticGrad.addColorStop(0.6, `rgba(56, 189, 248, ${(causticPulse * 0.4).toFixed(3)})`);
+        causticGrad.addColorStop(1.0, 'rgba(56, 189, 248, 0.0)');
+        dishCtx.fillStyle = causticGrad;
+        dishCtx.beginPath();
+        dishCtx.ellipse(585, 620, 260, 95, 0, 0, TWO_PI);
+        dishCtx.fill();
+
+        dishCtx.restore();
+
+        // 3. Dynamic contact shadows & glowing radar rings on the genomic matrix under each sphere
+        dishCtx.save();
+        for (const sp of sphereStates) {
+          if (sp.y0 < 190) continue;
+          const heightFactor = Math.max(0.35, Math.min(1.0, 1.0 - (sp.curYOffset + 18) / 42));
+          const shadowR = sp.r * (0.82 + 0.22 * (1 - heightFactor));
+          const shadowX = sp.curX;
+          const shadowY = sp.y0 + 24;
+
+          const shGrad = dishCtx.createRadialGradient(shadowX, shadowY, 2, shadowX, shadowY, shadowR * 1.3);
+          shGrad.addColorStop(0.0, `rgba(6, 14, 24, ${(0.46 * heightFactor).toFixed(3)})`);
+          shGrad.addColorStop(0.6, `rgba(10, 22, 36, ${(0.22 * heightFactor).toFixed(3)})`);
+          shGrad.addColorStop(1.0, 'rgba(10, 22, 36, 0.0)');
+          dishCtx.fillStyle = shGrad;
+          dishCtx.beginPath();
+          dishCtx.ellipse(shadowX, shadowY, shadowR * 1.22, shadowR * 0.76, 0, 0, TWO_PI);
+          dishCtx.fill();
+
+          if (sp.hasTether) {
+            const ringPulse = 0.45 + 0.35 * Math.sin(phaseAngle * 2.0 + sp.phase);
+            dishCtx.strokeStyle = sp.rimColor.replace(/[\d.]+\)$/, `${(ringPulse * 0.65).toFixed(3)})`);
+            dishCtx.lineWidth = 1.8;
+            dishCtx.beginPath();
+            dishCtx.ellipse(shadowX, shadowY - 2, shadowR * 0.46, shadowR * 0.28, 0, 0, TWO_PI);
+            dishCtx.stroke();
+          }
+        }
+        dishCtx.restore();
+
+        // 4. Composite the unified 3D Petri Dish at zPlane = 0
+        ctx.save();
+        applyPlaneTransform(ctx, transform, 0);
+        ctx.drawImage(dishBuffer, 0, 0, W, H);
+        ctx.restore();
+      }
+
+      function renderPetriFrame(timeSec) {
+        if (!allLoaded) return;
+
+        const phaseAngle = (timeSec / LOOP_DURATION) * TWO_PI;
+
+        smoothPointerX += (pointerX - smoothPointerX) * 0.08;
+        smoothPointerY += (pointerY - smoothPointerY) * 0.08;
+
+        // Smooth 3D orbital tilt, levitation, and breathing over the 6.0s loop
+        const transform = {
+          tiltX: Math.sin(phaseAngle) * 1.15 + smoothPointerY * 1.4,
+          tiltY: Math.cos(phaseAngle) * 1.25 + smoothPointerX * 1.6,
+          spinZ: Math.sin(phaseAngle + 0.7) * 0.045 + smoothPointerX * 0.04,
+          floatX: 7.5 * Math.cos(phaseAngle - 0.5) + smoothPointerX * 10,
+          floatY: 11.0 * Math.sin(phaseAngle - 0.3) + smoothPointerY * 8,
+          scaleBreath: 1.0 + 0.016 * Math.sin(phaseAngle - 0.8)
+        };
+
+        // Compute current 3D states of all diagnostic spheres
+        const sphereStates = DIAGNOSTIC_SPHERES.map((sp) => {
+          const a = phaseAngle * sp.freq + sp.phase;
+          const dx = sp.ampX * Math.cos(a);
+          const dy = sp.ampY * Math.sin(a);
+          const curX = sp.x + dx;
+          const curY = sp.y + dy;
+          const curZ = sp.z + 18 * Math.sin(a - 0.5);
+
+          const proj = projectPoint3D(curX, curY, curZ, transform);
+          // Tether base sits on the dish barcode plane (z = -10) directly below the sphere
+          const tetherBaseY = sp.y + (sp.tetherDrop || 56);
+          const baseProj = projectPoint3D(sp.x + dx * 0.25, tetherBaseY, -10, transform);
+
+          return {
+            ...sp,
+            x0: sp.x,
+            y0: sp.y,
+            curX,
+            curY,
+            curYOffset: dy,
+            curZ,
+            proj,
+            baseProj,
+            scaleMod: 1.0 + sp.ampScale * Math.sin(a - 0.4),
+            phaseAngle: a
+          };
+        });
+
+        // Clear main canvas
+        ctx.clearRect(0, 0, W, H);
+
+        // 1. Soft atmospheric 3D volumetric glow behind the Petri dish
+        ctx.save();
+        const backPulse = 0.22 + 0.07 * Math.sin(phaseAngle);
+        const backGrad = ctx.createRadialGradient(
+          CX + transform.floatX,
+          CY + transform.floatY + 10,
+          30,
+          CX + transform.floatX,
+          CY + transform.floatY + 10,
+          440
+        );
+        backGrad.addColorStop(0.0, `rgba(56, 189, 248, ${backPulse.toFixed(3)})`);
+        backGrad.addColorStop(0.55, `rgba(30, 64, 100, ${(backPulse * 0.42).toFixed(3)})`);
+        backGrad.addColorStop(1.0, 'rgba(30, 64, 100, 0.0)');
+        ctx.fillStyle = backGrad;
+        ctx.fillRect(0, 0, W, H);
+        ctx.restore();
+
+        // 2. Render multi-plane 3D Petri dish (Bowl + Recessed Genomic Matrix + Raised Glass Rim)
+        renderDishLayers(phaseAngle, sphereStates, transform);
+
+        // 3. Render rising bioluminescent micro-particles inside the dish 3D volume
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        for (const pt of BIO_PARTICLES) {
+          const rawProgress = ((phaseAngle + pt.phase) % TWO_PI) / TWO_PI;
+          const alpha = Math.sin(rawProgress * Math.PI) * 0.78;
+          if (alpha <= 0.02) continue;
+
+          const xSway = pt.x + 6.0 * Math.sin(phaseAngle * 2.0 + pt.phase);
+          const yLift = pt.y - rawProgress * pt.liftPx;
+          const zLift = rawProgress * 75;
+          const proj = projectPoint3D(xSway, yLift, zLift, transform);
+          const rScaled = pt.r * proj.scale * (0.85 + 0.45 * Math.sin(rawProgress * Math.PI));
+
+          const pGrad = ctx.createRadialGradient(proj.sx, proj.sy, 0, proj.sx, proj.sy, rScaled * 3.4);
+          pGrad.addColorStop(0.0, '#ffffff');
+          pGrad.addColorStop(0.38, pt.color);
+          pGrad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = pGrad;
+          ctx.beginPath();
+          ctx.arc(proj.sx, proj.sy, rScaled * 3.4, 0, TWO_PI);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // 4. Render delicate optical data filaments connecting dish genomic bands -> bottom of floating spheres
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        for (const sp of sphereStates) {
+          if (!sp.hasTether) continue;
+          const x0 = sp.baseProj.sx;
+          const y0 = sp.baseProj.sy;
+          const x1 = sp.proj.sx;
+          // Connect to the bottom rim of the sphere so it never pokes above the sphere!
+          const y1 = sp.proj.sy + sp.r * 0.65;
+          if (y0 <= y1 + 4) continue;
+
+          const tetherGrad = ctx.createLinearGradient(x0, y0, x1, y1);
+          tetherGrad.addColorStop(0.0, sp.rimColor.replace(/[\d.]+\)$/, '0.42)'));
+          tetherGrad.addColorStop(0.6, sp.rimColor.replace(/[\d.]+\)$/, '0.22)'));
+          tetherGrad.addColorStop(1.0, sp.rimColor.replace(/[\d.]+\)$/, '0.0)'));
+
+          ctx.strokeStyle = tetherGrad;
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(x0, y0);
+          const cxMid = (x0 + x1) * 0.5 + 5 * Math.sin(phaseAngle + sp.phase);
+          const cyMid = (y0 + y1) * 0.5;
+          ctx.quadraticCurveTo(cxMid, cyMid, x1, y1);
+          ctx.stroke();
+
+          // Travelling bioluminescent photon pulse rising from the barcode lane into the sphere
+          const pulseT = ((phaseAngle + sp.phase) % TWO_PI) / TWO_PI;
+          const invT = 1 - pulseT;
+          const px = invT * invT * x0 + 2 * invT * pulseT * cxMid + pulseT * pulseT * x1;
+          const py = invT * invT * y0 + 2 * invT * pulseT * cyMid + pulseT * pulseT * y1;
+          const pulseAlpha = Math.sin(pulseT * Math.PI) * 0.82;
+
+          const pulseGrad = ctx.createRadialGradient(px, py, 0, px, py, 7.5);
+          pulseGrad.addColorStop(0.0, `rgba(255, 255, 255, ${pulseAlpha.toFixed(3)})`);
+          pulseGrad.addColorStop(0.5, sp.rimColor.replace(/[\d.]+\)$/, `${(pulseAlpha * 0.75).toFixed(3)})`));
+          pulseGrad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = pulseGrad;
+          ctx.beginPath();
+          ctx.arc(px, py, 7.5, 0, TWO_PI);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // 5. Combine Bokeh Orbs and Diagnostic Spheres and sort back-to-front by 3D Z elevation
+        const renderables = [];
+
+        for (const bk of BOKEH_ORBS) {
+          const a = phaseAngle + bk.phase;
+          const bx = bk.x + bk.ampX * Math.cos(a);
+          const by = bk.y + bk.ampY * Math.sin(a);
+          const bz = bk.z + 12 * Math.sin(a - 0.5);
+          const proj = projectPoint3D(bx, by, bz, transform);
+          renderables.push({
+            kind: 'bokeh',
+            depth: bz,
+            sx: proj.sx,
+            sy: proj.sy,
+            r: bk.r * proj.scale * (1.0 + 0.04 * Math.sin(a)),
+            type: bk.type,
+            phase: a
+          });
+        }
+
+        for (const sp of sphereStates) {
+          renderables.push({
+            kind: 'sphere',
+            depth: sp.curZ,
+            sx: sp.proj.sx,
+            sy: sp.proj.sy,
+            r: sp.r * sp.proj.scale * sp.scaleMod,
+            sp
+          });
+        }
+
+        renderables.sort((a, b) => a.depth - b.depth);
+
+        // 6. Draw sorted 3D Bokeh Orbs and Diagnostic Glass Spheres
+        for (const item of renderables) {
+          if (item.kind === 'bokeh') {
+            ctx.save();
+            const { sx, sy, r, type } = item;
+            if (type === 'cyan') {
+              ctx.globalCompositeOperation = 'screen';
+              const g = ctx.createRadialGradient(sx - r * 0.2, sy - r * 0.2, r * 0.1, sx, sy, r * 1.15);
+              g.addColorStop(0.0, 'rgba(224, 242, 254, 0.92)');
+              g.addColorStop(0.55, 'rgba(56, 189, 248, 0.78)');
+              g.addColorStop(0.88, 'rgba(14, 165, 233, 0.28)');
+              g.addColorStop(1.0, 'rgba(14, 165, 233, 0.0)');
+              ctx.fillStyle = g;
+              ctx.beginPath();
+              ctx.arc(sx, sy, r * 1.15, 0, TWO_PI);
+              ctx.fill();
+            } else if (type === 'blue') {
+              ctx.globalCompositeOperation = 'screen';
+              const g = ctx.createRadialGradient(sx - r * 0.2, sy - r * 0.2, r * 0.1, sx, sy, r * 1.1);
+              g.addColorStop(0.0, 'rgba(147, 197, 253, 0.85)');
+              g.addColorStop(0.65, 'rgba(59, 130, 246, 0.52)');
+              g.addColorStop(1.0, 'rgba(59, 130, 246, 0.0)');
+              ctx.fillStyle = g;
+              ctx.beginPath();
+              ctx.arc(sx, sy, r * 1.1, 0, TWO_PI);
+              ctx.fill();
+            } else {
+              const g = ctx.createRadialGradient(sx - r * 0.32, sy - r * 0.32, r * 0.08, sx, sy, r);
+              g.addColorStop(0.0, 'rgba(255, 255, 255, 0.98)');
+              g.addColorStop(0.65, 'rgba(226, 232, 240, 0.92)');
+              g.addColorStop(0.92, 'rgba(148, 163, 184, 0.78)');
+              g.addColorStop(1.0, 'rgba(148, 163, 184, 0.0)');
+              ctx.fillStyle = g;
+              ctx.beginPath();
+              ctx.arc(sx, sy, r, 0, TWO_PI);
+              ctx.fill();
+
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
+              ctx.lineWidth = 1.2;
+              ctx.beginPath();
+              ctx.arc(sx, sy, r * 0.94, 0, TWO_PI);
+              ctx.stroke();
+            }
+            ctx.restore();
+          } else {
+            const { sx, sy, r, sp } = item;
+            const badgeImg = images[sp.imgKey];
+            if (!badgeImg) continue;
+
+            ctx.save();
+
+            // Outer bioluminescent halo around the 3D sphere
+            const haloGrad = ctx.createRadialGradient(sx, sy, r * 0.72, sx, sy, r * 1.42);
+            haloGrad.addColorStop(0.0, sp.glowColor);
+            haloGrad.addColorStop(1.0, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = haloGrad;
+            ctx.beginPath();
+            ctx.arc(sx, sy, r * 1.42, 0, TWO_PI);
+            ctx.fill();
+
+            // Draw the extracted circular badge image with gentle 3D micro-tilt
+            const padScale = (sp.r + 4) / sp.r;
+            const drawRadius = r * padScale;
+            ctx.translate(sx, sy);
+            ctx.rotate(0.045 * Math.sin(sp.phaseAngle));
+            ctx.drawImage(badgeImg, -drawRadius, -drawRadius, drawRadius * 2, drawRadius * 2);
+
+            // 3D Glass Sphere Specular Dome Highlight
+            const hlOffsetX = -r * 0.28 + r * 0.10 * Math.cos(phaseAngle + sp.phase);
+            const hlOffsetY = -r * 0.30 + r * 0.10 * Math.sin(phaseAngle + sp.phase);
+            const specGrad = ctx.createRadialGradient(
+              hlOffsetX, hlOffsetY, r * 0.04,
+              hlOffsetX, hlOffsetY, r * 0.68
+            );
+            specGrad.addColorStop(0.0, 'rgba(255, 255, 255, 0.52)');
+            specGrad.addColorStop(0.45, 'rgba(255, 255, 255, 0.14)');
+            specGrad.addColorStop(1.0, 'rgba(255, 255, 255, 0.0)');
+            ctx.fillStyle = specGrad;
+            ctx.beginPath();
+            ctx.arc(0, 0, r * 0.98, 0, TWO_PI);
+            ctx.fill();
+
+            // 3D Fresnel Glass Rim Ring
+            ctx.strokeStyle = sp.rimColor;
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            ctx.arc(0, 0, r * 0.98, 0, TWO_PI);
+            ctx.stroke();
+
+            // Crisp top-left glass crescent reflection
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.72)';
+            ctx.lineWidth = 2.0;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            const glintAngle = -Math.PI * 0.72 + 0.15 * Math.sin(phaseAngle + sp.phase);
+            ctx.arc(0, 0, r * 0.90, glintAngle - 0.42, glintAngle + 0.42);
+            ctx.stroke();
+
+            ctx.restore();
+          }
+        }
+      }
+
+      window.renderPetriAtTime = function (timeSec) {
+        renderPetriFrame(timeSec);
+      };
+
+      let isPaused = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let startTimestamp = null;
+
+      function tick(ts) {
+        if (!startTimestamp) startTimestamp = ts;
+        if (!isPaused && !isCapture) {
+          const elapsedSec = ((ts - startTimestamp) / 1000) % LOOP_DURATION;
+          renderPetriFrame(elapsedSec);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      window.petriReadyPromise.then(() => {
+        renderPetriFrame(0);
+        if (!isCapture) {
+          requestAnimationFrame(tick);
+        }
+      });
+
+      const btnSection = document.getElementById('btnViewSection');
+      const btnVideo = document.getElementById('btnViewVideo');
+      const btnCloseup = document.getElementById('btnViewCloseup');
+      const btnMotion = document.getElementById('btnToggleMotion');
+      const videoEl = document.getElementById('petriVideo');
+
+      if (btnSection && btnVideo && btnCloseup && btnMotion) {
+        btnSection.addEventListener('click', () => {
+          document.body.classList.remove('capture-mode');
+          canvas.style.display = 'block';
+          if (videoEl) videoEl.style.display = 'none';
+          btnSection.classList.add('studio-btn--active');
+          btnVideo.classList.remove('studio-btn--active');
+          btnCloseup.classList.remove('studio-btn--active');
+        });
+        btnVideo.addEventListener('click', () => {
+          document.body.classList.remove('capture-mode');
+          canvas.style.display = 'none';
+          if (videoEl) {
+            videoEl.style.display = 'block';
+            videoEl.play().catch(() => {});
+          }
+          btnVideo.classList.add('studio-btn--active');
+          btnSection.classList.remove('studio-btn--active');
+          btnCloseup.classList.remove('studio-btn--active');
+        });
+        btnCloseup.addEventListener('click', () => {
+          document.body.classList.add('capture-mode');
+          canvas.style.display = 'block';
+          if (videoEl) videoEl.style.display = 'none';
+          btnCloseup.classList.add('studio-btn--active');
+          btnSection.classList.remove('studio-btn--active');
+          btnVideo.classList.remove('studio-btn--active');
+        });
+        btnMotion.addEventListener('click', () => {
+          isPaused = !isPaused;
+          if (videoEl) {
+            if (isPaused) videoEl.pause();
+            else videoEl.play().catch(() => {});
+          }
+          btnMotion.textContent = isPaused ? 'Resume Motion' : 'Pause Motion';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

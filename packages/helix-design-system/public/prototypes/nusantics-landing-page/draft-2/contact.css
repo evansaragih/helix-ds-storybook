@@ -1,0 +1,575 @@
+/* Contact Page Styles. Source: Figma frame 228:47 (1280px wide).
+   Shares design tokens and layout conventions with styles.css & about.css */
+
+body {
+  background: var(--surface-default);
+  color: var(--text-default);
+}
+
+/* ==========================================================================
+   1. Contact Hero & 3D Holographic Map Stage
+   ========================================================================== */
+.contact-hero {
+  position: relative;
+  isolation: isolate;
+  height: 100vh;
+  height: 100svh; /* full screen */
+  min-height: 720px;
+  overflow: hidden;
+  background-color: #bf5b0c;
+  background-image: radial-gradient(ellipse 85% 70% at 50% 45%, #cb6719 0%, #b85004 60%, #9b3d00 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Full Bleed Map Stage (Zero black/white bars on any screen width) */
+.contact-hero__map-stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.contact-hero__map-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 1.2s var(--motion-easing-decelerate);
+}
+
+/* ==========================================================================
+   2. Desktop Content Wrap & Floating Locations (Figma 1280x768)
+   ========================================================================== */
+.contact-hero__content-wrap {
+  position: absolute;
+  inset: 0;
+  max-width: var(--page);
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  z-index: 4;
+}
+
+/* Map panel: beside the title block, 12px radius (Figma 420 x 420 at minimum; it grows to fill the hero) */
+/* The row takes all the height between the navbar and the contact details, so the map grows with the hero */
+.contact-hero__row {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 64px;
+}
+
+.contact-hero__row .contact-hero__intro { flex: none; align-self: flex-end; }
+
+.contact-hero__map {
+  position: relative;
+  flex: 1 1 0; /* takes the width left of the 545px title block */
+  max-width: 560px;
+  min-width: 0;
+  min-height: 420px;
+  margin-bottom: 12px; /* Figma: map bottom sits 12px above the description's */
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  pointer-events: auto;
+  background: #e8e2d4;
+  box-shadow: 0 1px 2px rgba(20, 20, 30, 0.12), 0 8px 24px rgba(89, 40, 0, 0.18);
+}
+
+.contact-map { position: absolute; inset: 0; isolation: isolate; font-family: var(--font-body); }
+.contact-map iframe { display: block; width: 100%; height: 100%; border: 0; }
+.contact-map.leaflet-container { background: #e5e3df; }
+.contact-map .leaflet-tile { outline: 1px solid transparent; }
+.contact-map .leaflet-control-zoom { border: 0; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
+.contact-map .leaflet-control-zoom a { width: 32px; height: 32px; line-height: 32px; color: #666; }
+.contact-map .leaflet-control-attribution { font-size: 10px; background: rgba(255, 255, 255, 0.72); }
+.contact-map .leaflet-popup-content-wrapper { border-radius: 8px; box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3); }
+.contact-map .leaflet-popup-content { margin: 12px 14px; }
+.contact-map .leaflet-popup-tip-container { height: 12px; }
+.contact-map__pin { filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)); }
+.contact-map__type { position: absolute; top: 10px; left: 10px; z-index: 800; display: flex; background: #fff; border-radius: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
+.contact-map__type button { height: 36px; padding: 0 14px; border: 0; background: transparent; font: 400 14px/20px var(--font-body); color: #666; cursor: pointer; }
+.contact-map__type button[aria-pressed="true"] { font-weight: 500; color: #000; background: #ebebeb; }
+.contact-map__type button:focus-visible { outline: 2px solid var(--surface-primary); outline-offset: -2px; }
+.contact-map__fallback { margin: 0; padding: 24px; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.contact-map__fallback a { color: var(--text-default); text-decoration: underline; }
+.contact-map__info { font: 400 13px/19.2px var(--font-body); color: var(--text-subtle); }
+.contact-map__info strong { display: block; font-weight: 500; color: var(--text-default); }
+.contact-map__info a { display: block; color: var(--text-primary); text-decoration: none; }
+.contact-map__info a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   3. Hero Bottom Editorial Content Panel (Figma 225:22957 - 225:22959)
+   ========================================================================== */
+/* Hero copy sits at the bottom, 80px from the edges (Figma 228:1805: vertical, gap 16) */
+.contact-hero__bottom {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  pointer-events: auto;
+  padding: 108px var(--gutter) 80px; /* 48px of air under the navbar */
+  display: flex;
+  flex-direction: column;
+  gap: 64px; /* title block to contact details */
+  width: 100%;
+}
+
+.contact-hero__intro {
+  width: 545px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-hero__title {
+  max-width: 545px;
+  margin: 0;
+  font: 700 39px/46.8px var(--font-heading);
+  letter-spacing: -0.01px;
+  color: var(--text-on-primary);
+}
+
+.contact-hero__desc {
+  max-width: 532px; /* Figma box is 526; a few px of slack keeps the same line break across font rendering */
+  margin: 0;
+  font: 400 16px/24px var(--font-body);
+  letter-spacing: -0.01px;
+  color: var(--text-on-primary);
+}
+
+/* Contact details (Figma 225:22959): two Content Containers + Follow Us */
+.contact-strip {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.contact-strip__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px; /* 12px minus the 1px border: 62px tall like Figma (icon tile 38 + 24) */
+  background: var(--surface-default);
+  border: 1px solid var(--stroke-subtle);
+  border-radius: var(--radius-xl);
+  text-decoration: none;
+  color: var(--text-default);
+  box-shadow: var(--shadow-small);
+  transition:
+    transform var(--motion-duration-base) var(--motion-easing-decelerate),
+    box-shadow var(--motion-duration-base) var(--motion-easing-decelerate),
+    border-color var(--motion-duration-base) var(--motion-easing-standard);
+}
+
+.contact-strip__item:hover {
+  transform: translateY(-2px);
+  border-color: #e0e0e0;
+  box-shadow: 0 6px 16px var(--shadow-neutral);
+}
+
+.contact-strip__icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-subtle-primary);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  color: var(--surface-primary);
+  flex-shrink: 0;
+}
+
+.contact-strip__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Figma shows the value only; the label stays for screen readers */
+.contact-strip__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.contact-strip__icon-tile svg { width: 20px; height: 20px; }
+
+.contact-strip__value {
+  font: 400 16px/24px var(--font-body);
+  letter-spacing: -0.01px;
+  color: var(--text-subtler);
+}
+
+.contact-strip__social-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.contact-strip__social-label {
+  font: 400 13px/19.2px var(--font-body);
+  letter-spacing: -0.01px;
+  color: var(--text-on-primary);
+  white-space: nowrap;
+}
+
+.contact-strip__social-links {
+  display: flex;
+  align-items: center;
+}
+
+.contact-strip__social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-lg);
+  color: var(--text-on-primary);
+  text-decoration: none;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-standard),
+    transform var(--motion-duration-fast) var(--motion-easing-standard);
+}
+
+.contact-strip__social-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   4. Our Office (Figma 228:2550) · Office Card = Content Container (gray shell, white body, footer)
+   Tokens come from styles.css; text styles follow the Helix scale used on About.
+   ========================================================================== */
+.office-section,
+.distributor-section {
+  background: var(--surface-subtle);
+}
+
+.office-section { padding: 64px 0 48px; }
+.distributor-section { padding: 48px 0 64px; }
+
+.office-section__container,
+.distributor-section__container {
+  max-width: var(--page);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.office-section__title,
+.distributor-section__title {
+  margin: 0;
+  text-align: center;
+  font: 700 31px/37.2px var(--font-heading);
+  letter-spacing: var(--letter-spacing, -0.01px);
+  color: var(--text-primary);
+}
+
+.office-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.facility-card__body { padding: 20px; gap: 40px; }
+
+.facility-card__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.facility-card__img {
+  width: 100%;
+  height: 314px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
+.facility-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.facility-card__name {
+  margin: 0;
+  font: 700 25px/30px var(--font-heading);
+  letter-spacing: -0.01px;
+  color: var(--text-subtle);
+}
+
+.facility-card__locations {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.facility-card__location {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.facility-card__place {
+  margin: 0;
+  font: 500 16px/24px var(--font-body);
+  letter-spacing: -0.16px;
+  color: var(--text-primary);
+}
+
+.facility-card__address {
+  font: 400 13px/19.2px var(--font-body);
+  letter-spacing: -0.01px;
+  color: var(--text-subtler);
+}
+
+.facility-card__footer {
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+/* ==========================================================================
+   5. Our Distributor (Figma 229:49)
+   ========================================================================== */
+.distributor-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.distributor-card__body {
+  padding: 24px;
+  gap: 16px;
+}
+
+.distributor-card__icon-tile {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: var(--surface-subtle-primary);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.4);
+  color: var(--surface-primary);
+}
+
+.distributor-card__name {
+  margin: 0;
+  font: 500 16px/24px var(--font-body);
+  letter-spacing: -0.16px;
+  color: var(--text-subtle);
+}
+
+.distributor-card__address {
+  font: 400 13px/19.2px var(--font-body);
+  letter-spacing: -0.01px;
+  color: var(--text-subtler);
+}
+
+.distributor-card__footer {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Tag: bordered 28px chip with a leading icon */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 4px 10px;
+  border: 1px solid var(--stroke-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-default);
+  font: 400 13px/19.2px var(--font-body);
+  letter-spacing: -0.01px;
+  color: var(--text-subtler);
+  transition: border-color var(--motion-duration-fast) var(--motion-easing-standard);
+}
+
+.tag svg { color: #3a3a3b; flex-shrink: 0; }
+.tag:hover { border-color: #e0e0e0; }
+
+/* ==========================================================================
+   6. Adaptive Layout: Desktop (> 960px) vs Mobile/Tablet (<= 960px)
+   ========================================================================== */
+@media (max-width: 960px) {
+  .contact-hero {
+    height: auto;
+    min-height: auto;
+    padding-top: 84px;
+    background-color: #bf5b0c;
+    background-image: linear-gradient(180deg, #cb6719 0%, #b85004 50%, #9e4000 100%);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* The photo stays a full-bleed backdrop; the map panel leads the stacked content */
+  .contact-hero {
+    min-height: 100svh;
+    justify-content: flex-start;
+  }
+
+  .contact-hero__content-wrap {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    pointer-events: auto;
+    padding: 0 24px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    box-sizing: border-box;
+  }
+
+  .contact-hero__row {
+    flex: none;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 32px;
+  }
+
+  .contact-hero__row .contact-hero__intro { align-self: auto; }
+
+  .contact-hero__map {
+    flex: none;
+    width: 100%;
+    height: 320px;
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
+  .contact-hero__bottom {
+    padding: 0;
+  }
+
+  .contact-strip {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .contact-strip__social-group {
+    width: 100%;
+    flex: none;
+    align-items: flex-start;
+  }
+
+  .facility-card__body {
+    grid-template-columns: 1fr;
+  }
+
+  .facility-card__media {
+    height: 240px;
+  }
+
+  .distributor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .facility-card__row {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .facility-card:nth-child(even) .facility-card__img { order: 2; }
+}
+
+@media (max-width: 640px) {
+  .contact-hero__content-wrap {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .contact-hero__map {
+    height: 280px;
+  }
+
+  .contact-hero__title {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .contact-strip__item {
+    width: 100%;
+  }
+
+  .office-section__container,
+  .distributor-section__container {
+    padding-inline: 20px;
+  }
+
+}
+
+/* Scroll reveal states */
+.facility-card,
+.distributor-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.js .reveal-ready:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.js .reveal-ready {
+  transition:
+    opacity 0.6s var(--motion-easing-decelerate),
+    transform 0.6s var(--motion-easing-decelerate),
+    box-shadow var(--motion-duration-slow) var(--motion-easing-decelerate),
+    border-color var(--motion-duration-base) var(--motion-easing-standard);
+}
+
+.js .reveal-ready.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Revealed cards keep the neutral hover lift */
+.js .reveal-ready.is-visible.cc--interactive:hover {
+  transform: translateY(-2px);
+}
+
+/* Prevent horizontal viewport overflow on narrow mobile devices */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@media (max-width: 640px) {
+  .nav__inner {
+    padding-inline: 16px;
+  }
+  .nav .btn--soft {
+    display: none;
+  }
+  .nav .btn--primary {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}

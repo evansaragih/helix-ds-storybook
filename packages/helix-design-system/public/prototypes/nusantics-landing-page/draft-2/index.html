@@ -23,6 +23,7 @@
           <img class="nav__logo-dark" src="assets/nav-logo-dark.svg" alt="" width="131" height="16" aria-hidden="true">
         </a>
         <nav class="nav__links" aria-label="Primary">
+          <div class="nav__menu">
           <div class="nav-dd nav__hide-sm">
             <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-audience">For Lab<span class="nav-chevron" aria-hidden="true"></span></button>
             <div class="nav-menu helix-pop" id="menu-audience" role="menu" aria-label="For Lab" data-side="bottom" data-state="closed" hidden>
@@ -32,39 +33,39 @@
               </div>
             </div>
           </div>
-          <a class="nav__item nav__hide-sm" href="#about">About Us</a>
+          <a class="nav__item nav__hide-sm" href="about.html">About Us</a>
           <div class="nav-dd nav__hide-sm">
             <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-products">Products &amp; Solutions<span class="nav-chevron" aria-hidden="true"></span></button>
             <div class="nav-menu helix-pop" id="menu-products" role="menu" aria-label="Products &amp; Solutions" data-side="bottom" data-state="closed" hidden>
               <div class="nav-menu__list">
-                <a class="nav-menu__item" role="menuitem" href="#products">Human Diagnostics</a>
-                <a class="nav-menu__item" role="menuitem" href="#products">Animal Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="product.html">Human Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="product.html">Animal Diagnostics</a>
                 <div class="nav-menu__divider" role="separator"></div>
-                <a class="nav-menu__item" role="menuitem" href="#products">Product Pipeline</a>
+                <a class="nav-menu__item" role="menuitem" href="pipeline.html">Product Pipeline</a>
               </div>
             </div>
           </div>
-          <a class="nav__item nav__hide-sm" href="#career">Career</a>
+          <a class="nav__item nav__hide-sm" href="career.html">Career</a>
           <div class="nav-dd nav__hide-sm">
             <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-knowledge">Knowledge Hub<span class="nav-chevron" aria-hidden="true"></span></button>
             <div class="nav-menu helix-pop" id="menu-knowledge" role="menu" aria-label="Knowledge Hub" data-side="bottom" data-state="closed" hidden>
               <div class="nav-menu__list">
-                <a class="nav-menu__item" role="menuitem" href="#knowledge">Paper &amp; Publications</a>
-                <a class="nav-menu__item" role="menuitem" href="#knowledge">Blog</a>
+                <a class="nav-menu__item" role="menuitem" href="paper-publications.html">Paper &amp; Publications</a>
+                <a class="nav-menu__item" role="menuitem" href="news.html">News</a>
+                <a class="nav-menu__item" role="menuitem" href="media-coverage.html">Media Coverage</a>
+                <a class="nav-menu__item" role="menuitem" href="blog.html">Blog</a>
               </div>
             </div>
           </div>
-          <div class="nav-dd nav-dd--end">
-            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-language"><img class="nav-flag" src="../assets/flag-gb.svg" alt="" width="14" height="14"> EN<span class="nav-chevron" aria-hidden="true"></span></button>
-            <div class="nav-menu helix-pop" id="menu-language" role="menu" aria-label="EN" data-side="bottom" data-state="closed" hidden>
-              <div class="nav-menu__list">
-                <a class="nav-menu__item" role="menuitem" href="#" lang="en">English</a>
-                <a class="nav-menu__item" role="menuitem" href="#" lang="id">Bahasa Indonesia</a>
-              </div>
-            </div>
           </div>
-          <a class="btn btn--soft nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
-          <a class="btn btn--primary" href="#contact">Contact Us</a>
+          <div class="nav__actions">
+            <div class="toggle toggle--sm" role="radiogroup" aria-label="Language" data-toggle="language">
+              <button class="toggle__item" type="button" role="radio" aria-checked="true" lang="en"><img class="toggle__icon" src="../assets/flag-gb.svg" alt="" width="16" height="16">EN</button>
+              <button class="toggle__item" type="button" role="radio" aria-checked="false" tabindex="-1" lang="id"><img class="toggle__icon" src="../assets/flag-id.svg" alt="" width="16" height="16">ID</button>
+            </div>
+          <a class="btn btn--white nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
+          <a class="btn btn--primary" href="contact.html">Contact Us</a>
+          </div>
         </nav>
       </div>
     </header>
@@ -141,7 +142,7 @@
         </header>
         <div class="fields">
           <div class="field-group">
-            <h3 class="sub-title">Core Technology</h3>
+            <h3 class="sub-title">Life Science</h3>
             <div class="field-row field-row--center">
               <article class="cc cc--gray field-card">
                 <div class="cc__body"><img class="avatar" src="assets/icon-core.png" alt="">
@@ -155,17 +156,21 @@
           </div>
           <div class="field-group">
             <h3 class="sub-title">Human Diagnostics</h3>
-            <div class="field-row">
-              <article class="cc cc--gray field-card">
-                <div class="cc__body"><img class="avatar" src="../assets/field-reproductive-icon.png" alt="">
-                  <div class="card-copy"><h4 class="field-card__title">Reproductive Health</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
-              </article>
+            <div class="field-row field-row--center field-row--wrap">
               <article class="cc cc--gray field-card">
                 <div class="cc__body"><img class="avatar" src="../assets/field-respiratory-icon.png" alt="">
                   <div class="card-copy"><h4 class="field-card__title">Respiratory</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
               </article>
               <article class="cc cc--gray field-card">
-                <div class="cc__body"><img class="avatar avatar--contain" src="../assets/field-human-icon.png" alt="">
+                <div class="cc__body"><img class="avatar" src="../assets/field-reproductive-icon.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Reproductive Health</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar" src="assets/field-extraction-icon.png" alt="">
+                  <div class="card-copy"><h4 class="field-card__title">Extraction Kit</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
+              </article>
+              <article class="cc cc--gray field-card">
+                <div class="cc__body"><img class="avatar" src="assets/field-extraction-icon.png" alt="">
                   <div class="card-copy"><h4 class="field-card__title">Bloodborne Disease (HBV)</h4><p class="field-card__desc">Screening and diagnostic PCR kits for clinics and laboratories, including PathoScan hrHPV for cervical cancer screening.</p></div></div>
               </article>
             </div>
@@ -213,8 +218,9 @@
         </div>
       </section>
 
+      <div class="glow">
       <!-- News Highlight -->
-      <section class="section" aria-labelledby="news-title">
+      <section class="section section--news" aria-labelledby="news-title">
         <header class="section__head">
           <div class="section__text">
             <h2 class="section__title" id="news-title">News Highlight</h2>
@@ -252,11 +258,32 @@
         </div>
       </section>
 
+      <!-- Bioinformatics Dashboard (Figma 265:16476) -->
+      <section class="dash" id="dashboard" aria-labelledby="dash-title">
+        <div class="dash__row">
+          <div class="dash__copy">
+            <div class="dash__head">
+              <h2 class="dash__title" id="dash-title">Dari data sekuensing ke insight, tanpa pipeline sendiri</h2>
+              <p class="dash__desc">Akses Nusantics Dashboard dengan kode unik dari bundle. Unggah data 16S rRNA dan dapatkan hasil analisis otomatis.</p>
+            </div>
+            <ol class="dash__steps">
+              <li class="cc cc--bordered dash-step"><div class="cc__body"><div class="dash-step__txt"><span>Step 1</span><strong>Klaim kode Anda</strong></div><img src="assets/dash-step-1.png" alt="" width="154" height="100"></div></li>
+              <li class="cc cc--bordered dash-step"><div class="cc__body"><div class="dash-step__txt"><span>Step 2</span><strong>Unggah data sekuensing 16S rRNA</strong></div><img src="assets/dash-step-2.png" alt="" width="144" height="100"></div></li>
+              <li class="cc cc--bordered dash-step"><div class="cc__body"><div class="dash-step__txt"><span>Step 3</span><strong>Sistem memproses secara otomatis</strong></div><img src="assets/dash-step-3.png" alt="" width="132" height="100"></div></li>
+              <li class="cc cc--bordered dash-step"><div class="cc__body"><div class="dash-step__txt"><span>Step 4</span><strong>Temukan insight dari data Anda</strong></div><img src="assets/dash-step-4.png" alt="" width="146" height="100"></div></li>
+            </ol>
+            <p class="dash__note">Upstream: data clean-up, klasifikasi taksonomi hingga level spesies, anotasi fungsional. Downstream: taxa bar plot, alpha diversity, beta diversity. Level taksonomi, metrik (Shannon, Richness, Simpson) dan kelompok data bisa diatur.</p>
+            <div><a class="btn btn--glass" href="../../nusantics-research-dashboard/login.html">Jelajahi Nusantics Dashboard</a></div>
+          </div>
+          <div class="dash__shot" data-reveal><img src="assets/dash-card.png" alt="Nusantics Research Dashboard di tablet, dashboard.nusantics.com" width="552" height="757"></div>
+        </div>
+      </section>
+
       <!-- Knowledge Hub -->
-      <section class="section" id="knowledge" aria-labelledby="hub-title">
+      <section class="section section--hub" id="knowledge" aria-labelledby="hub-title">
         <header class="section__head">
           <div class="section__text">
-            <h2 class="section__title" id="hub-title">Knowledge Hub</h2>
+            <h2 class="section__title section__title--neutral" id="hub-title">Knowledge Hub</h2>
             <p class="section__desc">Recent coverage of our recovery, leadership and new products.</p>
           </div>
           <a class="btn btn--outline" href="#">See more</a>
@@ -271,6 +298,8 @@
         </div>
       </section>
 
+      </div><!-- /.glow -->
+
       <!-- Blog -->
       <section class="section section--blog" aria-labelledby="blog-title">
         <header class="section__head">
@@ -278,7 +307,7 @@
             <h2 class="section__title" id="blog-title">Blog</h2>
             <p class="section__desc">Recent coverage of our recovery, leadership and new products.</p>
           </div>
-          <a class="btn btn--outline" href="#">See more</a>
+          <a class="btn btn--outline" href="blog.html">See more</a>
         </header>
         <div class="blog">
           <div class="blog__row blog__row--wide-first">
@@ -307,7 +336,7 @@
             <h2 class="section__title" id="join-title">Join the team</h2>
             <p class="section__desc">Help us make molecular diagnostics accessible across Indonesia.</p>
           </div>
-          <a class="btn btn--soft" href="#">See more</a>
+          <a class="btn btn--soft" href="career.html">See more</a>
         </div>
         <div class="jobs">
           <article class="job"><span class="badge">Commmercial (AnimalDx)</span>
@@ -331,7 +360,7 @@
           </div>
           <nav class="footer__col" aria-label="Footer menu" id="about">
             <p class="footer__head">Menu</p>
-            <a href="#">For Lab</a><a href="#">For Clinic</a><a href="#about">About Us</a><a href="#">Product Pipeline</a><a href="#">Human Diagnostics</a><a href="#">Animal Diagnostics</a><a href="#career">Career</a>
+            <a href="#products">For Lab</a><a href="#products">For Clinic</a><a href="about.html">About Us</a><a href="pipeline.html">Product Pipeline</a><a href="product.html">Human Diagnostics</a><a href="product.html">Animal Diagnostics</a><a href="career.html">Career</a>
           </nav>
           <div class="footer__col footer__col--find">
             <p class="footer__head">Find Us</p>
@@ -349,11 +378,11 @@
         <hr class="footer__rule">
         <div class="footer__bottom">
           <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
-            <a href="#">Privacy Policy</a><a href="#">Terms of Service</a></p>
+            <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></p>
           <div class="footer__social">
-            <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
-            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
-            <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+            <a href="https://www.instagram.com/nusantics" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
+            <a href="https://www.linkedin.com/company/nusantics-nusantara-genetics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
+            <a href="https://www.youtube.com/@nusantics" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
           </div>
         </div>
       </div>
@@ -361,5 +390,6 @@
   </div>
 
   <script src="script.js"></script>
+  <script src="mobile-menu.js"></script>
 </body>
 </html>

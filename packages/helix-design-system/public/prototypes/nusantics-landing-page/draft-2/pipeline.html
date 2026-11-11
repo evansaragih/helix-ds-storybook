@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Pipeline | Nusantics</title>
+  <meta name="description" content="Explore Nusantics' product pipeline in human and animal molecular diagnostics—from non-invasive sampling and DNA/RNA extraction kits to qPCR, NGS, and bioinformatics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="pipeline.css">
+  <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <!-- Marketing Navbar (Figma 240:4784 — state: onTop) -->
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a class="nav__logo" href="index.html" aria-label="Nusantics home">
+          <img class="nav__logo-light" src="assets/nav-logo.svg" alt="Nusantics" width="131" height="16">
+          <img class="nav__logo-dark" src="assets/nav-logo-dark.svg" alt="" width="131" height="16" aria-hidden="true">
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <div class="nav__menu">
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-audience">For Lab<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-audience" role="menu" aria-label="For Lab" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="index.html#products">For Lab</a>
+                <a class="nav-menu__item" role="menuitem" href="index.html#products">For Clinic</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="about.html">About Us</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-products">Products &amp; Solutions<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-products" role="menu" aria-label="Products &amp; Solutions" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="product.html">Human Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="product.html">Animal Diagnostics</a>
+                <div class="nav-menu__divider" role="separator"></div>
+                <a class="nav-menu__item" role="menuitem" href="pipeline.html" aria-current="page">Product Pipeline</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="career.html">Career</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-knowledge">Knowledge Hub<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-knowledge" role="menu" aria-label="Knowledge Hub" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="paper-publications.html">Paper &amp; Publications</a>
+                <a class="nav-menu__item" role="menuitem" href="news.html">News</a>
+                <a class="nav-menu__item" role="menuitem" href="media-coverage.html">Media Coverage</a>
+                <a class="nav-menu__item" role="menuitem" href="blog.html">Blog</a>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="nav__actions">
+            <div class="toggle toggle--sm" role="radiogroup" aria-label="Language" data-toggle="language">
+              <button class="toggle__item" type="button" role="radio" aria-checked="true" lang="en"><img class="toggle__icon" src="../assets/flag-gb.svg" alt="" width="16" height="16">EN</button>
+              <button class="toggle__item" type="button" role="radio" aria-checked="false" tabindex="-1" lang="id"><img class="toggle__icon" src="../assets/flag-id.svg" alt="" width="16" height="16">ID</button>
+            </div>
+          <a class="btn btn--white nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
+          <a class="btn btn--primary" href="contact.html">Contact Us</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Unified Molecular Backdrop for Hero (240:3433) + Intro (240:3439) -->
+      <div class="p-top-backdrop">
+        <!-- Hero Section (Figma 240:3433 — 1280 × 768) -->
+        <section class="p-hero" aria-labelledby="pipeline-title">
+          <div class="p-hero__media" aria-hidden="true">
+            <video class="p-hero__video" id="pipeline-hero-video" src="assets/pipeline-hero.mp4" poster="assets/pipeline-hero-bg.jpg" autoplay muted loop playsinline preload="metadata" tabindex="-1"></video>
+          </div>
+          <div class="p-hero__copy">
+            <p class="p-hero__kicker">Products &amp; Solutions</p>
+            <h1 class="p-hero__title" id="pipeline-title">Product Pipeline</h1>
+            <div class="p-hero__sub">
+              <p>Our pipeline is made up of non-invasive sampling method, DNA &amp; RNA extraction kits, PCR kits,</p>
+              <p>NGS kits, and bioinformatics pipeline to support multitude of applications.</p>
+              <p>We are devoted in our pursuit in making molecular diagnostics more accessible.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Intro Section with Live 3D Petri Dish (Figma 240:3439 — 1280 × 613) -->
+        <section class="p-intro" aria-labelledby="intro-title">
+          <div class="p-intro__inner">
+            <div class="p-intro__copy" data-reveal>
+              <h2 class="p-intro__title" id="intro-title">Our Future Innovation<br>in Human and Animal Health</h2>
+              <p class="p-intro__text">The COVID-19 pandemic has underscored the critical importance of molecular diagnosis as a cornerstone in the battle against infectious diseases. Moreover, in the field of oncology, molecular diagnosis empowers clinicians to pinpoint specific genetic mutations and biomarkers linked with various cancer types. These tests not only facilitate the prevention of further spread but also enable tailored treatment strategies, thereby enhancing patient outcomes, mitigating the risk of unnecessary therapies, and reducing the burden on our healthcare system.</p>
+              <p class="p-intro__text">Additionally, rapid and precise molecular diagnosis holds immense potential for farmers in averting substantial operational losses caused by pathogens.</p>
+              <p class="p-intro__text">In this pursuit, we remain steadfast in our commitment to advancing healthcare outcomes in both human and animal health through new product innovation.</p>
+            </div>
+
+            <!-- Live 3D Petri Dish (Figma 225:25218 — 597 × 370) -->
+            <div class="p-intro__visual" data-reveal>
+              <div class="p-petri-stage" id="petri-stage" role="img" aria-label="Interactive 3D glass petri dish with floating molecular diagnostic targets for respiratory, oncology, hematology, aquaculture, and livestock health">
+                <div class="p-petri-stage__glow" aria-hidden="true"></div>
+                <canvas class="p-petri-canvas" id="petri-canvas" width="1200" height="744"></canvas>
+                <video class="p-petri-video" src="assets/petri-dish-loop.mp4" autoplay loop muted playsinline preload="metadata" aria-hidden="true" tabindex="-1"></video>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Pipeline Stage Board (Figma 240:3446 / Content Container 265:8016) -->
+      <section class="p-pipeline" id="pipeline-board" aria-label="Product development stages">
+        <div class="p-pipeline__inner">
+          <div class="p-board" data-reveal>
+            <!-- Header Slot: Tabs Horizontal (Figma 265:8015) -->
+            <div class="p-board__header">
+              <div class="p-tabs" role="tablist" aria-label="Diagnostic category">
+                <button class="p-tab" id="tab-human" type="button" role="tab" aria-selected="true" aria-controls="panel-human" tabindex="0">Human Diagnostics</button>
+                <button class="p-tab" id="tab-animal" type="button" role="tab" aria-selected="false" aria-controls="panel-animal" tabindex="-1">Animal Diagnostics</button>
+              </div>
+            </div>
+
+            <!-- Body Slot: 3 Stage Columns (Figma 265:7965) -->
+            <div class="p-board__body">
+              <div class="p-board__surface">
+                <!-- Panel 1: Human Diagnostics (Figma 265:7965) -->
+                <div class="p-columns" id="panel-human" role="tabpanel" aria-labelledby="tab-human">
+                  <!-- Column 1: Prototyping (Figma 265:7991) -->
+                  <div class="p-col p-col--prototyping">
+                    <div class="p-col__header">
+                      <span class="p-col__dot" aria-hidden="true"></span>
+                      <h3 class="p-col__title">Prototyping</h3>
+                      <span class="p-col__count" aria-label="4 products">4</span>
+                    </div>
+                    <div class="p-col__body">
+                      <div class="p-col__list">
+                        <article class="p-card">
+                          <span class="p-card__badge">Respiratory</span>
+                          <h4 class="p-card__title">PathoScan Pneumonia Panel</h4>
+                          <p class="p-card__desc">16 pathogens that cause Pneumonia</p>
+                        </article>
+                        <article class="p-card">
+                          <span class="p-card__badge">Respiratory</span>
+                          <h4 class="p-card__title">PathoScan MTB/NMTB</h4>
+                          <p class="p-card__desc">Mycobacterium tuberculosis</p>
+                        </article>
+                        <article class="p-card">
+                          <span class="p-card__badge">Respiratory</span>
+                          <h4 class="p-card__title">PathoSeq Myc-TB</h4>
+                          <p class="p-card__desc">Myc-TB genotyping and antibiotic resistance</p>
+                        </article>
+                        <article class="p-card">
+                          <span class="p-card__badge">Oncology</span>
+                          <h4 class="p-card__title">OncoScan EGFR Mutation (NSCLC)</h4>
+                          <p class="p-card__desc">29 EGFR mutations in NSCLC lung cancer</p>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Column 2: Pre-Clinical (Figma 265:7998) -->
+                  <div class="p-col p-col--preclinical">
+                    <div class="p-col__header">
+                      <span class="p-col__dot" aria-hidden="true"></span>
+                      <h3 class="p-col__title">Pre-Clinical</h3>
+                      <span class="p-col__count" aria-label="0 products">0</span>
+                    </div>
+                    <div class="p-col__body">
+                      <div class="p-col__list">
+                        <p class="p-col__empty">No products at this stage yet</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Column 3: Clinical Validation (Figma 265:8009) -->
+                  <div class="p-col p-col--clinical">
+                    <div class="p-col__header">
+                      <span class="p-col__dot" aria-hidden="true"></span>
+                      <h3 class="p-col__title">Clinical Validation</h3>
+                      <span class="p-col__count" aria-label="1 product">1</span>
+                    </div>
+                    <div class="p-col__body">
+                      <div class="p-col__list">
+                        <article class="p-card">
+                          <span class="p-card__badge">Bloodborne Diseases</span>
+                          <h4 class="p-card__title">PathoScan HBV Quantification Kit</h4>
+                          <p class="p-card__desc">Detects and quantifies Hepatitis B viral load</p>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Panel 2: Animal Diagnostics -->
+                <div class="p-columns" id="panel-animal" role="tabpanel" aria-labelledby="tab-animal" hidden>
+                  <!-- Column 1: Prototyping -->
+                  <div class="p-col p-col--prototyping">
+                    <div class="p-col__header">
+                      <span class="p-col__dot" aria-hidden="true"></span>
+                      <h3 class="p-col__title">Prototyping</h3>
+                      <span class="p-col__count" aria-label="2 products">2</span>
+                    </div>
+                    <div class="p-col__body">
+                      <div class="p-col__list">
+                        <article class="p-card">
+                          <span class="p-card__badge">Aquaculture</span>
+                          <h4 class="p-card__title">PathoScan Tilapia TiLV Detection Kit</h4>
+                          <p class="p-card__desc">Tilapia lake virus early outbreak screening</p>
+                        </article>
+                        <article class="p-card">
+                          <span class="p-card__badge">Livestock</span>
+                          <h4 class="p-card__title">PathoScan Avian Respiratory Panel</h4>
+                          <p class="p-card__desc">Multiplex avian respiratory pathogen detection</p>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Column 2: Pre-Clinical -->
+                  <div class="p-col p-col--preclinical">
+                    <div class="p-col__header">
+                      <span class="p-col__dot" aria-hidden="true"></span>
+                      <h3 class="p-col__title">Pre-Clinical</h3>
+                      <span class="p-col__count" aria-label="1 product">1</span>
+                    </div>
+                    <div class="p-col__body">
+                      <div class="p-col__list">
+                        <article class="p-card">
+                          <span class="p-card__badge">Livestock</span>
+                          <h4 class="p-card__title">PathoScan ASF Quantification Kit</h4>
+                          <p class="p-card__desc">African Swine Fever viral load detection</p>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Column 3: Clinical Validation -->
+                  <div class="p-col p-col--clinical">
+                    <div class="p-col__header">
+                      <span class="p-col__dot" aria-hidden="true"></span>
+                      <h3 class="p-col__title">Clinical Validation</h3>
+                      <span class="p-col__count" aria-label="1 product">1</span>
+                    </div>
+                    <div class="p-col__body">
+                      <div class="p-col__list">
+                        <article class="p-card">
+                          <span class="p-card__badge">Aquaculture</span>
+                          <h4 class="p-card__title">PathoScan Shrimp Multiplex Panel</h4>
+                          <p class="p-card__desc">WSSV, EHP, and AHPND/EMS crustacean screening</p>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Launched Products CTA with 3D Interactive Scientist (Figma 240:3848 — 1280 × 652) -->
+      <section class="p-cta" aria-labelledby="cta-title">
+        <div class="p-cta__inner">
+          <h2 class="p-cta__title" id="cta-title">Looking for Our Launched Products?</h2>
+
+          <!-- 3D Interactive Scientist Stage (Figma 265:4997 — 542 × 470) -->
+          <div class="p-scientist-stage" id="scientist-stage">
+            <div class="p-scientist-rig">
+              <!-- Back plane: Recessed 3D laboratory halo & concentric rings -->
+              <div class="p-scientist-halo" aria-hidden="true"></div>
+
+              <!-- Mid plane: Cutout Scientist holding sample vial -->
+              <div class="p-scientist-figure">
+                <img class="p-scientist-img" src="assets/pipeline-scientist.png" alt="Nusantics scientist in lab coat and safety glasses inspecting a molecular diagnostic sample vial" width="542" height="470">
+              </div>
+
+              <!-- Front plane: Sample Vial Bioluminescence & Diagnostic Aura -->
+              <div class="p-vial-aura" aria-hidden="true">
+                <div class="p-vial-aura__core"></div>
+                <div class="p-vial-aura__ring"></div>
+              </div>
+
+              <!-- Front plane: Floating 3D Glass Micro-Readout Pills -->
+              <div class="p-float-tag p-float-tag--1" aria-hidden="true">
+                <span class="p-float-tag__dot"></span>
+                <span>Pathogen Detection</span>
+              </div>
+              <div class="p-float-tag p-float-tag--2" aria-hidden="true">
+                <span class="p-float-tag__dot"></span>
+                <span>Genomics &amp; qPCR</span>
+              </div>
+              <div class="p-float-tag p-float-tag--3" aria-hidden="true">
+                <span class="p-float-tag__dot"></span>
+                <span>Microbiomics</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right-side CTA Copy & Glass Buttons (Figma 265:4966) -->
+          <div class="p-cta__copy">
+            <p class="p-cta__desc">Explore key applications in your field. We offer a broad portfolio of diagnostic kits for pathogen detection, genomics, and microbiomics application in both human and animal health.</p>
+            <div class="p-cta__actions">
+              <a class="p-btn-glass p-btn-glass--human" href="product.html">
+                <span class="p-btn-glass__label">Human Diagnostics</span>
+              </a>
+              <a class="p-btn-glass p-btn-glass--animal" href="product.html">
+                <span class="p-btn-glass__label">Animal Diagnostics</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer (Figma 240:4506) -->
+    <footer class="cc cc--gray footer" id="contact">
+      <div class="footer__inner">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <img src="assets/footer-logo.svg" alt="Nusantics" width="218" height="27">
+            <p>Founded in 2020, Nusantics changed the molecular diagnostics landscape in Indonesia.</p>
+          </div>
+          <nav class="footer__col" aria-label="Footer menu" id="about">
+            <p class="footer__head">Menu</p>
+            <a href="index.html#products">For Lab</a><a href="index.html#products">For Clinic</a><a href="about.html">About Us</a><a href="pipeline.html" aria-current="page">Product Pipeline</a><a href="product.html">Human Diagnostics</a><a href="product.html">Animal Diagnostics</a><a href="career.html">Career</a>
+          </nav>
+          <div class="footer__col footer__col--find">
+            <p class="footer__head">Find Us</p>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Mon - Sat : 8am - 9pm</p>
+              <address>i3L Campus @ Lvl. 3<br>Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung,<br>Jakarta Timur 13210</address>
+            </div>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Contact Us</p>
+              <a href="mailto:nusantics@support.com">nusantics@support.com</a>
+              <a href="tel:+628888888888">(+62) 888 8888 8888</a>
+            </div>
+          </div>
+        </div>
+        <hr class="footer__rule">
+        <div class="footer__bottom">
+          <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
+            <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></p>
+          <div class="footer__social">
+            <a href="https://www.instagram.com/nusantics" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
+            <a href="https://www.linkedin.com/company/nusantics-nusantara-genetics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
+            <a href="https://www.youtube.com/@nusantics" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/petri-3d/petri-assets.js"></script>
+  <script src="script.js"></script>
+  <script src="mobile-menu.js"></script>
+  <script src="pipeline.js"></script>
+</body>
+</html>
+

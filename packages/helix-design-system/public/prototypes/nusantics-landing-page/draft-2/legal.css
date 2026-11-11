@@ -1,0 +1,37 @@
+/* Privacy Policy and Terms of Use. Source: Figma frames 231:47 and 225:24314 (1280px wide). Shares tokens, nav and footer with styles.css. */
+body { background: var(--surface-subtle); }
+.legal { padding-inline: var(--gutter); }
+.legal > * { max-width: 1120px; margin-inline: auto; }
+
+.legal__header { padding: 156px 0 32px; text-align: center; }
+.legal__title { margin: 0; font: 700 39px/46.8px var(--font-heading); color: var(--text-subtle); }
+.legal .legal__updated { margin: 16px 0 0; font-size: 13px; line-height: 19.2px; color: var(--text-subtler); }
+
+/* Tabs (Helix Tabs Horizontal): centred row on a hairline, active tab underlined in brand orange */
+.legal__tabs { margin-top: 32px; display: flex; justify-content: center; border-bottom: 1px solid var(--stroke-subtle); }
+.legal__tab { position: relative; display: inline-flex; align-items: center; height: 44px; padding: 0 16px; font-size: 16px; line-height: 24px; font-weight: 500; color: var(--text-subtler); text-decoration: none; transition: color var(--motion-duration-fast) var(--motion-easing-standard); }
+.legal__tab::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--surface-primary); transform: scaleX(0); transition: transform var(--motion-duration-base) var(--motion-easing-decelerate); }
+.legal__tab:hover { color: var(--text-default); }
+.legal__tab.is-current { color: var(--text-primary); }
+.legal__tab.is-current::after { transform: none; }
+.legal__tab:focus-visible { outline: 2px solid var(--surface-primary); outline-offset: -2px; border-radius: var(--radius-md); }
+
+/* Document */
+.legal__intro, .legal__section { color: var(--text-subtler); font-size: 16px; line-height: 24px; }
+.legal__intro { padding-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+.legal__section { display: flex; flex-direction: column; gap: 24px; padding-top: 48px; }
+.legal__section:last-child { padding-bottom: 0; }
+.legal p, .legal ul { margin: 0; }
+.legal__h2 { margin: 0; font: 700 31px/37.2px var(--font-heading); color: var(--text-primary); }
+.legal__sub { display: flex; flex-direction: column; gap: 8px; }
+.legal__h3 { margin: 0; font: 500 20px/30px var(--font-body); color: var(--text-subtle); }
+.legal ul { padding-left: 22px; list-style: disc; }
+.legal li::marker { color: var(--text-subtler); font-size: 12px; }
+.legal main > *:last-child, .legal > :last-child { margin-bottom: 0; }
+.legal { padding-bottom: 96px; }
+@media (max-width: 720px) {
+  .legal { padding-inline: 20px; }
+  .legal__header { padding-top: 112px; } .legal__title { font-size: 31px; line-height: 37px; }
+  .legal__h2 { font-size: 25px; line-height: 30px; }
+}
+.nav { background: var(--surface-default); }

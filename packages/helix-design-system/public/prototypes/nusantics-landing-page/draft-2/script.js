@@ -1,14 +1,14 @@
 // Ornament layer (Figma 33:5067). Each entry: [shape, x, y, width, height, depth], placed on the 1280px frame.
 // y is measured from the top of the Figma frame; the layer starts below the hero, so HERO_H is subtracted and
 // the ornaments that sat behind the hero are skipped (the hero covers them).
-// depth 1 = far (drifts slower than the page), 2 = tracks the page, 3 = near (drifts faster).
+// depth 1 = far (drifts slower than the page), 2 = tracks the page, 3 = near (drifts faster); the drift is kept gentle (10% of the scroll).
 (() => {
   const layer = document.querySelector('.ornaments');
   if (!layer) return;
 
   const FRAME = 1280;
   const HERO_H = 720;
-  const FACTOR = { 1: 0.2, 2: 0, 3: -0.2 };
+  const FACTOR = { 1: 0.1, 2: 0, 3: -0.1 };
   const ORNAMENTS = [
     ['circle', 187, 3, 33, 33, 2], ['line-dark', 13, 94, 6, 71, 2], ['circle', 499, 133, 33, 33, 2],
     ['rounded-dark', 1112, 33, 44, 44, 2], ['half-circle-dark', 1058, 199, 35, 37, 2], ['circle-dark', 549, 403, 60, 61, 2],
@@ -121,7 +121,13 @@
   const nav = document.getElementById('nav');
   if (!nav) return;
   let ticking = false;
-  function update() { nav.classList.toggle('is-scrolled', window.scrollY > 8); ticking = false; }
+  const FADE = 96; // px of scroll over which the bar fades from transparent to white
+  function update() {
+    const p = Math.min(1, Math.max(0, window.scrollY / FADE));
+    nav.style.setProperty('--nav-p', p.toFixed(3));
+    nav.classList.toggle('is-scrolled', p > 0.4); // text and logo cross-fade (own transitions) once the surface is partly white
+    ticking = false;
+  }
   window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   update();
 })();
@@ -133,6 +139,7 @@
   const groups = [
     '.section__head', '.field-group > .sub-title', '.field-card', '.partners__row img', '.news-card', '.paper',
     '.blog-card', '.join__img', '.join__intro > .section__text', '.join__intro > .btn', '.job', '.footer__top > *', '[data-reveal]',
+    '.values__title', '.carousel', '.value', '.positions__title', '.positions__desc', '.board',
   ];
   const targets = new Set();
   groups.forEach((selector) => {
@@ -211,5 +218,43 @@
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     dropdowns.forEach((dd) => close(dd, dd.root.contains(document.activeElement)));
+  });
+})();
+
+
+// Toggle (radio group of two segments): click or arrow keys select; the choice is remembered across pages.
+(() => {
+  const KEY = 'nusantics-lang';
+  const store = {
+    get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } },
+    set(v) { try { localStorage.setItem(KEY, v); } catch (e) { /* storage unavailable */ } },
+  };
+  document.querySelectorAll('.toggle').forEach((group) => {
+    const items = [...group.querySelectorAll('[role="radio"]')];
+    const select = (item, focus) => {
+      items.forEach((el) => {
+        const on = el === item;
+        el.setAttribute('aria-checked', String(on));
+        el.tabIndex = on ? 0 : -1;
+      });
+      if (focus) item.focus();
+      if (group.dataset.toggle === 'language' && item.lang) {
+        document.documentElement.lang = item.lang;
+        store.set(item.lang);
+        document.dispatchEvent(new CustomEvent('nusantics:lang', { detail: item.lang }));
+      }
+    };
+    const saved = group.dataset.toggle === 'language' ? store.get() : null;
+    const start = items.find((el) => el.lang === saved) || items.find((el) => el.getAttribute('aria-checked') === 'true') || items[0];
+    if (start) select(start, false);
+    items.forEach((item, i) => {
+      item.addEventListener('click', () => select(item, false));
+      item.addEventListener('keydown', (e) => {
+        const dir = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (!dir) return;
+        e.preventDefault();
+        select(items[(i + dir + items.length) % items.length], true);
+      });
+    });
   });
 })();
