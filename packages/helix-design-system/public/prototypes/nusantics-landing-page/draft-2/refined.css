@@ -1,0 +1,33 @@
+/* Refined pass on Draft 2: same content, calmer presentation. Loaded after styles.css; delete this file to get the Figma-faithful version back. */
+
+/* 1. Contrast: secondary copy was #828282 at 13px on white (about 3.9:1). */
+:root { --text-subtler: #6b6b6b; }
+.field-card__desc, .news-card__desc, .paper__sum, .paper__date, .job__meta { font-size: 14px; line-height: 20px; }
+.section__desc { color: #6b6b6b; }
+
+/* 2. Hero: readable copy over bright imagery, bigger hit area for the indicator dots */
+.hero__body::before { content: ""; position: absolute; inset: 0 35% 0 0; z-index: -1; pointer-events: none; background: linear-gradient(90deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0)); }
+.btn--glass { background: rgba(20, 20, 30, 0.35); border: 1px solid rgba(255, 255, 255, 0.5); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: none; }
+.btn--glass:hover { background: rgba(20, 20, 30, 0.5); }
+.dots button { overflow: visible; }
+.dots button::after { border-radius: inherit; }
+.dots button::before { content: ""; position: absolute; inset: -9px -3px; }
+
+/* 3. Field cards behave like what they say: a pickable link with a quiet hover */
+.field-card { position: relative; text-decoration: none; color: inherit; transition: transform var(--motion-duration-base) var(--motion-easing-standard), box-shadow var(--motion-duration-base) var(--motion-easing-standard); }
+.field-card:hover { transform: translateY(-2px); box-shadow: 0 1px 1px var(--shadow-neutral), 0 6px 14px var(--shadow-neutral); }
+.field-card:focus-visible { outline: 2px solid var(--surface-primary); outline-offset: 2px; }
+.field-card .cc__body { position: relative; }
+.field-card .cc__body::after {
+  content: ""; position: absolute; top: 16px; right: 16px; width: 18px; height: 18px; background: var(--text-primary); opacity: 0; transform: translateX(-4px);
+  transition: opacity var(--motion-duration-fast) var(--motion-easing-standard), transform var(--motion-duration-base) var(--motion-easing-decelerate);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.field-card:hover .cc__body::after, .field-card:focus-visible .cc__body::after { opacity: 1; transform: none; }
+
+/* 4. Dashboard band: flat orange (no scanline pattern), solid CTA */
+.dash::before { display: none; }
+.dash__copy .btn--white { color: var(--text-primary); }
+.dash__copy .btn--white:hover { background: var(--surface-subtle-primary); }
+@media (prefers-reduced-motion: reduce) { .field-card, .field-card .cc__body::after { transition: none; } .field-card:hover { transform: none; } }

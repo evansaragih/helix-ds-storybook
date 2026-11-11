@@ -1,0 +1,51 @@
+/* Career detail. Reuses landing tokens, .badge, .btn and .cc from styles.css; row meta icons match career.css. */
+body { background: var(--surface-subtle); }
+.nav { background: var(--surface-default); }
+.jd { padding: 112px var(--gutter) 96px; }
+.jd > * { max-width: 1120px; margin-inline: auto; }
+.jd__crumb { display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 20px; color: var(--text-subtler); }
+.jd__sep { width: 4px; height: 4px; border-top: 1.5px solid var(--text-subtler); border-right: 1.5px solid var(--text-subtler); transform: rotate(45deg); margin-inline: 2px 2px; }
+.jd__crumb a { color: var(--text-subtler); text-decoration: none; transition: color var(--motion-duration-fast) var(--motion-easing-standard); }
+.jd__crumb a:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; }
+.jd__crumb [aria-current] { color: var(--text-subtler); }
+.jd__crumb a, .jd__crumb [aria-current] { padding: 0 6px; }
+.jd__header { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 32px 0 72px; }
+.jd__title { margin: 0; font: 700 39px/46.8px var(--font-heading); color: var(--text-primary); }
+.jd__meta { margin: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 13px; line-height: 20px; color: var(--text-secondary); }
+.jd__meta span, .job__ico { display: inline-flex; align-items: center; gap: 6px; }
+.job__ico { flex: none; color: var(--surface-primary); }
+.jd__body { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 48px; align-items: start; }
+.jd__content { display: flex; flex-direction: column; gap: 24px; }
+.jd__section { display: flex; flex-direction: column; gap: 16px; }
+.jd__h2 { margin: 0; font: 700 25px/30px var(--font-heading); letter-spacing: -0.01px; color: var(--text-subtle); }
+.jd__list { margin: 0; padding-left: 24px; display: flex; flex-direction: column; gap: 0; list-style: disc; font-size: 16px; line-height: 24px; color: var(--text-subtler); }
+.jd__list li::marker { color: var(--text-subtler); font-size: 12px; }
+.jd__aside { position: sticky; top: 96px; display: flex; flex-direction: column; gap: 24px; padding: 24px; background: var(--surface-default); }
+.jd__facts { margin: 0; display: flex; flex-direction: column; gap: 16px; }
+.jd__facts dt { font: 500 16px/24px var(--font-body); color: var(--text-subtle); }
+.jd__facts dd { margin: 4px 0 0; font-size: 16px; line-height: 24px; color: var(--text-subtler); }
+.jd__apply { width: 100%; justify-content: center; height: 36px; font-size: 13px; }
+.jd__share { display: flex; flex-direction: column; gap: 8px; padding-top: 20px; border-top: 1px solid var(--stroke-subtle); }
+.jd__share-label { font-weight: 500; font-size: 16px; line-height: 36px; color: var(--text-subtler); }
+.jd__share-links { position: relative; display: flex; flex-wrap: wrap; gap: 8px; }
+/* Figma Icon Button: Secondary / Solid / sm (white surface, 0.5px subtle stroke, soft drop shadow) */
+.jd__icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; border: 0.5px solid var(--stroke-subtle); border-radius: var(--radius-lg); background: var(--surface-default); color: #9f9f9f; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 4px rgba(89, 89, 90, 0.15); cursor: pointer; transition: color var(--motion-duration-fast) var(--motion-easing-standard), box-shadow var(--motion-duration-fast) var(--motion-easing-standard), transform var(--motion-duration-fast) var(--motion-easing-standard); }
+.jd__icon-btn svg { width: 16px; height: 16px; }
+.jd__icon-btn:hover { color: var(--text-secondary); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 2px 6px rgba(89, 89, 90, 0.22); }
+.jd__icon-btn:active { transform: scale(0.96); }
+.jd__copied { position: absolute; left: 0; top: calc(100% + 8px); font-size: 13px; line-height: 20px; color: var(--text-primary); }
+.jd__back { margin-top: 48px; font-size: 13px; line-height: 20px; }
+.jd__back a { color: var(--text-primary); text-decoration: none; }
+.jd__back a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.jd__header, .jd__section, .jd__aside { animation: jd-in var(--motion-duration-slow) var(--motion-easing-decelerate) both; }
+.jd__section:nth-child(2) { animation-delay: 60ms; } .jd__aside { animation-delay: 100ms; }
+@keyframes jd-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .jd__header, .jd__section, .jd__aside { animation: none; } }
+@media (max-width: 900px) {
+  .jd__body { grid-template-columns: 1fr; gap: 32px; }
+  .jd__aside { position: static; order: -1; }
+}
+@media (max-width: 720px) {
+  .jd { padding: 96px 20px 64px; }
+  .jd__title { font-size: 31px; line-height: 37px; }
+}

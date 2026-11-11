@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-maps-api-key" content="">
+  <title>Contact Us | Nusantics</title>
+  <meta name="description" content="Reach out to Nusantics. Get in touch with our precision molecular diagnostics laboratories in Jakarta and Banyuwangi, or connect with our authorized distributors.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="contact.css">
+  <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <!-- Marketing Navbar (Figma 225:23687) -->
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a class="nav__logo" href="index.html" aria-label="Nusantics home">
+          <img class="nav__logo-light" src="assets/nav-logo.svg" alt="Nusantics" width="131" height="16">
+          <img class="nav__logo-dark" src="assets/nav-logo-dark.svg" alt="" width="131" height="16" aria-hidden="true">
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <div class="nav__menu">
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-audience">For Lab<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-audience" role="menu" aria-label="For Lab" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="index.html#products">For Lab</a>
+                <a class="nav-menu__item" role="menuitem" href="index.html#products">For Clinic</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="about.html">About Us</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-products">Products &amp; Solutions<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-products" role="menu" aria-label="Products &amp; Solutions" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="product.html">Human Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="product.html">Animal Diagnostics</a>
+                <div class="nav-menu__divider" role="separator"></div>
+                <a class="nav-menu__item" role="menuitem" href="pipeline.html">Product Pipeline</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="career.html">Career</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-knowledge">Knowledge Hub<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-knowledge" role="menu" aria-label="Knowledge Hub" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="paper-publications.html">Paper &amp; Publications</a>
+                <a class="nav-menu__item" role="menuitem" href="news.html">News</a>
+                <a class="nav-menu__item" role="menuitem" href="media-coverage.html">Media Coverage</a>
+                <a class="nav-menu__item" role="menuitem" href="blog.html">Blog</a>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="nav__actions">
+            <div class="toggle toggle--sm" role="radiogroup" aria-label="Language" data-toggle="language">
+              <button class="toggle__item" type="button" role="radio" aria-checked="true" lang="en"><img class="toggle__icon" src="../assets/flag-gb.svg" alt="" width="16" height="16">EN</button>
+              <button class="toggle__item" type="button" role="radio" aria-checked="false" tabindex="-1" lang="id"><img class="toggle__icon" src="../assets/flag-id.svg" alt="" width="16" height="16">ID</button>
+            </div>
+          <a class="btn btn--white nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
+          <a class="btn btn--primary is-active" href="contact.html" aria-current="page">Contact Us</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- 1. Hero Section (Figma 228:48 "Intro") -->
+      <section class="contact-hero" aria-labelledby="contact-hero-title">
+        <!-- Hero backdrop: orange render with the dotted Indonesia map (Figma 228:47 "Intro"), full bleed -->
+        <div class="contact-hero__map-stage" id="map-stage">
+          <img class="contact-hero__map-bg" src="assets/contact-hero-bg.jpg" alt="" aria-hidden="true" width="1280" height="768">
+          
+                  </div>
+
+        <!-- Hero Editorial & Location Cards Container -->
+        <div class="contact-hero__content-wrap">
+          <!-- Hero Bottom Editorial Content Panel (Figma 225:22957, 225:22958, 225:22959) -->
+          <div class="contact-hero__bottom">
+            <div class="contact-hero__row">
+              <div class="contact-hero__intro">
+                <h1 class="contact-hero__title" id="contact-hero-title">Reach Out to Us,<br>We’d Love to Hear from You!</h1>
+                <p class="contact-hero__desc">We’re here to help. If you have questions or feedbacks about Nusantics, send us a message and we will respond as soon as possible.</p>
+              </div>
+              <!-- Interactive map of the two locations (Figma 228:47 "Map", 420 x 420) -->
+              <div class="contact-hero__map" role="group" aria-label="Map of Nusantics locations">
+                <div class="contact-map" id="contact-map">
+                  <noscript>
+                    <ul class="contact-map__fallback">
+                      <li><a href="https://maps.app.goo.gl/b1LLsiwowjc36SJc6" target="_blank" rel="noopener noreferrer">Nusantics Headquarters, Jakarta</a></li>
+                      <li><a href="https://maps.app.goo.gl/1CFiQC13AFwAHY5u9" target="_blank" rel="noopener noreferrer">CeKolam by Nusantics, Banyuwangi</a></li>
+                    </ul>
+                  </noscript>
+                </div>
+              </div>
+            </div>
+
+          <div class="contact-strip">
+            <!-- Email Item Container -->
+            <a class="contact-strip__item" href="mailto:hello@nusantics.com">
+              <div class="contact-strip__icon-tile contact-strip__icon-tile--email">
+                <svg viewBox="0 0 512 512" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/></svg>
+              </div>
+              <div class="contact-strip__text">
+                <span class="contact-strip__label">Email</span>
+                <span class="contact-strip__value">hello@nusantics.com</span>
+              </div>
+            </a>
+
+            <!-- Phone Item Container -->
+            <a class="contact-strip__item" href="tel:+622150919430">
+              <div class="contact-strip__icon-tile contact-strip__icon-tile--phone">
+                <svg viewBox="0 0 512 512" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M497.39 361.8l-112-48a24 24 0 0 0-28 6.9l-49.6 60.6A370.66 370.66 0 0 1 130.6 204.11l60.6-49.6a23.94 23.94 0 0 0 6.9-28l-48-112A24.16 24.16 0 0 0 122.6.61l-104 24A24 24 0 0 0 0 48c0 256.5 207.9 464 464 464a24 24 0 0 0 23.4-18.6l24-104a24.29 24.29 0 0 0-14.01-27.6z"/></svg>
+              </div>
+              <div class="contact-strip__text">
+                <span class="contact-strip__label">Phone</span>
+                <span class="contact-strip__value">+62 (21) 509 194 30</span>
+              </div>
+            </a>
+
+            <!-- Follow Us Group -->
+            <div class="contact-strip__social-group">
+              <span class="contact-strip__social-label">Follow Us On</span>
+              <div class="contact-strip__social-links">
+                <a class="contact-strip__social-btn" href="#" aria-label="Nusantics Instagram" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 1024 1024" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M512 378.7c-73.4 0-133.3 59.9-133.3 133.3S438.6 645.3 512 645.3 645.3 585.4 645.3 512 585.4 378.7 512 378.7zM911.8 512c0-55.2.5-109.9-2.6-165-3.1-64-17.7-120.8-64.5-167.6-46.9-46.9-103.6-61.4-167.6-64.5-55.2-3.1-109.9-2.6-165-2.6-55.2 0-109.9-.5-165 2.6-64 3.1-120.8 17.7-167.6 64.5C132.6 226.3 118.1 283 115 347c-3.1 55.2-2.6 109.9-2.6 165s-.5 109.9 2.6 165c3.1 64 17.7 120.8 64.5 167.6 46.9 46.9 103.6 61.4 167.6 64.5 55.2 3.1 109.9 2.6 165 2.6 55.2 0 109.9.5 165-2.6 64-3.1 120.8-17.7 167.6-64.5 46.9-46.9 61.4-103.6 64.5-167.6 3.2-55.1 2.6-109.8 2.6-165zM512 717.1c-113.5 0-205.1-91.6-205.1-205.1S398.5 306.9 512 306.9 717.1 398.5 717.1 512 625.5 717.1 512 717.1zm213.5-370.7c-26.5 0-47.9-21.4-47.9-47.9s21.4-47.9 47.9-47.9 47.9 21.4 47.9 47.9a47.84 47.84 0 0 1-47.9 47.9z"/></svg></a>
+                <a class="contact-strip__social-btn" href="#" aria-label="Nusantics LinkedIn" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 448 512" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg></a>
+                <a class="contact-strip__social-btn" href="#" aria-label="Nusantics YouTube" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"/></svg></a>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Our Office Section (Figma 228:2550) -->
+      <section class="office-section" id="offices" aria-labelledby="office-section-title">
+        <div class="office-section__container">
+          <h2 class="office-section__title" id="office-section-title">Our Office</h2>
+
+          <div class="office-grid">
+            <!-- Office Card / Nusantics HQ (Figma 322:8533): text left, photo right -->
+            <article class="cc cc--interactive facility-card" aria-labelledby="office-hq-title">
+              <div class="cc__body facility-card__body">
+                <div class="facility-card__row">
+                  <div class="facility-card__info">
+                    <h3 class="facility-card__name" id="office-hq-title">Nusantics<br>Headquarters</h3>
+                    <div class="facility-card__locations">
+                      <div class="facility-card__location">
+                        <p class="facility-card__place">Jakarta</p>
+                        <address class="facility-card__address">i3L Campus @ Lvl. 3, Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung, Jakarta Timur 13210</address>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="facility-card__img" src="assets/office-jakarta-hq.jpg" alt="Nusantics Headquarters at i3L Campus in Jakarta" width="518" height="314" loading="lazy">
+                </div>
+              </div>
+              <footer class="cc__footer facility-card__footer">
+                <a class="btn btn--white" href="https://maps.app.goo.gl/b1LLsiwowjc36SJc6" target="_blank" rel="noopener noreferrer">Get Directions</a>
+              </footer>
+            </article>
+
+            <!-- Office Card / CeKolam (Figma 323:8575): photo left, text right -->
+            <article class="cc cc--interactive facility-card" aria-labelledby="office-cekolam-title">
+              <div class="cc__body facility-card__body">
+                <div class="facility-card__row">
+                  <img class="facility-card__img" src="assets/office-cekolam.jpg" alt="CeKolam Shrimp Diagnostic Center" width="518" height="314" loading="lazy">
+                  <div class="facility-card__info">
+                    <h3 class="facility-card__name" id="office-cekolam-title">CeKolam<br>by Nusantics</h3>
+                    <div class="facility-card__locations">
+                      <div class="facility-card__location">
+                        <p class="facility-card__place">Jakarta Marine Diagnostics</p>
+                        <address class="facility-card__address">i3L Campus @ Lvl. 3, Jl. Pulomas Barat No.Kav.88, Jakarta Timur 13210</address>
+                      </div>
+                      <div class="facility-card__location">
+                        <p class="facility-card__place">Banyuwangi Diagnostic Center</p>
+                        <address class="facility-card__address">Ruko Taman Laguna Residence, Jl. Yos Sudarso No.6, Klatak, Kalipuro, Banyuwangi 68421</address>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <footer class="cc__footer facility-card__footer">
+                <a class="btn btn--white" href="https://maps.app.goo.gl/1CFiQC13AFwAHY5u9" target="_blank" rel="noopener noreferrer">Get Directions</a>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Our Distributor Section (Figma 229:49) -->
+      <section class="distributor-section" id="distributors" aria-labelledby="distributor-section-title">
+        <div class="distributor-section__container">
+          <h2 class="distributor-section__title" id="distributor-section-title">Our Distributor</h2>
+
+          <div class="distributor-grid">
+            <article class="cc cc--interactive distributor-card" aria-labelledby="distributor-rng-title">
+              <div class="cc__body distributor-card__body">
+                <div class="distributor-card__icon-tile" aria-hidden="true">
+                  <svg viewBox="0 0 640 512" width="28" height="22" fill="currentColor"><path d="M624 352h-16V243.9c0-12.7-5.1-24.9-14.1-33.9L494 110.1c-9-9-21.2-14.1-33.9-14.1H416V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h16c0 53 43 96 96 96s96-43 96-96h128c0 53 43 96 96 96s96-43 96-96h48c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zM160 464c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm320 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-208H416V144h44.1l99.9 99.9V256z"/></svg>
+                </div>
+                <h3 class="distributor-card__name" id="distributor-rng-title">PT. Riset Nusantara Genetika</h3>
+                <address class="distributor-card__address">Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung, Jakarta Timur, DKI Jakarta 13210</address>
+              </div>
+              <footer class="cc__footer distributor-card__footer">
+                <a class="tag" href="mailto:bu.humandx@nusantics.com"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>bu.humandx@nusantics.com</span></a>
+                <a class="tag" href="tel:+6281138231889"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>+62 811 3823 1889</span></a>
+              </footer>
+            </article>
+            <article class="cc cc--interactive distributor-card" aria-labelledby="distributor-nbd-title">
+              <div class="cc__body distributor-card__body">
+                <div class="distributor-card__icon-tile" aria-hidden="true">
+                  <svg viewBox="0 0 640 512" width="28" height="22" fill="currentColor"><path d="M624 352h-16V243.9c0-12.7-5.1-24.9-14.1-33.9L494 110.1c-9-9-21.2-14.1-33.9-14.1H416V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h16c0 53 43 96 96 96s96-43 96-96h128c0 53 43 96 96 96s96-43 96-96h48c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zM160 464c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm320 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-208H416V144h44.1l99.9 99.9V256z"/></svg>
+                </div>
+                <h3 class="distributor-card__name" id="distributor-nbd-title">PT. Nusantara Butuh Diagnostik</h3>
+                <address class="distributor-card__address">Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung, Jakarta Timur, DKI Jakarta 13210</address>
+              </div>
+              <footer class="cc__footer distributor-card__footer">
+                <a class="tag" href="mailto:bu.humandx@nusantics.com"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>bu.humandx@nusantics.com</span></a>
+                <a class="tag" href="tel:+6281138231889"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>+62 811 3823 1889</span></a>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer (Figma 229:379) -->
+    <footer class="cc cc--gray footer">
+      <div class="footer__inner">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <img src="assets/footer-logo.svg" alt="Nusantics" width="218" height="27">
+            <p>Founded in 2020, Nusantics changed the molecular diagnostics landscape in Indonesia.</p>
+          </div>
+          <nav class="footer__col" aria-label="Footer menu">
+            <p class="footer__head">Menu</p>
+            <a href="index.html#products">For Lab</a>
+            <a href="index.html#products">For Clinic</a>
+            <a href="about.html">About Us</a>
+            <a href="pipeline.html">Product Pipeline</a>
+            <a href="product.html">Human Diagnostics</a>
+            <a href="product.html">Animal Diagnostics</a>
+            <a href="career.html">Career</a>
+          </nav>
+          <div class="footer__col footer__col--find">
+            <p class="footer__head">Find Us</p>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Mon - Sat : 8am - 9pm</p>
+              <address>i3L Campus @ Lvl. 3<br>Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung,<br>Jakarta Timur 13210</address>
+            </div>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Contact Us</p>
+              <a href="mailto:hello@nusantics.com">hello@nusantics.com</a>
+              <a href="tel:+622150919430">(+62) 21 509 194 30</a>
+            </div>
+          </div>
+        </div>
+        <hr class="footer__rule">
+        <div class="footer__bottom">
+          <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
+            <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></p>
+          <div class="footer__social">
+            <a href="https://www.instagram.com/nusantics" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
+            <a href="https://www.linkedin.com/company/nusantics-nusantara-genetics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
+            <a href="https://www.youtube.com/@nusantics" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="i18n/id.js"></script>
+  <script src="i18n.js"></script>
+  <script src="script.js"></script>
+  <script src="mobile-menu.js"></script>
+  <script src="contact.js"></script>
+</body>
+</html>
+

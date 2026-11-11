@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog | Knowledge Hub | Nusantics</title>
+  <meta name="description" content="Insights on molecular diagnostics, genomics and animal health from the Nusantics team.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="knowledge-hub.css">
+  <link rel="stylesheet" href="blog.css">
+  <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <!-- Marketing Navbar (state: onTop) -->
+    <header class="nav is-light" id="nav">
+      <div class="nav__inner">
+        <a class="nav__logo" href="index.html" aria-label="Nusantics home">
+          <img class="nav__logo-light" src="assets/nav-logo.svg" alt="Nusantics" width="131" height="16">
+          <img class="nav__logo-dark" src="assets/nav-logo-dark.svg" alt="" width="131" height="16" aria-hidden="true">
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <div class="nav__menu">
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-audience">For Lab<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-audience" role="menu" aria-label="For Lab" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="index.html#products">For Lab</a>
+                <a class="nav-menu__item" role="menuitem" href="index.html#products">For Clinic</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="about.html">About Us</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-products">Products &amp; Solutions<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-products" role="menu" aria-label="Products &amp; Solutions" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="product.html">Human Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="product.html">Animal Diagnostics</a>
+                <div class="nav-menu__divider" role="separator"></div>
+                <a class="nav-menu__item" role="menuitem" href="pipeline.html">Product Pipeline</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="career.html">Career</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-knowledge">Knowledge Hub<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-knowledge" role="menu" aria-label="Knowledge Hub" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="paper-publications.html">Paper &amp; Publications</a>
+                <a class="nav-menu__item" role="menuitem" href="news.html">News</a>
+                <a class="nav-menu__item" role="menuitem" href="media-coverage.html">Media Coverage</a>
+                <a class="nav-menu__item" role="menuitem" href="blog.html">Blog</a>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="nav__actions">
+            <div class="toggle toggle--sm" role="radiogroup" aria-label="Language" data-toggle="language">
+              <button class="toggle__item" type="button" role="radio" aria-checked="true" lang="en"><img class="toggle__icon" src="../assets/flag-gb.svg" alt="" width="16" height="16">EN</button>
+              <button class="toggle__item" type="button" role="radio" aria-checked="false" tabindex="-1" lang="id"><img class="toggle__icon" src="../assets/flag-id.svg" alt="" width="16" height="16">ID</button>
+            </div>
+          <a class="btn btn--white nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
+          <a class="btn btn--primary" href="contact.html">Contact Us</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="kh">
+      <header class="kh__header">
+        <h1 class="kh__title">Knowledge Hub</h1>
+        <p class="kh__sub">Blog</p>
+      </header>
+      <nav class="kh__tabs" aria-label="Knowledge Hub sections"><a class="kh__tab" href="paper-publications.html">Paper &amp; Publications</a><a class="kh__tab" href="news.html">News</a><a class="kh__tab" href="media-coverage.html">Media Coverage</a><a class="kh__tab is-current" href="blog.html" aria-current="page">Blog</a></nav>
+      <div class="kh__body">
+        <div class="bl-bar">
+          <div class="kh-filter" role="group" aria-label="Filter by category">
+            <button class="kh-chip" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="kh-chip" type="button" data-filter="respiratory" aria-pressed="false">Respiratory</button>
+            <button class="kh-chip" type="button" data-filter="reproductive" aria-pressed="false">Reproductive</button>
+            <div class="bl-dd">
+              <button class="kh-chip" id="bl-other" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="bl-other-menu" aria-pressed="false">Other<span class="bl-dd__chev" aria-hidden="true"></span></button>
+              <div class="nav-menu helix-pop" id="bl-other-menu" role="menu" aria-label="Other categories" data-state="closed" hidden>
+                <div class="nav-menu__list">
+                  <button class="nav-menu__item" type="button" role="menuitemradio" aria-checked="false" data-sub="human-diagnostics">Human Diagnostics</button>
+                  <button class="nav-menu__item" type="button" role="menuitemradio" aria-checked="false" data-sub="animal-diagnostics">Animal Diagnostics</button>
+                  <button class="nav-menu__item" type="button" role="menuitemradio" aria-checked="false" data-sub="genomics">Genomics</button>
+                  <div class="nav-menu__divider" role="separator"></div>
+                  <button class="nav-menu__item" type="button" role="menuitemradio" aria-checked="false" data-sub="microbiome">Microbiome</button>
+                  <button class="nav-menu__item" type="button" role="menuitemradio" aria-checked="false" data-sub="company-news">Company News</button>
+                  <button class="nav-menu__item" type="button" role="menuitemradio" aria-checked="false" data-sub="events">Events</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <label class="kh-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+            <input id="bl-q" type="search" placeholder="Search articles" aria-label="Search articles" autocomplete="off">
+          </label>
+        </div>
+        <p class="bl-status" id="bl-status" role="status" aria-live="polite"></p>
+        <div class="bl-grid" id="bl-grid"></div>
+        <div class="kh-empty" id="bl-empty" hidden>
+          <img src="assets/blog-empty.svg" alt="" width="160" height="160">
+          <div class="kh-empty__copy"><h2 class="kh-empty__title">No articles found</h2><p class="kh-empty__desc" id="bl-empty-desc"></p></div>
+          <div class="kh-empty__actions">
+            <button class="btn btn--white" id="bl-clear" type="button">Clear search</button>
+            <button class="btn btn--primary" id="bl-all" type="button">View all articles</button>
+          </div>
+        </div>
+        <nav class="kh-pager bl-pager" id="bl-pager" aria-label="Pagination" hidden></nav>
+      </div>
+    </main>
+
+    <footer class="cc cc--gray footer" id="contact">
+      <div class="footer__inner">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <img src="assets/footer-logo.svg" alt="Nusantics" width="218" height="27">
+            <p>Founded in 2020, Nusantics changed the molecular diagnostics landscape in Indonesia.</p>
+          </div>
+          <nav class="footer__col" aria-label="Footer menu" id="about">
+            <p class="footer__head">Menu</p>
+            <a href="index.html#products">For Lab</a><a href="index.html#products">For Clinic</a><a href="about.html">About Us</a><a href="pipeline.html">Product Pipeline</a><a href="product.html">Human Diagnostics</a><a href="product.html">Animal Diagnostics</a><a href="career.html">Career</a>
+          </nav>
+          <div class="footer__col footer__col--find">
+            <p class="footer__head">Find Us</p>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Mon - Sat : 8am - 9pm</p>
+              <address>i3L Campus @ Lvl. 3<br>Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung,<br>Jakarta Timur 13210</address>
+            </div>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Contact Us</p>
+              <a href="mailto:nusantics@support.com">nusantics@support.com</a>
+              <a href="tel:+628888888888">(+62) 888 8888 8888</a>
+            </div>
+          </div>
+        </div>
+        <hr class="footer__rule">
+        <div class="footer__bottom">
+          <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
+            <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></p>
+          <div class="footer__social">
+            <a href="https://www.instagram.com/nusantics" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
+            <a href="https://www.linkedin.com/company/nusantics-nusantara-genetics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
+            <a href="https://www.youtube.com/@nusantics" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script type="application/json" id="posts">[{"id": 540, "cat": 5, "title": "PCR: A Fast and Accurate Detection Technology in Modern Healthcare", "excerpt": "Learn how PCR detects pathogen genetic material, from DNA extraction and target gene recognition to amplification and detection, to produce accurate data", "slug": "apa-itu-pcr-dan-cara-kerja", "img": "assets/blog/list-1.jpg", "date": "2026-10-19"}, {"id": 539, "cat": 3, "title": "Optimize Shrimp Health with A Structured Monitoring Schedule", "excerpt": "Ensure optimal shrimp health with a structured monitoring schedule. Learn effective disease prevention through regular Anco and PCR checks with CeKolam's advanced Real-Time PCR technology.", "slug": "optimize-shrimp-health-with-a-structured-monitoring-schedule", "img": "assets/blog/list-2.jpg", "date": "2025-02-03"}, {"id": 537, "cat": 9, "title": "Beware of These HPV Types – Some Can Be Fatal!", "excerpt": "Learn about the most high-risk HPV types that can affect your health, including the causes of cervical cancer and other complications. Discover how vaccination and early screening can protect you from HPV threats.", "slug": "beware-of-these-hpv-types-some-can-be-fatal", "img": "assets/blog/list-3.jpg", "date": "2025-01-28"}, {"id": 536, "cat": 9, "title": "Consume These 5 Foods and Beverages to Fight HPV!", "excerpt": "Learn how healthy foods like fruits, fatty fish, nuts, and green tea can help combat HPV, the leading cause of cervical cancer. Discover the importance of the HPV DNA test for early detection and cervical cancer prevention.", "slug": "consume-these-5-foods-and-beverages-to-fight-hpv", "img": "assets/blog/list-4.jpg", "date": "2025-01-13"}, {"id": 532, "cat": 9, "title": "Beware of Abnormal Vaginal Discharge: Signs of Cervical Cancer!", "excerpt": "Learn about the 5 key characteristics of abnormal vaginal discharge that could be an early sign of cervical cancer. Discover the importance of routine screening with HPV DNA testing for early prevention.", "slug": "beware-of-abnormal-vaginal-discharge-signs-of-cervical-cancer", "img": "assets/blog/list-5.jpg", "date": "2025-01-02"}, {"id": 535, "cat": 3, "title": "Monitoring Pathogen Sources: Essential Tips for Preventing Shrimp Diseases", "excerpt": "Prevent shrimp diseases effectively with CeKolam's shrimp disease monitoring services. Utilize Next-Generation Sequencing (NGS) technology for early shrimp disease detection and microbial diversity analysis in your pond. Ensure healthy and profitable shrimp farming!", "slug": "monitoring-pathogen-sources-essential-tips-for-preventing-shrimp-diseases", "img": "assets/blog/list-6.jpg", "date": "2025-01-02"}, {"id": 534, "cat": 3, "title": "Explore Microbial Diversity Thoroughly with AquaCheck & ProCheck Services", "excerpt": "Enhance the success of your shrimp farming with AquaCheck & ProCheck services from CeKolam. Analyze microbial diversity comprehensively in your pond using Next-Generation Sequencing (NGS) technology to ensure ecosystem health and probiotic effectiveness.", "slug": "explore-microbial-diversity-thoroughly-with-aquacheck-procheck-services", "img": "assets/blog/list-7.jpg", "date": "2024-12-31"}, {"id": 531, "cat": 9, "title": "A Comprehensive Guide to Protecting Yourself and Your Loved Ones from HPV and Cervical Cancer", "excerpt": "Learn effective steps to protect yourself and your family from cervical cancer, starting from HPV vaccination, regular screenings, and maintaining a healthy lifestyle. Discover the crucial role of family support in facing the threat of cervical cancer.", "slug": "a-comprehensive-guide-to-protecting-yourself-and-your-loved-ones-from-hpv-and-cervical-cancer", "img": "assets/blog/list-8.jpg", "date": "2024-12-30"}, {"id": 530, "cat": 3, "title": "Understanding PirA and PirB Genes in Vibrio Bacteria in Shrimp Farms", "excerpt": "Learn about the pirA and pirB genes in Vibrio bacteria, the primary causes of AHPND in shrimp farming operations.", "slug": "understanding-pira-and-pirb-genes-in-vibrio-bacteria-in-shrimp-farms", "img": "assets/blog/list-9.jpg", "date": "2024-12-19"}, {"id": 529, "cat": 3, "title": "Pond Bottom Sediment: A Source of AHPND in Shrimp Farms", "excerpt": "Learn about one of the sources of AHPND in shrimp: pond bottom sediment. Discover effective ways to manage pond sediment contaminated with AHPND.", "slug": "pond-bottom-sediment-a-source-of-ahpnd-in-shrimp-farms", "img": "assets/blog/list-10.jpg", "date": "2024-12-17"}, {"id": 528, "cat": 3, "title": "Tackling PirA and PirB Toxins Causing AHPND in Shrimp", "excerpt": "Overcome pirA and pirB toxins, the cause of AHPND/EMS in vannamei shrimp. Learn how to address shrimp diseases for optimal farming.", "slug": "tackling-pira-and-pirb-toxins-causing-ahpnd-in-shrimp", "img": "assets/blog/list-11.jpg", "date": "2024-12-16"}, {"id": 527, "cat": 9, "title": "Is Cervical Cancer Contagious?  Check Out 7 Myths About Cervical Cancer Here!", "excerpt": "Explore the myths surrounding cervical cancer that mislead and hinder prevention efforts. Is cervical cancer contagious or incurable? Discover the facts behind these misconceptions and the importance of early screening, such as HPV DNA testing, for better protection.", "slug": "is-cervical-cancer-contagious-check-out-7-myths-about-cervical-cancer-here", "img": "assets/blog/list-12.jpg", "date": "2024-12-06"}]</script>
+  <script src="script.js"></script>
+  <script src="mobile-menu.js"></script>
+  <script src="blog.js"></script>
+</body>
+</html>

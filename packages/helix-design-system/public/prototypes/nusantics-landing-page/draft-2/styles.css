@@ -34,6 +34,7 @@
   --radius-2xl: 16px;
   --radius-3xl: 24px;
   --surface-primary-hover: #df6505;
+  --surface-hover: #eee;
 
   /* Motion (Helix --motion-* tokens) */
   --motion-duration-fast: 160ms;
@@ -98,20 +99,25 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 /* ---------- Navbar (Marketing Navbar: onTop over the hero, onScroll once the hero is behind it) ---------- */
 .nav {
   position: fixed; inset: 0 0 auto; z-index: 50; height: 60px;
-  transition: background-color var(--motion-duration-base) var(--motion-easing-standard),
-              box-shadow var(--motion-duration-base) var(--motion-easing-standard);
 }
-.nav.is-scrolled {
+/* The bar's white surface is its own layer whose opacity follows the scroll (--nav-p, 0 to 1, set in script.js), so it fades in and out instead of switching on */
+.nav::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background: var(--surface-default);
   box-shadow: 0 1px 0 var(--stroke-subtle);
+  opacity: var(--nav-p, 0);
+  transition: opacity 120ms linear;
 }
 .nav__inner { display: flex; align-items: center; justify-content: space-between; height: 100%; padding-inline: max(var(--gutter), calc((100% - var(--page)) / 2 + var(--gutter))); }
-.nav__logo { position: relative; display: block; width: 131px; height: 16px; }
+.nav__logo { position: relative; display: block; flex: none; width: 131px; height: 16px; }
 .nav__logo img { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity var(--motion-duration-base) var(--motion-easing-standard); }
 .nav__logo-dark { opacity: 0; }
 .nav.is-scrolled .nav__logo-light, .nav.is-light .nav__logo-light { opacity: 0; }
 .nav.is-scrolled .nav__logo-dark, .nav.is-light .nav__logo-dark { opacity: 1; }
-.nav__links { display: flex; align-items: center; gap: 8px; }
+.nav__links { display: flex; align-items: center; gap: 24px; }
+/* Navbar groups (Figma option B): links 8px apart, actions 12px apart, 24px between the groups */
+.nav__menu { display: flex; align-items: center; gap: 8px; }
+.nav__actions { display: flex; align-items: center; gap: 12px; }
 .nav__item {
   display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 8px 12px;
   border: 0; border-radius: var(--radius-md); background: transparent;
@@ -122,18 +128,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 }
 .nav.is-scrolled .nav__item, .nav.is-light .nav__item { color: var(--text-subtle); }
 
-/* Hover, open dropdown and the current item share ONE look, as on the Marketing Navbar component (Select / Dropdown "Layanan Kami"):
-   onTop = Secondary/Subtle (white 50% fill, on-primary text and chevron); onScroll = Primary/Subtle (Surface/Subtle/Primary fill, primary text and chevron).
-   The transparent navbar over the light slide-3 photo uses the onScroll pill so its text stays readable. */
-.nav .nav__item:hover, .nav .nav__item[aria-expanded="true"], .nav .nav__item.is-current {
-  background: var(--surface-glass); color: var(--text-on-primary);
-  box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-neutral);
-}
-.nav.is-light .nav__item:hover, .nav.is-light .nav__item[aria-expanded="true"], .nav.is-light .nav__item.is-current,
-.nav.is-scrolled .nav__item:hover, .nav.is-scrolled .nav__item[aria-expanded="true"], .nav.is-scrolled .nav__item.is-current {
-  background: var(--surface-subtle-primary); color: var(--text-primary);
-  box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-brand);
-}
+/* Menu items read as links, not buttons (Figma _nav-link): no pill or shadow, the text (and chevron) turns brand orange on hover,
+   while a dropdown is open, and for the current page. Same on the hero, the scrolled bar and the light pages. */
+.nav .nav__item:hover, .nav .nav__item[aria-expanded="true"], .nav .nav__item.is-current { color: var(--text-primary); }
 /* The chevron is a mask filled with currentColor, so it always matches the item's text colour */
 .nav-chevron {
   flex: none; width: 14px; height: 14px; background: currentColor;
@@ -161,6 +158,34 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .nav-menu__item:hover, .nav-menu__item:focus-visible { background: var(--surface-subtle-primary); outline: none; }
 .nav-menu__divider { height: 1px; flex: none; background: var(--stroke-subtle); }
 .nav-flag { flex: none; }
+
+/* ---------- Toggle (Figma Toggle: Size md|sm x Surface Light|Dark; two segments, one selected) ----------
+   md = 46px tall (36px segments, 4px padding); sm = 36px tall (30px segments, 2px padding).
+   Dark = glass container for dark or photo backgrounds; the navbar picks it automatically while it sits on top of the hero. */
+.toggle {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px;
+  background: var(--surface-subtle); border: 1px solid var(--stroke-subtle); border-radius: var(--radius-md);
+}
+.toggle__item {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 12px;
+  border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-subtler);
+  font: 500 13px/19.2px var(--font-body); letter-spacing: -0.13px; white-space: nowrap; cursor: pointer;
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-standard),
+              color var(--motion-duration-fast) var(--motion-easing-standard),
+              box-shadow var(--motion-duration-fast) var(--motion-easing-standard);
+}
+.toggle__item:hover { background: var(--surface-hover); }
+.toggle__item[aria-checked="true"] { background: var(--surface-default); color: var(--text-primary); }
+.toggle__item:disabled { opacity: 0.5; cursor: not-allowed; }
+.toggle__item:focus-visible { outline: 1px solid rgba(89, 89, 90, 0.7); outline-offset: 0; }
+.toggle__icon { flex: none; width: 16px; height: 16px; }
+.toggle--sm { gap: 2px; padding: 2px; }
+.toggle--sm .toggle__item { height: 30px; }
+.toggle--dark, .nav:not(.is-scrolled):not(.is-light) .toggle { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
+.toggle--dark .toggle__item, .nav:not(.is-scrolled):not(.is-light) .toggle__item { color: var(--text-on-primary); }
+.toggle--dark .toggle__item:hover, .nav:not(.is-scrolled):not(.is-light) .toggle__item:hover { background: rgba(255, 255, 255, 0.2); }
+.toggle--dark .toggle__item[aria-checked="true"], .nav:not(.is-scrolled):not(.is-light) .toggle__item[aria-checked="true"] { background: var(--surface-default); color: var(--text-primary); }
+.toggle--dark .toggle__item:focus-visible, .nav:not(.is-scrolled):not(.is-light) .toggle__item:focus-visible { outline-color: var(--surface-default); }
 @keyframes helix-pop-in { from { opacity: 0; transform: translateY(-4px) scale(0.97); } to { opacity: 1; transform: none; } }
 @keyframes helix-pop-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(-4px) scale(0.97); } }
 .helix-pop[data-state="open"] { animation: helix-pop-in var(--motion-duration-base) var(--motion-easing-decelerate); }
@@ -233,6 +258,12 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .cc--bordered { border: 1px solid var(--stroke-subtle); }
 .cc__body { display: flex; flex-direction: column; gap: 12px; margin: 2px; padding: 12px; background: var(--surface-default); border-radius: var(--radius-xl); overflow: hidden; }
 .hero__card .cc__body { gap: 0; padding: 0; }
+/* Interactive Content Container: one neutral hover for every card (same as Product Pipeline cards) */
+.cc--interactive { transition: transform 0.22s var(--motion-easing-decelerate), box-shadow 0.22s var(--motion-easing-decelerate), border-color 0.22s var(--motion-easing-decelerate); }
+.cc--interactive:hover { transform: translateY(-2px); box-shadow: 0 6px 16px var(--shadow-neutral); border-color: #e0e0e0; }
+/* Content Container, Surface=White · Content Style=Flush: white shell, body runs edge to edge */
+.cc--white { background: var(--surface-default); }
+.cc--white > .cc__body { margin: 0; }
 .cc__footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px; }
 
 /* ---------- Sections ---------- */
@@ -258,10 +289,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .field-card { flex: 1; min-width: 0; }
 .field-row--center .field-card { flex: none; width: 352px; }
 .field-card__title { font: 500 20px/30px var(--font-body); color: var(--text-subtle); }
-.field-card__desc { font-size: 13px; line-height: 19.2px; color: var(--text-subtler); }
+.field-card__desc { font-size: 16px; line-height: 24px; color: var(--text-subtler); }
 
 /* Partners */
-.partners { display: flex; flex-direction: column; gap: 32px; width: 100%; }
+.partners { display: flex; flex-direction: column; gap: 48px; width: 100%; }
 .partners__row { display: flex; align-items: center; justify-content: center; gap: 32px; min-height: 123.9px; }
 .partners__row img { flex: 1; min-width: 0; width: 256px; height: auto; }
 
@@ -270,7 +301,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .news-card { display: flex; flex-direction: column; gap: 24px; padding: 24px; background: var(--surface-default); border: 1px solid var(--stroke-subtle); border-radius: var(--radius-xl); box-shadow: var(--shadow-small); }
 .news-card__title { font: 500 20px/30px var(--font-body); color: var(--text-default); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .news-card__title--16 { font-size: 16px; line-height: 24px; letter-spacing: -0.16px; }
-.news-card__desc { font-size: 13px; line-height: 19.2px; color: var(--text-subtler); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.news-card__desc { font-size: 16px; line-height: 24px; color: var(--text-subtler); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* News Highlight (Featured Paper) */
 .hub { display: flex; gap: 32px; align-items: stretch; }
@@ -283,7 +314,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .paper__foot { display: flex; flex-direction: column; gap: 8px; padding: 24px 12px; }
 .paper__date { font-size: 13px; line-height: 19.2px; color: var(--text-subtler); }
 .paper__title { font: 500 20px/30px var(--font-body); color: var(--text-default); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.paper__sum { font-size: 13px; line-height: 19.2px; color: var(--text-subtler); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.paper__sum { font-size: 16px; line-height: 24px; color: var(--text-subtler); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* Blog (Silk gradient fill approximated with a CSS gradient) */
 .section--blog { gap: 64px; }
@@ -299,7 +330,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .blog-card__copy .news-card__desc--plain { -webkit-line-clamp: unset; display: block; }
 
 /* Join the team */
-.join { display: flex; gap: 32px; padding: 48px var(--gutter) 96px; }
+.join { display: flex; gap: 32px; padding: 96px var(--gutter); }
 .join__intro { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 32px; }
 .join__img { position: relative; width: 100%; max-width: 544px; height: 331px; filter: drop-shadow(0 1px 1px var(--shadow-neutral)) drop-shadow(0 1px 1.5px var(--shadow-neutral)); }
 .join__back-wrap { position: absolute; inset: 0; overflow: hidden; border-radius: var(--radius-2xl); }
@@ -314,7 +345,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .badge { display: inline-flex; padding: 3px 12px; background: var(--surface-subtle); border-radius: 9999px; font-size: 13px; line-height: 19.2px; color: var(--text-subtle); white-space: nowrap; }
 .job__title { font: 500 20px/30px var(--font-body); color: var(--text-default); }
 .job__meta { font-size: 13px; line-height: 19.2px; color: var(--text-subtler); }
-.job__apply { font-size: 16px; line-height: 24px; color: var(--text-primary); }
+.job__apply { font-size: 13px; line-height: 19.2px; color: var(--text-primary); }
 .job__apply:hover { text-decoration: underline; }
 
 /* ---------- Footer ---------- */
@@ -388,4 +419,162 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; transition-delay: 0s !important; animation-duration: 0.01ms !important; animation-delay: 0s !important; }
   .dots button::after { animation: none !important; }
+}
+
+
+/* ---------- Bioinformatics Dashboard (Figma 265:16476) ---------- */
+.dash { position: relative; padding: 96px var(--gutter); color: var(--text-on-primary); }
+.dash__row { display: flex; align-items: center; justify-content: space-between; gap: 64px; }
+.dash__copy { display: flex; flex-direction: column; gap: 24px; width: 504px; flex: none; }
+.dash__head { display: flex; flex-direction: column; gap: 24px; }
+.dash__title { font: 700 31px/37.2px var(--font-heading); }
+.dash__desc { font-size: 16px; line-height: 24px; }
+.dash__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.dash-step .cc__body { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; margin: 2px; padding: 0 0 0 24px; }
+.dash-step__txt { display: flex; flex-direction: column; gap: 4px; color: var(--text-subtle); }
+.dash-step__txt span { font-size: 13px; line-height: 19px; color: var(--text-subtle); }
+.dash-step__txt strong { font: 500 20px/30px var(--font-body); }
+.dash-step img { flex: none; height: 100%; width: auto; object-fit: cover; align-self: stretch; }
+.dash-step { transition: transform var(--motion-duration-base) var(--motion-easing-standard), box-shadow var(--motion-duration-base) var(--motion-easing-standard); }
+.dash-step:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow-neutral); }
+.dash__note { font-size: 13px; line-height: 19.2px; }
+.dash__copy .btn--glass { outline: 0.5px solid rgba(255, 255, 255, 0.6); }
+.dash__shot { flex: none; width: 552px; border-radius: var(--radius-2xl); overflow: hidden; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12); }
+.dash__shot img { width: 100%; height: auto; }
+@media (max-width: 1100px) {
+  .dash__row { flex-direction: column; align-items: stretch; }
+  .dash__copy, .dash__shot { width: 100%; max-width: 552px; margin-inline: auto; }
+}
+@media (max-width: 640px) { .dash { padding: 64px 20px; } .dash-step__txt strong { font-size: 16px; line-height: 22px; } }
+
+.field-row--wrap { flex-wrap: wrap; max-width: 736px; margin-inline: auto; }
+
+
+/* ---------- Draft 2 revisions (Figma 213:7943) ---------- */
+body { background: var(--surface-subtle); }
+.footer { background: var(--surface-default); }
+.section__title--neutral { color: var(--text-secondary); }
+.news-card__title, .paper__title, .job__title { color: var(--text-subtle); }
+
+/* News Highlight: featured card + two horizontal cards, 405px tall */
+.paper--featured, .hub__stack { height: 405px; }
+.paper--featured .paper__media { flex: none; height: 218px; }
+.paper--featured .paper__foot { padding: 20px 12px 12px; gap: 6px; }
+.hub__stack .paper { flex-direction: row; align-items: center; gap: 24px; padding: 24px; }
+.hub__stack .paper__media { flex: none; width: 212px; height: 134px; margin: 0; border-radius: var(--radius-lg); }
+.hub__stack .paper__foot { flex: 1; min-width: 0; padding: 0; gap: 4px; }
+@media (max-width: 1100px) {
+  .paper--featured, .hub__stack { height: auto; }
+  .hub__stack .paper { flex-direction: column; align-items: stretch; }
+  .hub__stack .paper__media { width: 100%; height: 180px; }
+}
+
+
+
+/* Orange dashboard band: full-bleed, hard edges (Figma 3699-4648) */
+html, body { overflow-x: clip; }
+.glow { display: contents; }
+.dash {
+  isolation: isolate; width: 100vw; margin-inline: calc(50% - 50vw);
+  padding-inline: max(var(--gutter), calc((100vw - var(--page)) / 2 + var(--gutter)));
+  background: var(--surface-primary-hover);
+}
+.dash::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.5;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 26px, transparent 26px 78px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0 26px, transparent 26px 104px);
+  -webkit-mask-image: linear-gradient(#000 0, transparent 35%, transparent 65%, #000 100%); mask-image: linear-gradient(#000 0, transparent 35%, transparent 65%, #000 100%);
+}
+@media (max-width: 1100px) { .dash { padding-inline: 24px; } }
+
+/* Figma match: outlined dashboard CTA, flat tablet card, tighter news titles, blog excerpt clamps */
+.dash__copy .btn--glass { background: transparent; box-shadow: none; outline: 0; border: 1px solid rgba(255, 255, 255, 0.8); }
+.dash__copy .btn--glass:hover { background: rgba(255, 255, 255, 0.16); }
+.dash__shot { box-shadow: none; border-radius: var(--radius-xl); }
+.news-card__title, .paper__title { letter-spacing: -0.2px; }
+.blog-card__copy .news-card__desc { -webkit-line-clamp: 2; }
+.section--news { padding-bottom: 96px; }
+.section--hub { padding-top: 96px; }
+.dash-step .cc__body { position: relative; }
+.dash-step img { position: absolute; right: 0; top: 0; height: 100%; width: auto; }
+.dash-step__txt { position: relative; z-index: 1; white-space: nowrap; }
+@media (max-width: 640px) { .dash-step__txt { white-space: normal; max-width: 60%; } }
+.dash-step { height: 100px; }
+.dash-step .cc__body { height: auto; flex: 1; }
+
+/* ---------- Mobile menu (Figma Mobile Menu 8698:8130; script: mobile-menu.js) ----------
+   The navbar stays where it is: opening the menu only turns it light and fades the panel in underneath. */
+.nav__burger { display: none; }
+.mmenu { display: none; }
+/* Open state of the bar = the scrolled/light look, without the divider line */
+/* the bar's own surface layer goes fully white (no divider line) and fades back to the scroll value on close */
+.nav.is-menu-open::before { opacity: 1; box-shadow: none; }
+.nav.is-menu-open .nav__logo-light { opacity: 0; }
+.nav.is-menu-open .nav__logo-dark { opacity: 1; }
+/* The full bar needs about 1240px (Indonesian labels are the widest), so the hamburger takes over just below the 1280px page width */
+@media (max-width: 1279px) {
+  /* Closed bar = logo + hamburger; language, Login and Contact Us move into the panel */
+  .nav__links { display: none; }
+  .nav__burger {
+    display: grid; place-items: center; width: 44px; height: 44px; margin-right: -10px; padding: 0;
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-on-primary); cursor: pointer;
+    transition: color var(--motion-duration-base) var(--motion-easing-standard);
+  }
+  .nav.is-scrolled .nav__burger, .nav.is-light .nav__burger, .nav.is-menu-open .nav__burger { color: var(--text-subtle); }
+  .nav__burger:focus-visible, .mmenu__row:focus-visible { outline: 1px solid rgba(89, 89, 90, 0.7); outline-offset: -1px; }
+  /* Hamburger and X cross-fade in the same spot */
+  .nav__burger-icon { display: grid; grid-area: 1 / 1; transition: opacity var(--motion-duration-fast) var(--motion-easing-standard), transform var(--motion-duration-base) var(--motion-easing-standard); }
+  .nav__burger-icon--close { opacity: 0; transform: rotate(-90deg); }
+  .nav__burger[aria-expanded="true"] .nav__burger-icon--menu { opacity: 0; transform: rotate(90deg); }
+  .nav__burger[aria-expanded="true"] .nav__burger-icon--close { opacity: 1; transform: none; }
+
+  /* Panel sits under the navbar and only fades; exit is quicker than the entrance */
+  .mmenu {
+    position: fixed; inset: 0; z-index: -2; display: flex; flex-direction: column; padding-top: 60px; background: var(--surface-default);
+    visibility: hidden; opacity: 0;
+    transition: opacity var(--motion-duration-fast) var(--motion-easing-standard), visibility 0s linear var(--motion-duration-fast);
+  }
+  .mmenu[data-state="open"] {
+    visibility: visible; opacity: 1;
+    transition: opacity var(--motion-duration-slow) var(--motion-easing-decelerate), visibility 0s;
+  }
+  .mmenu__body { flex: 1; min-height: 0; overflow-y: auto; padding: 8px 12px; }
+  .mmenu__row {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; min-height: 48px; padding: 12px;
+    border: 0; border-radius: var(--radius-md); background: transparent; color: var(--text-subtle);
+    font: 400 14px/20px var(--font-body); letter-spacing: -0.01px; text-align: left; text-decoration: none; cursor: pointer;
+    transition: background-color var(--motion-duration-fast) var(--motion-easing-standard), color var(--motion-duration-fast) var(--motion-easing-standard);
+  }
+  .mmenu__row:hover { background: var(--surface-hover); }
+  .mmenu__row[aria-current="page"] { color: var(--text-primary); }
+  .mmenu__row .nav-chevron { color: var(--text-subtler); }
+  .mmenu__row--group[aria-expanded="true"] .nav-chevron { transform: rotate(180deg); }
+  .mmenu__sub { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--motion-duration-base) var(--motion-easing-standard); }
+  .mmenu__sub[data-open="true"] { grid-template-rows: 1fr; }
+  /* Rows fade while the height animates; visibility flips only after the collapse ends, so nothing pops */
+  .mmenu__sub-inner {
+    min-height: 0; overflow: hidden; padding-left: 16px; visibility: hidden; opacity: 0;
+    transition: opacity var(--motion-duration-fast) var(--motion-easing-standard), visibility 0s linear var(--motion-duration-base);
+  }
+  .mmenu__sub[data-open="true"] .mmenu__sub-inner {
+    visibility: visible; opacity: 1;
+    transition: opacity var(--motion-duration-base) var(--motion-easing-standard) 40ms, visibility 0s;
+  }
+  .mmenu__foot { display: flex; flex: none; flex-direction: column; gap: 12px; padding: 16px 16px calc(32px + env(safe-area-inset-bottom)); }
+  .mmenu__rule { width: 100%; height: 1px; margin: 0 0 4px; border: 0; background: var(--stroke-subtle); }
+  .mmenu__toggle { display: flex; width: 100%; }
+  .mmenu__toggle .toggle__item { flex: 1; }
+  /* The panel now lives inside .nav, whose transparent-bar rules turn toggles into the white glass look: keep the light toggle here */
+  .nav.nav .mmenu .mmenu__toggle.toggle { background: var(--surface-subtle); border-color: var(--stroke-subtle); }
+  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item { color: var(--text-subtler); }
+  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item:hover { background: var(--surface-hover); }
+  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item[aria-checked="true"] { background: var(--surface-default); color: var(--text-primary); }
+  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item:focus-visible { outline-color: rgba(89, 89, 90, 0.7); }
+  .mmenu__actions { display: flex; gap: 12px; }
+  .mmenu__btn { flex: 1; height: 36px; }
+}
+html.mmenu-open { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .mmenu, .mmenu__sub, .mmenu__sub-inner { transition: none; }
 }
