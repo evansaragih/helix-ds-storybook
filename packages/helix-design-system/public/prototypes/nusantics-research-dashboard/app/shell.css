@@ -151,6 +151,45 @@
 .hx-sidebar:not(.collapsed) .hx-avatar{cursor:default}
 @media (prefers-reduced-motion:no-preference){.hx-menu{animation:hx-pop .15s cubic-bezier(0,0,.2,1) both}@keyframes hx-pop{from{opacity:0;transform:translateY(4px) scale(.98)}to{opacity:1;transform:none}}}
 
+/* Account menu — Figma "Menu Profil": white panel 216, identity row (avatar + name + email), divider, 36px rows (Profile & Akun = Text/Subtle, Keluar = destructive) */
+.hx-menu--acct{width:216px;min-width:0;padding:8px;background:var(--hx-surface)}
+.hx-menu--acct .hx-menu-head{flex-direction:row;align-items:center;gap:12px;padding:0}
+.hx-mi-av{width:36px;height:36px;flex:none;display:grid;place-items:center;border-radius:50%;background:var(--hx-primary-hover);color:#fff;font-size:11.7px;line-height:1;font-weight:500;border:.4px solid var(--hx-stroke)}
+.hx-menu--acct .hx-menu-head .hx-mi-av{color:#fff;font-size:11.7px;line-height:1}
+.hx-mi-id{display:flex;flex-direction:column;gap:0;min-width:0}
+.hx-mi-id b{font-weight:500;letter-spacing:-.13px;color:var(--hx-text-subtle);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hx-mi-id span{font-size:13px;line-height:20px;color:var(--hx-text-subtler);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hx-menu--acct .hx-menu-sep{margin:8px 0}
+.hx-menu--acct .hx-menu-item{min-height:36px;color:var(--hx-text-subtle)}
+.hx-menu--acct .hx-menu-item--out{color:#b91c1c}
+.hx-menu--acct .hx-mi-i{color:var(--hx-text-subtler)}
+.hx-menu--acct .hx-menu-item--out .hx-mi-i{color:currentColor}
+
+/* Study group switcher (navbar) — one card per institution, radio rows with division code + role.
+   Figma: Content Container (Gray, Floating) per institution; rows = Group Item (Radio) with Badge xs. */
+.hx-btn--dark[aria-expanded="true"] .hx-i:last-child{transform:rotate(180deg)}
+.hx-sg-pop{width:357px;max-width:calc(100vw - 16px);max-height:calc(100vh - 96px);overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:8px;background:var(--hx-surface)}
+.hx-sg-pop[hidden]{display:none}
+.hx-sg-card{display:flex;flex-direction:column;background:var(--hx-surface-subtle);border:1px solid var(--hx-stroke);border-radius:12px;box-shadow:0 1px 2px var(--hx-shadow)}
+.hx-sg-head{margin:0;padding:12px 12px 8px;font-size:13px;line-height:20px;font-weight:500;letter-spacing:-.13px;color:var(--hx-text-subtler)}
+.hx-sg-list{display:flex;flex-direction:column;gap:8px;padding:8px;background:var(--hx-surface);border-radius:12px}
+.hx-sg-card--flat{background:none;border:0;box-shadow:none}
+.hx-sg-card--flat .hx-sg-list{padding:0}
+.hx-sg-row{display:flex;align-items:flex-start;gap:12px;width:100%;padding:8px 12px;border:1px solid var(--hx-stroke);border-radius:8px;background:var(--hx-surface);box-shadow:0 1px 2px var(--hx-shadow);font:inherit;text-align:left;color:var(--hx-text-subtle);cursor:pointer;transition:background .15s,border-color .15s}
+.hx-sg-row:hover{background:var(--hx-surface-subtle)}
+.hx-sg-row:focus-visible{outline:2px solid rgba(245,126,32,.55);outline-offset:1px}
+.hx-sg-row[aria-checked="true"]{background:var(--hx-selected);border-color:rgba(245,126,32,.35)}
+.hx-sg-radio{flex:none;width:20px;height:20px;margin-top:0;border:1px solid #9f9f9f;border-radius:50%;background:var(--hx-surface);display:grid;place-items:center}
+.hx-sg-row[aria-checked="true"] .hx-sg-radio{border-color:var(--hx-primary)}
+.hx-sg-row[aria-checked="true"] .hx-sg-radio::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--hx-primary)}
+.hx-sg-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.hx-sg-name{font-size:13px;line-height:20px;font-weight:500;letter-spacing:-.13px;color:var(--hx-text-subtle)}
+.hx-sg-badges{display:flex;flex-wrap:wrap;gap:6px}
+.hx-badge{display:inline-flex;align-items:center;padding:0 6px;border-radius:9999px;font-size:8px;line-height:15px;font-weight:500;white-space:nowrap}
+/* Badge xs / Appearance=Subtle (Figma): code = Neutral (Surface/Subtle · Text/Subtle), role = Info (Surface/Info-Subtle · Text/Info). Lead and Member look the same. */
+.hx-badge--code{background:#f7f7f7;color:#49494a}
+.hx-badge--lead,.hx-badge--member{background:#ebf2fe;color:#014cc5}
+
 /* Loading skeleton + entrance (shared by every page; honours reduced motion) */
 @keyframes hx-shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
 @keyframes hx-rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
