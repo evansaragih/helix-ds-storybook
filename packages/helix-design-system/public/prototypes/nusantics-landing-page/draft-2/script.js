@@ -222,6 +222,27 @@
 })();
 
 
+// Language dropdown (navbar): picks English or Bahasa Indonesia, remembered across pages. i18n.js listens for 'nusantics:lang'.
+(() => {
+  const KEY = 'nusantics-lang';
+  const root = document.querySelector('.nav-dd--lang');
+  if (!root) return;
+  const flag = root.querySelector('.nav-lang__flag');
+  const code = root.querySelector('.nav-lang__code');
+  const items = [...root.querySelectorAll('.nav-menu__item[lang]')];
+  const read = () => { try { return localStorage.getItem(KEY); } catch (e) { return null; } };
+  const write = (v) => { try { localStorage.setItem(KEY, v); } catch (e) { /* storage unavailable */ } };
+  function select(item) {
+    items.forEach((el) => { if (el === item) el.setAttribute('aria-current', 'true'); else el.removeAttribute('aria-current'); });
+    flag.src = item.querySelector('img').src;
+    code.textContent = item.dataset.code;
+    document.documentElement.lang = item.lang;
+    document.dispatchEvent(new CustomEvent('nusantics:lang', { detail: item.lang }));
+  }
+  items.forEach((item) => item.addEventListener('click', (e) => { e.preventDefault(); write(item.lang); select(item); }));
+  select(items.find((el) => el.lang === read()) || items[0]);
+})();
+
 // Toggle (radio group of two segments): click or arrow keys select; the choice is remembered across pages.
 (() => {
   const KEY = 'nusantics-lang';

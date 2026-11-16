@@ -26,7 +26,7 @@
 
   // Rows from the navbar: dropdown groups become expandable rows, plain links stay links
   let n = 0;
-  const rows = [...menu.children].map((el) => {
+  const navRows = [...menu.children].map((el) => {
     const trigger = el.querySelector('.nav-trigger');
     if (!trigger) {
       return `<a class="mmenu__row" href="${esc(el.getAttribute('href'))}"${el.hasAttribute('aria-current') ? ' aria-current="page"' : ''}>${esc(el.textContent.trim())}</a>`;
@@ -42,7 +42,25 @@
       + `<div class="mmenu__sub" id="${id}" data-open="${current}"><div class="mmenu__sub-inner">${subs}</div></div>`;
   }).join('');
 
-  const lang = nav.querySelector('.nav__actions .toggle');
+  // Language row (Figma Mobile Menu): a group row like the others, English (EN) with English and Bahasa Indonesia underneath
+  const lang = nav.querySelector('.nav__actions .nav-dd--lang');
+  const langItems = lang ? [...lang.querySelectorAll('.nav-menu__item[lang]')] : [];
+  const langName = (o) => `${o.textContent.trim()} (${o.dataset.code})`;
+  const flagOf = (o) => { const f = o.querySelector('img'); return f ? f.getAttribute('src') : ''; };
+  const langRows = lang ? `<button class="mmenu__row mmenu__row--group mmenu__lang" type="button" aria-expanded="false" aria-controls="mmenu-lang"><span class="mmenu__lang-label"><img class="nav-flag" alt="" width="16" height="16"><span class="mmenu__lang-name"></span></span><span class="nav-chevron" aria-hidden="true"></span></button>`
+    + `<div class="mmenu__sub" id="mmenu-lang" data-open="false"><div class="mmenu__sub-inner">${langItems.map((o) => `<a class="mmenu__row mmenu__row--sub" href="#" lang="${o.lang}"><img class="nav-flag" src="${esc(flagOf(o))}" alt="" width="16" height="16">${esc(o.textContent.trim())}</a>`).join('')}</div></div>` : '';
+
+  // Legal block: same copy, links and social icons as the page footer
+  const pageLinks = [...document.querySelectorAll('.footer__legal a')];
+  const privacyHref = (pageLinks[0] && pageLinks[0].getAttribute('href')) || 'privacy.html';
+  const termsHref = (pageLinks[1] && pageLinks[1].getAttribute('href')) || 'terms.html';
+  const social = document.querySelector('.footer__social');
+  const legal = `<div class="mmenu__legal">
+        <p class="mmenu__copy">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.</p>
+        <div class="mmenu__links"><a href="${esc(privacyHref)}">Privacy Policy</a><a href="${esc(termsHref)}">Terms of Use</a></div>
+        ${social ? `<div class="mmenu__social">${social.innerHTML}</div>` : ''}
+      </div>`;
+
   const login = nav.querySelector('.nav__actions a.btn--white, .nav__actions a[href*="login"]');
   const contact = nav.querySelector('.nav__actions a.btn--primary');
 
@@ -55,29 +73,39 @@
   panel.setAttribute('data-state', 'closed');
   panel.setAttribute('inert', '');
   panel.innerHTML = `
-    <nav class="mmenu__body" aria-label="Mobile">${rows}</nav>
+    <nav class="mmenu__body" aria-label="Mobile">${navRows}${langRows}</nav>
     <div class="mmenu__foot">
       <hr class="mmenu__rule">
-      ${lang ? '<div class="toggle toggle--sm mmenu__toggle" role="radiogroup" aria-label="Language"></div>' : ''}
       <div class="mmenu__actions">
         ${login ? `<a class="btn btn--white mmenu__btn" href="${esc(login.getAttribute('href'))}">${esc(login.textContent.trim())}</a>` : ''}
         ${contact ? `<a class="btn btn--primary mmenu__btn" href="${esc(contact.getAttribute('href'))}">${esc(contact.textContent.trim())}</a>` : ''}
       </div>
+      ${legal}
     </div>`;
   nav.appendChild(panel); // inside the navbar's stacking context, so the bar itself stays above the panel
 
-  // Language: the panel toggle mirrors the navbar toggle and forwards clicks to it, so i18n.js stays the single owner
+  // Language: the sub rows forward to the navbar dropdown items, so script.js and i18n.js stay the owners
   if (lang) {
-    const mine = panel.querySelector('.mmenu__toggle');
-    const orig = [...lang.querySelectorAll('.toggle__item')];
-    orig.forEach((o) => {
-      const b = o.cloneNode(true);
-      b.addEventListener('click', () => { o.click(); sync(); });
-      mine.appendChild(b);
-    });
-    const sync = () => [...mine.children].forEach((b, i) => { b.setAttribute('aria-checked', orig[i].getAttribute('aria-checked')); b.tabIndex = orig[i].tabIndex; });
+    const name = panel.querySelector('.mmenu__lang-name');
+    const flag = panel.querySelector('.mmenu__lang-label .nav-flag');
+    const subs = [...panel.querySelectorAll('.mmenu__row--sub[lang]')];
+    const sync = () => {
+      langItems.forEach((o, i) => {
+        const on = o.getAttribute('aria-current') === 'true';
+        if (on) { name.textContent = langName(o); flag.src = flagOf(o); }
+        if (on) subs[i].setAttribute('aria-current', 'true'); else subs[i].removeAttribute('aria-current');
+      });
+    };
     sync();
     document.addEventListener('nusantics:lang', sync);
+    subs.forEach((row, i) => row.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation(); // stay open: only the group collapses
+      langItems[i].click();
+      const g = panel.querySelector('.mmenu__lang');
+      g.setAttribute('aria-expanded', 'false');
+      document.getElementById('mmenu-lang').dataset.open = 'false';
+    }));
   }
 
   // Groups expand and collapse

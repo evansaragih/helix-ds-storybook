@@ -89,7 +89,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .btn--primary { background: var(--surface-primary); color: var(--text-on-primary); box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-brand); outline: 0.5px solid var(--stroke-primary-pressed); outline-offset: -0.5px; }
 .btn--soft { background: var(--surface-subtle-primary); color: var(--text-primary); box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-brand); }
 .btn--glass { background: var(--surface-glass); color: var(--text-on-primary); box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-neutral); }
-.btn--white { background: var(--surface-default); color: var(--text-subtler); border: 0.5px solid var(--stroke-subtle); box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-neutral); }
+.btn--white { background: var(--surface-default); color: var(--text-subtler); outline: 0.5px solid var(--stroke-subtle); outline-offset: -0.5px; box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-neutral); }
 .btn--outline { background: transparent; color: var(--text-primary); border: 0.5px solid var(--stroke-primary); }
 .btn:hover { filter: brightness(0.96); transform: translateY(-1px); }
 .btn:active { transform: translateY(0) scale(0.98); }
@@ -158,6 +158,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .nav-menu__item:hover, .nav-menu__item:focus-visible { background: var(--surface-subtle-primary); outline: none; }
 .nav-menu__divider { height: 1px; flex: none; background: var(--stroke-subtle); }
 .nav-flag { flex: none; }
+.nav-menu__item[aria-current="true"] { color: var(--text-primary); font-weight: 500; }
+.nav-dd--lang .nav-trigger { gap: 6px; }
 
 /* ---------- Toggle (Figma Toggle: Size md|sm x Surface Light|Dark; two segments, one selected) ----------
    md = 46px tall (36px segments, 4px padding); sm = 36px tall (30px segments, 2px padding).
@@ -324,7 +326,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .blog__row--wide-last { grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr); }
 .blog-card { position: relative; isolation: isolate; display: flex; flex-direction: column; justify-content: flex-end; height: 340px; padding: 24px; background: var(--surface-default); border: 1px solid var(--stroke-subtle); border-radius: var(--radius-xl); box-shadow: var(--shadow-small); overflow: hidden; }
 .blog-card__img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
-.blog-card__fade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, #fff 0%, #fff 40%, rgba(255, 255, 255, 0) 73%); }
+.blog-card__fade { position: absolute; inset: 0; z-index: -1; background: url("assets/knowledge/card-fade-352.png") center / 100% 100% no-repeat; } /* the silk fade from the Figma Card / Post shader, exported as white with alpha */
 .blog-card__copy { display: flex; flex-direction: column; gap: 8px; }
 .blog-card__copy .news-card__desc { -webkit-line-clamp: 3; }
 .blog-card__copy .news-card__desc--plain { -webkit-line-clamp: unset; display: block; }
@@ -371,6 +373,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
 .footer__social a { display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-lg); color: var(--text-subtler); transition: color 160ms cubic-bezier(0.4, 0, 0.2, 1); }
 .footer__social a:hover { color: var(--text-primary); }
 
+/* ---------- Mobile footer (Figma mobile frames): logo, tagline, divider, copyright, legal links on one line, social icons flush left.
+   The Menu and Find Us columns are hidden; the 24px icon buttons are pulled 6px left so the 12px glyphs line up with the text edge. ---------- */
+@media (max-width: 720px) {
+  .footer__top .footer__col { display: none; }
+  /* Figma Footer (486:20661): 40/24/32 padding, 24px between logo block, divider and the bottom block */
+  .footer__inner { gap: 24px; padding: 40px 24px 32px; }
+  .footer__brand { gap: 16px; }
+  .footer__brand img { margin-block: 8px; } /* the logo sits in a 43px-tall row */
+  .footer__rule { margin: 0; }
+  /* Copyright, legal links and social icons stack 12px apart (the same step as the mobile menu) */
+  .footer__bottom { gap: 12px; }
+  .footer__legal { row-gap: 12px; }
+  .footer__social { margin-left: -6px; }
+}
+
 /* ---------- Narrow screens (the Figma frame is desktop only; this is a simple fallback) ---------- */
 @media (max-width: 1100px) {
   :root { --gutter: 24px; }
@@ -381,6 +398,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--stroke-primary)
   .hero__card { max-width: 360px; }
   .nav__inner { padding-inline: var(--gutter); }
   .field-row, .hub, .join, .footer__top, .footer__bottom { flex-direction: column; }
+  .footer__bottom { align-items: flex-start; }
   .field-row--center .field-card, .hero__card, .footer__brand, .footer__col { width: 100%; }
   .cards-3, .blog__row--wide-first, .blog__row--wide-last, .jobs { grid-template-columns: 1fr; }
   .partners__row { flex-wrap: wrap; }
@@ -562,15 +580,20 @@ html, body { overflow-x: clip; }
     transition: opacity var(--motion-duration-base) var(--motion-easing-standard) 40ms, visibility 0s;
   }
   .mmenu__foot { display: flex; flex: none; flex-direction: column; gap: 12px; padding: 16px 16px calc(32px + env(safe-area-inset-bottom)); }
-  .mmenu__rule { width: 100%; height: 1px; margin: 0 0 4px; border: 0; background: var(--stroke-subtle); }
-  .mmenu__toggle { display: flex; width: 100%; }
-  .mmenu__toggle .toggle__item { flex: 1; }
-  /* The panel now lives inside .nav, whose transparent-bar rules turn toggles into the white glass look: keep the light toggle here */
-  .nav.nav .mmenu .mmenu__toggle.toggle { background: var(--surface-subtle); border-color: var(--stroke-subtle); }
-  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item { color: var(--text-subtler); }
-  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item:hover { background: var(--surface-hover); }
-  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item[aria-checked="true"] { background: var(--surface-default); color: var(--text-primary); }
-  .nav.nav .mmenu .mmenu__toggle.toggle .toggle__item:focus-visible { outline-color: rgba(89, 89, 90, 0.7); }
+  .mmenu__rule { width: 100%; height: 1px; margin: 0; border: 0; background: var(--stroke-subtle); }
+  /* Language row (Figma _nav-link with Leading Content): 16px flag, 8px before the label */
+  .mmenu__lang-label { display: inline-flex; align-items: center; gap: 8px; }
+  .mmenu__row .nav-flag { width: 16px; height: 16px; }
+  .mmenu__row--sub { justify-content: flex-start; } /* flag + label sit together on the left; space-between is for the group rows' chevron */
+  /* Selected language: Figma _nav-link State=Active (soft grey pill) */
+  .mmenu__row--sub[aria-current="true"] { background: var(--surface-subtle); }
+  .mmenu__legal { display: flex; flex-direction: column; gap: 12px; padding-top: 4px; }
+  .mmenu__copy { margin: 0; font-size: 13px; line-height: 19.2px; color: var(--text-subtler); }
+  .mmenu__links { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; line-height: 19.2px; }
+  .mmenu__links a { color: var(--text-primary); letter-spacing: -0.13px; }
+  .mmenu__social { display: flex; gap: 4px; margin-left: -6px; }
+  .mmenu__social a { display: grid; place-items: center; width: 24px; height: 24px; border-radius: var(--radius-lg); color: var(--text-subtler); }
+  .mmenu__social a:hover { color: var(--text-primary); }
   .mmenu__actions { display: flex; gap: 12px; }
   .mmenu__btn { flex: 1; height: 36px; }
 }

@@ -80,7 +80,7 @@ window.NUSANTICS_ID = {
   "Founded in 2020, Nusantics changed the molecular diagnostics landscape in Indonesia.": "Didirikan pada tahun 2020, Nusantics mengubah lanskap diagnostik molekuler di Indonesia.",
   "Mon - Sat : 8am - 9pm": "Sen - Sab : 08.00 - 21.00",
   "Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.": "Hak Cipta © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. Seluruh Hak Dilindungi.",
-  "Terms of Service": "Ketentuan Layanan",
+  "Terms of Use": "Ketentuan Penggunaan",
   "Nusantics Headquarters, Jakarta": "Kantor Pusat Nusantics, Jakarta",
   "CeKolam by Nusantics, Banyuwangi": "CeKolam oleh Nusantics, Banyuwangi",
   "Phone": "Telepon",

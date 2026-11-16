@@ -20,6 +20,7 @@ import { SwitchSection } from './SwitchSection';
 import { RadioButtonSection } from './RadioButtonSection';
 import { SelectSection } from './SelectSection';
 import { TabsSection } from './TabsSection';
+import { ToggleSection } from './ToggleSection';
 import { TooltipSection } from './TooltipSection';
 import { ProgressBarSection } from './ProgressBarSection';
 import { SliderSection } from './SliderSection';
@@ -95,6 +96,7 @@ export function MainContent({ activeSection, left, onSectionChange }: MainConten
       case 'radio-button':      return <RadioButtonSection />;
       case 'select':            return <SelectSection />;
       case 'tabs':              return <TabsSection />;
+      case 'toggle':            return <ToggleSection />;
       case 'tooltip':           return <TooltipSection />;
       case 'progress-bar':      return <ProgressBarSection />;
       case 'slider':            return <SliderSection />;

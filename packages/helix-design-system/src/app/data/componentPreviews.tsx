@@ -6,7 +6,7 @@ import {
 import {
   Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Callout, Checkbox, ContentContainer, ContentDivider, Divider, Dot, Dropzone, Field,
   FooterActions, GroupItem, IconButton, IconTile, InfoBadge, Input, LabelValue, ListItem, LoadingState, MetricTile, Pagination, ProgressBar,
-  RadioButton, SectionHeader, Select, Skeleton, Slider, SortableListItem, Spinner, Stepper, Switch, Tabs, Tag,
+  RadioButton, SectionHeader, Select, Skeleton, Slider, SortableListItem, Spinner, Stepper, Switch, Tabs, Tag, Toggle,
 } from '../../components';
 
 const noop = () => {};
@@ -59,6 +59,7 @@ export const componentPreviews: Record<string, ReactNode> = {
   select: w(180, <Select options={[{ value: 'jakarta', label: 'Jakarta' }, { value: 'bandung', label: 'Bandung' }]} placeholder="Select a city" />),
   sheet: tile(<PanelRight />),
   stepper: w(220, <Stepper activeStep={1} steps={[{ id: 's1', title: 'Received', label: 'Done', badge: 'Done' }, { id: 's2', title: 'Processing', label: 'Now', badge: 'Running' }]} />),
+  toggle: <Toggle aria-label="View" defaultValue="monthly" options={[{ value: 'monthly', label: 'Monthly' }, { value: 'weekly', label: 'Weekly' }]} />,
   tabs: w(220, <Tabs showNavigation={false} renderContent={false} items={[{ id: 'a', label: 'Overview' }, { id: 'b', label: 'Activity' }, { id: 'c', label: 'Settings' }]} />),
   tag: <div style={row(6)}><Tag label="Design" onClose={noop} /><Tag label="Lab" /></div>,
   toast: tile(<Bell />),

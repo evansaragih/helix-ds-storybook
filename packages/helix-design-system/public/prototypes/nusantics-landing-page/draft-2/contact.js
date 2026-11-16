@@ -55,7 +55,16 @@
       const street = esri('World_Street_Map');
       const imagery = esri('World_Imagery');
       street.addTo(map);
-      new ResizeObserver(() => map.invalidateSize()).observe(mapEl); // the panel grows with the full-screen hero
+      // On a narrow panel (phone, tablet) frame both pins; the two bubbles would overlap there, so they open on tap instead. The wide desktop panel keeps the fixed view and both bubbles open
+      const frame = () => {
+        map.invalidateSize();
+        if (mapEl.clientWidth < 500) {
+          map.fitBounds(LOCATIONS.map((l) => [l.latlng.lat, l.latlng.lng]), { padding: [50, 40], maxZoom: 5, animate: false });
+        } else {
+          map.setView([-7.2, 110.6], 5, { animate: false });
+        }
+      };
+      new ResizeObserver(frame).observe(mapEl);
       L.control.zoom({ position: 'bottomright' }).addTo(map);
 
       const type = document.createElement('div');
@@ -78,9 +87,11 @@
         iconAnchor: [13.5, 43],
         popupAnchor: [0, -40]
       });
+      const narrow = mapEl.clientWidth < 500;
       LOCATIONS.forEach((loc) => {
         const marker = L.marker([loc.latlng.lat, loc.latlng.lng], { icon, title: loc.name, keyboard: true }).addTo(map);
-        marker.bindPopup(`<div class="contact-map__info"><strong>${loc.name}</strong>${loc.city}<a href="${loc.url}" target="_blank" rel="noopener noreferrer">Go to maps</a></div>`, { autoClose: false, closeOnClick: false, maxWidth: 200, autoPan: false }).openPopup();
+        marker.bindPopup(`<div class="contact-map__info"><strong>${loc.name}</strong>${loc.city}<a href="${loc.url}" target="_blank" rel="noopener noreferrer">Go to maps</a></div>`, { autoClose: false, closeOnClick: false, maxWidth: 200, autoPan: narrow });
+        if (!narrow) marker.openPopup();
       });
     };
 

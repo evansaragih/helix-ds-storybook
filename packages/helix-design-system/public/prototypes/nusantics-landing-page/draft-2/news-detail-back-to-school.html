@@ -60,9 +60,14 @@
           </div>
           </div>
           <div class="nav__actions">
-            <div class="toggle toggle--sm" role="radiogroup" aria-label="Language" data-toggle="language">
-              <button class="toggle__item" type="button" role="radio" aria-checked="true" lang="en"><img class="toggle__icon" src="../assets/flag-gb.svg" alt="" width="16" height="16">EN</button>
-              <button class="toggle__item" type="button" role="radio" aria-checked="false" tabindex="-1" lang="id"><img class="toggle__icon" src="../assets/flag-id.svg" alt="" width="16" height="16">ID</button>
+            <div class="nav-dd nav-dd--end nav-dd--lang">
+              <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-language" aria-label="Language"><img class="nav-flag nav-lang__flag" src="../assets/flag-gb.svg" alt="" width="14" height="14"><span class="nav-lang__code">EN</span><span class="nav-chevron" aria-hidden="true"></span></button>
+              <div class="nav-menu helix-pop" id="menu-language" role="menu" aria-label="Language" data-side="bottom" data-state="closed" hidden>
+                <div class="nav-menu__list">
+                  <a class="nav-menu__item" role="menuitem" href="#" lang="en" data-code="EN" aria-current="true"><img class="nav-flag" src="../assets/flag-gb.svg" alt="" width="14" height="14">English</a>
+                  <a class="nav-menu__item" role="menuitem" href="#" lang="id" data-code="ID"><img class="nav-flag" src="../assets/flag-id.svg" alt="" width="14" height="14">Bahasa Indonesia</a>
+                </div>
+              </div>
             </div>
           <a class="btn btn--white nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
           <a class="btn btn--primary" href="contact.html">Contact Us</a>
@@ -154,7 +159,7 @@
         <hr class="footer__rule">
         <div class="footer__bottom">
           <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
-            <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Service</a></p>
+            <a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a></p>
           <div class="footer__social">
             <a href="https://www.instagram.com/nusantics" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
             <a href="https://www.linkedin.com/company/nusantics-nusantara-genetics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>

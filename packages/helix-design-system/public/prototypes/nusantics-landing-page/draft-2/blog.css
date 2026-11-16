@@ -21,7 +21,8 @@
 .bl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
 .bl-card { height: 380px; color: inherit; text-decoration: none; }
 .bl-card--feat { grid-column: span 2; }
-.bl-card .news-card__title { -webkit-line-clamp: 3; text-wrap: pretty; }
+.bl-card--feat .blog-card__fade { background-image: url("assets/knowledge/card-fade-736.png"); }
+.bl-card .news-card__title { -webkit-line-clamp: 2; text-wrap: pretty; }
 .bl-card--feat .news-card__title { -webkit-line-clamp: 2; }
 .bl-card .blog-card__copy .news-card__desc { font-size: 13px; line-height: 19.2px; -webkit-line-clamp: 2; }
 

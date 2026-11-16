@@ -60,6 +60,7 @@ const components: NavItem[] = [
   { label: 'Stepper', id: 'stepper' },
   { label: 'Switch', id: 'switch' },
   { label: 'Tab', id: 'tabs' },
+  { label: 'Toggle', id: 'toggle' },
   { label: 'Tag', id: 'tag' },
   { label: 'Tooltip', id: 'tooltip' },
   { label: 'Tables', id: 'table' },
