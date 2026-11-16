@@ -364,7 +364,6 @@
   .skel { display: block; border-radius: 6px; background: linear-gradient(90deg, #ececec 25%, #f6f6f6 50%, #ececec 75%); background-size: 200% 100%; }
   .skel.lbl { width: 90px; height: 12px; margin-bottom: 8px; }
   .skel.inp { width: 100%; height: 36px; border-radius: 8px; }
-  .skel.ttl { width: 140px; height: 13px; margin-bottom: 4px; }
   .skel.row { height: 14px; }
   @media (prefers-reduced-motion: no-preference) { .skel { animation: sk-shimmer 1.2s linear infinite; } }
   /* Error toast (Figma Alert Layout=Card, Status=Error, Actions Dismiss / Retry) pinned bottom right */
@@ -538,6 +537,14 @@
   tbody tr:nth-child(even) td { background: var(--bg); }
   tbody tr:last-child td { border-bottom: 0; }
   td.grp { color: var(--brand); }
+  .dlg-search { flex-shrink: 0; padding: 12px 14px 0; }
+  .dlg-search label { position: relative; display: block; }
+  .dlg-search .i { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text); pointer-events: none; }
+  .dlg-search input { width: 100%; height: 36px; padding: 0 12px 0 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font: inherit; font-size: 13px; letter-spacing: -.01px; color: var(--text); }
+  .dlg-search input::placeholder { color: #9f9f9f; }
+  .dlg-search input:focus { outline: 0; border-color: var(--brand); }
+  .dlg-search input::-webkit-search-cancel-button { display: none; }
+  td.tbl-empty { padding: 32px 16px; text-align: center; color: var(--text-subtle); }
   td:nth-child(1) { width: 35%; } td:nth-child(2) { width: 30%; }
 
   @media (max-width: 1100px) {
@@ -590,7 +597,6 @@
       <div class="tab-panel active" id="panel-rare">
         <div class="side">
           <div class="side-card"><div class="side-scroll">
-            <div class="side-title">Rarefaction Curve</div>
             <div class="field"><div class="label-row"><label for="rareMetric">Metric</label>
               <button class="info-btn" id="rareInfo" type="button" aria-label="About this metric" aria-describedby="rareTip" aria-expanded="false"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button></div>
               <div class="select"><select id="rareMetric"><option value="richness">Richness</option><option value="shannon">Shannon</option><option value="simpson">Simpson</option></select></div>
@@ -871,6 +877,7 @@
       <p>When results are shown at species level, closely related species that can't be reliably told apart are collapsed into a genus-level "group". This table shows which species each group contains.</p>
       <button class="x" id="dlgClose" aria-label="Close"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </header>
+    <div class="dlg-search"><label><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="dlgSearch" placeholder="Search genus, species group, or member" aria-label="Search species groups" autocomplete="off"></label></div>
     <div class="dlg-body"><div class="tbl"><table><thead><tr><th>Genus</th><th>Species Group</th><th>Member</th></tr></thead><tbody id="dlgRows"></tbody></table></div></div>
   </div>
 </div>
@@ -1110,7 +1117,7 @@
     const panel = $('#panel-' + id), side = panel.querySelector('.side-scroll'), body = panel.querySelector('.chart-body');
     const fields = side ? Math.max(1, Math.min(7, side.querySelectorAll('.field').length)) : 0;
     const sideSk = document.createElement('div'); sideSk.className = 'skel-layer'; sideSk.setAttribute('aria-hidden', 'true');
-    sideSk.innerHTML = '<span class="skel ttl"></span>' + Array.from({ length: fields }, () => '<div><span class="skel lbl"></span><span class="skel inp"></span></div>').join('');
+    sideSk.innerHTML = Array.from({ length: fields }, () => '<div><span class="skel lbl"></span><span class="skel inp"></span></div>').join('');
     const bodySk = document.createElement('div'); bodySk.className = 'skel-layer body'; bodySk.setAttribute('aria-hidden', 'true');
     const widths = [86, 64, 92, 48, 78, 58, 88, 70, 42, 82, 60, 74];
     bodySk.innerHTML = widths.map((w) => `<span class="skel row" style="width:${w}%"></span>`).join('');
@@ -1594,6 +1601,7 @@
     return r === undefined || r === k ? str : str.replace(k, () => r);
   }
   Object.assign(ID_PHRASES, {   // download image dialog
+    'Search genus, species group, or member': 'Cari genus, grup spesies, atau anggota', 'Search species groups': 'Cari grup spesies', 'No matching species groups': 'Tidak ada grup spesies yang cocok',
     'Image': 'Gambar', 'Download Image': 'Unduh Gambar', 'Set the format, background, resolution, and file name before downloading.': 'Atur format, latar, resolusi, dan nama file sebelum mengunduh.',
     'Format': 'Format', 'Background': 'Latar Belakang', 'Transparent': 'Transparan', 'White': 'Putih', 'Resolution': 'Resolusi', 'File Name': 'Nama File', 'Preview': 'Preview',
     'Cancel': 'Batal', 'Download': 'Unduh',
@@ -2426,10 +2434,19 @@
 
   // ── species groups dialog ──
   const scrim = $('#scrim');
-  function openDlg() {
-    $('#dlgRows').innerHTML = SPECIES_GROUPS.map((r) => `<tr><td>${esc(r.genus)}</td><td class="grp">${esc(r.group)}</td><td>${esc(r.members)}</td></tr>`).join('');
-    scrim.classList.add('show'); $('#dlgClose').focus();
+  const dlgSearch = $('#dlgSearch');
+  function paintDlgRows() {
+    const q = dlgSearch.value.trim().toLowerCase();
+    const rows = q ? SPECIES_GROUPS.filter((r) => [r.genus, r.group, r.members].some((v) => String(v).toLowerCase().includes(q))) : SPECIES_GROUPS;
+    $('#dlgRows').innerHTML = rows.length
+      ? rows.map((r) => `<tr><td>${esc(r.genus)}</td><td class="grp">${esc(r.group)}</td><td>${esc(r.members)}</td></tr>`).join('')
+      : '<tr><td class="tbl-empty" colspan="3">No matching species groups</td></tr>';
   }
+  function openDlg() {
+    dlgSearch.value = ''; paintDlgRows();
+    scrim.classList.add('show'); dlgSearch.focus();
+  }
+  dlgSearch.addEventListener('input', paintDlgRows);
   function closeDlg() { scrim.classList.remove('show'); }
   document.querySelectorAll('.js-info').forEach((b) => b.addEventListener('click', openDlg));
   document.querySelectorAll('.js-full').forEach((b) => b.addEventListener('click', () => (document.fullscreenElement ? document.exitFullscreen() : b.closest('.chart-col').requestFullscreen?.())));
