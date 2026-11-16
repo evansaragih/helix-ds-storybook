@@ -364,7 +364,6 @@
   .skel { display: block; border-radius: 6px; background: linear-gradient(90deg, #ececec 25%, #f6f6f6 50%, #ececec 75%); background-size: 200% 100%; }
   .skel.lbl { width: 90px; height: 12px; margin-bottom: 8px; }
   .skel.inp { width: 100%; height: 36px; border-radius: 8px; }
-  .skel.ttl { width: 140px; height: 13px; margin-bottom: 4px; }
   .skel.row { height: 14px; }
   @media (prefers-reduced-motion: no-preference) { .skel { animation: sk-shimmer 1.2s linear infinite; } }
   /* Error toast (Figma Alert Layout=Card, Status=Error, Actions Dismiss / Retry) pinned bottom right */
@@ -590,7 +589,6 @@
       <div class="tab-panel active" id="panel-rare">
         <div class="side">
           <div class="side-card"><div class="side-scroll">
-            <div class="side-title">Rarefaction Curve</div>
             <div class="field"><div class="label-row"><label for="rareMetric">Metric</label>
               <button class="info-btn" id="rareInfo" type="button" aria-label="About this metric" aria-describedby="rareTip" aria-expanded="false"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button></div>
               <div class="select"><select id="rareMetric"><option value="richness">Richness</option><option value="shannon">Shannon</option><option value="simpson">Simpson</option></select></div>
@@ -1110,7 +1108,7 @@
     const panel = $('#panel-' + id), side = panel.querySelector('.side-scroll'), body = panel.querySelector('.chart-body');
     const fields = side ? Math.max(1, Math.min(7, side.querySelectorAll('.field').length)) : 0;
     const sideSk = document.createElement('div'); sideSk.className = 'skel-layer'; sideSk.setAttribute('aria-hidden', 'true');
-    sideSk.innerHTML = '<span class="skel ttl"></span>' + Array.from({ length: fields }, () => '<div><span class="skel lbl"></span><span class="skel inp"></span></div>').join('');
+    sideSk.innerHTML = Array.from({ length: fields }, () => '<div><span class="skel lbl"></span><span class="skel inp"></span></div>').join('');
     const bodySk = document.createElement('div'); bodySk.className = 'skel-layer body'; bodySk.setAttribute('aria-hidden', 'true');
     const widths = [86, 64, 92, 48, 78, 58, 88, 70, 42, 82, 60, 74];
     bodySk.innerHTML = widths.map((w) => `<span class="skel row" style="width:${w}%"></span>`).join('');
