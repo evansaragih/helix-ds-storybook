@@ -182,12 +182,79 @@
     });
     document.addEventListener('keydown',function(e){if(e.key==='Escape')hideTip();});
 
+    /* ───────── Notifikasi (sheet on the right, opened by the bell) ───────── */
+    var NOTIFS=[
+      {id:'n1',kind:'ok',icon:'dl',day:0,time:'17:30',id_:['Hasil analisis siap diunduh','Analisis bioinformatika sampel BIO-2025-0892 telah selesai diproses dan siap untuk diunduh.'],en_:['Analysis results are ready to download','The bioinformatics analysis for sample BIO-2025-0892 has finished processing and is ready to download.']},
+      {id:'n2',kind:'info',icon:'up',day:0,time:'10:30',id_:['Submisi sampel berhasil dikirim','Sampel BIO-2025-0891 telah berhasil disubmit dan sedang dalam antrian pemrosesan.'],en_:['Sample submission sent','Sample BIO-2025-0891 was submitted successfully and is in the processing queue.']},
+      {id:'n3',kind:'err',icon:'warn',day:0,time:'08:30',read:1,id_:['File FASTQ gagal divalidasi','File sample_R2.fastq.gz memiliki format tidak sesuai. Harap periksa dan unggah ulang.'],en_:['FASTQ file failed validation','The file sample_R2.fastq.gz has an invalid format. Please check it and upload again.']},
+      {id:'n4',kind:'ok',icon:'check',day:1,time:'Apr 8',id_:['Akun berhasil diverifikasi','Akun peneliti Anda telah terverifikasi oleh tim Nusantics. Anda kini dapat mengakses semua fitur.'],en_:['Account verified','Your researcher account has been verified by the Nusantics team. You can now access all features.']},
+      {id:'n5',kind:'info',icon:'sync',day:1,time:'Mar 13',read:1,id_:['Pembaruan pipeline bioinformatika v2.4','Pipeline analisis telah diperbarui ke versi 2.4. Terdapat peningkatan akurasi pada deteksi varian.'],en_:['Bioinformatics pipeline update v2.4','The analysis pipeline was updated to version 2.4, with improved variant-detection accuracy.']}
+    ];
+    var NSTORE='nusantics-notif-read', NSTATE={open:false,loading:false,unreadOnly:false,opener:null,timer:null};
+    try{var nr=JSON.parse(localStorage.getItem(NSTORE)||'null'); if(nr) NOTIFS.forEach(function(n){n.read=nr.indexOf(n.id)>-1?1:0;});}catch(e){}
+    var NT={
+      id:{title:'Notifikasi',unread:function(n){return n?'Ada '+n+' notifikasi yang belum dibaca':'Semua notifikasi sudah dibaca';},filter:'Hanya yang belum dibaca',today:'Hari ini • 20 Mei 2026',older:'Lebih lama',none:'Tidak ada notifikasi yang belum dibaca.',close:'Tutup',bell:function(n){return n?'Notifikasi, '+n+' belum dibaca':'Notifikasi';}},
+      en:{title:'Notifications',unread:function(n){return n?'You have '+n+' unread notification'+(n>1?'s':''):'All notifications are read';},filter:'Unread only',today:'Today • 20 May 2026',older:'Earlier',none:'No unread notifications.',close:'Close',bell:function(n){return n?'Notifications, '+n+' unread':'Notifications';}}
+    };
+    var NIC={dl:'M12 3v12m0 0-4-4m4 4 4-4M4 21h16',up:'M12 15V3m0 0L8 7m4-4 4 4M4 21h16',warn:'M12 3 2 21h20L12 3zM12 10v5M12 18h.01',check:'M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3',sync:'M21 12a9 9 0 0 1-15.5 6.2M3 12A9 9 0 0 1 18.5 5.8M21 4v5h-5M3 20v-5h5',filter:'M3 6h18M7 12h10M10 18h4',x:'M18 6 6 18M6 6l12 12'};
+    var nic=function(n,c){return '<svg class="'+(c||'')+'" viewBox="0 0 24 24" aria-hidden="true"><path d="'+NIC[n]+'"/></svg>';};
+    var nsc=document.createElement('div'); nsc.className='hx-nscrim'; nsc.hidden=true;
+    nsc.innerHTML='<aside class="hx-nsheet" role="dialog" aria-modal="true" aria-labelledby="hxNTitle"><div class="hx-nsheet__h"><h2 id="hxNTitle"></h2><button class="hx-nx" type="button" data-nclose>'+nic('x')+'</button></div><div class="hx-nsheet__b" id="hxNBody"></div></aside>';
+    document.body.appendChild(nsc);
+    var unreadCount=function(){return NOTIFS.filter(function(n){return !n.read;}).length;};
+    function notifBell(){
+      var c=unreadCount(), b=$('.hx-notif',$('#hxBell')); if(b){b.textContent=c; b.hidden=!c;}
+      $('#hxBell').setAttribute('aria-label',NT[LANG].bell(c));
+    }
+    function notifPaint(){
+      var L=NT[LANG], c=unreadCount(), body=$('#hxNBody'); $('#hxNTitle').textContent=L.title; $('.hx-nx',nsc).setAttribute('aria-label',L.close);
+      if(NSTATE.loading){
+        body.innerHTML='<div class="hx-nload" aria-busy="true">'+[0,1,2,3].map(function(){return '<div class="hx-nload__r"><span class="hx-sk hx-sk--c" style="width:40px;height:40px"></span><div><span class="hx-sk" style="width:100%;height:20px"></span><span class="hx-sk" style="width:58%;height:12px"></span></div></div>';}).join('')+'</div>';
+        return;
+      }
+      var list=NOTIFS.filter(function(n){return !NSTATE.unreadOnly||!n.read;});
+      var group=function(day,label){
+        var it=list.filter(function(n){return n.day===day;}); if(!it.length) return '';
+        return '<h3 class="hx-ng">'+esc(label)+'</h3>'+it.map(function(n){var tx=LANG==='en'?n.en_:n.id_;
+          return '<button class="hx-ni" type="button" data-nid="'+n.id+'"><span class="hx-ni__ic hx-ni__ic--'+n.kind+'">'+nic(n.icon)+'</span><span class="hx-ni__tx"><b>'+esc(tx[0])+'</b><span>'+esc(tx[1])+'</span></span><span class="hx-ni__t'+(n.read?'':' is-new')+'">'+esc(n.time)+'</span></button>';}).join('');
+      };
+      body.innerHTML='<div class="hx-nbar"><span aria-live="polite">'+esc(L.unread(c))+'</span><button class="hx-nf" type="button" aria-pressed="'+NSTATE.unreadOnly+'" aria-label="'+esc(L.filter)+'" title="'+esc(L.filter)+'">'+nic('filter')+'</button></div><div class="hx-nlist">'+(group(0,L.today)+group(1,L.older)||'<p class="hx-nempty">'+esc(L.none)+'</p>')+'</div>';
+    }
+    function openNotif(opener){
+      closeAll(null); hideTip(); NSTATE.opener=opener||$('#hxBell'); NSTATE.open=true; NSTATE.loading=true; NSTATE.unreadOnly=false;
+      nsc.hidden=false; nsc.classList.remove('is-out'); notifPaint(); $('.hx-nx',nsc).focus();
+      clearTimeout(NSTATE.timer); NSTATE.timer=setTimeout(function(){NSTATE.loading=false; if(NSTATE.open) notifPaint();},800);   // mock request
+    }
+    function closeNotif(){
+      if(!NSTATE.open) return; NSTATE.open=false; clearTimeout(NSTATE.timer); nsc.classList.add('is-out');
+      setTimeout(function(){if(!NSTATE.open){nsc.hidden=true; nsc.classList.remove('is-out');}},180);
+      var o=NSTATE.opener; if(o&&o.focus) o.focus();
+    }
+    $('#hxBell').addEventListener('click',function(e){e.stopPropagation(); openNotif(this);});
+    nsc.addEventListener('click',function(e){
+      if(e.target===nsc||e.target.closest('[data-nclose]')) return closeNotif();
+      if(e.target.closest('.hx-nf')){NSTATE.unreadOnly=!NSTATE.unreadOnly; notifPaint(); var f=$('.hx-nf',nsc); if(f) f.focus(); return;}
+      var it=e.target.closest('[data-nid]'); if(!it) return;
+      var n=NOTIFS.filter(function(x){return x.id===it.dataset.nid;})[0]; if(n&&!n.read){n.read=1; try{localStorage.setItem(NSTORE,JSON.stringify(NOTIFS.filter(function(x){return x.read;}).map(function(x){return x.id;})));}catch(err){} notifBell(); notifPaint(); var again=$('[data-nid="'+n.id+'"]',nsc); if(again) again.focus();}
+    });
+    nsc.addEventListener('keydown',function(e){
+      if(e.key==='Escape'){e.preventDefault(); e.stopPropagation(); return closeNotif();}
+      if(e.key!=='Tab') return;
+      var f=[].slice.call(nsc.querySelectorAll('button')).filter(function(x){return x.offsetParent!==null;}); if(!f.length) return;
+      var a=f[0], z=f[f.length-1];
+      if(!nsc.contains(document.activeElement)){e.preventDefault(); a.focus();}
+      else if(e.shiftKey&&document.activeElement===a){e.preventDefault(); z.focus();}
+      else if(!e.shiftKey&&document.activeElement===z){e.preventDefault(); a.focus();}
+    });
+    window.__hxNotifRender=function(){notifBell(); if(NSTATE.open) notifPaint();};
+
     /* ───────── Text (re-rendered whenever the language changes) ───────── */
     function render(){
       sb.setAttribute('aria-label',t('nav')); $('.hx-sb-nav',sb).setAttribute('aria-label',t('menu'));
       sb.querySelectorAll('.hx-nav-item').forEach(function(el){var s=t(el.dataset.k); el.setAttribute('aria-label',s); el.dataset.tip=s; $('.hx-label',el).textContent=s;});
       $('#hxAccount').setAttribute('aria-label',t('account')); $('#hxLogoutText').textContent=t('logout'); $('#hxProfileText').textContent=t('profile'); $('#hxAvatar').setAttribute('aria-label',t('account'));
       $('#hxBell').setAttribute('aria-label',t('notif'));
+      if(window.__hxNotifRender) window.__hxNotifRender();
       renderStudy();   /* trigger label + menu text follow the active study group and the language */
       toggle.setAttribute('aria-label',t(sb.classList.contains('collapsed')?'expand':'collapse'));
       var title=t('runsN',RUNS.length); $('#runPillText').textContent=title; $('#runsTitle').textContent=title; $('#runsAll span').textContent=t('all');
