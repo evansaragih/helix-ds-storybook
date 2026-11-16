@@ -1,6 +1,6 @@
 import { ComponentDocPage } from './ComponentDocPage';
-import { Navbar, NavLink, DashboardNavbar, DashboardFooter, Breadcrumb, Button } from '../../components';
-import { ChevronDown } from 'lucide-react';
+import { Navbar, NavLink, MobileMenu, MobileMenuItem, DashboardNavbar, DashboardFooter, Breadcrumb, Button, IconButton, Logo, Toggle } from '../../components';
+import { ChevronDown, X } from 'lucide-react';
 
 const right = (
   <>
@@ -26,6 +26,14 @@ export function NavbarSection() {
       demos={[
         { id: 'marketing', title: 'Marketing Navbar', description: 'onScroll is a solid Surface/Default fill, with no transparency or blur.',
           node: <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 900 }}><Navbar state="onTop" leftContent={<strong style={{ fontFamily: 'var(--font-family-body)' }}>Helix</strong>} rightContent={right} /><div style={{ background: 'linear-gradient(135deg, #FCC9A3, #EBF2FE)' }}><Navbar state="onScroll" leftContent={<strong style={{ fontFamily: 'var(--font-family-body)' }}>Helix</strong>} rightContent={right} /></div></div> },
+        { id: 'mobile-menu', title: 'Mobile Navbar and Mobile Menu', description: 'Device=mobile is the closed bar; the hamburger opens the Mobile Menu (header, links, footer pinned to the bottom).',
+          node: <div style={{ width: 375, height: 640, border: '1px solid var(--color-stroke-subtle, #EEEEEE)' }}><MobileMenu logo={<Logo variant="wordmark" brand="nusantics" height={16} />} closeButton={<IconButton hierarchy="secondary" appearance="ghost" size="md" icon={<X size={20} />} aria-label="Close menu" />}
+            footer={<><Toggle aria-label="Language" fullWidth options={[{ value: 'en', label: 'EN' }, { value: 'id', label: 'ID' }]} /><div style={{ display: 'flex', gap: 12 }}><Button hierarchy="secondary" appearance="outline" size="sm" style={{ flex: 1 }}>Login</Button><Button size="sm" style={{ flex: 1 }}>Contact Us</Button></div></>}>
+            <MobileMenuItem label="For Lab" href="#"><MobileMenuItem label="Lab services" href="#" /></MobileMenuItem>
+            <MobileMenuItem label="About Us" href="#" />
+            <MobileMenuItem label="Products & Solutions" defaultOpen><MobileMenuItem label="Product Pipeline" href="#" /><MobileMenuItem label="Human Diagnostics" href="#" /></MobileMenuItem>
+            <MobileMenuItem label="Career" href="#" />
+          </MobileMenu></div> },
         { id: 'dashboard', title: 'Dashboard Navbar and Footer',
           node: <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 900 }}><DashboardNavbar leftContent={<Breadcrumb items={[{ label: 'Lab' }, { label: 'Processing' }]} />} rightContent={<Button size="sm">New sample</Button>} /><DashboardFooter leftContent={<Button hierarchy="secondary" appearance="ghost" size="sm">Back</Button>} rightContent={<Button size="sm">Save</Button>} /></div> },
       ]}

@@ -220,6 +220,7 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Top-level application navigation bar combining logo, nav links, search/notification actions, and the current user’s identity. Supports sticky and transparent (hero-section) modes.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-11-11', version: '0.1.0', summary: 'Added device (desktop | mobile), state-driven colours (onTop transparent, onScroll solid) and MobileMenu / MobileMenuItem for the opened phone menu.' },
     ],
   },
   {
@@ -285,6 +286,13 @@ export const componentChangelogs: ComponentChangelog[] = [
     description: 'Binary on/off toggle for settings that take effect immediately. Use Checkbox instead when the choice is part of a form that gets submitted rather than applied right away.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with state stories.' },
+    ],
+  },
+  {
+    id: 'toggle', category: 'Molecule', name: 'Toggle', status: 'beta',
+    description: 'Segmented switch between exactly two options, such as a language (EN / ID with flags) or a Monthly / Weekly view. Use Tabs for three or more options or page navigation, and Switch for a single on/off setting.',
+    changelog: [
+      { date: '2026-11-10', version: '0.0.1', summary: 'Added Toggle with Size (md 46px, sm 36px) and Surface (light, dark for photo backgrounds), mirroring the Figma Toggle.' },
     ],
   },
   {
