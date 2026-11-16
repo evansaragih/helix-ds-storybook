@@ -199,3 +199,46 @@
 .hx-sk-layer{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--hx-surface);border-radius:inherit;overflow:hidden}
 @media (prefers-reduced-motion:reduce){.hx-sk{animation:none}.hx-enter>*{animation:none!important}}
 .hx-lang,#langMenu{display:none!important}   /* the new Figma navbar has no language switch */
+
+/* ───────── Notifikasi sheet (Figma: Dashboard — Notifikasi (Sheets Right)) ───────── */
+.hx-notif[hidden]{display:none}
+.hx-nscrim{position:fixed;inset:0;z-index:200;background:rgba(20,20,30,.5);font-family:var(--hx-font);font-size:13px;line-height:19.2px;letter-spacing:-.01px;animation:hx-nfade .2s ease-out both}
+.hx-nscrim[hidden]{display:none}
+.hx-nscrim.is-out{animation:hx-nfade-out .18s ease-in both}
+.hx-nsheet{position:absolute;top:0;right:0;bottom:0;width:385px;max-width:100%;display:flex;flex-direction:column;background:var(--hx-surface);box-shadow:-8px 0 24px rgba(20,20,30,.12);animation:hx-nin .32s cubic-bezier(.16,1,.3,1) backwards;-webkit-font-smoothing:antialiased}
+.hx-nscrim.is-out .hx-nsheet{animation:hx-nout .18s ease-in both}
+.hx-nsheet__h{flex:none;display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 12px;border-bottom:1px solid var(--hx-stroke)}
+.hx-nsheet__h h2{margin:0;font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.16px;color:var(--hx-text)}
+.hx-nx{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:var(--hx-surface);border:.5px solid var(--hx-stroke);box-shadow:0 1px 3px var(--hx-shadow);color:var(--hx-text-subtle);cursor:pointer;transition:background .15s,transform .2s cubic-bezier(.16,1,.3,1)}
+.hx-nx:hover{background:var(--hx-surface-subtle);transform:rotate(90deg)}
+.hx-nx svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.hx-nsheet__b{flex:1;min-height:0;overflow-y:auto;padding:12px;scrollbar-width:thin;scrollbar-color:#d7d7d7 transparent}
+.hx-nbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 6px 6px 12px;min-height:44px;background:var(--hx-surface-subtle);border:1px solid var(--hx-stroke);border-radius:12px 12px 0 0;border-bottom:0;color:var(--hx-text-subtle)}
+.hx-nf{width:28px;height:28px;display:grid;place-items:center;border-radius:6px;background:var(--hx-surface);border:1px solid var(--hx-primary);color:var(--hx-primary);cursor:pointer;transition:background .15s}
+.hx-nf:hover,.hx-nf[aria-pressed="true"]{background:var(--hx-selected)}
+.hx-nf svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.hx-nlist{display:flex;flex-direction:column;padding:4px 0 8px;background:var(--hx-surface);border:1px solid var(--hx-stroke);border-radius:0 0 12px 12px;box-shadow:0 1px 2px var(--hx-shadow)}
+.hx-ng{margin:0;padding:10px 12px 6px;font-size:13px;font-weight:400;color:var(--hx-text-subtler)}
+.hx-ni{display:flex;align-items:flex-start;gap:12px;width:100%;padding:12px;text-align:left;border:0;border-top:1px solid var(--hx-stroke);background:none;font:inherit;color:inherit;cursor:pointer;transition:background .15s}
+.hx-ng+.hx-ni{border-top:0}
+.hx-ni:hover{background:var(--hx-surface-subtle)}
+.hx-ni:focus-visible{outline:2px solid rgba(245,126,32,.55);outline-offset:-2px}
+.hx-ni__ic{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:8px}
+.hx-ni__ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hx-ni__ic--ok{background:#e9f9ef;color:#12843c}
+.hx-ni__ic--info{background:#eaf1ff;color:#2563eb}
+.hx-ni__ic--err{background:#fee2e2;color:#dc2626}
+.hx-ni__tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.hx-ni__tx b{font-weight:500;color:var(--hx-text)}
+.hx-ni__tx span{color:var(--hx-text-subtle)}
+.hx-ni__t{flex:none;padding:2px 8px;border-radius:9999px;background:var(--hx-surface-subtle);font-size:10px;line-height:15.6px;color:var(--hx-text-subtle);white-space:nowrap}
+.hx-ni__t.is-new{background:#eaf1ff;color:#2563eb}
+.hx-nempty{margin:0;padding:24px 12px;text-align:center;color:var(--hx-text-subtler)}
+.hx-nload{display:flex;flex-direction:column;gap:16px;padding:8px 6px}
+.hx-nload__r{display:flex;align-items:center;gap:12px}
+.hx-nload__r>div{flex:1;display:flex;flex-direction:column;gap:8px}
+@keyframes hx-nfade{from{opacity:0}}
+@keyframes hx-nfade-out{to{opacity:0}}
+@keyframes hx-nin{from{transform:translateX(24px);opacity:0}}
+@keyframes hx-nout{to{transform:translateX(24px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.hx-nscrim,.hx-nsheet{animation:none!important}.hx-nx{transition:none}}

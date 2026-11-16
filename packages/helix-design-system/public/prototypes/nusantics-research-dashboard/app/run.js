@@ -468,6 +468,7 @@
     setTimeout(function(){
       host.removeAttribute('aria-busy'); host.classList.remove('rn-booting'); render();
       host.classList.add('hx-enter'); setTimeout(function(){host.classList.remove('hx-enter');},900);
+      if(/[?&]new=1/.test(location.search)){var nb=host.querySelector('[data-create]'); if(nb) nb.click();}
     },700);
   }
   if(window.HelixShell) HelixShell.onLang(onLang); else onLang('id');
