@@ -1861,7 +1861,7 @@
   function drawPerm() {
     const host = $('#permBody');
     if (permState.view === 'empty') {
-      host.innerHTML = emptyHTML('No PERMANOVA results', 'Select covariates, then run PERMANOVA to see the variance explained per covariate.', { id: 'permEmptyRun', label: 'Run PERMANOVA', disabled: !permState.selected.size });
+      host.innerHTML = emptyHTML('No PERMANOVA results', 'Select covariates, then run PERMANOVA to see the variance explained per covariate.', { id: 'permEmptyRun', label: 'Run PERMANOVA', disabled: !permState.selected.size }, 'assets/permanova-illustration.svg');
       return;
     }
     if (permState.view === 'loading') {
