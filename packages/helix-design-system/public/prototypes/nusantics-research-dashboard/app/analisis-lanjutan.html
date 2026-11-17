@@ -95,7 +95,7 @@
   .badge.brand.subtle { background: var(--brand-subtle); color: var(--brand); }
   .tab-meta-text { text-align: left; min-width: 0; flex: 1; }
   .tab-meta-text p { line-height: 1.3; }
-  .tab-meta-l1 { font-size: 13px; letter-spacing: -.01px; color: var(--text); overflow: hidden; text-overflow: ellipsis; }
+  .tab-meta-l1 { font-size: 13px; font-weight: 500; letter-spacing: -.01px; color: var(--text); overflow: hidden; text-overflow: ellipsis; }
   .tab-meta-l2 { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
   .tab-meta .sk { display: none; }
   .tab-meta[aria-busy="true"] .sk { display: block; border-radius: 4px; background: linear-gradient(90deg, #ececec 25%, #f6f6f6 50%, #ececec 75%); background-size: 200% 100%; }
@@ -528,7 +528,7 @@
   .dialog header p { font-size: 14px; color: var(--text-2); margin-top: 2px; line-height: 1.45; }
   .dialog .x { position: absolute; top: 16px; right: 16px; width: 28px; height: 28px; border-radius: 6px; background: var(--panel); display: grid; place-items: center; }
   .dialog .x:hover { background: var(--border); }
-  .dlg-body { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; overflow: auto; padding: 12px 14px 16px; }
+  .dlg-body { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; overflow: auto; padding: 0 14px 16px; }
   /* Table (Figma Table, Size=Medium): bordered r6 container, 48px header on #f7f7f7, 16px cells, zebra from the 2nd row */
   .tbl { border: 1px solid var(--border); border-radius: 6px; overflow: clip; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -537,7 +537,7 @@
   tbody tr:nth-child(even) td { background: var(--bg); }
   tbody tr:last-child td { border-bottom: 0; }
   td.grp { color: var(--brand); }
-  .dlg-search { flex-shrink: 0; padding: 12px 14px 0; }
+  .dlg-search { flex-shrink: 0; padding: 12px 14px; }
   .dlg-search label { position: relative; display: block; }
   .dlg-search .i { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--text); pointer-events: none; }
   .dlg-search input { width: 100%; height: 36px; padding: 0 12px 0 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font: inherit; font-size: 13px; letter-spacing: -.01px; color: var(--text); }
@@ -1078,7 +1078,10 @@
     const run = (info && info.run) || '20260901-appconfigtrimprefix';
     const RUN_MAX = 32;   // max characters shown for the run name; the full name stays in the tooltip
     const shown = run.length > RUN_MAX ? run.slice(0, RUN_MAX - 1).trimEnd() + '…' : run;
-    $('#metaVer').textContent = 'Metadata Version ' + ((info && info.version) || 1); $('#metaRun').textContent = `Run Name: ${shown}`; $('#metaRun').title = run;
+    // mock metadata hash: stable per run + version, 8 hex chars
+    const ver = (info && info.version) || 1; let hx = 2166136261; for (const c of run + ver) hx = Math.imul(hx ^ c.charCodeAt(0), 16777619);
+    $('#metaVer').textContent = shown; $('#metaVer').title = run;
+    $('#metaRun').replaceChildren(document.createTextNode('Version'), document.createTextNode(` ${ver} • meta-${(hx >>> 0).toString(16).padStart(8, '0')}`));
     runMeta.setAttribute('aria-busy', 'false');
   }
   runMeta.setAttribute('aria-busy', 'true');   // skeleton until the (mock) request resolves
@@ -1574,7 +1577,7 @@
     'Wilcoxon rank-sum': 'Wilcoxon rank-sum', 'Wilcoxon signed-rank': 'Wilcoxon signed-rank',
     'Display Settings': 'Pengaturan Tampilan', 'Adjust the chart orientation and display size.': 'Sesuaikan orientasi dan ukuran tampilan chart.',
     'Orientation': 'Orientasi', 'Vertical': 'Vertikal', 'Horizontal': 'Horizontal', 'Dominant taxa at': 'Taksa Dominan di', 'Top': 'Atas', 'Bottom': 'Bawah',
-    'Metadata Version 1': 'Metadata Versi 1', 'X range (PC1)': 'Rentang X (PC1)', 'Y range (PC2)': 'Rentang Y (PC2)', 'Auto': 'Otomatis', 'Custom': 'Kustom', 'Adjust the chart colors and display size.': 'Sesuaikan warna dan ukuran tampilan chart.', 'About this metric': 'Tentang metrik ini', 'About the ellipse': 'Tentang elips', 'About the covariates': 'Tentang kovariat', 'Couldn\'t load Taxa Bar Plot': 'Gagal memuat Taxa Bar Plot', 'No taxa have non-zero abundance at this rank after the current metadata filter is applied.': 'Tidak ada taksa dengan kelimpahan bukan nol pada peringkat ini setelah filter metadata saat ini diterapkan.',
+    'Version': 'Versi', 'X range (PC1)': 'Rentang X (PC1)', 'Y range (PC2)': 'Rentang Y (PC2)', 'Auto': 'Otomatis', 'Custom': 'Kustom', 'Adjust the chart colors and display size.': 'Sesuaikan warna dan ukuran tampilan chart.', 'About this metric': 'Tentang metrik ini', 'About the ellipse': 'Tentang elips', 'About the covariates': 'Tentang kovariat', 'Couldn\'t load Taxa Bar Plot': 'Gagal memuat Taxa Bar Plot', 'No taxa have non-zero abundance at this rank after the current metadata filter is applied.': 'Tidak ada taksa dengan kelimpahan bukan nol pada peringkat ini setelah filter metadata saat ini diterapkan.',
     'Retry': 'Coba lagi', 'Error failed': 'Gagal', 'Failed to load': 'Gagal dimuat', 'Close notification': 'Tutup notifikasi', 'Loading Taxa Bar Plot': 'Memuat Taxa Bar Plot', 'Fetching the abundance matrix…': 'Mengambil matriks kelimpahan…',
     'request to /taxabarplot returned an empty matrix: the active metadata filter excludes every sample (or every remaining taxon collapses into "Other" at this rank) (mock demo error)': 'Permintaan ke /taxabarplot mengembalikan matriks kosong: filter metadata aktif mengecualikan semua sampel (atau semua taksa yang tersisa digabung menjadi "Other" pada peringkat ini) (mock demo error)',
     'Show on the chart axis': 'Tampilkan di sumbu chart', 'Show label': 'Tampilkan label', 'Bar width': 'Lebar Bar', 'Sample spacing': 'Jarak Antar Sampel', 'Legend position': 'Posisi Legenda', 'Right': 'Kanan', 'Left': 'Kiri', 'Color palette': 'Palet Warna', 'Aspect ratio': 'Rasio Tampilan', 'Width': 'Lebar',
