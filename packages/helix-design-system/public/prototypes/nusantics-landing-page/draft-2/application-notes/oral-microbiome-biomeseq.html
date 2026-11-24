@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profiling oral bacterial communities from buccal swabs with BiomeSeq | Application Notes | Nusantics</title>
+  <meta name="description" content="Illustrative application note: amplifying the 16S V3–V4 region from 48 buccal swabs with BiomeSeq and checking accuracy against a mock community.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../customer-stories/longform.css">
+  <link rel="stylesheet" href="application-note.css">
+  <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <!-- Marketing Navbar (state: onTop) -->
+    <header class="nav is-light" id="nav">
+      <div class="nav__inner">
+        <a class="nav__logo" href="../index.html" aria-label="Nusantics home">
+          <img class="nav__logo-light" src="../assets/nav-logo.svg" alt="Nusantics" width="131" height="16">
+          <img class="nav__logo-dark" src="../assets/nav-logo-dark.svg" alt="" width="131" height="16" aria-hidden="true">
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <div class="nav__menu">
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-audience">For Lab<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-audience" role="menu" aria-label="For Lab" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="../index.html#products">For Lab</a>
+                <a class="nav-menu__item" role="menuitem" href="../index.html#products">For Clinic</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="../about.html">About Us</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-products">Products &amp; Solutions<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-products" role="menu" aria-label="Products &amp; Solutions" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="../product.html">Human Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="../product.html">Animal Diagnostics</a>
+                <div class="nav-menu__divider" role="separator"></div>
+                <a class="nav-menu__item" role="menuitem" href="../pipeline.html">Product Pipeline</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="../career.html">Career</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-knowledge">Knowledge Hub<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-knowledge" role="menu" aria-label="Knowledge Hub" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="../paper-publications.html">Paper &amp; Publications</a>
+                <a class="nav-menu__item" role="menuitem" href="../news.html">News</a>
+                <a class="nav-menu__item" role="menuitem" href="../media-coverage.html">Media Coverage</a>
+                <a class="nav-menu__item" role="menuitem" href="../blog.html">Blog</a>
+                <a class="nav-menu__item" role="menuitem" href="../customer-stories/index.html">Customer Stories</a>
+                <a class="nav-menu__item" role="menuitem" href="../application-notes/index.html">Application Notes</a>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="nav__actions">
+            <div class="nav-dd nav-dd--end nav-dd--lang">
+              <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-language" aria-label="Language"><img class="nav-flag nav-lang__flag" src="../../assets/flag-gb.svg" alt="" width="14" height="14"><span class="nav-lang__code">EN</span><span class="nav-chevron" aria-hidden="true"></span></button>
+              <div class="nav-menu helix-pop" id="menu-language" role="menu" aria-label="Language" data-side="bottom" data-state="closed" hidden>
+                <div class="nav-menu__list">
+                  <a class="nav-menu__item" role="menuitem" href="#" lang="en" data-code="EN" aria-current="true"><img class="nav-flag" src="../../assets/flag-gb.svg" alt="" width="14" height="14">English</a>
+                  <a class="nav-menu__item" role="menuitem" href="#" lang="id" data-code="ID"><img class="nav-flag" src="../../assets/flag-id.svg" alt="" width="14" height="14">Bahasa Indonesia</a>
+                </div>
+              </div>
+            </div>
+          <a class="btn btn--white nav__hide-sm" href="../../../nusantics-research-dashboard/login.html">Login</a>
+          <a class="btn btn--primary" href="../contact.html">Contact Us</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="ls">
+      <header class="ls__wrap ls__header an__head">
+        <div class="an__head-main">
+          <nav class="ls__crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><img src="../assets/customer-stories/lf-crumb-chevron.svg" alt="" width="12" height="12"><a href="../paper-publications.html" aria-label="Knowledge Hub, Application Notes">···</a><img src="../assets/customer-stories/lf-crumb-chevron.svg" alt="" width="12" height="12"><span aria-current="page">Profiling oral bacterial communities from buccal swabs with BiomeSeq</span></nav>
+          <span class="ls__badge">Application note  •  Library prep</span>
+          <h1 class="ls__title">Profiling oral bacterial communities from buccal swabs with BiomeSeq</h1>
+          <p class="ls__meta">Nusantics R&amp;D  •  November 2026  •  PDF, 12 pages, 1.4 MB  •  8 min read</p>
+          <ul class="an__kw" aria-label="Keywords"><li class="ls__tag">16S rRNA</li><li class="ls__tag">V3–V4</li><li class="ls__tag">Illumina MiSeq</li><li class="ls__tag">Buccal swab</li><li class="ls__tag">RUO</li></ul>
+        </div>
+        <aside class="an__pdf" aria-label="PDF version">
+          <div class="an__pdf-cover"><span class="an__pdf-kicker">Application note</span><span class="an__pdf-title">Profiling oral bacterial communities with BiomeSeq</span></div>
+          <p class="an__pdf-meta">PDF  •  12 pages  •  1.4 MB</p>
+          <a class="an__dl" href="#" download>Download PDF</a>
+        </aside>
+      </header>
+
+      <div class="ls__wrap">
+        <div class="an__row">
+          <nav class="an__rail" aria-label="In this note"><span class="an__rail-title">In this note</span><a href="#key-takeaways" class="is-active">Key takeaways</a><a href="#abstract">Abstract</a><a href="#introduction">Introduction</a><a href="#methods">Materials and methods</a><a href="#results">Results</a><a href="#conclusion">Conclusion</a><a href="#references">References</a><a href="#products">Products used</a><span aria-disabled="true">Authors</span></nav>
+          <article class="an__article">
+            <section class="an__kt" id="key-takeaways" aria-labelledby="kt-h">
+              <span class="an__kt-icon" aria-hidden="true"><svg viewBox="0 0 16 16" width="16" height="16" fill="#fff"><circle cx="8" cy="4" r="1.3"/><rect x="7" y="6.5" width="2" height="6" rx="1"/></svg></span>
+              <div class="an__kt-body"><span class="an__kt-title" id="kt-h">Key takeaways</span><ul><li>BiomeSeq produced sequencing-ready libraries from buccal swab DNA within one working day.</li><li>Relative abundance from a mock community matched theoretical values within 1 percentage point.</li><li>Replicates agreed closely, with a Bray-Curtis distance of 0.05 or lower.</li></ul></div>
+            </section>
+            <section class="an__group" id="abstract"><h2>Abstract</h2><p>The oral microbiome is a promising target for non-invasive studies, and buccal swabs make large cohorts practical. This note describes how the BiomeSeq 16S rRNA NGS Kit Bundle was used to amplify the V3–V4 region from 48 buccal swab samples, prepare libraries for the Illumina MiSeq system and analyse the data in the Nusantics Dashboard. We report taxonomic accuracy against a mock community and reproducibility across replicates.</p></section>
+            <section class="an__group" id="introduction"><h2>Introduction</h2><p>The 16S rRNA gene is present in all bacteria, and its V3–V4 region varies enough to tell most genera apart [1]. Sequencing it shows which bacteria are in a sample and in what proportion. A cheek swab is quick and needs no needle, but it yields little DNA, so the method has to work reliably at low input. Large surveys of healthy adults have shown that the mouth hosts one of the most diverse bacterial communities in the body [2], which makes it a useful test bed for any profiling workflow. Two things decide whether a profile can be trusted: whether it recovers a known mixture in the right proportions, and whether the same sample gives the same answer twice [3]. This note tests both.</p></section>
+            <section class="an__group" id="methods"><h2>Materials and methods</h2><p>Samples. 48 buccal swabs from adult volunteers and one mock community control were collected into stabilising buffer. DNA input followed the kit manual: 41.5 ng total DNA for tissue, 15 ng for bacterial isolates and 30 ng for environmental samples. Swab DNA was treated as tissue-type input (41.5 ng, or 4.15 ng/µL).</p><p>Library preparation and sequencing. V3–V4 amplification, clean-up, indexing PCR and normalisation to 4 nM followed the five-step workflow, using the ready-to-use PCR mix. Libraries were sequenced on an Illumina MiSeq system with the MiSeq Reagent Kit v2 (500 cycles). Analysis. Reads were uploaded to the Nusantics Dashboard with the kit access code and profiled automatically.</p></section>
+            <figure class="an__fig"><img class="an__img" src="../assets/application-notes/oral-swab.png" alt="A gloved hand places a buccal swab into a tube of DNA stabilizing buffer, with labelled sample tubes in a rack beside it." width="848" height="477" loading="lazy" decoding="async"><figcaption>Figure 1. A buccal swab is placed into a tube of DNA stabilizing buffer at collection, before extraction.</figcaption></figure>
+            <section class="an__group" id="results"><h2>Results</h2>
+              <figure class="an__fig"><div class="an__chart" role="img" aria-label="Bar chart of mock community relative abundance by genus, percent: Bacillus 11.8, Listeria 12.9, Staphylococcus 12.4, Enterococcus 13.3, Lactobacillus 12.1, Escherichia 11.6, Salmonella 13.0, Pseudomonas 12.9. Theoretical value is 12.5 for every genus."><span class="an__chart-title">Mock community: relative abundance by genus (%)</span><div class="an__bars" aria-hidden="true"><div class="an__bar" style="--v:11.8">11.8</div><div class="an__bar" style="--v:12.9">12.9</div><div class="an__bar" style="--v:12.4">12.4</div><div class="an__bar" style="--v:13.3">13.3</div><div class="an__bar" style="--v:12.1">12.1</div><div class="an__bar" style="--v:11.6">11.6</div><div class="an__bar" style="--v:13.0">13.0</div><div class="an__bar" style="--v:12.9">12.9</div><span class="an__ref"></span></div><div class="an__labels" aria-hidden="true"><span>Bacillus</span><span>Listeria</span><span>Staph.</span><span>Enteroc.</span><span>Lactob.</span><span>Escher.</span><span>Salmon.</span><span>Pseudom.</span></div><div class="an__legend" aria-hidden="true"><i></i>Measured (BiomeSeq)<b></b>Theoretical (12.5%)</div></div><figcaption>Figure 2. Relative abundance of the mock community compared with theoretical values. Note: bars that match the dashed line mean the kit recovers each species in the expected proportion.</figcaption></figure>
+              <figure class="an__fig"><div class="an__chart" role="img" aria-label="Bar chart of Bray-Curtis distance per sample pair, lower is better: Pair 1 0.021, Pair 2 0.034, Pair 3 0.018, Pair 4 0.041, Pair 5 0.027, Pair 6 0.03."><span class="an__chart-title">Replicate agreement: Bray-Curtis distance per sample pair</span><div class="an__plot" aria-hidden="true"><div class="an__pair"><span>0.021</span><div class="an__pair-bar" style="--h:31px"></div><span>Pair 1</span></div><div class="an__pair"><span>0.034</span><div class="an__pair-bar" style="--h:63px"></div><span>Pair 2</span></div><div class="an__pair"><span>0.018</span><div class="an__pair-bar" style="--h:23px"></div><span>Pair 3</span></div><div class="an__pair"><span>0.041</span><div class="an__pair-bar" style="--h:81px"></div><span>Pair 4</span></div><div class="an__pair"><span>0.027</span><div class="an__pair-bar" style="--h:46px"></div><span>Pair 5</span></div><div class="an__pair"><span>0.03</span><div class="an__pair-bar" style="--h:53px"></div><span>Pair 6</span></div></div><div class="an__legend" aria-hidden="true"><i></i>Bray-Curtis distance (lower is better)</div></div><figcaption>Figure 3. Bray-Curtis distance between replicates of the same sample. Note: lower values mean the same sample gives the same answer each time.</figcaption></figure>
+              <figure class="an__fig"><table class="an__table"><thead><tr><th scope="col">Sample group</th><th scope="col">Median reads per sample</th><th scope="col">Genera detected</th></tr></thead><tbody><tr><td>Mock community (n = 3)</td><td>61,200</td><td>8</td></tr><tr><td>Buccal swabs, age 18–35 (n = 24)</td><td>52,400</td><td>74</td></tr><tr><td>Buccal swabs, age 36+ (n = 24)</td><td>49,800</td><td>69</td></tr><tr><td>Negative control (n = 2)</td><td>310</td><td>2</td></tr></tbody></table><figcaption>Table 1. Reads per sample and number of genera detected. Note: more genera detected in swabs than in the mock community is expected, because the mock community contains only eight species.</figcaption></figure>
+            </section>
+            <section class="an__group" id="conclusion"><h2>Conclusion</h2><p>BiomeSeq gives labs a complete route from buccal swab DNA to a taxonomy profile, using one kit and one dashboard. In this sample run, the mock community was recovered within 1 percentage point of its expected proportions, and replicates stayed within a Bray-Curtis distance of 0.05. Results come from one run and one sample type, so confirm DNA input for your own swabs before scaling up.</p></section>
+            <section class="an__group" id="references"><h2>References</h2><ol class="an__refs"><li>1.  Klindworth A, et al. Nucleic Acids Research, 2013  <a href="https://doi.org/10.1093/nar/gks808" target="_blank" rel="noopener noreferrer">doi:10.1093/nar/gks808</a></li><li>2.  Human Microbiome Project Consortium. Nature, 2012  <a href="https://doi.org/10.1038/nature11234" target="_blank" rel="noopener noreferrer">doi:10.1038/nature11234</a></li><li>3.  Bray JR, Curtis JT. Ecological Monographs, 1957  <a href="https://doi.org/10.2307/1942268" target="_blank" rel="noopener noreferrer">doi:10.2307/1942268</a></li></ol></section>
+          </article>
+        </div>
+
+        <section class="ls__section" id="products" aria-labelledby="ls-products">
+          <div class="an__sechead"><h2 class="ls__h" id="ls-products">Products used in this note</h2><p class="ls__intro">Listed in workflow order. Each card says what the product did in this method.</p></div>
+          <div class="ls__products"><article class="ls__pcard"><img src="../assets/application-notes/oral-product-1.png" alt="" width="328" height="140" loading="lazy" decoding="async"><div class="ls__pcopy"><h3 class="ls__pname">DNA Extraction Kit [name TBC]</h3><p class="ls__prole">Recovered bacterial DNA from every swab in one run.</p><ul class="ls__tags"><li class="ls__tag">[Spec TBC]</li><li class="ls__tag">RUO</li></ul></div><a class="ls__pbtn" href="#">View product</a></article><article class="ls__pcard"><img src="../assets/application-notes/oral-product-2.png" alt="" width="328" height="140" loading="lazy" decoding="async"><div class="ls__pcopy"><h3 class="ls__pname">BiomeSeq 16S rRNA NGS LibPrep Kit</h3><p class="ls__prole">Amplified the V3–V4 region and prepared sequencing-ready libraries for MiSeq.</p><ul class="ls__tags"><li class="ls__tag">V3–V4</li><li class="ls__tag">RUO</li></ul></div><a class="ls__pbtn" href="#">View product</a></article><article class="ls__pcard"><img src="../assets/application-notes/oral-product-3.png" alt="" width="328" height="140" loading="lazy" decoding="async"><div class="ls__pcopy"><h3 class="ls__pname">Nusantics Dashboard</h3><p class="ls__prole">Turned reads into taxonomy profiles for every volunteer, without writing scripts.</p><ul class="ls__tags"><li class="ls__tag">Software</li><li class="ls__tag">Included with kit</li></ul></div><a class="ls__pbtn" href="#">View product</a></article></div>
+        </section>
+
+        <section class="ls__section" aria-labelledby="ls-more">
+          <h2 class="ls__h" id="ls-more">More application notes</h2>
+          <div class="ls__posts"><a class="ls__post an__post" href="#"><span class="ls__post-copy"><span class="ls__post-title">Thaw, mix, run: fewer pipetting errors in 16S PCR setup</span><span class="ls__post-desc">Discover how a ready-to-use mix cuts hands-on steps across a 96-well plate.</span></span></a><a class="ls__post an__post" href="#"><span class="ls__post-copy"><span class="ls__post-title">Choosing the right DNA input for each sample type</span><span class="ls__post-desc">Learn how much DNA to load for each sample type.</span></span></a><a class="ls__post an__post" href="#"><span class="ls__post-copy"><span class="ls__post-title">Reading a taxonomy profile in the Nusantics Dashboard</span><span class="ls__post-desc">Walk through a first analysis, from your access code to a relative abundance chart.</span></span></a></div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="cc cc--gray footer" id="contact">
+      <div class="footer__inner">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <img src="../assets/footer-logo.svg" alt="Nusantics" width="218" height="27">
+            <p>Founded in 2020, Nusantics changed the molecular diagnostics landscape in Indonesia.</p>
+          </div>
+          <nav class="footer__col" aria-label="Footer menu" id="about">
+            <p class="footer__head">Menu</p>
+            <a href="../index.html#products">For Lab</a><a href="../index.html#products">For Clinic</a><a href="../about.html">About Us</a><a href="../pipeline.html">Product Pipeline</a><a href="../product.html">Human Diagnostics</a><a href="../product.html">Animal Diagnostics</a><a href="../career.html">Career</a>
+          </nav>
+          <div class="footer__col footer__col--find">
+            <p class="footer__head">Find Us</p>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Mon - Sat : 8am - 9pm</p>
+              <address>i3L Campus @ Lvl. 3<br>Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung,<br>Jakarta Timur 13210</address>
+            </div>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Contact Us</p>
+              <a href="mailto:nusantics@support.com">nusantics@support.com</a>
+              <a href="tel:+628888888888">(+62) 888 8888 8888</a>
+            </div>
+          </div>
+        </div>
+        <hr class="footer__rule">
+        <div class="footer__bottom">
+          <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
+            <a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms of Use</a></p>
+          <div class="footer__social">
+            <a href="https://www.instagram.com/nusantics" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
+            <a href="https://www.linkedin.com/company/nusantics-nusantara-genetics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
+            <a href="https://www.youtube.com/@nusantics" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../script.js"></script>
+  <script src="../mobile-menu.js"></script>
+  <script src="application-note.js"></script>
+</body>
+</html>
