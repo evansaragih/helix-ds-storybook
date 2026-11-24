@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Stories | Knowledge Hub | Nusantics</title>
+  <meta name="description" content="How labs, clinics and farms use Nusantics kits and the Dashboard in their daily work.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../knowledge-hub.css">
+  <link rel="stylesheet" href="../blog.css">
+  <link rel="stylesheet" href="list.css">
+  <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="page">
+    <!-- Marketing Navbar (state: onTop) -->
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a class="nav__logo" href="../index.html" aria-label="Nusantics home">
+          <img class="nav__logo-light" src="../assets/nav-logo.svg" alt="Nusantics" width="131" height="16">
+          <img class="nav__logo-dark" src="../assets/nav-logo-dark.svg" alt="" width="131" height="16" aria-hidden="true">
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+          <div class="nav__menu">
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-audience">For Lab<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-audience" role="menu" aria-label="For Lab" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="../index.html#products">For Lab</a>
+                <a class="nav-menu__item" role="menuitem" href="../index.html#products">For Clinic</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="../about.html">About Us</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-products">Products &amp; Solutions<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-products" role="menu" aria-label="Products &amp; Solutions" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="../product.html">Human Diagnostics</a>
+                <a class="nav-menu__item" role="menuitem" href="../product.html">Animal Diagnostics</a>
+                <div class="nav-menu__divider" role="separator"></div>
+                <a class="nav-menu__item" role="menuitem" href="../pipeline.html">Product Pipeline</a>
+              </div>
+            </div>
+          </div>
+          <a class="nav__item nav__hide-sm" href="../career.html">Career</a>
+          <div class="nav-dd nav__hide-sm">
+            <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-knowledge">Knowledge Hub<span class="nav-chevron" aria-hidden="true"></span></button>
+            <div class="nav-menu helix-pop" id="menu-knowledge" role="menu" aria-label="Knowledge Hub" data-side="bottom" data-state="closed" hidden>
+              <div class="nav-menu__list">
+                <a class="nav-menu__item" role="menuitem" href="../paper-publications.html">Paper &amp; Publications</a>
+                <a class="nav-menu__item" role="menuitem" href="../news.html">News</a>
+                <a class="nav-menu__item" role="menuitem" href="../media-coverage.html">Media Coverage</a>
+                <a class="nav-menu__item" role="menuitem" href="../blog.html">Blog</a>
+                <a class="nav-menu__item" role="menuitem" href="../customer-stories/index.html">Customer Stories</a>
+                <a class="nav-menu__item" role="menuitem" href="../application-notes/index.html">Application Notes</a>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="nav__actions">
+            <div class="nav-dd nav-dd--end nav-dd--lang">
+              <button class="nav__item nav-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-language" aria-label="Language"><img class="nav-flag nav-lang__flag" src="../assets/flag-gb.svg" alt="" width="14" height="14"><span class="nav-lang__code">EN</span><span class="nav-chevron" aria-hidden="true"></span></button>
+              <div class="nav-menu helix-pop" id="menu-language" role="menu" aria-label="Language" data-side="bottom" data-state="closed" hidden>
+                <div class="nav-menu__list">
+                  <a class="nav-menu__item" role="menuitem" href="#" lang="en" data-code="EN" aria-current="true"><img class="nav-flag" src="../assets/flag-gb.svg" alt="" width="14" height="14">English</a>
+                  <a class="nav-menu__item" role="menuitem" href="#" lang="id" data-code="ID"><img class="nav-flag" src="../assets/flag-id.svg" alt="" width="14" height="14">Bahasa Indonesia</a>
+                </div>
+              </div>
+            </div>
+          <a class="btn btn--white nav__hide-sm" href="../../nusantics-research-dashboard/login.html">Login</a>
+          <a class="btn btn--primary" href="../contact.html">Contact Us</a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" class="kh">
+      <div class="kh-hero" aria-hidden="true">
+        <canvas class="kh-hero__silk"></canvas>
+        <canvas class="kh-hero__helix"></canvas>
+      </div>
+      <header class="kh__header">
+        <h1 class="kh__title">Knowledge Hub</h1>
+        <p class="kh__sub">Customer Stories</p>
+      </header>
+      <nav class="kh__tabs" aria-label="Knowledge Hub sections"><a class="kh__tab" href="../paper-publications.html">Paper &amp; Publications</a><a class="kh__tab" href="../news.html">News</a><a class="kh__tab" href="../media-coverage.html">Media Coverage</a><a class="kh__tab" href="../blog.html">Blog</a><a class="kh__tab is-current" href="../customer-stories/index.html" aria-current="page">Customer Stories</a><a class="kh__tab" href="../application-notes/index.html">Application Notes</a></nav>
+      <div class="kh__body">
+        <div class="bl-bar">
+          <div class="kh-filter" role="group" aria-label="Filter by category">
+            <button class="kh-chip" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="kh-chip" type="button" data-filter="microbiome" aria-pressed="false">Microbiome</button>
+            <button class="kh-chip" type="button" data-filter="human-health" aria-pressed="false">Human health</button>
+            <button class="kh-chip" type="button" data-filter="animal-health" aria-pressed="false">Animal health</button>
+          </div>
+          <label class="kh-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+            <input id="bl-q" type="search" placeholder="Search stories" aria-label="Search stories" autocomplete="off">
+          </label>
+        </div>
+        <p class="bl-status" id="bl-status" role="status" aria-live="polite"></p>
+        <div class="bl-grid" id="bl-grid"></div>
+        <div class="kh-empty" id="bl-empty" hidden>
+          <img src="../assets/blog-empty.svg" alt="" width="160" height="160">
+          <div class="kh-empty__copy"><h2 class="kh-empty__title">No stories found</h2><p class="kh-empty__desc" id="bl-empty-desc"></p></div>
+          <div class="kh-empty__actions">
+            <button class="btn btn--white" id="bl-clear" type="button">Clear search</button>
+            <button class="btn btn--primary" id="bl-all" type="button">View all stories</button>
+          </div>
+        </div>
+        <nav class="kh-pager bl-pager" id="bl-pager" aria-label="Pagination" hidden></nav>
+      </div>
+    </main>
+
+    <footer class="cc cc--gray footer" id="contact">
+      <div class="footer__inner">
+        <div class="footer__top">
+          <div class="footer__brand">
+            <img src="../assets/footer-logo.svg" alt="Nusantics" width="218" height="27">
+            <p>Founded in 2020, Nusantics changed the molecular diagnostics landscape in Indonesia.</p>
+          </div>
+          <nav class="footer__col" aria-label="Footer menu" id="about">
+            <p class="footer__head">Menu</p>
+            <a href="../index.html#products">For Lab</a><a href="../index.html#products">For Clinic</a><a href="../about.html">About Us</a><a href="../pipeline.html">Product Pipeline</a><a href="../product.html">Human Diagnostics</a><a href="../product.html">Animal Diagnostics</a><a href="../career.html">Career</a>
+          </nav>
+          <div class="footer__col footer__col--find">
+            <p class="footer__head">Find Us</p>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Mon - Sat : 8am - 9pm</p>
+              <address>i3L Campus @ Lvl. 3<br>Jl. Pulomas Barat No.Kav.88, RT.4/RW.9, Kayu Putih, Pulo Gadung,<br>Jakarta Timur 13210</address>
+            </div>
+            <div class="footer__group">
+              <p class="footer__head footer__head--brand">Contact Us</p>
+              <a href="mailto:nusantics@support.com">nusantics@support.com</a>
+              <a href="tel:+628888888888">(+62) 888 8888 8888</a>
+            </div>
+          </div>
+        </div>
+        <hr class="footer__rule">
+        <div class="footer__bottom">
+          <p class="footer__legal">Copyright © 2026 PT Riset Nusantara Genetika, PT Nusantara Butuh Diagnostik. All Rights Reserved.
+            <a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms of Use</a></p>
+          <div class="footer__social">
+            <a href="https://www.instagram.com/nusantics" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm5.2-3.2a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/></svg></a>
+            <a href="https://www.linkedin.com/company/nusantics-nusantara-genetics" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm7 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.600 4.800 6V20.500h-4v-4.900c0-1.200 0-2.700-1.700-2.700s-1.900 1.300-1.900 2.600v5H10v-11Z"/></svg></a>
+            <a href="https://www.youtube.com/@nusantics" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M21.600 7.200a2.500 2.500 0 0 0-1.800-1.800C18.200 5 12 5 12 5s-6.200 0-7.800.4A2.500 2.500 0 0 0 2.400 7.200C2 8.800 2 12 2 12s0 3.200.4 4.800a2.500 2.500 0 0 0 1.800 1.800C5.800 19 12 19 12 19s6.200 0 7.800-.4a2.500 2.500 0 0 0 1.800-1.800c.4-1.600.4-4.800.4-4.800s0-3.200-.4-4.800ZM10 15V9l5.200 3L10 15Z"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script type="application/json" id="posts">[{"slug": "oral-microbiome", "cat": "microbiome", "title": "Mapping the oral microbiome from a simple cheek swab", "excerpt": "A university lab profiled the bacteria in 120 volunteers' mouths using BiomeSeq and the Nusantics Dashboard, without building a sequencing pipeline of their own.", "org": "Oral Microbiome Research Lab", "min": 6, "tags": ["BiomeSeq", "Nusantics Dashboard", "+1"], "img": "../assets/customer-stories/card-oral-microbiome.jpg"}, {"slug": "multiguard-ahpnd-ehp", "cat": "animal-health", "title": "Four targets, one tube: screening for AHPND and EHP", "excerpt": "A hatchery replaced separate tests with one MultiGuard reaction that reads AHPND, EHP and an internal control.", "org": "Shrimp Hatchery", "min": 9, "tags": ["ShrimProtect", "X-Kit V2.0"], "img": "../assets/customer-stories/card-multiguard-ahpnd-ehp.jpg"}, {"slug": "farm-outbreak", "cat": "animal-health", "title": "From unexplained mortality to a decision by noon", "excerpt": "A farm lab checked a suspected outbreak the same morning with ShrimProtect X-Kit and single-target qPCR kits.", "org": "Farm Laboratory", "min": 8, "tags": ["ShrimProtect", "X-Kit V2.0"], "img": "../assets/customer-stories/card-farm-outbreak.jpg"}, {"slug": "skin-microbiome", "cat": "microbiome", "title": "Testing whether a moisturiser is gentle on skin bacteria", "excerpt": "A skincare research team profiled the skin microbiome of 40 volunteers before and after a four-week trial.", "org": "Skincare Research Team", "min": 5, "tags": ["BiomeSeq", "Nusantics Dashboard"], "img": "../assets/customer-stories/card-skin-microbiome.jpg"}, {"slug": "pond-water", "cat": "animal-health", "title": "We read the pond’s bacteria, not just its chemistry", "excerpt": "An aquaculture research center adds a bacterial view to routine pond water quality checks.", "org": "Aquaculture Research Center", "min": 7, "tags": ["BiomeSeq", "PathoScan X-Kit"], "img": "../assets/customer-stories/card-pond-water.jpg"}, {"slug": "probiotic", "cat": "microbiome", "title": "Checking what is inside a probiotic, batch by batch", "excerpt": "A food-science lab profiled 36 probiotic samples with BiomeSeq and compared each batch against its label.", "org": "Probiotic Quality Research Lab", "min": 8, "tags": ["BiomeSeq", "PathoScan X-Kit"], "img": "../assets/customer-stories/card-probiotic.jpg"}, {"slug": "hrhpv-followup", "cat": "human-health", "title": "We plan the follow-up, not the wait", "excerpt": "A women’s health laboratory explains how in-house HPV testing changed its workflow, and how it picks between two kits.", "org": "Women’s Health Laboratory", "min": 7, "tags": ["PathoScan", "hrHPV"], "img": "../assets/customer-stories/card-hrhpv-followup.png"}, {"slug": "gargle-surveillance", "cat": "human-health", "title": "Gargle samples made campus surveillance easier", "excerpt": "A university health unit replaced nasopharyngeal swabs with gargle collection for routine SARS-CoV-2 surveillance.", "org": "University Health Unit", "min": 5, "tags": ["BioSaliva", "mBioCoV-19"], "img": "../assets/customer-stories/card-gargle-surveillance.jpg"}, {"slug": "broodstock-screening", "cat": "animal-health", "title": "Screening broodstock for three viruses before spawning", "excerpt": "A shrimp breeding company checks every lot for IHHNV, DIV1 and WSSV in a single MultiGuard reaction.", "org": "Shrimp Breeding Company", "min": 6, "tags": ["ShrimProtect", "MultiGuard"], "img": "../assets/customer-stories/card-broodstock-screening.jpg"}, {"slug": "variant-sorting", "cat": "human-health", "title": "Telling variants apart when a positive needs a closer look", "excerpt": "A research institute sorts SARS-CoV-2 positives by variant pattern before deciding what to sequence.", "org": "Infectious Disease Research Institute", "min": 5, "tags": ["VarScreen", "mBioCoV-19"], "img": "../assets/customer-stories/card-variant-sorting.jpg"}]</script>
+  <script src="../script.js"></script>
+  <script src="../mobile-menu.js"></script>
+  <script src="../kh-hero.js"></script>
+  <script src="list.js"></script>
+</body>
+</html>

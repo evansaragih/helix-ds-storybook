@@ -1,0 +1,9 @@
+/* Customer Stories list. Source: Figma 588:18778 (1280px) and 850:33940 (mobile). Reuses Knowledge Hub header/chips/pager and the Post card (styles.css .blog-card), adds meta line + product tags. */
+.cs-card { height: 440px; }
+.cs-card .blog-card__copy { gap: 8px; }
+.cs-card .news-card__title { font-size: 20px; line-height: 30px; }
+.cs-card .blog-card__copy .news-card__desc { font-size: 16px; line-height: 24px; -webkit-line-clamp: 2; }
+.cs-card__meta { margin: 0; font-size: 13px; line-height: 20px; color: var(--text-subtler); }
+.cs-card__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.cs-tag { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 0.5px solid var(--stroke-subtle); border-radius: var(--radius-md); background: var(--surface-default); font-size: 10px; line-height: 16px; letter-spacing: -0.01px; color: var(--text-subtler); white-space: nowrap; }
+@media (max-width: 720px) { .cs-card { height: auto; min-height: 380px; } .bl-card--feat { min-height: 440px; } }
