@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="id" data-brand="causa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Causa Admin - Daftar Transaksi</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/theme.css">
+<link rel="stylesheet" href="finance-ui.css">
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+  <div class="sb-head"><a class="sb-logo" href="causa-admin-finance-dashboard.html" aria-label="Causa"><img class="sb-logo-full" src="assets/wordmark-default.svg" alt="Causa"><span class="sb-logo-mark"><img src="assets/mark-default.svg" alt="Causa"></span></a><span class="sb-pill">Admin</span></div>
+  <nav class="sb-nav" aria-label="Menu utama"><a class="nav-item" title="Organizations"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5 3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6h3a1 1 0 0 1 1 1v11h-2V11h-2v10H5V3Zm3 3v2h2V6H8Zm4 0v2h1V6h-1ZM8 11v2h2v-2H8Zm4 0v2h1v-2h-1ZM8 16v2h2v-2H8Zm4 0v2h1v-2h-1Z"/></svg><span class="lbl">Organizations</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Web Registrations"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 3v1.5h16V7H4Zm9 4h5v2h-5v-2Zm0 4h5v2h-5v-2Z"/></svg><span class="lbl">Web Registrations</span></a><a class="nav-item" title="Consignment Inventory"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 8.5 4.9L12 11.8 3.5 6.9 12 2ZM3 8.6l8 4.6V22l-8-4.6V8.6Zm18 0v8.8L13 22v-8.8l8-4.6Z"/></svg><span class="lbl">Consignment Inventory</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Patient Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5Z"/></svg><span class="lbl">Patient Management</span></a><a class="nav-item" title="Order Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5L13 3.5ZM8 13v2h8v-2H8Zm0 4v2h5v-2H8Z"/></svg><span class="lbl">Order Management</span></a><a class="nav-item" title="Sample Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 2h6v2h-1v5.2l5.4 9A2 2 0 0 1 17.7 21H6.3a2 2 0 0 1-1.7-2.8L10 9.200V4H9V2Zm-.6 12-2 3.500a.5.5 0 0 0 .4.500h10.400a.5.5 0 0 0 .4-.5L15.600 14H8.400Z"/></svg><span class="lbl">Sample Management</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Campaigns"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 3v14l-5-2.700H8.500l1.400 5.200a1 1 0 0 1-1 1.200H7.700a1 1 0 0 1-1-.7L5 15H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h11l5-3Z"/></svg><span class="lbl">Campaigns</span></a><a class="nav-item" title="Commission History"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm-1 4h2v1.100c1.300.2 2 1 2 2h-2c0-.4-.4-.8-1-.8s-1 .3-1 .7c0 .5.5.7 1.500 1 1.500.4 2.500 1 2.500 2.300 0 1-.8 1.800-2 2V17h-2v-1.100c-1.500-.2-2.300-1.200-2.300-2.200h2c0 .5.5.9 1.300.9.700 0 1.200-.3 1.200-.8 0-.5-.5-.7-1.600-1-1.400-.4-2.400-.9-2.400-2.200 0-1 .8-1.800 2-2V7Z"/></svg><span class="lbl">Commission History</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Payable History"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm-2 5h20V8H2v2Zm4 5v2h4v-2H6Z" transform="translate(0 0)"/></svg><span class="lbl">Payable History</span></a><a class="nav-item active" href="causa-admin-finance-dashboard.html" aria-current="page" title="Finance Hub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h2v16h16v2H3V3Zm5 9h3v6H8v-6Zm5-5h3v11h-3V7Zm5 3h3v8h-3v-8Z"/></svg><span class="lbl">Finance Hub</span></a><a class="nav-item" title="Service Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 6h9.100a3 3 0 0 1 5.800 0H20v2h-1.100a3 3 0 0 1-5.800 0H4V6Zm0 10h1.100a3 3 0 0 1 5.800 0H20v2h-9.100a3 3 0 0 1-5.800 0H4v-2Z"/></svg><span class="lbl">Service Management</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Simulator Harga"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3v4h10V5H7Zm1 6v2h2v-2H8Zm3 0v2h2v-2h-2Zm3 0v2h2v-2h-2ZM8 15v2h2v-2H8Zm3 0v2h2v-2h-2Zm3 0v4h2v-4h-2Z"/></svg><span class="lbl">Simulator Harga</span></a></nav>
+</aside>
+
+  <div class="main">
+    <header class="navbar">
+      <div class="nb-left"><button class="ibtn nb-toggle" type="button" id="sbToggle" aria-controls="sidebar" aria-expanded="true" aria-label="Ciutkan sidebar"><img src="assets/ic-panel.svg" alt=""></button><span class="nb-div" aria-hidden="true"></span><div class="crumbs"><span class="muted">Finance</span><span class="sep">/</span><a class="muted" href="causa-admin-finance-dashboard.html">Finance Hub</a><span class="sep">/</span><span class="cur" id="crumbCur">Transaksi</span></div></div>
+      <div class="nav-right"><a class="btn" href="causa-admin-finance-dashboard.html"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m14.600 5.600 1.400 1.400-5 5 5 5-1.400 1.400-6.400-6.400 6.400-6.400Z"/></svg>Kembali ke Finance Hub</a><button class="btn btn-profile" type="button" aria-haspopup="menu" aria-label="Menu profil"><span class="pf-avatar">JL</span><span class="pf-name">Finance Admin</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></button></div>
+    </header>
+
+    <div class="scroll">
+      <div class="page">
+        <!-- Action panel, modelled on the price-list active-version card
+             (`Panel`: rounded-2xl bg-surface-default p-5 shadow-md) — the
+             primary CTAs live in their own card ABOVE the table, never in the
+             table toolbar. Export/Download stays in the toolbar per gen2. -->
+        <div class="gut" id="panelSlot"></div>
+        <div id="tableSlot"></div>
+        <div class="gut note">
+          Satu baris = satu order. Angka sintetis, dihitung dari <code>finance-data.js</code>; margin Nusantics
+          dihitung sebagai sisa (<code>before_tax &minus; komisi lab &minus; komisi provider</code>) sehingga
+          setiap baris reconcile tepat.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ settlement dialog — gen3 molecule/dialog.tsx ══ -->
+<div class="dlg-overlay" id="dlgOverlay">
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+    <div class="dlg-head">
+      <div class="itile-md">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <div style="min-width:0">
+        <div class="dlg-title" id="dlgTitle">Tandai Settlement</div>
+        <div class="dlg-desc" id="dlgDesc"></div>
+      </div>
+      <button class="dlg-x" id="dlgX" aria-label="Tutup">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="dlg-body" id="dlgBody"></div>
+    <div class="dlg-foot">
+      <span class="spacer" id="dlgCount"></span>
+      <button class="btn" id="dlgCancel">Batal</button>
+      <button class="btn btn-primary" id="dlgConfirm">Tandai Settlement</button>
+    </div>
+  </div>
+</div>
+
+<script src="finance-catalog.js"></script>
+<script src="finance-data.js"></script>
+<script>
+(function () {
+  'use strict';
+  const rp = FD.rp, pct = FD.pct, num = FD.num;
+  const $ = function (id) { return document.getElementById(id); };
+  const esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); };
+
+  const ICON = {
+    filter: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>',
+    sort:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg>',
+    dl:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>',
+    down:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>',
+    check:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>',
+    chevL:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>',
+    chevR:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>',
+    chevD:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>',
+    plus:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>',
+    info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+    // lucide HelpCircle, as feature-causa/tutorial-help-button uses
+    help:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>',
+    warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+  };
+
+  /* ---- scope from the query string ---- */
+  const q = new URLSearchParams(location.search);
+  /* `period` is a scope: a month id, or a year id when the recap was in
+     Tahunan. Drilling from a year into one month would show figures that do
+     not match the row that was clicked. */
+  const askedFor = q.get('period');
+  const period = (FD.PERIODS.some(function (p) { return p.id === askedFor; }) ||
+    FD.YEARS.some(function (y) { return y.id === askedFor; })) ? askedFor : FD.DEFAULT_PERIOD;
+  const isYearScope = FD.isYear(period);
+  const months = FD.periodsIn(period).map(function (p) { return p.id; });
+  const per = isYearScope
+    ? { label: FD.scopeLabel(period), status: 'closed' }
+    : FD.periodOf(period);
+
+  const scope = (function () {
+    const pairId = q.get('pair'), provId = q.get('provider'), labId = q.get('lab');
+    if (pairId && FD.PAIRS.some(function (p) { return p.id === pairId; })) {
+      const p = FD.PAIRS.find(function (x) { return x.id === pairId; });
+      return {
+        kind: 'pair', pairs: [p], scheme: p.scheme,
+        title: FD.PROVIDERS[p.providerId].name + ' × ' + FD.LABS[p.labId].name,
+        crumb: FD.PROVIDERS[p.providerId].name,
+        chips: ['Pasangan', 'Skema: ' + FD.SCHEMES[p.scheme].short],
+        sub: 'Satu pasangan provider × lab. Dokumen tidak diterbitkan di level ini: ' +
+             'invoice dan statement selalu per organisasi.',
+      };
+    }
+    if (provId && FD.PROVIDERS[provId]) {
+      const sch = FD.SCHEMES[q.get('scheme')] ? q.get('scheme') : null;
+      const pairs = FD.PAIRS.filter(function (x) {
+        return x.providerId === provId && (!sch || x.scheme === sch);
+      });
+      const o = FD.PROVIDERS[provId];
+      // A self-lab organization is not on a scheme with anyone — it owns both
+      // ends and only owes us the platform fee.
+      const self = pairs.length > 0 && pairs.every(function (x) { return x.selfLab; });
+      if (self) {
+        return {
+          kind: 'provider', orgId: provId, pairs: pairs, scheme: sch, selfLab: true,
+          title: o.name, crumb: o.name,
+          chips: [FD.PROVIDER_TYPE[o.type], 'Lab sendiri'],
+          sub: o.city + ' · ditagih sebagai provider, dibayar sebagai lab · platform fee ' +
+               pct(o.platformFeePct) + ' dari RPP.',
+        };
+      }
+      return {
+        kind: 'provider', orgId: provId, pairs: pairs, scheme: sch, selfLab: false,
+        title: o.name, crumb: o.name,
+        chips: [FD.PROVIDER_TYPE[o.type], 'Skema: ' + (sch ? FD.SCHEMES[sch].short : 'Semua')],
+        sub: o.city + ' · ' + pairs.length + ' lab · ' +
+             (sch === 'payable'
+               ? 'Provider menagih pasien langsung, lalu berutang ke Nusantics.'
+               : 'Nusantics menagih pelanggan, lalu membayarkan insentif rujukan ke dokter.'),
+      };
+    }
+    if (labId && FD.LABS[labId]) {
+      const pairs = FD.PAIRS.filter(function (x) { return x.labId === labId; });
+      const o = FD.LABS[labId];
+      return {
+        kind: 'lab', orgId: labId, pairs: pairs, scheme: null,
+        title: o.name, crumb: o.name,
+        chips: ['Lab', 'Skema: Semua'],
+        sub: o.city + ' · ' + pairs.length + ' provider · ' +
+             'Komisi lab terutang pada setiap order, apa pun skema providernya.',
+      };
+    }
+    return {
+      kind: 'all', pairs: FD.PAIRS.slice(), scheme: null,
+      title: 'Semua transaksi', crumb: 'Semua transaksi',
+      chips: ['Skema: Semua'], sub: 'Seluruh provider dan lab pada periode ini.',
+    };
+  })();
+
+  /* Which cash leg this page is about, and so what "settlement" means here. */
+  /* Payment of a lab commission is not tracked anywhere yet, so a lab page
+     has no settlement leg: it is a reconciliation surface, and what it
+     produces is the statement of account. */
+  const tracksSettlement = scope.kind !== 'lab';
+  const legKind = scope.scheme === 'payable' ? 'payable' : 'incentive';
+  const legVerb = legKind === 'incentive' ? 'dicairkan' : 'dibayarkan';
+  const legLabel = legKind === 'payable' ? 'Payable' : 'Insentif';
+
+  const rows = (function () {
+    const out = [];
+    scope.pairs.forEach(function (p) {
+      months.forEach(function (m) {
+        Array.prototype.push.apply(out, FD.transactions(p.id, m));
+      });
+    });
+    return out.sort(function (a, b) {
+      return a.orderedAt - b.orderedAt || a.orderId.localeCompare(b.orderId);
+    });
+  })();
+  const agg = FD.aggregate(rows);
+  const st = FD.settlement(agg, legKind);
+  const legAmount = function (t) {
+    return legKind === 'payable' ? t.payable : t.incentive;
+  };
+
+  /* Settlement marks whole ORDERS, so the dialog has to list orders, not the
+     tests inside them: an order carrying a panel of three would otherwise
+     appear three times and be selectable three times, and the counts would
+     disagree with the header. Roll the pending tests up by order id. */
+  const pending = (function () {
+    const by = {}, out = [];
+    rows.filter(function (t) { return !t.settled; }).forEach(function (t) {
+      let o = by[t.orderId];
+      if (!o) {
+        o = by[t.orderId] = { orderId: t.orderId, date: t.date, orderedAt: t.orderedAt,
+          services: [], tests: 0, amount: 0 };
+        out.push(o);
+      }
+      if (o.services.indexOf(t.service) < 0) o.services.push(t.service);
+      o.tests += 1;
+      o.amount += legAmount(t);
+    });
+    return out;
+  })();
+  const picked = new Set(pending.map(function (o) { return o.orderId; }));   // bulk by default
+
+  /** Roll the scope's tests up into the orders they belong to. */
+  function toOrders(list) {
+    const by = {}, out = [];
+    list.forEach(function (t) {
+      let o = by[t.orderId];
+      if (!o) {
+        o = by[t.orderId] = {
+          orderId: t.orderId, date: t.date, orderedAt: t.orderedAt,
+          providerId: t.providerId, labId: t.labId, scheme: t.scheme,
+          settled: t.settled, settledAt: t.settledAt,
+          services: [], tests: 0,
+          beforeTax: 0, labComm: 0, providerComm: 0, nusanticsMargin: 0, payable: 0, incentive: 0,
+        };
+        out.push(o);
+      }
+      if (o.services.indexOf(t.service) < 0) o.services.push(t.service);
+      o.tests += 1;
+      ['beforeTax', 'labComm', 'providerComm', 'nusanticsMargin', 'payable', 'incentive']
+        .forEach(function (k) { o[k] += t[k]; });
+    });
+    return out;
+  }
+
+  /* Settlement progress is counted in ORDERS, which is what settles — not in
+     tests, which is what the rows are. One order can carry several tests. */
+  const orderIds = {}, settledIds = {};
+  rows.forEach(function (t) {
+    orderIds[t.orderId] = 1;
+    if (t.settled) settledIds[t.orderId] = 1;
+  });
+  const orderCount = Object.keys(orderIds).length;
+  const settledOrderCount = Object.keys(settledIds).length;
+
+  /* Per Tes is the default: finance reconciles against the test list and the
+     workbook, both of which are one row per test. Per Order exists because
+     settlement is an order-level act — see `canSettle`. */
+  let grouping = q.get('by') === 'order' ? 'order' : 'tes';
+  const byOrder = function () { return grouping === 'order'; };
+
+  const PAGE = 50;   // default page size across every list
+  let page = 1;
+  /** Row count of the active grouping: tests, or the orders they roll into. */
+  function viewCount() { return byOrder() ? orderCount : rows.length; }
+  function pageCountOf() { return Math.max(1, Math.ceil(viewCount() / PAGE)); }
+
+  $('crumbCur').textContent = scope.crumb;
+
+  /* ══════════ action panel (price-list Panel pattern) ══════════ */
+  function renderPanel() {
+    // Documents are monthly instruments; a year scope has no single one.
+    const doc = scope.orgId && !isYearScope
+      ? FD.documentFor({ kind: scope.kind, orgId: scope.orgId, scheme: scope.scheme || 'payable' }, period)
+      : null;
+    const pstat = isYearScope
+      ? { cls: 'chip-closed', label: per.label }
+      : FD.PERIOD_STATUS[per.status];
+
+    function docBtn(target, label, primary) {
+      const d = FD.documentFor(target, period);
+      const cls = 'btn' + (primary ? ' btn-primary' : '');
+      return d.available
+        ? '<a class="' + cls + '" href="' + FD.documentUrl(target, period) +
+          '" target="_blank">' + ICON.down + 'Unduh ' + label + '</a>'
+        : '<button class="' + cls + '" disabled title="Periode masih berjalan">' +
+          ICON.down + 'Unduh ' + label + '</button>';
+    }
+
+    /* Self-lab issues two documents: the statement for the lab commission we
+       pay out, and the invoice for the payable we bill back. */
+    const selfLabId = scope.selfLab && scope.pairs.length ? scope.pairs[0].labId : null;
+    const cta = !doc ? ''
+      : selfLabId
+      ? docBtn({ kind: 'lab', orgId: selfLabId, scheme: 'payable' }, 'Statement Lab', false) +
+        docBtn({ kind: 'provider', orgId: scope.orgId, scheme: 'payable' }, 'Invoice Provider', true)
+      : docBtn({ kind: scope.kind, orgId: scope.orgId, scheme: scope.scheme || 'payable' },
+               doc.label, true);
+
+    /* Always available, whichever grouping is on screen: the dialog works in
+       orders in both cases, so there is nothing to withhold. What changes is
+       only the explanation — see the callout in the table. */
+    const settleBtn = !tracksSettlement ? ''
+      : pending.length
+      ? '<button class="btn" id="openSettle">' + ICON.check + 'Tandai Settlement</button>'
+      : '<button class="btn" disabled title="Semua order sudah settled">' + ICON.check + 'Tandai Settlement</button>';
+
+    $('panelSlot').innerHTML =
+      '<div class="panel">' +
+        '<div class="panel-top">' +
+          '<div style="min-width:0">' +
+            '<div class="panel-titlerow">' +
+              '<h2 class="panel-title">' + esc(scope.title) + '</h2>' +
+              '<span class="chip ' + pstat.cls + '"><span class="dot"></span>' + per.label + '</span>' +
+              scope.chips.map(function (c) { return '<span class="badge badge-neutral">' + esc(c) + '</span>'; }).join('') +
+            '</div>' +
+            '<p class="panel-sub">' + esc(scope.sub) + '</p>' +
+          '</div>' +
+          '<div class="ctarow">' + settleBtn + cta + '</div>' +
+        '</div>' +
+        (isYearScope && scope.orgId
+          ? '<div class="callout">' + ICON.warn +
+            '<div class="body"><div class="d">Invoice dan statement diterbitkan per bulan. ' +
+            'Pilih satu periode bulanan di Finance Hub untuk menerbitkan dokumen.</div></div></div>'
+          : doc && !doc.available
+          ? '<div class="callout">' + ICON.warn +
+            '<div class="body"><div class="d">Periode ' + per.label + ' masih berjalan. ' +
+            doc.label + ' baru bisa diterbitkan setelah periode berakhir.</div></div></div>'
+          : '') +
+        // Same split bar as the Ringkasan overview, scoped to this counterparty:
+        // a row of figures makes you do the division yourself, the bar shows
+        // where this counterparty's money actually sits.
+        // align-items:start — the settlement column is taller than the split block,
+        // and stretching would strand the bar at the bottom of a tall gap.
+        '<div class="hero-grid" style="margin-top:20px;align-items:start">' +
+          '<div class="hero-main">' +
+            '<div>' +
+              '<div class="hero-label">Nilai sebelum PPN</div>' +
+              '<div class="hero-value tnum">' + rp(agg.beforeTax) + '</div>' +
+              '<div class="hero-meta">' + num(FD.groupByService(rows).length) + ' jenis layanan · ' +
+                num(scope.pairs.length) + (scope.kind === 'lab' ? ' provider' : ' lab') + '</div>' +
+              // volume behind the money — see finance-data `volume()`
+              (function () {
+                const v = FD.volume(rows);
+                return '<div class="volrow">' +
+                  [['Order', v.orderCount], ['Tes', v.testCount], ['Sampel', v.sampleCount]]
+                    .map(function (x) {
+                      return '<div class="vi"><span class="vl">' + x[0] + '</span>' +
+                        '<span class="vv tnum">' + num(x[1]) + '</span></div>';
+                    }).join('') + '</div>';
+              })() +
+            '</div>' +
+            splitBlock() +
+          '</div>' +
+          settlePanel() +
+        '</div>' +
+      '</div>';
+
+    const ob = $('openSettle');
+    if (ob) ob.onclick = openDialog;
+  }
+
+  /* The split, with the part this page actually documents held at full
+     strength and the rest receding. A leg is not always one segment: payable
+     is everything the provider did not keep, so it brackets the lab and
+     Nusantics bars together. */
+  const LEGS = FD.documentedLegs(scope.kind, scope.scheme, scope.selfLab);
+
+  /* Same pattern as the portal's list pages: the explanation lives in the
+     tutorial, not in a paragraph on the page. Content comes from the feature
+     spec (the four schemes, the documented leg, settlement). */
+  const TUTORIAL = scope.selfLab
+    ? { href: '/tutorial/finance-hub#lab-sendiri', label: 'Panduan Lab Sendiri' }
+    : scope.kind === 'lab'
+    ? { href: '/tutorial/finance-hub#lab', label: 'Panduan Lab' }
+    : scope.scheme === 'payable'
+    ? { href: '/tutorial/finance-hub#skema-provider', label: 'Panduan Skema Provider' }
+    : { href: '/tutorial/finance-hub#skema-insentif', label: 'Panduan Skema Insentif' };
+
+  function helpBtn() {
+    return '<a class="btn btn-sm" href="' + TUTORIAL.href +
+      '" target="_blank" rel="noopener noreferrer">' + ICON.help + TUTORIAL.label + '</a>';
+  }
+
+  /** A money cell in the column this page's document is built from. */
+  function docTd(value) {
+    return '<td class="num tnum doccol">' + value + '</td>';
+  }
+
+  function splitBlock() {
+    const base = agg.beforeTax || 1;
+    const SEG = {
+      lab:  { id: 'lab',  cls: 'seg-lab',  key: 'Komisi Lab',       amount: agg.labComm,
+              sw: 'var(--color-brand-tertiary)' },
+      prov: { id: 'prov', cls: 'seg-prov', key: 'Komisi Provider',  amount: agg.providerComm,
+              sw: 'var(--color-brand-secondary)' },
+      nus:  { id: 'nus',  cls: 'seg-nus',  key: 'Margin Nusantics', amount: agg.nusanticsMargin,
+              sw: 'var(--color-brand-primary)' },
+    };
+    const segs = FD.segOrder(LEGS).map(function (k) { return SEG[k]; });
+    // A negative take cannot be drawn as width; it is reported in the legend.
+    const draw = segs.map(function (g) { return Math.max(0, g.amount); });
+    const drawn = draw.reduce(function (a, b) { return a + b; }, 0) || 1;
+    const w = draw.map(function (d) { return d / drawn * 100; });
+    const on = {};
+    LEGS.forEach(function (k) { FD.LEG_META[k].segs.forEach(function (sg) { on[sg] = 1; }); });
+
+    const bar = '<div class="splitbar">' +
+      segs.map(function (g, i) {
+        return '<div class="' + g.cls + (LEGS.length && !on[g.id] ? ' dim' : '') +
+          '" style="width:' + w[i] + '%">' +
+          (w[i] > 7 ? '<span>' + pct(g.amount / base * 100) + '</span>' : '') + '</div>';
+      }).join('') + '</div>';
+
+    // One bracket per documented leg, spanning the segments it covers.
+    const brackets = LEGS.map(function (k) {
+      const m = FD.LEG_META[k];
+      const idx = segs.map(function (g, i) { return m.segs.indexOf(g.id) >= 0 ? i : -1; })
+        .filter(function (i) { return i >= 0; });
+      const off = w.slice(0, idx[0]).reduce(function (a, b) { return a + b; }, 0);
+      const span = idx.reduce(function (a, i) { return a + w[i]; }, 0);
+      const col = m.segs[0] === 'prov' ? 'var(--color-brand-secondary)'
+        : m.segs.length > 1 ? 'var(--color-brand-primary)' : 'var(--color-brand-tertiary)';
+      return '<div class="hlrow"><div style="width:' + off + '%;flex:none"></div>' +
+        '<div class="hlwrap" style="width:' + span + '%;flex:none;color:' + col + '">' +
+          '<div class="hlbrk"></div>' +
+          '<div class="hllab"><span class="amt">' + rp(FD.legAmount(agg, k)) + '</span>' +
+          m.label + ' <span class="doc">\u2192 ' +
+          (m.doc === 'invoice' ? 'Invoice' : 'Statement of Account') + '</span></div>' +
+        '</div></div>';
+    }).join('');
+
+    return '<div>' + bar + brackets +
+      '<div class="splitkey">' +
+        segs.map(function (g) {
+          return '<div class="k"><span class="sw" style="background:' + g.sw +
+            (LEGS.length && !on[g.id] ? ';opacity:.4' : '') + '"></span>' +
+            '<div><div class="kt">' + g.key + '</div>' +
+            '<div class="kv tnum"' + (g.amount < 0 ? ' style="color:var(--color-text-error)"' : '') +
+            '>' + rp(g.amount) + '</div></div></div>';
+        }).join('') +
+      '</div></div>';
+  }
+
+  /* Settlement is the other half of this page: what the split means in cash,
+     and how much of it has moved. It keeps the control-panel shape the
+     overview uses for its period check. */
+  function legBlock(kind, title) {
+    const a = FD.settlement(agg, kind);
+    const col = kind === 'payable' ? 'var(--color-brand-primary)' : 'var(--color-brand-secondary)';
+    const verb = kind === 'incentive' ? 'dicairkan' : 'dibayarkan';
+    return '<div class="ctrl-title">' + title + '</div>' +
+      ctrlRow('Akrual periode', rp(a.accrued), 'strong') +
+      ctrlRow('Sudah ' + verb, rp(a.realized)) +
+      ctrlRow('Sisa', rp(a.outstanding)) +
+      '<div class="bar" style="margin-top:10px"><i style="width:' + (a.ratio * 100) +
+        '%;background:' + col + '"></i></div>' +
+      '<div class="ctrl-row" style="padding-top:6px">' +
+        '<span class="ctrl-lab">' + num(settledOrderCount) + ' dari ' +
+          num(orderCount) + ' order</span>' +
+        '<span class="ctrl-val">' + pct(a.ratio * 100) + '</span>' +
+      '</div>';
+  }
+
+  function settlePanel() {
+    /* Lab: accrual only. There is no realized figure to show, and inventing a
+       progress bar here would imply a payment record that does not exist. */
+    if (!tracksSettlement) {
+      const inc = rows.reduce(function (a, t) {
+        return a + (t.scheme === 'incentive' ? t.labComm : 0); }, 0);
+      return '<div class="ctrl">' +
+        '<div class="ctrl-title">Komisi lab \u00b7 Terutang ke pihak ini</div>' +
+        ctrlRow('Akrual periode', rp(agg.labComm), 'strong') +
+        ctrlRow('Dari order insentif', rp(inc)) +
+        ctrlRow('Dari order payable', rp(agg.labComm - inc)) +
+        ctrlRow('Progres', 'Belum terlacak') +
+        '</div>';
+    }
+    /* One entity, two roles: Nusantics invoices it as the provider and pays
+       it as the lab. Both legs are shown because each is its own document
+       with its own date, and the difference between them is our margin.
+       Only the payable settles, though: the lab leg has no payment record
+       here either, so it is stated as an accrual with no progress bar. */
+    if (scope.selfLab) {
+      return '<div class="ctrl">' +
+        legBlock('payable', 'Payable \u00b7 Ditagih sebagai provider') +
+        '<div class="ctrl-sep"></div>' +
+        '<div class="ctrl-title">Komisi lab \u00b7 Dibayar sebagai lab</div>' +
+        ctrlRow('Akrual periode', rp(agg.labComm), 'strong') +
+        ctrlRow('Progres', 'Belum terlacak') +
+        '<div class="ctrl-sep"></div>' +
+        '<div class="ctrl-row strong"><span class="ctrl-lab">Selisih kedua kaki</span>' +
+        '<span class="ctrl-val tnum">' + rp(agg.platformFee) + '</span></div>' +
+        '</div>';
+    }
+    const dir = legKind === 'payable' ? 'Diterima dari' : 'Dibayarkan ke';
+    return '<div class="ctrl">' + legBlock(legKind, legLabel + ' \u00b7 ' + dir + ' pihak ini') +
+      '</div>';
+  }
+
+  function ctrlRow(label, value, cls) {
+    return '<div class="ctrl-row' + (cls ? ' ' + cls : '') + '">' +
+      '<span class="ctrl-lab">' + label + '</span>' +
+      '<span class="ctrl-val tnum">' + value + '</span></div>';
+  }
+
+  /* ══════════ table ══════════ */
+  /* Same rule as the recap tables: the leg this page documents is its own
+     column, tinted. A per-order list that shows the split but not the figure
+     going on the invoice makes you add the row up yourself.
+     On a self-lab page Provider and Skema are constants and both commissions
+     are zero, so those columns go and the two documented legs lead. */
+  const isPay = LEGS.indexOf('payable') >= 0;
+  const isLabScope = scope.kind === 'lab';
+
+  /* A column that is the same value on every row of a scoped page is noise:
+     the provider is in the page title. Dropping them is also what keeps the
+     documented column on screen without a horizontal scroll. */
+  const showProvider = !scope.selfLab && scope.kind !== 'provider' && scope.kind !== 'pair';
+  const showLab = !isLabScope && scope.kind !== 'pair';
+  const showScheme = !scope.selfLab && !scope.scheme;
+
+  /* Column order follows the causa-admin-portal convention:
+       Tanggal · Order ID · stakeholders · Test ID (per-test only) · Layanan ·
+       pricing · status
+     The portal's own order list leads with Provider, but it is not scoped to
+     one — here the provider is in the page title, so the date leads and the
+     identifiers follow it. Identity first, then what was done, then money. */
+  function buildCols() {
+    const head = [{ label: 'Tanggal', w: 112 }, { label: 'Order ID', w: 132 }];
+    const who = scope.selfLab ? []
+      : (showProvider ? [{ label: 'Provider', w: 170 }] : [])
+        .concat(showLab ? [{ label: 'Lab', w: 150 }] : [])
+        .concat(showScheme ? [{ label: 'Skema', w: 92 }] : []);
+    // Per test a row carries its own identifier; per order it does not exist.
+    const tid = byOrder() ? [] : [{ label: 'Test ID', w: 196 }];
+    const svc = [{ label: 'Layanan', w: byOrder() ? 252 : 188 }];
+
+    const money = scope.selfLab
+      ? [{ label: 'Sebelum PPN', w: 126, num: true },
+         { label: 'Payable', w: 134, num: true, doc: true },
+         { label: 'Komisi Lab', w: 126, num: true, doc: true },
+         { label: 'Komisi Provider', w: 136, num: true }]
+      // The documented leg sits right after the value it came out of, so it
+      // is never the column that falls off the right edge.
+      : [{ label: 'Sebelum PPN', w: 126, num: true }]
+        .concat(isPay ? [{ label: 'Payable', w: 134, num: true, doc: true }] : [])
+        .concat([
+          { label: 'Komisi Lab', w: 126, num: true, doc: isLabScope },
+          { label: 'Komisi Provider', w: 136, num: true, doc: !isPay && !isLabScope },
+          { label: 'Margin Nusantics', w: 134, num: true },
+        ]);
+
+    return head.concat(who, tid, svc, money,
+      tracksSettlement ? [{ label: 'Status Settlement', w: 152 }] : []);
+  }
+  let COLS = buildCols();
+  let MINW = COLS.reduce(function (a, c) { return a + c.w; }, 0);
+
+  /* Service badges, matching feature-causa `SampleTypeBadge`: an outline pill
+     with a royal-blue dot and the service name. */
+  function svcBadges(names) {
+    return '<div class="svcbadges">' + names.map(function (n) {
+      return '<span class="svcbadge"><i></i>' + esc(n) + '</span>';
+    }).join('') + '</div>';
+  }
+
+  function renderTable() {
+    const src = byOrder() ? toOrders(rows) : rows;
+    if (page > pageCountOf()) page = pageCountOf();
+    const start = (page - 1) * PAGE;
+    const slice = src.slice(start, start + PAGE);
+
+    const body = slice.map(function (t) {
+      const who = scope.selfLab ? ''
+        : (showProvider ? '<td class="ell">' + esc(FD.PROVIDERS[t.providerId].name) + '</td>' : '') +
+          (showLab ? '<td class="ell">' + esc(FD.LABS[t.labId].name) + '</td>' : '') +
+          (showScheme
+            ? '<td><span class="badge ' + (t.scheme === 'payable' ? 'badge-brand' : 'badge-warning') + '">' +
+              FD.SCHEMES[t.scheme].short + '</span></td>' : '');
+      const money = scope.selfLab
+        ? '<td class="num tnum">' + rp(t.beforeTax) + '</td>' +
+          // the two documented legs, then the commission the entity keeps
+          docTd(rp(t.payable)) + docTd(rp(t.labComm)) +
+          '<td class="num tnum">' + rp(t.providerComm) + '</td>'
+        : '<td class="num tnum">' + rp(t.beforeTax) + '</td>' +
+          (isPay ? docTd(rp(t.payable)) : '') +
+          (isLabScope ? docTd(rp(t.labComm))
+            : '<td class="num tnum">' + rp(t.labComm) + '</td>') +
+          (!isPay && !isLabScope ? docTd(rp(t.providerComm))
+            : '<td class="num tnum">' + rp(t.providerComm) + '</td>') +
+          '<td class="num tnum"' + (t.nusanticsMargin < 0
+            ? ' style="color:var(--color-text-error);font-weight:600"' : '') +
+            '>' + rp(t.nusanticsMargin) + '</td>';
+      const head = '<td class="ell">' + t.date + '</td>' +
+        '<td class="ell">' + t.orderId + '</td>';
+      const tid = byOrder() ? '' : '<td class="ell tid">' + t.testId + '</td>';
+      const svc = byOrder()
+        ? '<td>' + svcBadges(t.services) + '</td>'
+        : '<td class="ell">' + esc(t.service) +
+          ' <span style="color:var(--color-text-muted)">' + t.serviceCode + '</span></td>';
+      return '<tr>' + head + who + tid + svc + money +
+        (!tracksSettlement ? '' : '<td>' + (t.settled
+          ? '<span class="badge badge-success">' + esc(t.settledAt) + '</span>'
+          : '<span class="badge badge-neutral">Belum ' +
+            (t.scheme === 'payable' ? 'Dibayarkan' : 'Dicairkan') + '</span>') + '</td>') +
+        '</tr>';
+    }).join('');
+
+    $('tableSlot').innerHTML =
+      '<div class="tbl-wrap">' +
+        '<div class="tbl-toolbar">' +
+          '<div class="tl"><div class="tbl-title">Daftar Transaksi (Sebelum PPN)</div>' +
+            '<div class="segmented sm" id="byToggle">' +
+              '<button class="seg' + (!byOrder() ? ' active' : '') + '" data-by="tes">Per Tes</button>' +
+              '<button class="seg' + (byOrder() ? ' active' : '') + '" data-by="order">Per Order</button>' +
+            '</div></div>' +
+          // gen2 right region: filter/sort group, then the download ButtonDropdown
+          '<div class="tr"><div class="icon-group">' +
+            '<button class="ibtn on" title="Filters">' + ICON.filter + '</button>' +
+            '<button class="ibtn" title="Sort">' + ICON.sort + '</button>' +
+          '</div>' +
+          '<button class="btn btn-sm">' + ICON.dl + 'Download' + ICON.chevD + '</button>' +
+          helpBtn() + '</div>' +
+        '</div>' +
+        (byOrder() || !tracksSettlement ? ''
+          : '<div class="tbl-callout"><div class="callout info">' + ICON.info +
+            '<div class="body"><div class="t">Tampilan per tes</div>' +
+            '<div class="d">Satu baris di sini adalah satu tes, tetapi settlement selalu menandai ' +
+            '<strong>order secara utuh</strong>. Tandai Settlement tetap bisa dijalankan dari ' +
+            'tampilan ini. Dialognya tetap memilih per order. Beralih ke ' +
+            '<strong>Per Order</strong> bila ingin memilih atau mengecualikan satu per satu.' +
+            '</div></div></div></div>') +
+        '<div class="tbl-chips"><div class="chips-l">' +
+          ['Periode: ' + per.label].concat(scope.chips).map(function (c) {
+            return '<button class="fpill">' + esc(c) + ' ' + ICON.chevD + '</button>';
+          }).join('') +
+          '<button class="fpill ghost">' + ICON.plus + 'Add Filter</button>' +
+        '</div><button class="reset-btn">Reset</button></div>' +
+        '<div class="tbl-scroll"><table class="t2" style="min-width:' + MINW + 'px">' +
+          '<colgroup>' + COLS.map(function (c) { return '<col style="width:' + c.w + 'px">'; }).join('') + '</colgroup>' +
+          '<thead><tr>' + COLS.map(function (c) {
+            const cl = (c.num ? 'num ' : '') + (c.doc ? 'doccol' : '');
+            return '<th' + (cl.trim() ? ' class="' + cl.trim() + '"' : '') + '>' + c.label + '</th>';
+          }).join('') + '</tr></thead>' +
+          '<tbody>' + (body || '<tr><td colspan="' + COLS.length + '" class="empty">No results.</td></tr>') + '</tbody>' +
+        '</table></div>' +
+        pager() +
+      '</div>';
+
+    bindToggle();
+
+    Array.prototype.forEach.call($('tableSlot').querySelectorAll('[data-page]'), function (b) {
+      b.onclick = function () { page = +b.dataset.page; renderTable(); };
+    });
+  }
+
+  function bindToggle() {
+    const el = $('byToggle');
+    if (!el) return;
+    Array.prototype.forEach.call(el.children, function (b) {
+      b.onclick = function () {
+        if (grouping === b.dataset.by) return;
+        grouping = b.dataset.by;
+        page = 1;
+        COLS = buildCols();
+        MINW = COLS.reduce(function (a, c) { return a + c.w; }, 0);
+        try {
+          const u = new URLSearchParams(location.search);
+          u.set('by', grouping);
+          history.replaceState(null, '', location.pathname + '?' + u.toString());
+        } catch (e) { /* file:// — not worth surfacing */ }
+        renderPanel();
+        renderTable();
+      };
+    });
+  }
+
+  function pager() {
+    const btns = ['<button class="pag-btn" data-page="' + (page - 1) + '"' + (page === 1 ? ' disabled' : '') + '>' + ICON.chevL + '</button>'];
+    const show = [];
+    for (let i = 1; i <= pageCountOf(); i++) if (i === 1 || i === pageCountOf() || Math.abs(i - page) <= 1) show.push(i);
+    let last = 0;
+    show.forEach(function (i) {
+      if (last && i - last > 1) btns.push('<button class="pag-btn" disabled>&hellip;</button>');
+      btns.push('<button class="pag-btn' + (i === page ? ' active' : '') + '" data-page="' + i + '">' + i + '</button>');
+      last = i;
+    });
+    btns.push('<button class="pag-btn" data-page="' + (page + 1) + '"' + (page === pageCountOf() ? ' disabled' : '') + '>' + ICON.chevR + '</button>');
+    return '<div class="tbl-pag"><div class="pag-l">' +
+      '<select class="pag-sel"><option selected>50</option><option>100</option><option>200</option></select>' +
+      '<span class="pag-count">' + num(viewCount()) + ' results</span></div>' +
+      '<div class="pag-r">' + btns.join('') + '</div></div>';
+  }
+
+  /* ══════════ settlement dialog ══════════
+     Bulk is the default: every outstanding order starts selected and the
+     operator deselects the exceptions, rather than picking one by one. */
+  function renderDialog() {
+    const total = pending.reduce(function (a, o) {
+      return a + (picked.has(o.orderId) ? o.amount : 0);
+    }, 0);
+    const allOn = picked.size === pending.length;
+    const someOn = picked.size > 0 && !allOn;
+
+    $('dlgDesc').textContent =
+      num(pending.length) + ' order belum ' + legVerb + ' pada periode ' + per.label +
+      '. Semua terpilih secara default. Hapus centang untuk mengecualikan.' +
+      (byOrder() ? '' : ' Daftar ini per order, bukan per tes.');
+
+    $('dlgBody').innerHTML =
+      '<div class="picklist">' +
+        '<div class="picklist-head">' +
+          '<input type="checkbox" class="cb' + (someOn ? ' ind' : '') + '" id="pickAll"' + (allOn ? ' checked' : '') + '>' +
+          '<span>Pilih semua</span>' +
+          '<span style="margin-left:auto;font-weight:400;color:var(--color-text-tertiary)">' +
+            num(picked.size) + ' dari ' + num(pending.length) + '</span>' +
+        '</div>' +
+        '<div class="picklist-scroll">' +
+          pending.map(function (o) {
+            const on = picked.has(o.orderId);
+            const svc = o.tests > 1
+              ? num(o.tests) + ' tes · ' + o.services[0] + (o.services.length > 1 ? ' …' : '')
+              : o.services[0];
+            return '<label class="pickrow' + (on ? '' : ' off') + '" data-pick="' + o.orderId + '">' +
+              '<input type="checkbox" class="cb"' + (on ? ' checked' : '') + '>' +
+              '<span class="pid">' + o.orderId + '</span>' +
+              '<span class="psvc">' + esc(svc) + ' · ' + o.date + '</span>' +
+              '<span class="pamt">' + rp(o.amount) + '</span></label>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      '<div class="note">Menandai settlement mengubah status order menjadi sudah ' + legVerb +
+      ' dan mencatat tanggalnya. Operasi berlaku untuk seluruh order yang dipilih sekaligus.</div>';
+
+    $('dlgCount').innerHTML = num(picked.size) + ' order dipilih · <strong class="tnum">' + rp(total) + '</strong>';
+    $('dlgConfirm').disabled = picked.size === 0;
+
+    $('pickAll').onchange = function () {
+      picked.clear();
+      if (this.checked) pending.forEach(function (o) { picked.add(o.orderId); });
+      renderDialog();
+    };
+    Array.prototype.forEach.call($('dlgBody').querySelectorAll('[data-pick]'), function (row) {
+      row.querySelector('input').onchange = function () {
+        if (this.checked) picked.add(row.dataset.pick); else picked.delete(row.dataset.pick);
+        renderDialog();
+      };
+    });
+  }
+
+  function openDialog() { renderDialog(); $('dlgOverlay').classList.add('open'); }
+  function closeDialog() { $('dlgOverlay').classList.remove('open'); }
+
+  $('dlgX').onclick = closeDialog;
+  $('dlgCancel').onclick = closeDialog;
+  $('dlgOverlay').onclick = function (e) { if (e.target === $('dlgOverlay')) closeDialog(); };
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDialog(); });
+  $('dlgConfirm').onclick = function () {
+    const n = picked.size;
+    closeDialog();
+    alert('Mockup: ' + num(n) + ' order ditandai sudah ' + legVerb + ' untuk periode ' + per.label + '.\n\n' +
+      'Di implementasi nyata ini satu bulk update bertanggal, biasanya dipicu setelah ' +
+      (legKind === 'payable' ? 'pembayaran invoice diterima' : 'transfer statement dieksekusi') + '.');
+  };
+
+  renderPanel();
+  renderTable();
+  bindToggle();
+})();
+</script>
+<script>(function(){var s=document.getElementById("sidebar"),t=document.getElementById("sbToggle");if(!s||!t)return;function set(c){s.classList.toggle("collapsed",c);t.setAttribute("aria-expanded",String(!c));t.setAttribute("aria-label",c?"Perluas sidebar":"Ciutkan sidebar");try{localStorage.setItem("causa-sb",c?"c":"e")}catch(e){}}t.addEventListener("click",function(){set(!s.classList.contains("collapsed"))});try{set(localStorage.getItem("causa-sb")==="c")}catch(e){}})();</script>
+</body>
+</html>

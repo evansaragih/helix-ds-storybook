@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id" data-brand="causa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Causa - Dokumen Periode</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/theme.css">
+<link rel="stylesheet" href="finance-ui.css">
+<style>
+/* ===========================================================================
+   Printable monthly document — INVOICE (provider on skema payable) or
+   STATEMENT OF ACCOUNT (lab commission, and provider incentive transfers).
+
+   Still gen3 Causa tokens: same palette, Quicksand headings / Rubik body,
+   same radius and stroke tokens as the rest of the app. The page is sized to
+   A4 so "Unduh" is a browser print-to-PDF.
+   =========================================================================== */
+body { background: var(--color-container-tertiary); }
+
+.docbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 24px; background: var(--color-container-primary);
+  box-shadow: var(--shadow-md);
+}
+.docbar-l { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.sheet {
+  width: 210mm; min-height: 297mm; margin: 24px auto; padding: 18mm 16mm;
+  background: var(--color-container-primary); box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+}
+
+.doc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.doc-issuer { display: flex; align-items: center; gap: 10px; }
+.doc-issuer .nm { font-family: var(--font-family-heading); font-weight: 700; font-size: 20px; color: var(--color-text-brand-primary); }
+.doc-issuer .sub { font-size: 10px; color: var(--color-text-tertiary); margin-top: 2px; }
+.doc-kind { text-align: right; }
+.doc-kind .t { font-family: var(--font-family-heading); font-weight: 700; font-size: 22px; letter-spacing: .02em; }
+.doc-kind .n { font-size: 11px; color: var(--color-text-tertiary); margin-top: 4px; font-variant-numeric: tabular-nums; }
+
+.doc-rule { height: 2px; background: var(--color-brand-primary); margin: 18px 0 20px; }
+
+.doc-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 22px; }
+.doc-meta .lbl { font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-muted); margin-bottom: 6px; }
+.doc-meta .val { font-size: 13px; font-weight: 600; color: var(--color-text-primary); }
+.doc-meta .val small { display: block; font-size: 11px; font-weight: 400; color: var(--color-text-tertiary); margin-top: 2px; }
+.doc-meta dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 11px; }
+.doc-meta dt { color: var(--color-text-tertiary); }
+.doc-meta dd { text-align: right; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+table.doc { width: 100%; border-collapse: collapse; font-size: 11px; }
+table.doc thead th {
+  text-align: left; font-weight: 700; color: var(--color-text-secondary);
+  padding: 8px 8px; border-bottom: 1.5px solid var(--color-stroke-default);
+  font-size: 10px; letter-spacing: .03em; text-transform: uppercase;
+}
+table.doc td { padding: 9px 8px; border-bottom: 1px dashed var(--color-stroke-subtle); vertical-align: top; }
+table.doc tbody tr:last-child td { border-bottom: 1px solid var(--color-stroke-default); }
+table.doc .num { text-align: right; font-variant-numeric: tabular-nums; }
+table.doc .muted { color: var(--color-text-tertiary); font-size: 10px; }
+table.doc .code { font-variant-numeric: tabular-nums; color: var(--color-text-secondary); font-weight: 600; }
+
+.doc-tot { margin-top: 16px; display: flex; justify-content: flex-end; }
+.doc-tot dl { display: grid; grid-template-columns: auto 160px; gap: 7px 20px; font-size: 12px; min-width: 320px; }
+.doc-tot dt { color: var(--color-text-secondary); }
+.doc-tot dd { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+.doc-tot .grand dt, .doc-tot .grand dd {
+  font-family: var(--font-family-heading); font-weight: 700; font-size: 16px;
+  color: var(--color-text-primary); padding-top: 9px; border-top: 1.5px solid var(--color-stroke-default);
+}
+
+.doc-note {
+  margin-top: auto; padding-top: 24px; font-size: 10px; line-height: 1.7;
+  color: var(--color-text-tertiary); border-top: 1px solid var(--color-stroke-subtle);
+}
+.doc-note strong { color: var(--color-text-secondary); }
+.doc-pay {
+  margin-top: 18px; padding: 12px 14px; border-radius: var(--radius-lg);
+  background: var(--color-status-brand-bg); font-size: 11px; line-height: 1.7;
+}
+.doc-pay .lbl { font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--color-brand-primary-pressed); margin-bottom: 4px; }
+
+@media print {
+  .docbar { display: none; }
+  body { background: #fff; }
+  .sheet { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
+  @page { size: A4; margin: 14mm; }
+}
+</style>
+</head>
+<body>
+
+<div class="docbar">
+  <div class="docbar-l">
+    <a class="btn" href="causa-admin-finance-dashboard.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      Kembali ke Finance Hub
+    </a>
+    <span class="chip chip-closed" id="barChip"></span>
+  </div>
+  <button class="btn btn-primary" onclick="window.print()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/><path d="M6 9V2h12v7"/></svg>
+    Unduh PDF
+  </button>
+</div>
+
+<div class="sheet" id="sheet"></div>
+
+<script src="finance-catalog.js"></script>
+<script src="finance-data.js"></script>
+<script>
+(function () {
+  'use strict';
+  const rp = FD.rp, num = FD.num, pct = FD.pct;
+  const esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); };
+
+  const q = new URLSearchParams(location.search);
+  const period = FD.PERIODS.some(function (p) { return p.id === q.get('period'); })
+    ? q.get('period') : FD.DEFAULT_PERIOD;
+  const per = FD.periodOf(period);
+  const kind = q.get('kind') === 'lab' ? 'lab' : 'provider';
+  const scheme = FD.SCHEMES[q.get('scheme')] ? q.get('scheme') : 'payable';
+  const orgId = q.get('org');
+
+  const org = kind === 'lab' ? FD.LABS[orgId] : FD.PROVIDERS[orgId];
+  if (!org) {
+    document.getElementById('sheet').innerHTML =
+      '<div class="empty">Organisasi tidak ditemukan. Buka dokumen ini dari halaman Finance Hub.</div>';
+    return;
+  }
+
+  const doc = FD.documentFor({ kind: kind, orgId: orgId, scheme: scheme }, period);
+  const st = FD.PERIOD_STATUS[per.status];
+  document.getElementById('barChip').className = 'chip ' + st.cls;
+  document.getElementById('barChip').innerHTML = '<span class="dot"></span>' + per.label + ' · ' + st.label;
+  document.title = 'Causa - ' + doc.label + ' ' + doc.number;
+
+  /* ---- line items ----------------------------------------------------
+     EVERY document itemises SERVICES, with catalog codes — never the other
+     side of the pair. A counterparty is billed or paid for the tests that
+     were ordered; how Nusantics routed them between providers and labs is a
+     supply-side arrangement they are not party to, and putting it on an
+     outbound document leaks a commercial relationship.
+     The provider x lab cut stays inside the app (tables and drawer), which is
+     where it belongs.
+     ------------------------------------------------------------------- */
+  const pairs = FD.PAIRS.filter(function (p) {
+    return kind === 'lab' ? p.labId === orgId : (p.providerId === orgId && p.scheme === scheme);
+  });
+
+  const txs = [];
+  pairs.forEach(function (p) { Array.prototype.push.apply(txs, FD.transactions(p.id, period)); });
+
+  /* A self-lab organization is invoiced exactly like any other BY_PROVIDER
+     provider — it keeps its provider commission and owes the rest. The only
+     thing self-lab changes on this document is the explanatory note. */
+  const isSelfLab = kind === 'provider' && pairs.length > 0 &&
+    pairs.every(function (p) { return p.selfLab; });
+
+  const lines = FD.groupByService(txs).map(function (g) {
+    // The amount owed/payable on this leg, per service.
+    const amount = kind === 'lab' ? g.labComm
+      : scheme === 'payable' ? g.payable : g.incentive;
+    return { code: g.code, name: g.name, meta: FD.SERVICE_CATEGORY[g.category] || g.category,
+             agg: g, amount: amount };
+  });
+
+  const total = lines.reduce(function (a, l) { return a + l.amount; }, 0);
+  const orders = lines.reduce(function (a, l) { return a + l.agg.orders; }, 0);
+  const beforeTax = lines.reduce(function (a, l) { return a + l.agg.beforeTax; }, 0);
+  const providerComm = lines.reduce(function (a, l) { return a + l.agg.providerComm; }, 0);
+
+  const isInvoice = doc.type === 'invoice';
+  /* A doctor's incentive statement states only what they earn: unit, quantity,
+     amount. The customer price is Nusantics' commercial information and has no
+     place on a referral payout advice. */
+  const isDoctorStatement = kind === 'provider' && scheme === 'incentive';
+  const ppn = Math.round(total * FD.PPN_PERCENT / 100);
+
+  /* Invoice is grossed up by PPN (matching the existing payable dialog);
+     a statement is a transfer advice, stated before tax. */
+  const grand = isInvoice ? total + ppn : total;
+
+  const colAmount = kind === 'lab' ? 'Komisi Lab' : isInvoice ? 'Payable' : 'Jumlah Insentif';
+
+  const sheet =
+    '<div class="doc-head">' +
+      '<div class="doc-issuer">' +
+        '<div class="logo-mark">c</div>' +
+        '<div><div class="nm">causa</div>' +
+        '<div class="sub">PT Nusantics Bhumi Nusantara<br>Jakarta, Indonesia · NPWP 00.000.000.0-000.000</div></div>' +
+      '</div>' +
+      '<div class="doc-kind"><div class="t">' + doc.title + '</div>' +
+        '<div class="n">' + doc.number + '</div></div>' +
+    '</div>' +
+    '<div class="doc-rule"></div>' +
+
+    '<div class="doc-meta">' +
+      '<div>' +
+        '<div class="lbl">' + (isInvoice ? 'Ditagihkan kepada' : 'Dibayarkan kepada') + '</div>' +
+        '<div class="val">' + esc(org.name) +
+          '<small>' + esc(org.city) + ' · ' + orgId + '</small></div>' +
+      '</div>' +
+      '<div>' +
+        '<div class="lbl">Detail dokumen</div>' +
+        '<dl>' +
+          '<dt>Periode</dt><dd>' + per.label + '</dd>' +
+          '<dt>Tanggal terbit</dt><dd>' + issueDate(per) + '</dd>' +
+          '<dt>Skema</dt><dd>' + (isSelfLab ? 'Skema provider · lab sendiri'
+            : kind === 'lab' ? 'Semua skema' : FD.SCHEMES[scheme].label) + '</dd>' +
+          '<dt>Jumlah order</dt><dd>' + num(orders) + '</dd>' +
+          '<dt>Jenis layanan</dt><dd>' + num(lines.length) + '</dd>' +
+        '</dl>' +
+      '</div>' +
+    '</div>' +
+
+    '<table class="doc"><thead><tr>' +
+      '<th style="width:64px">Kode</th>' +
+      '<th>Layanan</th>' +
+      '<th class="num">Qty</th>' +
+      (isDoctorStatement ? '' : '<th class="num">Nilai Sebelum PPN</th>') +
+      (isInvoice ? '<th class="num">Komisi Provider</th>' : '') +
+      (isDoctorStatement ? '<th class="num">Insentif / Unit</th>' : '') +
+      '<th class="num">' + colAmount + '</th>' +
+    '</tr></thead><tbody>' +
+      lines.map(function (l) {
+        return '<tr>' +
+          '<td class="code">' + l.code + '</td>' +
+          '<td>' + esc(l.name) + '<div class="muted">' + esc(l.meta) + '</div></td>' +
+          '<td class="num">' + num(l.agg.orders) + '</td>' +
+          (isDoctorStatement ? '' : '<td class="num">' + rp(l.agg.beforeTax) + '</td>') +
+          (isInvoice ? '<td class="num">− ' + rp(l.agg.providerComm) + '</td>' : '') +
+          (isDoctorStatement ? '<td class="num">' + rp(l.amount / l.agg.orders) + '</td>' : '') +
+          '<td class="num">' + rp(l.amount) + '</td></tr>';
+      }).join('') +
+    '</tbody></table>' +
+
+    '<div class="doc-tot"><dl>' +
+      (isDoctorStatement
+        ? '<dt>Jumlah layanan dirujuk</dt><dd>' + num(orders) + '</dd>'
+        : '<dt>Nilai sebelum PPN</dt><dd>' + rp(beforeTax) + '</dd>') +
+      (isInvoice
+        ? '<dt>Komisi provider (dikurangkan)</dt><dd>− ' + rp(providerComm) + '</dd>' +
+          '<dt>Dasar pengenaan pajak</dt><dd>' + rp(total) + '</dd>' +
+          '<dt>PPN ' + FD.PPN_PERCENT + '%</dt><dd>' + rp(ppn) + '</dd>'
+        : '<dt>' + colAmount + '</dt><dd>' + rp(total) + '</dd>') +
+      '<div class="grand" style="display:contents">' +
+        '<dt>' + (isInvoice ? 'Total tagihan' : isDoctorStatement ? 'Subtotal sebelum PPh' : 'Total transfer') +
+        '</dt><dd>' + rp(grand) + '</dd>' +
+      '</div>' +
+    '</dl></div>' +
+
+    (isInvoice
+      ? '<div class="doc-pay"><div class="lbl">Instruksi pembayaran</div>' +
+        'Transfer ke rekening PT Nusantics Bhumi Nusantara · Bank Mandiri 000-00-0000000-0.<br>' +
+        'Cantumkan nomor dokumen <strong>' + doc.number + '</strong> pada berita transfer. ' +
+        'Jatuh tempo 14 hari sejak tanggal terbit.</div>'
+      : isDoctorStatement
+      ? '<div class="doc-pay"><div class="lbl">Keterangan transfer</div>' +
+        'Rincian insentif rujukan untuk periode di atas. Jumlah yang tercantum adalah bruto; ' +
+        'pemotongan pajak dan nilai bersih yang ditransfer diterbitkan terpisah.</div>'
+      : '<div class="doc-pay"><div class="lbl">Keterangan transfer</div>' +
+        'Dokumen ini adalah rincian pendukung transfer keluar dari Nusantics untuk periode di atas. ' +
+        'Nilai dinyatakan sebelum PPN; perlakuan pajak mengikuti perjanjian kerja sama yang berlaku.</div>') +
+
+    '<div class="doc-note">' +
+      // The doctor statement must not explain the customer price or the
+      // three-way split either — that is the same disclosure the line items
+      // deliberately leave out.
+      (isDoctorStatement
+        ? '<strong>Dasar perhitungan.</strong> Insentif dihitung per layanan yang dirujuk: ' +
+          'jumlah layanan dikalikan insentif per unit sesuai perjanjian kerja sama yang berlaku.<br>'
+        : isSelfLab
+        ? '<strong>Dasar perhitungan.</strong> Nilai sebelum PPN adalah harga jual pelanggan dibagi ' +
+          (100 + FD.PPN_PERCENT) / 100 + ', dikurangi komisi provider Anda. Layanan pada periode ini ' +
+          'dikerjakan oleh laboratorium milik organisasi Anda sendiri; komisi laboratoriumnya ' +
+          'diterbitkan terpisah sebagai statement of account.<br>'
+        : '<strong>Dasar perhitungan.</strong> Nilai sebelum PPN adalah harga jual pelanggan dibagi ' +
+          (100 + FD.PPN_PERCENT) / 100 + '. Setiap order dibagi tiga: komisi lab, komisi provider, ' +
+          'dan margin Nusantics, dengan margin dihitung sebagai sisa sehingga penjumlahannya selalu tepat.<br>') +
+      '<strong>Dokumen sintetis.</strong> Mockup untuk keperluan desain, bukan dokumen keuangan yang sah, ' +
+      'dan seluruh angka, nama organisasi serta identitas pajak di dalamnya adalah data rekaan.' +
+    '</div>';
+
+  document.getElementById('sheet').innerHTML = sheet;
+
+  /* Documents are issued at the start of the month after the period closes. */
+  function issueDate(p) {
+    const m = p.month === 12 ? 1 : p.month + 1;
+    const y = p.month === 12 ? p.year + 1 : p.year;
+    const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli',
+      'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    return '01 ' + MONTHS[m - 1] + ' ' + y;
+  }
+})();
+</script>
+</body>
+</html>
