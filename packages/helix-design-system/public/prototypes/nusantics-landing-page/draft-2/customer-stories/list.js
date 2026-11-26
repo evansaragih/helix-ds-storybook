@@ -22,7 +22,7 @@
   const card = (p, feat) => `<a class="blog-card bl-card cs-card kh-lift${feat ? ' bl-card--feat' : ''}" href="${href(p)}"${DETAIL[p.slug] ? '' : ' aria-disabled="true"'}>
     <img class="blog-card__img" src="${p.img}" alt="" width="${feat ? 736 : 352}" height="440" loading="lazy" decoding="async"><span class="blog-card__fade"></span>
     <div class="blog-card__copy"><h2 class="news-card__title">${esc(p.title)}</h2><p class="news-card__desc">${esc(p.excerpt)}</p>
-    <p class="cs-card__meta">${esc(p.org)} &nbsp;•&nbsp; ${p.min} min read</p>
+    <p class="cs-card__meta">${p.loc ? esc(p.loc) + ' &nbsp;•&nbsp; ' : ''}${esc(p.date)}</p>
     <ul class="cs-card__tags">${p.tags.map((t) => `<li class="cs-tag">${esc(t)}</li>`).join('')}</ul></div></a>`;
 
   const pageList = (n, cur) => {

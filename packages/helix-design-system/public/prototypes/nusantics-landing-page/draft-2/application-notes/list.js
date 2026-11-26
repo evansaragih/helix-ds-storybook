@@ -1,8 +1,10 @@
-/* Application Notes list: category chips, search, pagination. Notes come from the inline JSON in index.html. */
+/* Application Notes list: product chips, search, pagination. Notes come from the inline JSON; body[data-variant] picks the card layout (photo | rows). */
 (() => {
-  const PAGE_SIZE = 10; // featured + 1, then rows of 3 (Figma 598:20098)
+  const PAGE_SIZE = 10;
+  const variant = document.body.dataset.variant;
   const posts = JSON.parse(document.getElementById('posts').textContent);
-  const LABEL = { all: 'All', 'complete-workflow': 'Complete workflow', 'sample-prep': 'Sample prep', 'library-prep': 'Library prep', sequencing: 'Sequencing', 'data-analysis': 'Data analysis', performance: 'Performance' };
+  const LABEL = { all: 'All', biomeseq: 'BiomeSeq', 'nusantics-dashboard': 'Nusantics Dashboard', 'dna-extraction-kit': 'DNA Extraction Kit' };
+  const slug = (t) => t.toLowerCase().replace(/\s+/g, '-');
   const state = { cat: 'all', q: '', page: 1 };
 
   const $ = (s) => document.querySelector(s);
@@ -13,14 +15,14 @@
   const href = (p) => p.href || '#';
 
   const matches = (p) => {
-    if (state.cat !== 'all' && p.cat !== state.cat) return false;
+    if (state.cat !== 'all' && !p.tags.some((t) => slug(t) === state.cat)) return false;
     const q = state.q.trim().toLowerCase();
     return !q || (p.title + ' ' + p.excerpt).toLowerCase().includes(q);
   };
 
-  const card = (p, feat) => `<a class="blog-card bl-card an-card kh-lift${feat ? ' bl-card--feat' : ''}" href="${href(p)}"${p.href ? '' : ' aria-disabled="true"'}>
-    <img class="blog-card__img" src="${p.img}" alt="" width="${feat ? 736 : 352}" height="470" loading="lazy" decoding="async"><span class="blog-card__fade"></span>
-    <div class="blog-card__copy"><span class="an-card__badge">${esc(p.badge)}</span><h2 class="news-card__title">${esc(p.title)}</h2><p class="news-card__desc">${esc(p.excerpt)}</p>
+  const card = (p) => `<a class="an-card an-card--${variant} kh-lift" href="${href(p)}"${p.href ? '' : ' aria-disabled="true"'}>
+    <span class="an-card__media"><img src="${p.img}" alt="" width="328" height="160" loading="lazy" decoding="async"></span>
+    <div class="an-card__copy"><h2 class="an-card__title">${esc(p.title)}</h2><p class="an-card__desc">${esc(p.excerpt)}</p>
     <p class="an-card__meta">${esc(p.info)}</p>
     <ul class="an-card__tags">${p.tags.map((t) => `<li class="an-tag">${esc(t)}</li>`).join('')}</ul></div></a>`;
 
@@ -50,14 +52,14 @@
     chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === state.cat)));
 
     if (q) status.textContent = `${all.length} result${all.length === 1 ? '' : 's'} for “${q}”`;
-    else if (state.cat !== 'all') status.textContent = `Showing ${all.length} application note${all.length === 1 ? '' : 's'} in ${LABEL[state.cat]}`;
+    else if (state.cat !== 'all') status.textContent = `Showing ${all.length} application note${all.length === 1 ? '' : 's'} for ${LABEL[state.cat]}`;
     else status.textContent = `Showing ${all.length} application notes`;
 
     grid.hidden = !slice.length;
     empty.hidden = !!slice.length;
-    grid.innerHTML = slice.map((p, i) => card(p, state.page === 1 && i === 0 && slice.length > 1)).join('');
+    grid.innerHTML = slice.map(card).join('');
     if (!slice.length) {
-      $('#bl-empty-desc').textContent = q ? `We couldn’t find any application note for “${q}”.\nCheck the spelling or try different keywords.` : `There are no application notes in ${LABEL[state.cat]} yet. Try another category.`;
+      $('#bl-empty-desc').textContent = q ? `We couldn’t find any application note for “${q}”.\nCheck the spelling or try different keywords.` : `There are no application notes for ${LABEL[state.cat]} yet. Try another product.`;
       $('#bl-clear').hidden = !q;
     }
     renderPager(slice.length ? pages : 0);

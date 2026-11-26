@@ -1,14 +1,10 @@
 /* Blog detail. Source: Figma "Blog Detail / Long-form (Jadwal Monitoring Kesehatan Udang)" 367:11766 (1280px wide). Shares tokens, nav and footer with styles.css. */
 body { background: var(--surface-subtle); }
-.nav { background: var(--surface-default); }
-.bd { padding: 112px var(--gutter) 96px; }
+.bd { padding: 80px var(--gutter) 96px; }
 .bd > * { max-width: 1120px; margin-inline: auto; }
 
 /* Header */
-.bd__crumb { display: flex; align-items: center; font-size: 13px; line-height: 20px; color: var(--text-subtler); }
-.bd__crumb a, .bd__crumb [aria-current] { padding: 0 6px; color: var(--text-subtler); text-decoration: none; }
-.bd__crumb a:hover { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; }
-.bd__sep { width: 4px; height: 4px; border-top: 1.5px solid var(--text-subtler); border-right: 1.5px solid var(--text-subtler); transform: rotate(45deg); margin-inline: 2px; }
+.bd > .st-crumb { max-width: 1120px; } /* st-crumb sets max-width:100%; keep the 1120 content column so it stays centered on wide screens */
 .bd__header { display: flex; flex-direction: column; gap: 16px; padding: 28px 0 0; }
 .bd__title { margin: 0; font: 700 39px/46.8px var(--font-heading); color: var(--text-primary); }
 .bd__meta { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 19.2px; color: var(--text-subtler); }
@@ -75,7 +71,7 @@ body { background: var(--surface-subtle); }
   .bd__grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 720px) {
-  .bd { padding: 96px 20px 64px; }
+  .bd { padding: 80px 20px 64px; }
   .bd__title { font-size: 31px; line-height: 37px; }
   .bd__fig--sq { width: 100%; }
 }

@@ -1,0 +1,4 @@
+/* Product tags in the Customer Story detail header. Same labels as the list cards (list.js `tags`); shared by the Cover, Editorial and Long-form variants.
+   Source: Figma "Knowledge Hub / Customer Story Detail / Cover v2" 653:25092, Keywords 877:40296 (Tag, Brand subtle, 24px). */
+.st-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.st-tag { display: inline-flex; align-items: center; height: 24px; padding: 2px 8px; background: var(--surface-subtle-primary); border-radius: var(--radius-lg); font-size: 10px; line-height: 15.6px; color: var(--text-primary); white-space: nowrap; }

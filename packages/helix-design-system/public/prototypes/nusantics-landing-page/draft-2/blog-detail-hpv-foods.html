@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="blog-detail.css">
+  <link rel="stylesheet" href="story-crumb.css">
   <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -79,7 +80,7 @@
     </header>
 
     <main id="main" class="bd">
-      <nav class="bd__crumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span class="bd__sep" aria-hidden="true"></span><a href="paper-publications.html">Knowledge Hub</a><span class="bd__sep" aria-hidden="true"></span><a href="blog.html">Blog</a><span class="bd__sep" aria-hidden="true"></span><span aria-current="page">Consume These 5 Foods and Beverages to Fight HPV!</span></nav>
+      <nav class="bd__crumb st-crumb" aria-label="Breadcrumb"><a class="st-crumb__home" href="index.html">Home</a><span class="st-crumb__sep" aria-hidden="true"></span><span class="st-crumb__menu-wrap"><button class="st-crumb__more" type="button" aria-label="Show more breadcrumb items" aria-expanded="false" aria-controls="st-crumb-menu"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button><ul class="st-crumb__menu" id="st-crumb-menu"><li><a href="paper-publications.html">Knowledge Hub</a></li><li><a href="blog.html">Blog</a></li></ul></span><span class="st-crumb__sep" aria-hidden="true"></span><span aria-current="page">Consume These 5 Foods and Beverages to Fight HPV!</span></nav>
       <header class="bd__header">
         <h1 class="bd__title">Consume These 5 Foods and Beverages to Fight HPV!</h1>
         <p class="bd__meta"><span>Fathimah Zahro</span><span class="bd__dot" aria-hidden="true"></span><time datetime="2025-01-13">January 13, 2025</time><span class="bd__dot" aria-hidden="true"></span><span>Blog</span></p>
@@ -190,6 +191,7 @@
 
   <script src="script.js"></script>
   <script src="mobile-menu.js"></script>
+  <script src="story-crumb.js"></script>
   <script src="blog-detail.js"></script>
 </body>
 </html>

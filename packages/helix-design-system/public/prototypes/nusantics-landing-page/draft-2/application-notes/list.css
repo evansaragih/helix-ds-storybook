@@ -1,10 +1,35 @@
-/* Application Notes list. Source: Figma 598:20098 (1280px) and 852:34429 (mobile). Reuses Knowledge Hub header/chips/pager and the Post card (styles.css .blog-card); adds the category badge, file info and product tags. */
-.an-card { height: 470px; }
-.an-card .blog-card__copy { align-items: flex-start; gap: 8px; }
-.an-card .news-card__title { font-size: 20px; line-height: 30px; }
-.an-card .blog-card__copy .news-card__desc { font-size: 16px; line-height: 24px; -webkit-line-clamp: 2; }
-.an-card__badge { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 9999px; background: var(--surface-subtle); font-size: 10px; line-height: 15.6px; letter-spacing: -0.01px; color: var(--text-subtle); }
+/* Application Notes list, two card variants. Source: Figma 890:39572 (Card, 3-col grid) and 890:40199 (List, rows). Reuses Knowledge Hub header/chips/pager; the whole card is the link to the note. */
+.an-grid[hidden], .an-list[hidden] { display: none; }
+.an-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; }
+.an-list { display: flex; flex-direction: column; gap: 32px; }
+
+.an-card { display: flex; background: var(--surface-default); border: 1px solid var(--stroke-subtle); border-radius: var(--radius-xl); box-shadow: var(--shadow-small); }
+.an-card__media { display: block; overflow: hidden; background: var(--surface-default); border-radius: var(--radius-lg); }
+.an-card__media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.an-card__copy { display: flex; flex: 1; min-width: 0; flex-direction: column; align-items: flex-start; gap: 8px; }
+.an-card__title { margin: 0; font: 500 20px/30px var(--font-body); letter-spacing: -0.01px; color: var(--text-subtle); }
+.an-card__desc { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin: 0; font-size: 16px; line-height: 24px; color: var(--text-subtler); }
 .an-card__meta { margin: 0; font-size: 13px; line-height: 19.2px; color: var(--text-subtler); white-space: pre-wrap; }
 .an-card__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .an-tag { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border: 0.5px solid var(--stroke-subtle); border-radius: var(--radius-md); background: var(--surface-default); font-size: 10px; line-height: 16px; letter-spacing: -0.01px; color: var(--text-subtler); white-space: nowrap; }
-@media (max-width: 720px) { .an-card { height: auto; min-height: 380px; } .bl-card--feat { min-height: 440px; } }
+
+/* Variant: Card (product photo header) */
+.an-card--card { flex-direction: column; gap: 12px; padding: 12px; }
+.an-card--card .an-card__media { height: 160px; }
+.an-card--card .an-card__copy { padding-bottom: 0; }
+
+/* Variant: List (row, product photo as a filled thumbnail on the left) */
+.an-card--list { align-items: center; gap: 20px; padding: 16px; }
+.an-card--list .an-card__media { flex: none; width: 120px; height: 120px; border: 1px solid var(--stroke-subtle); }
+.an-card--list .an-card__desc { -webkit-line-clamp: 2; }
+
+.an-card[aria-disabled="true"] { cursor: default; }
+
+@media (max-width: 1100px) { .an-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) {
+  .an-grid { grid-template-columns: 1fr; }
+  .an-list { gap: 16px; }
+  .an-card--list { align-items: flex-start; gap: 12px; padding: 12px; }
+  .an-card--list .an-card__media { width: 88px; height: 88px; }
+  .an-card__title { font-size: 18px; line-height: 27px; }
+}
