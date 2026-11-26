@@ -8,10 +8,12 @@ body { background: var(--surface-subtle); }
 .kh__title { margin: 0; font: 700 39px/46.8px var(--font-heading); color: var(--text-primary); }
 .kh .kh__sub { display: none; } /* the active tab already names the section */
 
-/* Hero background (Figma Knowledge Hub header): the silk gradient exported from Figma, plus a slow helix of dots */
+/* Hero background (Figma Knowledge Hub header): supports both 8x8 Bayer-dithered Swirl + DNA (.kh-hero.is-dither) and legacy silk gradient + helix */
 .kh > .kh-hero { position: absolute; inset: 0 0 auto; max-width: none; margin: 0; height: var(--kh-hero-h); overflow: hidden; pointer-events: none; z-index: 0; }
 .kh-hero__silk { position: absolute; inset: 0; width: 100%; height: 100%; background: url("assets/knowledge/hero-silk.jpg") center top / max(100%, calc(var(--kh-hero-h) * 4.2667)) 100% no-repeat; } /* the still image shows until the canvas draws over it */
+.kh-hero.is-dither .kh-hero__silk { background: var(--surface-subtle); }
 .kh-hero__helix { position: absolute; top: 0; right: max(0px, calc((100% - var(--page)) / 2)); width: min(640px, 100%); height: 100%; z-index: 1; }
+.kh-hero.is-dither .kh-hero__helix { right: 0; width: 100%; opacity: 1; }
 .kh__tabs { display: flex; justify-content: flex-start; box-sizing: border-box; height: 44px; margin-top: 32px; border-bottom: 1px solid var(--stroke-subtle); }
 .kh__tab { position: relative; display: inline-flex; align-items: center; height: 43px; padding: 0 12px; font-size: 13px; line-height: 20px; letter-spacing: -0.13px; font-weight: 500; color: var(--text-subtler); text-decoration: none; transition: color var(--motion-duration-fast) var(--motion-easing-standard); }
 .kh__tab::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--surface-primary); transform: scaleX(0); transition: transform var(--motion-duration-base) var(--motion-easing-decelerate); }
