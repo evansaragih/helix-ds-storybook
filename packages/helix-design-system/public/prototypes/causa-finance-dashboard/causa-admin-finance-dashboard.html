@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="id" data-brand="causa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Causa Admin - Finance Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../_shared/theme.css">
+<link rel="stylesheet" href="finance-ui.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══ Sidebar — items verbatim from causa-admin-portal client-layout.tsx.
+          "Finance Hub" is the new entry, slotted after Payable History. ══ -->
+  <aside class="sidebar" id="sidebar">
+  <div class="sb-head"><a class="sb-logo" href="causa-admin-finance-dashboard.html" aria-label="Causa"><img class="sb-logo-full" src="assets/wordmark-default.svg" alt="Causa"><span class="sb-logo-mark"><img src="assets/mark-default.svg" alt="Causa"></span></a><span class="sb-pill">Admin</span></div>
+  <nav class="sb-nav" aria-label="Menu utama"><a class="nav-item" title="Organizations"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5 3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v6h3a1 1 0 0 1 1 1v11h-2V11h-2v10H5V3Zm3 3v2h2V6H8Zm4 0v2h1V6h-1ZM8 11v2h2v-2H8Zm4 0v2h1v-2h-1ZM8 16v2h2v-2H8Zm4 0v2h1v-2h-1Z"/></svg><span class="lbl">Organizations</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Web Registrations"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 3v1.5h16V7H4Zm9 4h5v2h-5v-2Zm0 4h5v2h-5v-2Z"/></svg><span class="lbl">Web Registrations</span></a><a class="nav-item" title="Consignment Inventory"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 8.5 4.9L12 11.8 3.5 6.9 12 2ZM3 8.6l8 4.6V22l-8-4.6V8.6Zm18 0v8.8L13 22v-8.8l8-4.6Z"/></svg><span class="lbl">Consignment Inventory</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Patient Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Zm0 2c-4.4 0-8 2.2-8 5v2h16v-2c0-2.8-3.6-5-8-5Z"/></svg><span class="lbl">Patient Management</span></a><a class="nav-item" title="Order Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm7 1.5V9h5.5L13 3.5ZM8 13v2h8v-2H8Zm0 4v2h5v-2H8Z"/></svg><span class="lbl">Order Management</span></a><a class="nav-item" title="Sample Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 2h6v2h-1v5.2l5.4 9A2 2 0 0 1 17.7 21H6.3a2 2 0 0 1-1.7-2.8L10 9.200V4H9V2Zm-.6 12-2 3.500a.5.5 0 0 0 .4.500h10.400a.5.5 0 0 0 .4-.5L15.600 14H8.400Z"/></svg><span class="lbl">Sample Management</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Campaigns"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 3v14l-5-2.700H8.500l1.400 5.200a1 1 0 0 1-1 1.200H7.700a1 1 0 0 1-1-.7L5 15H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h11l5-3Z"/></svg><span class="lbl">Campaigns</span></a><a class="nav-item" title="Commission History"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Zm-1 4h2v1.100c1.300.2 2 1 2 2h-2c0-.4-.4-.8-1-.8s-1 .3-1 .7c0 .5.5.7 1.500 1 1.500.4 2.500 1 2.500 2.300 0 1-.8 1.800-2 2V17h-2v-1.100c-1.500-.2-2.300-1.200-2.300-2.200h2c0 .5.5.9 1.300.9.700 0 1.200-.3 1.200-.8 0-.5-.5-.7-1.600-1-1.400-.4-2.400-.9-2.400-2.200 0-1 .8-1.800 2-2V7Z"/></svg><span class="lbl">Commission History</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Payable History"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm-2 5h20V8H2v2Zm4 5v2h4v-2H6Z" transform="translate(0 0)"/></svg><span class="lbl">Payable History</span></a><a class="nav-item active" href="causa-admin-finance-dashboard.html" aria-current="page" title="Finance Hub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3h2v16h16v2H3V3Zm5 9h3v6H8v-6Zm5-5h3v11h-3V7Zm5 3h3v8h-3v-8Z"/></svg><span class="lbl">Finance Hub</span></a><a class="nav-item" title="Service Management"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 6h9.100a3 3 0 0 1 5.800 0H20v2h-1.100a3 3 0 0 1-5.800 0H4V6Zm0 10h1.100a3 3 0 0 1 5.800 0H20v2h-9.100a3 3 0 0 1-5.800 0H4v-2Z"/></svg><span class="lbl">Service Management</span><svg class="nav-chev" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></a><a class="nav-item" title="Simulator Harga"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 3v4h10V5H7Zm1 6v2h2v-2H8Zm3 0v2h2v-2h-2Zm3 0v2h2v-2h-2ZM8 15v2h2v-2H8Zm3 0v2h2v-2h-2Zm3 0v4h2v-4h-2Z"/></svg><span class="lbl">Simulator Harga</span></a></nav>
+</aside>
+
+  <div class="main">
+    <header class="navbar">
+      <div class="nb-left"><button class="ibtn nb-toggle" type="button" id="sbToggle" aria-controls="sidebar" aria-expanded="true" aria-label="Ciutkan sidebar"><img src="assets/ic-panel.svg" alt=""></button><span class="nb-div" aria-hidden="true"></span><div class="crumbs"><span class="muted">Finance</span><span class="sep">/</span><span class="cur">Finance Hub</span></div></div>
+      <div class="nav-right"><button class="btn" type="button"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-1 14h2v2h-2v-2Zm1-10a3.500 3.500 0 0 1 1.200 6.800c-.6.200-.7.500-.7 1.200h-2c0-1.500.700-2.200 1.600-2.600A1.500 1.500 0 1 0 10.500 9.500h-2A3.500 3.500 0 0 1 12 6Z"/></svg>Bantuan</button><button class="btn btn-profile" type="button" aria-haspopup="menu" aria-label="Menu profil"><span class="pf-avatar">JL</span><span class="pf-name">Finance Admin</span><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7.4 9 12 13.600 16.600 9 18 10.400l-6 6-6-6L7.400 9Z"/></svg></button></div>
+    </header>
+
+    <div class="scroll">
+      <div class="page">
+
+        <!-- ══ period bar — scope + stepper, always visible ══ -->
+        <div class="gut"><div class="periodbar">
+          <div class="period-left">
+            <span class="pb-label">Periode</span>
+            <div class="segmented" id="scopeToggle">
+              <button class="seg active" data-scope="month">Bulanan</button>
+              <button class="seg" data-scope="year">Tahunan</button>
+            </div>
+            <div class="ddwrap" id="monthPick"><div class="stepper" id="stepper">
+              <button id="prevM" aria-label="Periode sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="m15 18-6-6 6-6"/></svg></button>
+              <button type="button" class="label" id="periodLabel" aria-haspopup="dialog" aria-expanded="false" aria-label="Pilih bulan"></button>
+              <button id="nextM" aria-label="Periode berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="m9 18 6-6-6-6"/></svg></button>
+            </div>
+            <div class="pickpop" id="monthPop" role="dialog" aria-label="Pilih bulan"></div></div>
+            <div class="ddwrap" id="yearPick">
+              <button class="yearbtn" id="yearBtn"></button>
+              <div class="pickpop" id="yearMenu" role="dialog" aria-label="Pilih tahun"></div>
+            </div>
+          </div>
+          <div class="pstat"><span class="pb-label">Status periode</span><span class="chip" id="periodChip" tabindex="0"></span></div>
+        </div></div>
+
+        <!-- ══ section tabs — directly under the period bar, so they are the
+                first thing on the page rather than the last ══ -->
+        <div class="gut">
+          <div class="schemebar">
+            <div class="schemetabs" id="schemeTabs"></div>
+            <div id="tabAside" style="display:flex;align-items:center"></div>
+          </div>
+        </div>
+
+        <!-- ══ Ringkasan only: tri-partite + cash position ══ -->
+        <div id="overviewSlot" style="display:grid;gap:12px">
+          <div class="gut">
+            <div class="cc">
+              <div class="cc-head">
+                <div class="itile itile-solid-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+                <div class="cc-title">Distribusi Tri-Partit</div>
+                <span class="badge badge-brand" style="margin-left:8px">Sebelum PPN</span>
+              </div>
+              <div class="cc-body"><div class="hero-grid" id="heroSlot"></div></div>
+              <div class="cc-foot" id="heroFoot"></div>
+            </div>
+          </div>
+          <div class="gut">
+            <div class="cc">
+              <div class="cc-head">
+                <div class="itile itile-subtle-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg></div>
+                <div class="cc-title">Arus Kas Periode</div>
+              </div>
+              <div class="cc-body cc-body--white"><div class="cashwrap" id="netSlot"></div></div>
+              <div class="cc-foot" id="netFoot"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ stakeholder tabs only: that scheme's own figures ══ -->
+        <div class="gut" id="statsSlot"></div>
+
+        <!-- ══ tables ══ -->
+        <div id="tablesSlot" style="display:grid;gap:12px"></div>
+
+        <div class="gut note">
+          Angka bersifat sintetis dan dihitung ulang dari <code>finance-data.js</code>. Komisi dan payable
+          ditampilkan sebelum PPN; nilai bruto pelanggan = sebelum PPN &times; 1,11. Identitas rekonsiliasi
+          <code>before_tax &minus; (komisi lab + komisi provider + margin Nusantics) = 0</code> dijaga
+          per transaksi, sehingga berlaku di setiap tingkat agregasi.
+          Halaman <em>Komisi Reguler</em>, <em>Komisi Voucher</em> dan <em>Payable</em> yang sudah ada tetap terpisah dari halaman ini.
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ row-detail drawer ══ -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div style="min-width:0">
+      <div class="ht" id="dTitle">&nbsp;</div>
+      <div class="hs" id="dSub">&nbsp;</div>
+    </div>
+    <button class="xbtn" id="dClose" aria-label="Tutup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+  </div>
+  <div class="drawer-body" id="dBody"></div>
+  <div class="drawer-foot">
+    <button class="btn" id="dClose2">Tutup</button>
+    <a class="btn btn-primary" id="dOpenTx" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+      Buka daftar transaksi
+    </a>
+  </div>
+</aside>
+
+<!-- SheetJS: the overview exports the test list as a real .xlsx -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="finance-catalog.js"></script>
+<script src="finance-data.js"></script>
+<script>
+(function () {
+  'use strict';
+  const rp = FD.rp, pct = FD.pct, num = FD.num;
+  const $ = function (id) { return document.getElementById(id); };
+  const esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); };
+
+  /* View state lives in the URL so a given cut is shareable — same approach the
+     pricing-simulator plan specifies for its cart. */
+  /* One tab = one counterparty ledger. Provider splits by scheme because the
+     two are opposite cash directions; a lab is paid the same way on both, so
+     it is a single tab. */
+  /* Two kinds of section, and the split is the whole point of the page:
+       `overview`    — the period as a whole: tri-partite, cash position, and
+                       every test. Scheme-agnostic by design.
+       stakeholder   — one payment scheme and the counterparties inside it,
+                       with that scheme's own figures and its own documents.
+     "Skema Provider" is the house term for BY_PROVIDER — it is what the
+     price-list PDFs are called in causa-admin-portal. */
+  const TABS = {
+    'ringkasan':          { label: 'Ringkasan',                       kind: 'overview', scheme: null },
+    'provider-payable':   { label: 'Provider - Skema Provider',  kind: 'provider', scheme: 'payable' },
+    'provider-incentive': { label: 'Provider - Skema Insentif',  kind: 'provider', scheme: 'incentive' },
+    'lab':                { label: 'Lab',                             kind: 'lab',      scheme: null },
+    /* Self-lab is not an exception inside the payable scheme — it is a
+       different business model. The clinic owns both ends and Nusantics
+       charges a platform fee instead of earning a spread, so it gets its own
+       section and is excluded from the three third-party ones. */
+    'lab-sendiri':        { label: 'Provider - Lab Sendiri',          kind: 'selflab',  scheme: 'payable' },
+  };
+
+  const q0 = new URLSearchParams(location.search);
+  const state = {
+    scope: q0.get('scope') === 'year' ? 'year' : 'month',
+    period: FD.PERIODS.some(function (p) { return p.id === q0.get('period'); }) ? q0.get('period') : FD.DEFAULT_PERIOD,
+    year: FD.YEARS.some(function (y) { return y.id === q0.get('year'); })
+      ? q0.get('year') : FD.YEARS[FD.YEARS.length - 1].id,
+    tab: TABS[q0.get('tab')] ? q0.get('tab') : 'ringkasan',
+    group: q0.get('group') === 'pair' ? 'pair' : 'org',   // organisasi is the default cut
+    page: 1,
+  };
+  function tab() { return TABS[state.tab]; }
+
+  /* Each section points at its own tutorial anchor, the way the portal's list
+     pages do (feature-causa/components/tutorial-help-button, rendered in the
+     table toolbar's `actions`). The content behind these comes from the
+     feature spec: the schemes, the documented leg, and settlement. */
+  const TUTORIAL = {
+    'ringkasan':          { href: '/tutorial/finance-hub#ringkasan',       label: 'Panduan Rekap' },
+    'provider-payable':   { href: '/tutorial/finance-hub#skema-provider',  label: 'Panduan Skema Provider' },
+    'provider-incentive': { href: '/tutorial/finance-hub#skema-insentif',  label: 'Panduan Skema Insentif' },
+    'lab':                { href: '/tutorial/finance-hub#lab',             label: 'Panduan Lab' },
+    'lab-sendiri':        { href: '/tutorial/finance-hub#lab-sendiri',     label: 'Panduan Lab Sendiri' },
+  };
+
+  function helpBtn() {
+    const t = TUTORIAL[state.tab];
+    if (!t) return '';
+    return '<a class="btn btn-sm" href="' + t.href + '" target="_blank" rel="noopener noreferrer">' +
+      ICON.help + t.label + '</a>';
+  }
+  /* Everything on the page reads the scope, so a year view is the same
+     surface with a wider window — not a separate screen. */
+  function scopeId() { return state.scope === 'year' ? state.year : state.period; }
+  function periodIds() { return FD.periodsIn(scopeId()).map(function (p) { return p.id; }); }
+
+  /** Period summary for the active scope (a month, or every month of a year). */
+  function summary() {
+    const ids = periodIds();
+    if (ids.length === 1) return FD.periodSummary(ids[0]);
+    const acc = ids.map(FD.periodSummary);
+    const add = function (f) { return acc.reduce(function (a, x) { return a + f(x); }, 0); };
+    const bt = add(function (x) { return x.beforeTax; });
+    const leg = function (k) {
+      // A null realized stays null across a year: summing it would turn
+      // "not tracked" into zero, which reads as "nothing paid".
+      const tracked = acc[0].cash[k].realized !== null;
+      return { accrued: add(function (x) { return x.cash[k].accrued; }),
+               realized: tracked ? add(function (x) { return x.cash[k].realized; }) : null,
+               scope: acc[0].cash[k].scope };
+    };
+    return {
+      period: { label: FD.scopeLabel(scopeId()), status: 'closed' },
+      orders: add(function (x) { return x.orders; }), beforeTax: bt,
+      gross: add(function (x) { return x.gross; }),
+      labComm: add(function (x) { return x.labComm; }),
+      providerComm: add(function (x) { return x.providerComm; }),
+      nusanticsMargin: add(function (x) { return x.nusanticsMargin; }),
+      residual: bt - (add(function (x) { return x.labComm; }) + add(function (x) { return x.providerComm; }) +
+        add(function (x) { return x.nusanticsMargin; })),
+      pctLab: add(function (x) { return x.labComm; }) / bt * 100,
+      pctProvider: add(function (x) { return x.providerComm; }) / bt * 100,
+      pctNusantics: add(function (x) { return x.nusanticsMargin; }) / bt * 100,
+      incentive: { orders: add(function (x) { return x.incentive.orders; }) },
+      payable: { orders: add(function (x) { return x.payable.orders; }) },
+      cash: { customerIn: leg('customerIn'), payableIn: leg('payableIn'),
+              labOut: leg('labOut'), providerOut: leg('providerOut') },
+      netAccrued: add(function (x) { return x.netAccrued; }),
+      providerCount: acc[0].providerCount, labCount: acc[0].labCount,
+    };
+  }
+
+  /** Every transaction in the active scope, optionally one scheme. */
+  function scopeTx(scheme) {
+    const out = [];
+    periodIds().forEach(function (id) {
+      Array.prototype.push.apply(out, FD.allTransactions(id, scheme));
+    });
+    return out;
+  }
+
+  /* Third-party only. The three stakeholder sections exclude self-lab, so a
+     period-wide aggregate would overstate every footer and summary line next
+     to rows that do not contain those orders. */
+  function scopeTxTP(scheme) {
+    return scopeTx(scheme).filter(function (t) { return !t.selfLab; });
+  }
+
+  /** Aggregate rows for the active scope (months summed). */
+  function scopeRows(fn, scheme) {
+    const ids = periodIds();
+    if (ids.length === 1) return fn(ids[0], scheme);
+    const by = {};
+    ids.forEach(function (id) {
+      fn(id, scheme).forEach(function (r) {
+        const k = r.key;
+        if (!by[k]) { by[k] = Object.assign({}, r); return; }
+        ['orders', 'beforeTax', 'labComm', 'providerComm', 'nusanticsMargin', 'payable',
+         'incentive', 'settledOrders', 'realizedPayable', 'realizedIncentive',
+         'realizedCustomer', 'labCommIncentive', 'labCommPayable',
+         'platformFee', 'orderCount', 'testCount', 'sampleCount'].forEach(function (f) {
+          if (typeof r[f] === 'number') by[k][f] = (by[k][f] || 0) + r[f];
+        });
+      });
+    });
+    return Object.keys(by).map(function (k) { return by[k]; })
+      .sort(function (a, b) { return b.beforeTax - a.beforeTax; });
+  }
+  function scheme() { return tab().scheme; }
+
+  function syncUrl() {
+    const q = new URLSearchParams({ scope: state.scope, period: state.period,
+      year: state.year, tab: state.tab, group: state.group });
+    // replaceState throws a SecurityError on file:// in some browsers; the page
+    // works fine without it, so a failed sync is not worth surfacing.
+    try { history.replaceState(null, '', location.pathname + '?' + q.toString()); } catch (e) { /* no-op */ }
+  }
+
+  const ICON = {
+    up:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>',
+    down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m19 12-7 7-7-7"/><path d="M12 5v14"/></svg>',
+    ext:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>',
+    check2: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>',
+    sheet:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>',
+    warnSm: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+    filter: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>',
+    sort:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg>',
+    dl:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>',
+    chevL:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>',
+    chevR:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>',
+    chevD:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>',
+    plus:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5v14"/></svg>',
+    info:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>',
+    // lucide HelpCircle, as feature-causa/tutorial-help-button uses
+    help:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>',
+    warn:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+    check:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M20 6 9 17l-5-5"/></svg>',
+  };
+
+  /* ---------- small view helpers ---------- */
+
+  /* The margin is a remainder, so on a small counterparty it can come out
+     NEGATIVE when the lab's COGS runs high. Clamp the bar and flag the row
+     rather than rendering a negative width. */
+  /** A money cell in the column this section's document is built from. */
+  function docTd(value, neg) {
+    return '<td class="num tnum doccol"' +
+      (neg ? ' style="color:var(--color-text-error)"' : '') + '>' + value + '</td>';
+  }
+
+  /* The split, per row. Segments the section does not document recede, so a
+     column of these reads as "how big is the figure we are billing" rather
+     than three competing bars. */
+  function miniBar(agg, legs) {
+    const bt = agg.beforeTax || 1;
+    const w = function (v) { return Math.max(0, v / bt * 100); };
+    const over = agg.nusanticsMargin < 0;
+    const on = {};
+    (legs || []).forEach(function (k) {
+      FD.LEG_META[k].segs.forEach(function (sg) { on[sg] = 1; });
+    });
+    const d = function (sg) {
+      return (legs && legs.length && !on[sg]) ? ';opacity:.3' : '';
+    };
+    const part = {
+      lab:  '<i style="width:' + w(agg.labComm) + '%;background:var(--color-brand-tertiary)' + d('lab') + '"></i>',
+      prov: '<i style="width:' + w(agg.providerComm) + '%;background:var(--color-brand-secondary)' + d('prov') + '"></i>',
+      nus:  over
+        ? '<i style="width:100%;background:repeating-linear-gradient(45deg,var(--color-status-error-bg) 0 3px,var(--color-text-error) 3px 6px)"></i>'
+        : '<i style="width:' + w(agg.nusanticsMargin) + '%;background:var(--color-brand-primary)' + d('nus') + '"></i>',
+    };
+    return '<div class="minibar"' + (over ? ' title="Margin negatif: COGS lab melampaui sisa"' : '') + '>' +
+      FD.segOrder(legs).map(function (k) { return part[k]; }).join('') +
+      '</div>';
+  }
+
+  /* Row selection lives per org table. The pair table has none: a document is
+     addressed to an organization, and settlement follows the document, so a
+     provider x lab pair is never a billable counterparty. */
+  const selection = { 'provider-payable': new Set(), 'provider-incentive': new Set(), lab: new Set() };
+
+  function tableMeta(id) {
+    /* `settleLabel: null` means the section has no settlement action. The lab
+       side is one of those: payment of a lab commission is not tracked, so
+       selecting lab rows can only produce statements. */
+    if (id === 'lab') {
+      return { kind: 'lab', docType: 'statement', settleLabel: null };
+    }
+    const pay = TABS[id].scheme === 'payable';
+    return {
+      kind: 'provider',
+      docType: pay ? 'invoice' : 'statement',
+      settleLabel: pay ? 'Tandai Sudah Dibayarkan' : 'Tandai Sudah Dicairkan',
+    };
+  }
+
+  function selCell(tableId, id) {
+    const on = selection[tableId].has(id);
+    return '<td class="cbcell"><input type="checkbox" class="cb" data-sel="' + tableId +
+      '" data-id="' + id + '" aria-label="Select row"' + (on ? ' checked' : '') + '></td>';
+  }
+
+  function selHeader(tableId, ids) {
+    const sel = selection[tableId];
+    const all = ids.length > 0 && ids.every(function (i) { return sel.has(i); });
+    const some = !all && ids.some(function (i) { return sel.has(i); });
+    return '<th class="cbcell"><input type="checkbox" class="cb' + (some ? ' ind' : '') +
+      '" data-selall="' + tableId + '" aria-label="Select all"' + (all ? ' checked' : '') + '></th>';
+  }
+
+  /* An aggregate row is a mix of settled and outstanding orders, so it gets a
+     progress figure rather than a single status badge. */
+  function progCell(st, scheme) {
+    const color = scheme === 'payable' ? 'var(--color-brand-primary)' : 'var(--color-brand-secondary)';
+    const p = st.ratio * 100;
+    return '<div class="prog" title="' + rp(st.realized) + ' dari ' + rp(st.accrued) + '">' +
+      '<div class="prog-track"><i style="width:' + p + '%;background:' + color + '"></i></div>' +
+      '<span class="prog-pct tnum">' + Math.round(p) + '%</span></div>';
+  }
+
+  /* Only the name truncates — the badge must survive a narrow column. */
+  function nameCell(name, row) {
+    return '<div class="namecell"><span class="nm">' + esc(name) + '</span>' +
+      (row.selfLab || row.selfLabOf ? '<span class="badge badge-warning">Lab sendiri</span>' : '') +
+      '</div>';
+  }
+
+  function txUrl(params) {
+    // Carry the active scope, so a row clicked in Tahunan opens the year.
+    const q = Object.assign({ period: scopeId() }, params);
+    return 'causa-admin-finance-transactions.html?' +
+      Object.keys(q).map(function (k) { return k + '=' + encodeURIComponent(q[k]); }).join('&');
+  }
+
+  /* ---------- period / hero / stats / net ---------- */
+
+  function renderPeriod() {
+    const isYear = state.scope === 'year';
+    const i = FD.PERIODS.findIndex(function (p) { return p.id === state.period; });
+
+    Array.prototype.forEach.call($('scopeToggle').children, function (b) {
+      b.classList.toggle('active', b.dataset.scope === state.scope);
+      b.onclick = function () { state.scope = b.dataset.scope; state.page = 1; render(); };
+    });
+
+    /* Month scope steps; year scope picks. A stepper over three years would
+       be three clicks to the far end, and it hides how many years exist. */
+    $('monthPick').style.display = isYear ? 'none' : '';
+    $('yearPick').style.display = isYear ? '' : 'none';
+    if (isYear) {
+      $('yearBtn').innerHTML = FD.scopeLabel(state.year) + ICON.chevD;
+      $('yearMenu').innerHTML = '<div class="pick-body"><div class="pick-grid pick-grid--years">' +
+        FD.YEARS.map(function (y) {
+          const n = FD.periodsIn(y.id).length;
+          return '<button type="button" class="pcell tall' + (y.id === state.year ? ' sel' : '') + '" aria-pressed="' + (y.id === state.year) +
+            '" data-year="' + y.id + '"><span class="l">' + y.label.replace(/^Tahun /, '') + '</span><span class="sub">' + n + ' periode</span></button>';
+        }).join('') + '</div></div>';
+      $('yearBtn').setAttribute('aria-expanded', String($('yearMenu').classList.contains('open')));
+      $('yearBtn').onclick = function (e) {
+        e.stopPropagation(); closePops('yearMenu'); $('yearMenu').classList.toggle('open');
+        $('yearBtn').setAttribute('aria-expanded', String($('yearMenu').classList.contains('open')));
+      };
+      $('yearMenu').onclick = function (e) { e.stopPropagation(); };
+      Array.prototype.forEach.call($('yearMenu').querySelectorAll('[data-year]'), function (b) {
+        b.onclick = function () {
+          state.year = b.dataset.year;
+          // Keep the month picker somewhere sensible inside the chosen year.
+          const first = FD.periodsIn(state.year)[0];
+          if (FD.periodOf(state.period).year !== Number(state.year)) state.period = first.id;
+          $('yearMenu').classList.remove('open');
+          state.page = 1; render();
+        };
+      });
+    } else {
+      $('periodLabel').textContent = FD.periodOf(state.period).label;
+      $('prevM').disabled = i <= 0;
+      $('nextM').disabled = i >= FD.PERIODS.length - 1;
+      renderMonthPop();
+    }
+
+    const st = isYear ? null : FD.PERIOD_STATUS[FD.periodOf(state.period).status];
+    $('periodChip').className = isYear ? 'chip chip-closed' : 'chip ' + st.cls;
+    $('periodChip').innerHTML = isYear
+      ? '<span class="dot"></span>' + FD.scopeLabel(state.year) + ' \u00b7 ' + num(periodIds().length) + ' periode'
+      : '<span class="dot"></span>' + st.label;
+
+  }
+
+  /* ---------- month picker (Helix Month Picker: year header + 3x4 grid) ---------- */
+  function closePops(except) {
+    ['monthPop', 'yearMenu', 'tlMenu'].forEach(function (id) {
+      const el = $(id); if (el && id !== except) el.classList.remove('open');
+    });
+    $('periodLabel').setAttribute('aria-expanded', String($('monthPop').classList.contains('open')));
+  }
+  function renderMonthPop() {
+    const yr = state.browseYear || FD.periodOf(state.period).year;
+    const yrs = FD.YEARS.map(function (y) { return Number(y.id); });
+    const lo = Math.min.apply(null, yrs), hi = Math.max.apply(null, yrs);
+    const years = state.pickMode === 'years';
+    /* Helix MonthPicker: PickerYearHeader (prev year, year button, next year), then 3x4 tiles; the year button opens a year view */
+    const head =
+      '<div class="pick-head">' +
+        '<button type="button" class="pick-nav" data-yr="-1" aria-label="Tahun sebelumnya"' + (yr <= lo ? ' disabled' : '') + '>' + ICON.chevL + '</button>' +
+        '<button type="button" class="pick-yearbtn tnum" data-act="years" aria-haspopup="listbox" aria-expanded="' + years + '">' + yr + ICON.chevD + '</button>' +
+        '<button type="button" class="pick-nav" data-yr="1" aria-label="Tahun berikutnya"' + (yr >= hi ? ' disabled' : '') + '>' + ICON.chevR + '</button>' +
+      '</div>';
+    const body = years
+      ? '<div class="pick-grid pick-grid--years">' + FD.YEARS.map(function (y) {
+          const n = FD.periodsIn(y.id).length;
+          return '<button type="button" class="pcell tall' + (Number(y.id) === yr ? ' sel' : '') + '" data-pyear="' + y.id + '"><span class="l">' +
+            y.label.replace(/^Tahun /, '') + '</span><span class="sub">' + n + ' periode</span></button>';
+        }).join('') + '</div>'
+      : '<div class="pick-grid">' + FD.MONTHS_SHORT.map(function (m, k) {
+          const id = yr + '-' + String(k + 1).padStart(2, '0');
+          const exists = FD.PERIODS.some(function (p) { return p.id === id; });
+          return '<button type="button" class="pcell' + (id === state.period ? ' sel' : '') + '" data-pid="' + id + '"' +
+            ' aria-label="' + FD.MONTHS_LONG[k] + ' ' + yr + '" aria-pressed="' + (id === state.period) + '"' + (exists ? '' : ' disabled') + '><span class="l">' + m + '</span></button>';
+        }).join('') + '</div>';
+    $('monthPop').innerHTML = '<div class="pick-body">' + head + body + '</div>';
+    Array.prototype.forEach.call($('monthPop').querySelectorAll('[data-yr]'), function (b) {
+      b.onclick = function (e) { e.stopPropagation(); state.browseYear = yr + Number(b.dataset.yr); renderMonthPop(); };
+    });
+    $('monthPop').querySelector('[data-act="years"]').onclick = function (e) {
+      e.stopPropagation(); state.pickMode = years ? 'month' : 'years'; renderMonthPop();
+    };
+    Array.prototype.forEach.call($('monthPop').querySelectorAll('[data-pyear]'), function (b) {
+      b.onclick = function (e) { e.stopPropagation(); state.browseYear = Number(b.dataset.pyear); state.pickMode = 'month'; renderMonthPop(); };
+    });
+    Array.prototype.forEach.call($('monthPop').querySelectorAll('[data-pid]'), function (b) {
+      b.onclick = function () {
+        state.period = b.dataset.pid; state.browseYear = null; state.pickMode = 'month'; state.page = 1;
+        $('monthPop').classList.remove('open'); closeDrawer(); render();
+      };
+    });
+  }
+  $('periodLabel').onclick = function (e) {
+    e.stopPropagation(); closePops('monthPop');
+    state.browseYear = null; state.pickMode = 'month'; renderMonthPop();
+    $('monthPop').classList.toggle('open');
+    $('periodLabel').setAttribute('aria-expanded', String($('monthPop').classList.contains('open')));
+  };
+  $('monthPop').onclick = function (e) { e.stopPropagation(); };
+
+  function renderHero() {
+    const s = summary();
+    const balanced = s.residual === 0;
+
+    $('heroFoot').innerHTML = selfLabNote();
+    $('heroSlot').innerHTML =
+      '<div class="hero-main">' +
+        // Not "Pendapatan": on a BY_PROVIDER order the provider bills the
+        // patient, so this value is never Nusantics revenue. Under PSAK 72 the
+        // revenue Nusantics recognises is the margin. "Nilai transaksi" is the
+        // gross written value, which is what this figure actually is.
+        '<div class="hero-label">Nilai Transaksi (Sebelum PPN)</div>' +
+        '<div class="hero-value tnum">' + rp(s.beforeTax) + '</div>' +
+        '<div class="hero-meta">' + s.providerCount + ' provider · ' + s.labCount + ' lab · ' +
+          num(FD.PAIRS.length) + ' pasangan provider &times; lab</div>' +
+        volRow(FD.volume(scopeTx())) +
+        '<div class="splitbar">' +
+          '<div class="seg-lab has-tip"  data-tip="lab"       style="width:' + s.pctLab + '%"><span>' + pct(s.pctLab) + '</span></div>' +
+          '<div class="seg-prov has-tip" data-tip="provider"  style="width:' + s.pctProvider + '%"><span>' + pct(s.pctProvider) + '</span></div>' +
+          '<div class="seg-nus has-tip"  data-tip="nusantics" style="width:' + s.pctNusantics + '%"><span>' + pct(s.pctNusantics) + '</span></div>' +
+        '</div>' +
+        '<div class="splitkey">' +
+          keyItem('var(--color-brand-tertiary)', 'Komisi Lab', s.labComm, 'lab') +
+          keyItem('var(--color-brand-secondary)', 'Komisi Provider', s.providerComm, 'provider') +
+          keyItem('var(--color-brand-primary)', 'Margin Nusantics', s.nusanticsMargin, 'nusantics') +
+        '</div>' +
+      '</div>' +
+      // Control totals: the trial-balance check for the period, not a trend.
+      '<div class="ctrl">' +
+        '<div class="ctrl-title">Kontrol Periode</div>' +
+        ctrlRow('Nilai bruto pelanggan (termasuk PPN)', rp(s.gross)) +
+        ctrlRow('PPN ' + FD.PPN_PERCENT + '%', '− ' + rp(s.gross - s.beforeTax)) +
+        ctrlRow('Nilai sebelum PPN', rp(s.beforeTax), 'strong') +
+        '<div class="ctrl-sep"></div>' +
+        ctrlRow('Komisi lab', rp(s.labComm)) +
+        ctrlRow('Komisi provider', rp(s.providerComm)) +
+        ctrlRow('Margin Nusantics', rp(s.nusanticsMargin)) +
+        ctrlRow('Jumlah distribusi', rp(s.labComm + s.providerComm + s.nusanticsMargin), 'strong') +
+        '<div class="ctrl-sep"></div>' +
+        ctrlRow('Selisih', rp(s.residual), balanced ? 'ok' : 'bad') +
+        '<div class="ctrl-foot ' + (balanced ? 'ok' : 'bad') + '">' +
+          (balanced ? ICON.check + ' Seimbang' : ICON.warnSm + ' Tidak seimbang') + '</div>' +
+      '</div>';
+  }
+
+  function ctrlRow(label, value, tone) {
+    return '<div class="ctrl-row' + (tone ? ' ' + tone : '') + '">' +
+      '<span class="ctrl-lab">' + label + '</span>' +
+      '<span class="ctrl-val tnum">' + value + '</span></div>';
+  }
+
+  function keyItem(color, label, value, tip) {
+    return '<div class="k has-tip" data-tip="' + tip + '"><span class="sw" style="background:' + color + '"></span>' +
+      '<div><div class="kt">' + label + '</div><div class="kv tnum">' + rp(value) + '</div></div></div>';
+  }
+
+  /* gen3 Tooltip, arrow="none" side="top", content="detailed". */
+  const tipEl = document.createElement('div');
+  tipEl.className = 'tip';
+  document.body.appendChild(tipEl);
+
+  function showTip(target) {
+    const party = target.dataset.tip;
+    if (!party) return;
+    tipEl.innerHTML = partyTip(FD.periodSummary(state.period), party);
+    tipEl.classList.add('open');
+    const r = target.getBoundingClientRect();
+    const t = tipEl.getBoundingClientRect();
+    let left = r.left + r.width / 2 - t.width / 2;
+    left = Math.max(8, Math.min(left, window.innerWidth - t.width - 8));
+    let top = r.top - t.height - 8;                       // sideOffset 8
+    if (top < 8) top = r.bottom + 8;                      // flip when clipped
+    tipEl.style.left = left + 'px';
+    tipEl.style.top = top + 'px';
+  }
+  function hideTip() { tipEl.classList.remove('open'); }
+
+  /* Status pill tooltip: says what the period status means for documents
+     (PRD 4.1: only an open period cannot issue invoices / statements). */
+  function statusTip() {
+    if (state.scope === 'year') {
+      return '<div class="tip-title">' + FD.scopeLabel(state.year) + '</div>' +
+        '<div class="tip-sub">Invoice dan statement diterbitkan per bulan. ' +
+        'Pilih satu periode bulanan untuk menerbitkan dokumen.</div>';
+    }
+    const per = FD.periodOf(state.period), st = FD.PERIOD_STATUS[per.status];
+    const can = per.status !== 'open';
+    return '<div class="tip-title">' + st.label + '</div>' +
+      '<div class="tip-sub">' + st.note + '</div><div class="tip-sep"></div>' +
+      '<div class="tip-sub" style="margin-top:0">Dokumen (invoice dan statement)</div>' +
+      '<div class="tip-title" style="color:var(--color-' + (can ? 'text-success' : 'text-warning') + ')">' +
+        (can ? 'Bisa diterbitkan' : 'Belum bisa diterbitkan') + '</div>';
+  }
+  function showStatusTip() {
+    tipEl.innerHTML = statusTip();
+    tipEl.classList.add('open');
+    const r = $('periodChip').getBoundingClientRect(), t = tipEl.getBoundingClientRect();
+    tipEl.style.left = Math.max(8, Math.min(r.right - t.width, window.innerWidth - t.width - 8)) + 'px';
+    tipEl.style.top = (r.bottom + 8) + 'px';                       // below: the bar sits at the top of the page
+  }
+  $('periodChip').addEventListener('mouseenter', showStatusTip);
+  $('periodChip').addEventListener('focus', showStatusTip);
+  $('periodChip').addEventListener('mouseleave', hideTip);
+  $('periodChip').addEventListener('blur', hideTip);
+
+  function bindTips(root) {
+    Array.prototype.forEach.call(root.querySelectorAll('.has-tip'), function (el) {
+      el.addEventListener('mouseenter', function () { showTip(el); });
+      el.addEventListener('mouseleave', hideTip);
+      el.addEventListener('focus', function () { showTip(el); });
+      el.addEventListener('blur', hideTip);
+    });
+  }
+
+  /* Self-lab orders have no three parties, so they skew the bar: the whole
+     value bar one organization, which we book on the lab leg. The bar stays
+     whole-period on purpose — this line says how much of it is not a split. */
+  function selfLabNote() {
+    const rows = scopeRows(function (id) { return FD.selfLabRows(id); });
+    const tes = sumField(rows, 'orders');
+    if (!tes) return '';
+    const val = sumField(rows, 'beforeTax');
+    const fee = sumField(rows, 'platformFee');
+    const all = summary().beforeTax;
+    return '<div class="splitnote">' + ICON.info +
+      '<span>Termasuk <strong>' + num(tes) + ' tes lab sendiri</strong> (' +
+      pct(all ? val / all * 100 : 0) + ' dari nilai transaksi), yang bukan pembagian tiga pihak: ' +
+      'komisi lab di sana dibayarkan ke lab milik organisasi itu sendiri, dan margin Nusantics ' +
+      'hanya platform fee ' + rp(fee) + '.</span></div>';
+  }
+
+  /* The tri-partite detail that used to be a three-card section now lives on
+     hover over the split bar / legend — gen3 Tooltip, content="detailed". */
+  function partyTip(s, party) {
+    const d = {
+      lab: { name: 'Komisi Lab', amount: s.labComm, share: s.pctLab,
+             desc: 'Terutang ke lab pelaksana pada setiap order pihak ketiga, apa pun skemanya. ' +
+                   'Pada order lab sendiri porsi ini tidak ditagihkan: organisasinya sudah memegangnya.' },
+      provider: { name: 'Komisi Provider', amount: s.providerComm, share: s.pctProvider,
+             desc: num(s.incentive.orders) + ' order insentif · ' + num(s.payable.orders) +
+                   ' order payable. Hanya order insentif yang dibayarkan ke provider.' },
+      nusantics: { name: 'Margin Nusantics', amount: s.nusanticsMargin, share: s.pctNusantics,
+             desc: 'Sisa setelah kedua komisi pada order pihak ketiga, dan platform fee ' +
+                   'pada order lab sendiri. Margin kotor, belum dikurangi logistik.' },
+    }[party];
+    return '<div class="tip-title">' + d.name + '</div>' +
+      '<div class="tip-row"><span>Jumlah</span><span class="tnum">' + rp(d.amount) + '</span></div>' +
+      '<div class="tip-row"><span>Porsi</span><span class="tnum">' + pct(d.share) + '</span></div>' +
+      '<div class="tip-sep"></div>' +
+      '<div class="tip-sub">' + d.desc + '</div>';
+  }
+
+  /** One cash leg: accrued amount, realized-vs-accrued bar, outstanding. */
+  function cashLeg(label, leg, dir) {
+    const color = dir === 'in' ? 'var(--color-brand-primary)' : 'var(--color-brand-secondary)';
+    const head = '<div class="cashleg-top">' +
+      '<span class="cashleg-lab">' + label + ' <em>· ' + leg.scope + '</em></span>' +
+      '<span class="cashleg-amt tnum">' + rp(leg.accrued) + '</span>' +
+    '</div>';
+    /* `realized === null` means the leg has no payment record at all. An
+       empty bar would read as "nothing paid yet", which is a claim we cannot
+       make, so the leg states the accrual and says the rest is untracked. */
+    if (leg.realized === null) {
+      return '<div class="cashleg">' + head +
+        '<div class="cashleg-foot"><span>Akrual saja. Pembayaran belum terlacak.</span></div>' +
+        '</div>';
+    }
+    const ratio = leg.accrued ? leg.realized / leg.accrued : 0;
+    return '<div class="cashleg">' + head +
+      '<div class="bar"><i style="width:' + (ratio * 100) + '%;background:' + color + '"></i></div>' +
+      '<div class="cashleg-foot">' +
+        '<span>Terealisasi <strong class="tnum">' + rp(leg.realized) + '</strong> (' + pct(ratio * 100) + ')</span>' +
+        '<span>Sisa <strong class="tnum">' + rp(leg.accrued - leg.realized) + '</strong></span>' +
+      '</div></div>';
+  }
+
+  function renderNet() {
+    const s = summary();
+    const c = s.cash;
+    const matches = s.netAccrued === s.nusanticsMargin;
+
+    $('netSlot').innerHTML =
+      '<div class="cashgrid">' +
+        '<div class="cashcol">' +
+          '<div class="cashcol-head dir-in">' + ICON.up + 'MASUK</div><div class="cashbody">' +
+          cashLeg('Penerimaan dari pelanggan', c.customerIn, 'in') +
+          // Our receivable, even though the house noun for it is the
+          // provider's "payable" — the Payable History page owns that word.
+          cashLeg('Penerimaan payable provider', c.payableIn, 'in') +
+        '</div></div>' +
+        '<div class="cashcol">' +
+          '<div class="cashcol-head dir-out">' + ICON.down + 'KELUAR</div><div class="cashbody">' +
+          cashLeg('Pembayaran komisi lab', c.labOut, 'out') +
+          cashLeg('Pembayaran insentif provider', c.providerOut, 'out') +
+        '</div></div>' +
+      '</div>';
+    $('netFoot').innerHTML =
+      '<div class="cashnet">' +
+        '<div>' +
+          '<div class="cashnet-lab">ARUS KAS NETO (AKRUAL)</div>' +
+          '<div class="cashnet-val tnum">' + rp(s.netAccrued) + '</div>' +
+          // No realized net: the lab leg has no settlement data, so netting
+          // realized figures would count every unpaid lab commission as paid.
+          '<div class="cashnet-sub">Pembayaran komisi lab belum terlacak, ' +
+            'jadi neto terealisasi tidak dihitung.</div>' +
+        '</div>' +
+        '<span class="badge ' + (matches ? 'badge-success' : 'badge-error') + '">' +
+          (matches ? ICON.check + ' Sama dengan margin Nusantics' : ICON.warnSm + ' Tidak sama dengan margin') +
+        '</span>' +
+      '</div>';
+  }
+
+  function renderSchemeTabs() {
+    $('schemeTabs').innerHTML = Object.keys(TABS).map(function (k) {
+      const t = TABS[k];
+      // each count is what that tab actually lists, so they sum to Ringkasan
+      const n = t.kind === 'overview' ? FD.aggregate(scopeTx()).orders
+        : t.kind === 'selflab' ? sumField(scopeRows(function (id) { return FD.selfLabRows(id); }), 'orders')
+        : t.kind === 'lab' ? sumField(scopeRows(function (id) { return FD.labRows(id); }), 'orders')
+        : sumField(scopeRows(FD.providerRows, t.scheme), 'orders');
+      return '<button class="stab' + (state.tab === k ? ' active' : '') + '" data-tab="' + k + '">' +
+        t.label + '<span class="cnt">' + num(n) + '</span></button>';
+    }).join('');
+    Array.prototype.forEach.call($('schemeTabs').children, function (b) {
+      b.onclick = function () { state.tab = b.dataset.tab; state.page = 1; render(); };
+    });
+
+    /* Grouping only means something on the two provider tabs. The overview has
+       no counterparty axis; on a self-lab row the provider and the lab are the
+       same organization; and on the Lab tab the pair cut is the provider list,
+       not a grouping of labs — it answers a different question than the tab
+       asks, under a label that says it answers the same one. */
+    $('tabAside').innerHTML = tab().kind !== 'provider' ? '' :
+      '<span class="seglabel">Kelompokkan</span>' +
+      '<div class="segmented" id="groupToggle">' +
+        '<button class="seg' + (state.group === 'org' ? ' active' : '') + '" data-group="org">Per Organisasi</button>' +
+        '<button class="seg' + (state.group === 'pair' ? ' active' : '') + '" data-group="pair">Pasangan Provider &times; Lab</button>' +
+      '</div>';
+    if ($('groupToggle')) {
+      Array.prototype.forEach.call($('groupToggle').children, function (b) {
+        b.onclick = function () { state.group = b.dataset.group; state.page = 1; render(); };
+      });
+    }
+  }
+
+  /* ---------- tables ---------- */
+
+  /* gen2 toolbar renders checkActions only while rows are selected, as
+     `flex flex-row gap-2` ahead of the Filters/Sort group. Marking settlement
+     is a bulk operation: it follows the monthly invoice/statement, so it is
+     never a per-row toggle. */
+  function bulkActions(tableId) {
+    const sel = selection[tableId];
+    if (!sel || !sel.size) return '';
+    const past = FD.periodIsPast(state.period);
+    const t = tableMeta(tableId);
+    const docLabel = t.docType === 'invoice' ? 'Unduh Invoice' : 'Unduh Statement';
+    return '<div class="bulkbar">' +
+      '<span class="badge badge-brand">' + sel.size + ' dipilih</span>' +
+      (t.settleLabel
+        ? '<button class="btn btn-sm" data-bulk="settle" data-table="' + tableId + '">' +
+          ICON.check2 + t.settleLabel + '</button>'
+        : '') +
+      '<button class="btn btn-sm btn-primary" data-bulk="doc" data-table="' + tableId + '"' +
+        (past ? '' : ' disabled title="Periode masih berjalan"') + '>' +
+        ICON.dl + docLabel + ' (' + sel.size + ')</button>' +
+    '</div>';
+  }
+
+  function toolbar(title, chips, tableId) {
+    return '<div class="tbl-toolbar">' +
+        '<div class="tl"><div class="tbl-title">' + title + '</div></div>' +
+        // Right region order (gen2 table-toolbar.tsx): checkActions -> filter/sort
+        // group -> download ButtonDropdown -> toolbar.actions. Download is an
+        // outline text button with FileDown, not an icon-only button.
+        '<div class="tr">' + (tableId ? bulkActions(tableId) : '') + '<div class="icon-group">' +
+          '<button class="ibtn on" title="Filters">' + ICON.filter + '</button>' +
+          '<button class="ibtn" title="Sort">' + ICON.sort + '</button>' +
+        '</div>' +
+        '<button class="btn btn-sm">' + ICON.dl + 'Download' + ICON.chevD + '</button>' +
+        helpBtn() + '</div>' +
+      '</div>' +
+      '<div class="tbl-chips"><div class="chips-l">' +
+        chips.map(function (c) { return '<button class="fpill">' + c + ' ' + ICON.chevD + '</button>'; }).join('') +
+        '<button class="fpill ghost">' + ICON.plus + 'Add Filter</button>' +
+      '</div><button class="reset-btn">Reset</button></div>';
+  }
+
+  function pagination(n) {
+    return '<div class="tbl-pag"><div class="pag-l">' +
+      '<select class="pag-sel"><option selected>50</option><option>100</option><option>200</option></select>' +
+      '<span class="pag-count">' + n + ' results</span></div>' +
+      '<div class="pag-r"><button class="pag-btn" disabled>' + ICON.chevL + '</button>' +
+      '<button class="pag-btn active">1</button>' +
+      '<button class="pag-btn" disabled>' + ICON.chevR + '</button></div></div>';
+  }
+
+  /* `tableId` + `ids` turn on the gen2 synthetic select column (a 44px leading
+     checkbox col, prepended by TableClient when checkActions are configured). */
+  /* No totals row. gen2 `table-v2` renders head + body only — there is no
+     `footer` render-prop (v1 had one), so a sticky SUBTOTAL/TOTAL row is not
+     something this table can do. Every total these rows used to carry is in
+     the figures strip above the table, which is where it belongs anyway: it
+     stays on screen while the body scrolls. */
+  function tableShell(title, chips, cols, bodyRows, minWidth, rowCount, tableId, ids) {
+    const selCol = tableId ? '<col style="width:44px">' : '';
+    const selTh = tableId ? selHeader(tableId, ids || []) : '';
+    return '<div class="tbl-wrap">' + toolbar(title, chips, tableId) +
+      '<div class="tbl-scroll"><table class="t2" style="min-width:' + (minWidth + (tableId ? 44 : 0)) + 'px">' +
+      '<colgroup>' + selCol + cols.map(function (c) { return '<col style="width:' + c.w + 'px">'; }).join('') + '</colgroup>' +
+      '<thead><tr>' + selTh + cols.map(function (c) {
+        const cl = (c.num ? 'num ' : '') + (c.doc ? 'doccol' : '');
+        return '<th' + (cl.trim() ? ' class="' + cl.trim() + '"' : '') + '>' + c.label + '</th>';
+      }).join('') + '</tr></thead>' +
+      '<tbody>' + bodyRows + '</tbody>' +
+      '</table></div>' + pagination(rowCount) + '</div>';
+  }
+
+  function dirStrip(sch) {
+    if (!sch) {
+      return '<div class="gut dirhead">' +
+        '<span class="dirtag dir-out-tag">' + ICON.down + 'KOMISI LAB - SEMUA SKEMA</span>' +
+        '<span class="dirsum">Terutang pada setiap order, apa pun skema providernya</span></div>';
+    }
+    const sc = FD.SCHEMES[sch];
+    const out = scheme === 'incentive';
+    return '<div class="gut dirhead">' +
+      '<span class="dirtag ' + (out ? 'dir-out-tag' : 'dir-in-tag') + '">' + (out ? ICON.down : ICON.up) +
+      // The tag already names the scheme and the direction, and the counts are
+      // in the Volume cell, so there is nothing left for a summary line to say.
+      // The backend enum (DIRECT / BY_PROVIDER) is never shown anywhere.
+      sc.label.toUpperCase() + ' - ' + sc.direction + '</span></div>';
+  }
+
+  /* --- grouping: provider x lab pairs --- */
+  /* The pair cut of whichever tab is open. On the Lab tab (`sch` null) the
+     ledger is lab commission, so the lab leads and the accrued column is the
+     lab commission itself rather than a separate payable/incentive figure. */
+  function pairTable(sch) {
+    const rows = scopeRows(FD.pairRows, sch);
+    const isLab = !sch;
+    const isPay = sch === 'payable';
+    const kind = sch || 'lab';
+
+    /* The documented leg is the highlighted column. On skema insentif the
+       old separate `Insentif` column was Komisi Provider repeated, so it is
+       gone: the triple stays intact and the provider bar carries the mark. */
+    const legs = FD.documentedLegs('pair', sch, false);
+    const cols = isLab
+      ? [
+          { label: 'Lab', w: 175 }, { label: 'Provider', w: 180 },
+          { label: 'Order', w: 64, num: true }, { label: 'Split', w: 70 },
+          { label: 'Nilai Sebelum PPN', w: 136, num: true },
+          { label: 'Komisi Lab', w: 134, num: true, doc: true },
+          { label: 'Komisi Provider', w: 134, num: true },
+          { label: 'Margin Nusantics', w: 136, num: true },
+          { label: 'Sudah Dibayarkan', w: 136, num: true },
+          { label: 'Progres', w: 118 },
+        ]
+      : [
+          { label: 'Provider', w: 175 }, { label: 'Lab Tujuan', w: 155 },
+          { label: 'Order', w: 64, num: true }, { label: 'Split', w: 70 },
+          { label: 'Nilai Sebelum PPN', w: 128, num: true },
+        ].concat(isPay ? [{ label: 'Payable', w: 136, num: true, doc: true }] : [])
+         .concat([
+          { label: 'Komisi Lab', w: 134, num: true },
+          { label: 'Komisi Provider', w: 138, num: true, doc: !isPay },
+          { label: 'Margin Nusantics', w: 136, num: true },
+          { label: isPay ? 'Sudah Dibayarkan' : 'Sudah Dicairkan', w: 136, num: true },
+          { label: 'Progres', w: 118 },
+        ]);
+
+    const tot = FD.aggregate(scopeTxTP(sch));
+    const totSt = FD.settlement(tot, kind);
+
+    const body = rows.map(function (r) {
+      const st = FD.settlement(r, kind);
+      return '<tr class="clickable" data-kind="pair" data-key="' + r.id + '">' +
+        (isLab
+          ? '<td>' + nameCell(r.labName, r) + '</td><td class="ell">' + esc(r.providerName) + '</td>'
+          : '<td>' + nameCell(r.providerName, r) + '</td><td class="ell">' + esc(r.labName) + '</td>') +
+        '<td class="num tnum">' + num(r.orders) + '</td>' +
+        '<td>' + miniBar(r, legs) + '</td>' +
+        '<td class="num tnum">' + rp(r.beforeTax) + '</td>' +
+        (isPay ? docTd(rp(st.accrued)) : '') +
+        (isLab ? docTd(rp(r.labComm)) : '<td class="num tnum">' + rp(r.labComm) + '</td>') +
+        (!isLab && !isPay ? docTd(rp(r.providerComm))
+          : '<td class="num tnum">' + rp(r.providerComm) + '</td>') +
+        '<td class="num tnum"' + (r.nusanticsMargin < 0 ? ' style="color:var(--color-text-error);font-weight:600"' : '') + '>' + rp(r.nusanticsMargin) + '</td>' +
+        '<td class="num tnum">' + rp(st.realized) + '</td>' +
+        '<td>' + progCell(st, kind) + '</td></tr>';
+    }).join('');
+
+    const minW = cols.reduce(function (a, c) { return a + c.w; }, 0);
+    return dirStrip(sch) +
+      tableShell('Rekap per Pasangan Provider &times; Lab (Sebelum PPN)',
+        [periodChipLabel(), 'Skema: ' + (sch ? FD.SCHEMES[sch].short : 'Semua')],
+        cols, body, minW, rows.length);
+  }
+
+  function providerTable(sch) {
+    const rows = scopeRows(FD.providerRows, sch);
+    const isPay = sch === 'payable';
+    const legs = FD.documentedLegs('provider', sch, false);
+    const cols = [
+      { label: 'Provider', w: 170 }, { label: 'Kota', w: 98 },
+      { label: 'Lab', w: 60, num: true }, { label: 'Order', w: 64, num: true },
+      { label: 'Split', w: 70 },
+      { label: 'Nilai Sebelum PPN', w: 130, num: true },
+    ].concat(isPay ? [{ label: 'Payable', w: 132, num: true, doc: true }] : [])
+     .concat([
+      { label: 'Komisi Lab', w: 124, num: true },
+      { label: 'Komisi Provider', w: 130, num: true, doc: !isPay },
+      { label: 'Margin Nusantics', w: 122, num: true },
+      { label: isPay ? 'Sudah Dibayarkan' : 'Sudah Dicairkan', w: 132, num: true },
+      { label: 'Progres', w: 114 },
+    ]);
+    const tot = FD.aggregate(scopeTxTP(sch));
+    const totSt = FD.settlement(tot, sch);
+
+    const body = rows.map(function (r) {
+      const st = FD.settlement(r, sch);
+      return '<tr class="clickable" data-kind="provider" data-key="' + r.orgId + '">' +
+        selCell(state.tab, r.orgId) +
+        '<td>' + nameCell(r.name, r) + '</td>' +
+        '<td class="ell">' + esc(r.city) + '</td>' +
+        '<td class="num tnum">' + r.labCount + '</td>' +
+        '<td class="num tnum">' + num(r.orders) + '</td>' +
+        '<td>' + miniBar(r, legs) + '</td>' +
+        '<td class="num tnum">' + rp(r.beforeTax) + '</td>' +
+        (isPay ? docTd(rp(st.accrued)) : '') +
+        '<td class="num tnum">' + rp(r.labComm) + '</td>' +
+        (isPay ? '<td class="num tnum">' + rp(r.providerComm) + '</td>' : docTd(rp(r.providerComm))) +
+        '<td class="num tnum"' + (r.nusanticsMargin < 0 ? ' style="color:var(--color-text-error);font-weight:600"' : '') + '>' + rp(r.nusanticsMargin) + '</td>' +
+        '<td class="num tnum">' + rp(st.realized) + '</td>' +
+        '<td>' + progCell(st, sch) + '</td></tr>';
+    }).join('');
+
+    return dirStrip(sch) +
+      tableShell('Rekap per Provider: ' + FD.SCHEMES[sch].label + ' (Sebelum PPN)',
+        [periodChipLabel(), 'Skema: ' + FD.SCHEMES[sch].short], cols, body,
+        cols.reduce(function (a, c) { return a + c.w; }, 0), rows.length,
+        state.tab, rows.map(function (r) { return r.orgId; }));
+  }
+
+  function labTable() {
+    const rows = scopeRows(function (id) { return FD.labRows(id); });
+    const cols = [
+      { label: 'Lab', w: 210 }, { label: 'Kota', w: 130 },
+      { label: 'Provider', w: 80, num: true }, { label: 'Order', w: 64, num: true },
+      { label: 'Nilai Sebelum PPN', w: 150, num: true },
+      { label: 'Komisi Lab', w: 140, num: true, doc: true },
+      { label: 'Dari Insentif', w: 134, num: true },
+      { label: 'Dari Payable', w: 134, num: true },
+      { label: 'Statement', w: 150 },
+    ];
+    const totInc = rows.reduce(function (a, r) { return a + r.labCommIncentive; }, 0);
+    const totPay = rows.reduce(function (a, r) { return a + r.labCommPayable; }, 0);
+
+    const docReady = FD.periodIsPast(periodIds()[periodIds().length - 1]);
+    const body = rows.map(function (r) {
+      return '<tr class="clickable" data-kind="lab" data-key="' + r.orgId + '">' +
+        selCell('lab', r.orgId) +
+        '<td>' + nameCell(r.name, r) + '</td>' +
+        '<td class="ell">' + esc(r.city) + '</td>' +
+        '<td class="num tnum">' + r.providerCount + '</td>' +
+        '<td class="num tnum">' + num(r.orders) + '</td>' +
+        '<td class="num tnum">' + rp(r.beforeTax) + '</td>' +
+        docTd(rp(r.labComm)) +
+        '<td class="num tnum">' + rp(r.labCommIncentive) + '</td>' +
+        '<td class="num tnum">' + rp(r.labCommPayable) + '</td>' +
+        '<td>' + (docReady
+          ? '<span class="badge badge-neutral">Siap terbit</span>'
+          : '<span class="badge badge-neutral">Periode berjalan</span>') + '</td></tr>';
+    }).join('');
+
+    return dirStrip(null) +
+      tableShell('Rekap per Lab: Semua Skema (Sebelum PPN)',
+        [periodChipLabel(), 'Skema: Semua'], cols, body, 1296, rows.length,
+        'lab', rows.map(function (r) { return r.orgId; }));
+  }
+
+  /* ══════════ Lab Sendiri ══════════
+     Mechanically an ordinary BY_PROVIDER arrangement: the organization earns
+     its provider commission, Nusantics pays a lab commission, payable is
+     before-tax minus that commission. What differs is that the provider and
+     the lab are ONE entity — invoiced as the provider, paid as the lab, two
+     documents — and that the Nusantics margin is a 3-5% platform fee instead
+     of the 8-12% a third-party order leaves. Both legs are highlighted
+     because both are real money on a real document with its own date. */
+  function selfLabTable() {
+    const rows = scopeRows(function (id) { return FD.selfLabRows(id); });
+    // No Tier column: a self-lab pair is INTERNAL by definition.
+    const cols = [
+      { label: 'Provider / Lab', w: 196 },
+      { label: 'Tes', w: 54, num: true },
+      { label: 'Nilai Sebelum PPN', w: 130, num: true },
+      { label: 'Payable', w: 130, num: true, doc: true },
+      { label: 'Komisi Lab', w: 128, num: true, doc: true },
+      { label: 'Komisi Provider', w: 134, num: true },
+      { label: 'Fee', w: 54, num: true },
+      { label: 'Margin Nusantics', w: 130, num: true },
+      // Only the payable settles. The lab leg is reconciled from its statement.
+      { label: 'Tagih Klinik', w: 138 },
+    ];
+    const f = function (k) { return sumField(rows, k); };
+    const tot = { orders: f('orders'), beforeTax: f('beforeTax'), platformFee: f('platformFee'),
+      labComm: f('labComm'), payable: f('payable'), providerComm: f('providerComm'),
+      realizedPayable: f('realizedPayable'), settledOrders: f('settledOrders') };
+
+    const body = rows.map(function (r) {
+      const sPay = FD.settlement(r, 'payable');
+      return '<tr class="clickable" data-kind="provider" data-key="' + r.orgId + '">' +
+        '<td>' + nameCell(r.name, { selfLab: true }) +
+          '<div class="subname">' + esc(r.labName) + '</div></td>' +
+        '<td class="num tnum">' + num(r.orders) + '</td>' +
+        '<td class="num tnum">' + rp(r.beforeTax) + '</td>' +
+        docTd(rp(r.payable)) +
+        docTd(rp(r.labComm)) +
+        '<td class="num tnum">' + rp(r.providerComm) + '</td>' +
+        '<td class="num tnum">' + pct(r.feePct) + '</td>' +
+        '<td class="num tnum">' + rp(r.platformFee) + '</td>' +
+        '<td>' + progCell(sPay, 'payable') + '</td></tr>';
+    }).join('');
+
+    const minW = cols.reduce(function (a, c) { return a + c.w; }, 0);
+    return '<div class="gut dirhead">' +
+        '<span class="dirtag" style="background:var(--color-container-secondary);color:var(--color-brand-tertiary-hover)">' +
+        ICON.up + 'LAB SENDIRI - SATU ENTITAS, DUA PERAN</span>' +
+        '<span class="dirsum">Satu entitas menagih dan dibayar \u00b7 dua dokumen \u00b7 tier INTERNAL</span></div>' +
+      tableShell('Rekap Lab Sendiri (Sebelum PPN)',
+        [periodChipLabel(), 'Satu entitas \u00b7 dua dokumen'], cols, body, minW, rows.length);
+  }
+
+  function periodChipLabel() { return 'Periode: ' + FD.scopeLabel(scopeId()); }
+
+  /* ══════════ Ringkasan: the overall test list ══════════
+     Scheme-agnostic, one row per test, in the exact column order of the
+     finance workbook — and the export writes that workbook back out. */
+  const TL_W = { orderedAt: 136, orderId: 150, provider: 190, lab: 170, patient: 150,
+    category: 170, service: 230, testId: 200, rpp: 124, komisi: 118, payable: 134, take: 124 };
+  const TL_PAGE = 50;   // default page size across every list
+
+  function tlRows() {
+    const all = FD.testListRows(scopeId());
+    return state.cat && state.cat !== 'all'
+      ? all.filter(function (r) { return r._category === state.cat; }) : all;
+  }
+
+  function fmtDateTime(d) {
+    return String(d.getDate()).padStart(2, '0') + ' ' + FD.MONTHS_SHORT[d.getMonth()] + ' ' +
+      d.getFullYear() + ', ' + String(d.getHours()).padStart(2, '0') + '.' +
+      String(d.getMinutes()).padStart(2, '0');
+  }
+
+  function testListTable() {
+    const rs = tlRows(), sum = FD.testListSummary(rs);
+    const cols = FD.TEST_LIST_COLUMNS;
+    const pageCount = Math.max(1, Math.ceil(rs.length / TL_PAGE));
+    if (state.page > pageCount) state.page = pageCount;
+    const slice = rs.slice((state.page - 1) * TL_PAGE, state.page * TL_PAGE);
+    const minW = cols.reduce(function (a, c) { return a + TL_W[c.key]; }, 0);
+
+    const body = slice.map(function (r) {
+      return '<tr' + (r.take < 0 ? ' class="warnrow"' : '') + '>' +
+        '<td class="ell">' + fmtDateTime(r.orderedAt) + '</td>' +
+        '<td class="ell">' + r.orderId + '</td>' +
+        '<td class="ell">' + esc(r.provider) + '</td>' +
+        '<td class="ell">' + esc(r.lab) + '</td>' +
+        '<td class="ell">' + esc(r.patient) + '</td>' +
+        '<td class="ell">' + esc(r.category) + '</td>' +
+        '<td class="ell">' + esc(r.service) + '</td>' +
+        '<td class="ell">' + r.testId + '</td>' +
+        '<td class="num tnum">' + rp(r.rpp) + '</td>' +
+        '<td class="num tnum">' + rp(r.komisi) + '</td>' +
+        '<td class="num tnum">' + rp(r.payable) + '</td>' +
+        '<td class="num tnum"' + (r.take < 0 ? ' style="color:var(--color-text-error);font-weight:600"' : '') +
+          '>' + rp(r.take) + '</td></tr>';
+    }).join('');
+
+    const cats = ['all', 'ESOTERIC', 'ROUTINE', 'MICROBIOMIC'];
+    const pager = (function () {
+      const p = state.page;
+      const b = ['<button class="pag-btn" data-tlpage="' + (p - 1) + '"' + (p === 1 ? ' disabled' : '') + '>' + ICON.chevL + '</button>'];
+      const show = [];
+      for (let i = 1; i <= pageCount; i++) if (i === 1 || i === pageCount || Math.abs(i - p) <= 1) show.push(i);
+      let last = 0;
+      show.forEach(function (i) {
+        if (last && i - last > 1) b.push('<button class="pag-btn" disabled>&hellip;</button>');
+        b.push('<button class="pag-btn' + (i === p ? ' active' : '') + '" data-tlpage="' + i + '">' + i + '</button>');
+        last = i;
+      });
+      b.push('<button class="pag-btn" data-tlpage="' + (p + 1) + '"' + (p === pageCount ? ' disabled' : '') + '>' + ICON.chevR + '</button>');
+      return '<div class="tbl-pag"><div class="pag-l">' +
+        '<select class="pag-sel"><option selected>50</option><option>100</option><option>200</option></select>' +
+        '<span class="pag-count">' + num(rs.length) + ' results</span></div>' +
+        '<div class="pag-r">' + b.join('') + '</div></div>';
+    })();
+
+    return '<div class="gut dirhead">' +
+        '<span class="dirtag" style="background:var(--color-container-secondary);color:var(--color-text-secondary)">' +
+        ICON.sheet + 'SELURUH TES PERIODE - SEMUA SKEMA</span>' +
+        '<span class="dirsum">' + num(sum.orders) + ' order \u00b7 ' + num(sum.tests) + ' tes \u00b7 ' +
+        num(sum.samples) + ' sampel \u00b7 ' + num(sum.patients) + ' pasien' + (sum.negative ? ' \u00b7 ' + num(sum.negative) + ' margin negatif' : '') +
+        '</span></div>' +
+      '<div class="tbl-wrap">' +
+        '<div class="tbl-toolbar">' +
+          '<div class="tl"><div class="tbl-title">Rincian per Tes</div></div>' +
+          '<div class="tr"><div class="icon-group">' +
+            '<button class="ibtn on" title="Filters">' + ICON.filter + '</button>' +
+            '<button class="ibtn" title="Sort">' + ICON.sort + '</button>' +
+          '</div>' +
+          '<div class="ddwrap">' +
+            '<button class="btn btn-sm" id="tlDl">' + ICON.dl + 'Download' + ICON.chevD + '</button>' +
+            '<div class="ddmenu" id="tlMenu">' +
+              '<button data-fmt="xlsx">Download XLSX</button>' +
+              '<button data-fmt="csv">Download CSV</button>' +
+              '<button data-fmt="txt">Download TSV</button>' +
+            '</div>' +
+          '</div></div>' +
+        '</div>' +
+        '<div class="tbl-chips"><div class="chips-l">' +
+          '<button class="fpill">Periode: ' + FD.scopeLabel(scopeId()) + ' ' + ICON.chevD + '</button>' +
+          cats.map(function (c) {
+            return '<button class="fpill' + ((state.cat || 'all') === c ? '' : ' ghost') + '" data-tlcat="' + c + '">' +
+              (c === 'all' ? 'Semua kategori' : c) + '</button>';
+          }).join('') +
+        '</div><button class="reset-btn" data-tlcat="all">Reset</button></div>' +
+        '<div class="tbl-scroll"><table class="t2" style="min-width:' + minW + 'px">' +
+          '<colgroup>' + cols.map(function (c) { return '<col style="width:' + TL_W[c.key] + 'px">'; }).join('') + '</colgroup>' +
+          '<thead><tr>' + cols.map(function (c) {
+            return '<th' + (c.type === 'money' ? ' class="num"' : '') + '>' + c.header + '</th>';
+          }).join('') + '</tr></thead>' +
+          '<tbody>' + (body || '<tr><td colspan="12" class="empty">No results.</td></tr>') + '</tbody>' +
+        '</table></div>' + pager +
+      '</div>';
+  }
+
+  function bindTestList(root) {
+    Array.prototype.forEach.call(root.querySelectorAll('[data-tlpage]'), function (b) {
+      b.onclick = function () { state.page = +b.dataset.tlpage; renderTables(); };
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-tlcat]'), function (b) {
+      b.onclick = function () { state.cat = b.dataset.tlcat; state.page = 1; renderTables(); };
+    });
+    $('tlDl').onclick = function (e) { e.stopPropagation(); $('tlMenu').classList.toggle('open'); };
+    Array.prototype.forEach.call($('tlMenu').children, function (b) {
+      b.onclick = function () { $('tlMenu').classList.remove('open'); downloadTestList(b.dataset.fmt); };
+    });
+  }
+
+  /* Writes the finance workbook back out: same headers and order, same
+     [$Rp]#,##0 and yyyy-mm-dd h:mm:ss formats, same column widths. */
+  function downloadTestList(fmt) {
+    const rs = tlRows(), cols = FD.TEST_LIST_COLUMNS;
+    const aoa = [cols.map(function (c) { return c.header; })];
+    rs.forEach(function (r) { aoa.push(cols.map(function (c) { return r[c.key]; })); });
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa, { cellDates: true });
+    ws['!cols'] = cols.map(function (c) { return { wch: c.width }; });
+    for (let i = 0; i < rs.length; i++) {
+      cols.forEach(function (c, j) {
+        const cell = ws[XLSX.utils.encode_cell({ r: i + 1, c: j })];
+        if (!cell) return;
+        if (c.type === 'money') { cell.t = 'n'; cell.z = '[$Rp]#,##0'; }
+        else if (c.type === 'datetime') { cell.t = 'd'; cell.z = 'yyyy-mm-dd h:mm:ss'; }
+      });
+    }
+
+    const ps = FD.periodsIn(scopeId());
+    const tag = function (x) { return String(x.year) + String(x.month).padStart(2, '0'); };
+    const stamp = ps.length === 1 ? tag(ps[0]) : tag(ps[0]) + ' - ' + tag(ps[ps.length - 1]);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, stamp.slice(0, 31));
+    // SheetJS names the tab-separated writer `txt`, so map the extension.
+    const ext = fmt === 'txt' ? 'tsv' : (fmt || 'xlsx');
+    XLSX.writeFile(wb, stamp + ' - Causa Test List.' + ext,
+      fmt && fmt !== 'xlsx' ? { bookType: fmt, FS: fmt === 'txt' ? '\t' : ',' } : undefined);
+  }
+
+  function sumField(rows, f) {
+    return rows.reduce(function (a, r) { return a + (r[f] || 0); }, 0);
+  }
+
+  /* ══════════ per-tab figures ══════════
+     A stakeholder tab answers "what is happening inside this scheme", so it
+     gets that scheme's own numbers — counterparties, volume, what is owed and
+     how much has moved — rather than the period-wide totals, which live on
+     Ringkasan. */
+  /* Order / test / sample counts. Non-financial, but they are the volume the
+     money is a function of, and finance is asked for them constantly. A
+     sample is the specimen, not the test: one blood draw can carry a whole
+     panel, so orders <= samples <= tests always. */
+  function volRow(v, cls) {
+    return '<div class="volrow' + (cls ? ' ' + cls : '') + '">' +
+      [['Order', v.orderCount], ['Tes', v.testCount], ['Sampel', v.sampleCount]]
+        .map(function (x) {
+          return '<div class="vi"><span class="vl">' + x[0] + '</span>' +
+            '<span class="vv tnum">' + num(x[1]) + '</span></div>';
+        }).join('') + '</div>';
+  }
+
+  /** The three counts over a set of counterparty rows. */
+  function rowVolume(rows) {
+    return { orderCount: sumField(rows, 'orderCount'),
+      testCount: sumField(rows, 'testCount'),
+      sampleCount: sumField(rows, 'sampleCount') };
+  }
+
+  /** A stat cell carrying the three counts instead of a single figure. */
+  function volCell(v, sub) {
+    return '<div class="statcell"><div class="l">Volume</div><div class="in">' +
+      volRow(v, 'instat') +
+      (sub ? '<div class="s">' + sub + '</div>' : '') + '</div></div>';
+  }
+
+  function statCell(label, value, sub, color) {
+    return '<div class="statcell">' +
+      '<div class="l">' + label + '</div><div class="in"><div class="v tnum">' + value + '</div>' +
+      (sub ? '<div class="s">' + sub + '</div>' : '') + '</div></div>';
+  }
+
+  function renderStats() {
+    const t = tab();
+    if (t.kind === 'overview') { $('statsSlot').innerHTML = ''; return; }
+
+    if (t.kind === 'selflab') {
+      const rows = scopeRows(function (id) { return FD.selfLabRows(id); });
+      const tot = rows.reduce(function (a, r) {
+        ['orders', 'beforeTax', 'platformFee', 'labComm', 'payable', 'providerComm',
+         'realizedPayable', 'settledOrders']
+          .forEach(function (f) { a[f] = (a[f] || 0) + (r[f] || 0); });
+        return a;
+      }, {});
+      const eff = tot.beforeTax ? tot.platformFee / tot.beforeTax * 100 : 0;
+      const sPay = FD.settlement(tot, 'payable');
+      $('statsSlot').innerHTML = '<div class="statstrip">' +
+        statCell('Provider dengan lab sendiri', num(rows.length), 'klinik / RS memiliki labnya sendiri',
+          'var(--color-brand-tertiary)') +
+        volCell(rowVolume(rows), 'diarahkan ke lab milik sendiri') +
+        // the two documents, then what is left for Nusantics
+        statCell('Payable', rp(tot.payable || 0),
+          pct(sPay.ratio * 100) + ' diterima dari kliniknya', 'var(--color-brand-secondary)') +
+        statCell('Komisi lab', rp(tot.labComm || 0),
+          'dibayarkan ke labnya sendiri', 'var(--color-brand-tertiary)') +
+        statCell('Margin Nusantics', rp(tot.platformFee || 0),
+          'platform fee \u00b7 ' + pct(eff) + ' dari sebelum PPN', 'var(--color-brand-primary)') +
+        '</div>';
+      return;
+    }
+
+    if (t.kind === 'lab') {
+      const rows = scopeRows(function (id) { return FD.labRows(id); });
+      const agg = { beforeTax: sumField(rows, 'beforeTax'), orders: sumField(rows, 'orders'),
+        labComm: sumField(rows, 'labComm') };
+      const neg = scopeTx().filter(function (x) { return !x.selfLab && x.nusanticsMargin < 0; }).length;
+      const docReady = FD.periodIsPast(periodIds()[periodIds().length - 1]);
+      $('statsSlot').innerHTML = '<div class="statstrip">' +
+        statCell('Lab aktif', num(rows.length), 'mengerjakan tes periode ini', 'var(--color-brand-tertiary)') +
+        volCell(rowVolume(rows),
+          num(rows.reduce(function (a, r) { return a + (r.providerCount || 0); }, 0)) + ' pasangan provider') +
+        statCell('Komisi lab', rp(agg.labComm),
+          pct(agg.labComm / (agg.beforeTax || 1) * 100) + ' dari sebelum PPN') +
+        // No settlement figure: payment of a lab commission is not tracked.
+        statCell('Statement of account', docReady ? num(rows.length) : '-',
+          docReady ? 'siap diterbitkan untuk rekonsiliasi' : 'periode masih berjalan') +
+        statCell('Tes dengan margin negatif', num(neg),
+          neg ? 'COGS lab melampaui sisa' : 'semua tes profitabel',
+          neg ? 'var(--color-text-error)' : '') +
+        '</div>';
+      return;
+    }
+
+    /* The figures follow the grouping. Per Organisasi counts the parties we
+       settle with; Pasangan counts the pricing relationships, which is a
+       different number and the one the table below is actually listing. */
+    const sch = t.scheme;
+    const byPair = state.group === 'pair';
+    const rows = scopeRows(byPair ? FD.pairRows : FD.providerRows, sch);
+    const agg = { orders: sumField(rows, 'orders'), payable: sumField(rows, 'payable'),
+      incentive: sumField(rows, 'incentive'), realizedPayable: sumField(rows, 'realizedPayable'),
+      realizedIncentive: sumField(rows, 'realizedIncentive') };
+    const st = FD.settlement(agg, sch);
+    const pay = sch === 'payable';
+    const orgs = scopeRows(FD.providerRows, sch);
+    const docs = FD.periodIsPast(periodIds()[periodIds().length - 1]) ? orgs.length : 0;
+
+    const labIds = {}; rows.forEach(function (r) { if (r.labId) labIds[r.labId] = 1; });
+    const labCount = byPair ? Object.keys(labIds).length
+      : orgs.reduce(function (a, r) { return a + (r.labCount || 0); }, 0);
+    const avg = rows.length ? Math.round(agg.orders / rows.length) : 0;
+
+    $('statsSlot').innerHTML = '<div class="statstrip">' +
+      (byPair
+        ? statCell('Pasangan provider \u00d7 lab', num(rows.length),
+            num(orgs.length) + (pay ? ' provider' : ' dokter') + ' \u00b7 ' +
+            num(labCount) + ' lab', 'var(--color-brand-secondary)') +
+          volCell(rowVolume(rows), 'rata-rata ' + num(avg) + ' tes / pasangan')
+        : statCell(pay ? 'Provider aktif' : 'Dokter aktif', num(rows.length),
+            pay ? 'klinik / RS menagih pasien sendiri' : 'dokter perujuk',
+            'var(--color-brand-secondary)') +
+          volCell(rowVolume(rows), num(labCount) + ' pasangan lab')) +
+      statCell(pay ? 'Payable periode' : 'Insentif periode', rp(st.accrued),
+        pay ? 'provider berutang ke Nusantics' : 'Nusantics membayar dokter') +
+      statCell(pay ? 'Sudah dibayarkan' : 'Sudah dicairkan', rp(st.realized), pct(st.ratio * 100) + ' selesai') +
+      (byPair
+        // A pair is not a counterparty, so the document count belongs to the
+        // organization view — here the remainder is the whole story.
+        ? statCell('Sisa', rp(st.outstanding),
+            num(rows.filter(function (r) { return (r.orders || 0) > (r.settledOrders || 0); }).length) +
+            ' pasangan belum lunas')
+        : statCell('Sisa', rp(st.outstanding),
+            docs ? num(docs) + ' ' + (pay ? 'invoice' : 'statement') + ' siap terbit'
+                 : 'periode masih berjalan')) +
+      '</div>';
+  }
+
+  function renderTables() {
+    const t = tab();
+    $('overviewSlot').style.display = t.kind === 'overview' ? 'grid' : 'none';
+    $('tablesSlot').innerHTML =
+      t.kind === 'overview' ? testListTable()
+      : t.kind === 'selflab' ? selfLabTable()
+      : t.kind === 'lab' ? labTable()
+      : state.group === 'pair' ? pairTable(t.scheme)
+      : providerTable(t.scheme);
+    const root = $('tablesSlot');
+    if (t.kind === 'overview') { bindTestList(root); return; }
+    Array.prototype.forEach.call(root.querySelectorAll('tbody tr.clickable'), function (tr) {
+      tr.onclick = function () { openDrawer(tr.dataset.kind, tr.dataset.key, tr); };
+    });
+    // Checkbox clicks select; they must not also open the drawer.
+    Array.prototype.forEach.call(root.querySelectorAll('[data-sel]'), function (cb) {
+      cb.onclick = function (e) { e.stopPropagation(); };
+      cb.onchange = function () {
+        const set = selection[cb.dataset.sel];
+        if (cb.checked) set.add(cb.dataset.id); else set.delete(cb.dataset.id);
+        renderTables();
+      };
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-selall]'), function (cb) {
+      cb.onclick = function (e) { e.stopPropagation(); };
+      cb.onchange = function () {
+        const id = cb.dataset.selall;
+        const ids = Array.prototype.map.call(
+          root.querySelectorAll('[data-sel="' + id + '"]'), function (x) { return x.dataset.id; });
+        if (cb.checked) ids.forEach(function (i) { selection[id].add(i); });
+        else ids.forEach(function (i) { selection[id].delete(i); });
+        renderTables();
+      };
+    });
+    Array.prototype.forEach.call(root.querySelectorAll('[data-bulk]'), function (b) {
+      b.onclick = function () { runBulk(b.dataset.bulk, b.dataset.table); };
+    });
+  }
+
+  /* Bulk settlement + document issue. Both act on the current selection; a
+     document is generated per organization, so N selected rows open N tabs in
+     the real thing — here the first one opens and the rest are reported. */
+  function runBulk(action, tableId) {
+    const t = tableMeta(tableId);
+    const ids = Array.from(selection[tableId]);
+    if (!ids.length) return;
+
+    if (action === 'settle') {
+      if (!t.settleLabel) return;          // no settlement on this section
+      const verb = t.settleLabel.replace('Tandai ', '').toLowerCase();
+      alert('Mockup: ' + ids.length + ' organisasi ditandai ' + verb +
+        ' untuk periode ' + FD.periodOf(state.period).label + '.\n\n' +
+        'Di implementasi nyata ini satu bulk update yang menandai semua order ' +
+        'terkait pada periode tersebut, bukan satu per satu.');
+      return;
+    }
+
+    const target = { kind: t.kind, orgId: ids[0], scheme: scheme() };
+    if (ids.length > 1) {
+      alert('Mockup: ' + ids.length + ' ' + t.docType + ' akan diunduh sebagai satu berkas ZIP.\n\n' +
+        'Membuka contoh untuk organisasi pertama.');
+    }
+    window.open(FD.documentUrl(target, state.period), '_blank');
+  }
+
+  /* ---------- drawer ---------- */
+
+  /* The drawer is a peek, not a page: it confirms which row you clicked,
+     gives the split and the settlement, and hands off. The waterfall, the
+     scheme-parameter grid, the lab/provider list and the five-row transaction
+     preview all moved out — the transaction list page carries each of them in
+     full, and reproducing them here only made the drawer slower to read. */
+  function drawerSplit(agg, legs) {
+    const base = agg.beforeTax || 1;
+    const SEG = {
+      lab:  { id: 'lab',  cls: 'seg-lab',  key: 'Komisi lab', amount: agg.labComm,
+              sw: 'var(--color-brand-tertiary)' },
+      prov: { id: 'prov', cls: 'seg-prov', key: 'Komisi provider', amount: agg.providerComm,
+              sw: 'var(--color-brand-secondary)' },
+      nus:  { id: 'nus',  cls: 'seg-nus',  key: 'Margin Nusantics', amount: agg.nusanticsMargin,
+              sw: 'var(--color-brand-primary)' },
+    };
+    const segs = FD.segOrder(legs).map(function (k) { return SEG[k]; });
+    const on = {};
+    (legs || []).forEach(function (k) {
+      FD.LEG_META[k].segs.forEach(function (sg) { on[sg] = 1; });
+    });
+    const draw = segs.map(function (g) { return Math.max(0, g.amount); });
+    const drawn = draw.reduce(function (a, b) { return a + b; }, 0) || 1;
+    const dim = function (g) { return (legs && legs.length && !on[g.id]); };
+    return '<div>' +
+      '<div class="dsec-title">NILAI SEBELUM PPN</div>' +
+      '<div class="dnum tnum">' + rp(agg.beforeTax) + '</div>' +
+      '<div class="splitbar" style="height:20px;margin-top:12px">' +
+        segs.map(function (g, i) {
+          return '<div class="' + g.cls + (dim(g) ? ' dim' : '') +
+            '" style="width:' + (draw[i] / drawn * 100) + '%"></div>';
+        }).join('') +
+      '</div>' +
+      // The documented legs, called out above the split they came from.
+      (legs || []).map(function (k) {
+        const m = FD.LEG_META[k];
+        return '<div class="docleg"><span class="dl-t">' + m.label +
+          ' <em>\u2192 ' + (m.doc === 'invoice' ? 'Invoice' : 'Statement') + '</em></span>' +
+          '<span class="dl-v tnum">' + rp(FD.legAmount(agg, k)) + '</span></div>';
+      }).join('') +
+      '<dl class="kv" style="margin-top:12px">' +
+        segs.map(function (g) {
+          return '<dt><span class="sw" style="background:' + g.sw +
+            (dim(g) ? ';opacity:.4' : '') + '"></span>' + g.key + '</dt>' +
+            '<dd class="tnum"' + (g.amount < 0 ? ' style="color:var(--color-text-error)"' : '') + '>' +
+            rp(g.amount) + ' · ' + pct(g.amount / base * 100) + '</dd>';
+        }).join('') +
+      '</dl></div>';
+  }
+
+  /* Document block. Issued per organization only — a provider x lab pair is an
+     analytical cut, not a counterparty, so its drawer says so instead. */
+  function documentSection(kind, orgId, selfLab) {
+    if (kind === 'pair') {
+      return '<div class="wf-sep"></div><div>' +
+        '<div class="dsec-title">DOKUMEN</div>' +
+        '<div class="docbox"><div class="docbox-note">' +
+          'Invoice dan statement diterbitkan per organisasi, bukan per pasangan provider &times; lab. ' +
+          'Satu provider bisa memakai beberapa lab dalam satu periode, dan tagihannya tetap satu. ' +
+          'Buka provider atau lab-nya lewat tampilan <strong>Per Organisasi</strong> untuk menerbitkan dokumen.' +
+        '</div></div></div>';
+    }
+    const doc = FD.documentFor({ kind: kind, orgId: orgId, scheme: scheme() }, state.period);
+    const per = FD.periodOf(state.period);
+    return '<div class="wf-sep"></div><div>' +
+      '<div class="dsec-title">DOKUMEN</div>' +
+      '<div class="docbox">' +
+        '<div class="docbox-top"><div>' +
+          '<div class="docbox-type">' + doc.label + ' · ' + per.label + '</div>' +
+          '<div class="docbox-num">' + doc.number + '</div>' +
+        '</div>' +
+        (doc.available
+          ? '<a class="btn btn-sm btn-primary" href="' + FD.documentUrl({ kind: kind, orgId: orgId, scheme: scheme() }, state.period) +
+            '" target="_blank">' + ICON.dl + 'Unduh</a>'
+          : '<button class="btn btn-sm" disabled>' + ICON.dl + 'Unduh</button>') +
+        '</div>' +
+        '<div class="docbox-note">' + (doc.available
+          ? (selfLab
+              ? 'Tagihan platform fee periode ini, digross-up PPN ' + FD.PPN_PERCENT +
+                '%. Nilai layanan tidak ditagihkan.'
+              : doc.type === 'invoice'
+              ? 'Tagihan ke provider atas payable periode ini, digross-up PPN ' + FD.PPN_PERCENT + '%.'
+              : 'Rincian transfer keluar untuk periode ini. Dipakai sebagai lampiran bukti transfer.')
+          : 'Periode masih berjalan. Dokumen baru bisa diterbitkan setelah periode berakhir.') +
+        '</div>' +
+      '</div></div>';
+  }
+
+  /** Accrued vs realized block for a drawer, for one cash leg. */
+  function settlementSection(agg, kind) {
+    const st = FD.settlement(agg, kind);
+    const label = kind === 'payable' ? 'SETTLEMENT PAYABLE' : 'SETTLEMENT INSENTIF';
+    const verb = kind === 'incentive' ? 'Sudah dicairkan' : 'Sudah dibayarkan';
+    const color = kind === 'payable'
+      ? 'var(--color-brand-primary)' : 'var(--color-brand-secondary)';
+    return '<div class="wf-sep"></div><div>' +
+      '<div class="dsec-title"><span>' + label + '</span>' +
+      '<span style="font-weight:400;color:var(--color-text-muted)">' +
+        num(agg.settledOrders) + ' dari ' + num(agg.orders) + ' order</span></div>' +
+      '<div class="bar"><i style="width:' + (st.ratio * 100) + '%;background:' + color + '"></i></div>' +
+      '<dl class="kv" style="margin-top:10px">' +
+        '<dt>Akrual periode</dt><dd class="tnum">' + rp(st.accrued) + '</dd>' +
+        '<dt>' + verb + '</dt><dd class="tnum">' + rp(st.realized) + ' (' + pct(st.ratio * 100) + ')</dd>' +
+        '<dt>Sisa</dt><dd class="tnum">' + rp(st.outstanding) + '</dd>' +
+      '</dl></div>';
+  }
+
+  function openDrawer(kind, key, tr) {
+    let title, sub, agg, txs, url, leg, selfLab = false, docKind = null;
+
+    if (kind === 'pair') {
+      const p = FD.PAIRS.find(function (x) { return x.id === key; });
+      const sc = FD.SCHEMES[p.scheme];
+      txs = FD.transactions(p.id, state.period);
+      agg = FD.aggregate(txs);
+      selfLab = !!p.selfLab;
+      title = FD.PROVIDERS[p.providerId].name;
+      sub = FD.LABS[p.labId].name + ' · ' + num(agg.orders) + ' order · ' +
+        (selfLab ? 'lab sendiri' : sc.label.toLowerCase()) + ' · tier ' + p.tier;
+      url = txUrl({ pair: p.id });
+      leg = p.scheme;
+
+    } else if (kind === 'provider') {
+      const pairs = FD.PAIRS.filter(function (x) { return x.providerId === key && x.scheme === scheme(); });
+      const sc = FD.SCHEMES[scheme()];
+      txs = []; pairs.forEach(function (p) { Array.prototype.push.apply(txs, FD.transactions(p.id, state.period)); });
+      agg = FD.aggregate(txs);
+      selfLab = pairs.length > 0 && pairs.every(function (x) { return x.selfLab; });
+      title = FD.PROVIDERS[key].name;
+      sub = FD.PROVIDERS[key].city + ' · ' + num(agg.orders) + ' order · ' +
+        (selfLab
+          ? 'lab sendiri · platform fee ' + pct(FD.PROVIDERS[key].platformFeePct)
+          : pairs.length + ' lab · ' + sc.label.toLowerCase());
+      url = txUrl({ provider: key, scheme: scheme() });
+      leg = scheme();
+      docKind = 'provider';
+
+    } else {
+      const pairs = FD.PAIRS.filter(function (x) { return x.labId === key; });
+      txs = []; pairs.forEach(function (p) { Array.prototype.push.apply(txs, FD.transactions(p.id, state.period)); });
+      agg = FD.aggregate(txs);
+      title = FD.LABS[key].name;
+      sub = FD.LABS[key].city + ' · ' + pairs.length + ' provider · ' + num(agg.orders) +
+        ' order · semua skema';
+      url = txUrl({ lab: key });
+      leg = 'lab';
+      docKind = 'lab';
+    }
+
+    $('dTitle').textContent = title;
+    $('dSub').textContent = sub;
+    $('dBody').innerHTML =
+      drawerSplit(agg, FD.documentedLegs(kind, kind === 'lab' ? null : scheme(), selfLab)) +
+      // The lab leg has no settlement data, so a lab drawer shows none.
+      (leg === 'lab' ? '' : settlementSection(agg, leg)) +
+      documentSection(docKind || 'pair', key, selfLab);
+    $('dOpenTx').href = url;
+
+    Array.prototype.forEach.call(document.querySelectorAll('tbody tr'), function (r) { r.classList.remove('selected'); });
+    if (tr) tr.classList.add('selected');
+    $('drawer').classList.add('open'); $('scrim').classList.add('open');
+    $('drawer').setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDrawer() {
+    $('drawer').classList.remove('open'); $('scrim').classList.remove('open');
+    $('drawer').setAttribute('aria-hidden', 'true');
+    Array.prototype.forEach.call(document.querySelectorAll('tbody tr'), function (r) { r.classList.remove('selected'); });
+  }
+
+  /* ---------- wire up ---------- */
+
+  document.addEventListener('click', function () {
+    const m = $('tlMenu'); if (m) m.classList.remove('open');
+    closePops();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePops(); });
+
+  function render() {
+    syncUrl();
+    renderPeriod(); renderSchemeTabs();
+    if (tab().kind === 'overview') { renderHero(); renderNet(); }
+    renderStats(); renderTables();
+    bindTips($('heroSlot'));
+    hideTip();
+  }
+
+  $('prevM').onclick = function () {
+    const i = FD.PERIODS.findIndex(function (p) { return p.id === state.period; });
+    if (i > 0) { state.period = FD.PERIODS[i - 1].id; closeDrawer(); render(); }
+  };
+  $('nextM').onclick = function () {
+    const i = FD.PERIODS.findIndex(function (p) { return p.id === state.period; });
+    if (i < FD.PERIODS.length - 1) { state.period = FD.PERIODS[i + 1].id; closeDrawer(); render(); }
+  };
+  $('dClose').onclick = closeDrawer;
+  $('dClose2').onclick = closeDrawer;
+  $('scrim').onclick = closeDrawer;
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
+
+  render();
+  window.__openDrawer = openDrawer;   // for screenshot tooling
+})();
+</script>
+<script>(function(){var s=document.getElementById("sidebar"),t=document.getElementById("sbToggle");if(!s||!t)return;function set(c){s.classList.toggle("collapsed",c);t.setAttribute("aria-expanded",String(!c));t.setAttribute("aria-label",c?"Perluas sidebar":"Ciutkan sidebar");try{localStorage.setItem("causa-sb",c?"c":"e")}catch(e){}}t.addEventListener("click",function(){set(!s.classList.contains("collapsed"))});try{set(localStorage.getItem("causa-sb")==="c")}catch(e){}})();</script>
+</body>
+</html>
