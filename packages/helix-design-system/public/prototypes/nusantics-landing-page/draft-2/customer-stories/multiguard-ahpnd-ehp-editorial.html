@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="editorial.css">
+  <link rel="stylesheet" href="story-tags.css">
+  <link rel="stylesheet" href="../story-crumb.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -83,16 +85,16 @@
       <div class="ces-hero__media" aria-hidden="true"><img src="../assets/customer-stories/ed-multiguard-cover.jpg" alt="" width="1536" height="864" fetchpriority="high"><div class="ces-hero__tint"></div></div>
       <div class="ces-hero__inner">
         <div class="ces-hero__copy">
-          <span class="ces-badge">Aquaculture</span>
           <h1 class="ces-hero__title" id="ces-title">Four targets, one tube: screening for AHPND and EHP before stocking</h1>
           <p class="ces-hero__summary">A hatchery moved from separate tests to one MultiGuard reaction that reads AHPND, EHP and an internal control together, in about 35 minutes.</p>
-          <p class="ces-hero__meta">Shrimp Hatchery  •  Lampung, Indonesia  •  November 23, 2026</p>
+          <p class="ces-hero__meta">Lampung, Indonesia  •  November 23, 2026</p>
+          <ul class="st-tags" aria-label="Products used"><li class="st-tag">ShrimProtect</li><li class="st-tag">X-Kit V2.0</li></ul>
         </div>
         <figure class="ces-hero__figure"><img src="../assets/customer-stories/ed-multiguard-hero-side.jpg" alt="Two QC staff reviewing amplification curves on a qPCR instrument screen" width="1536" height="864"></figure>
       </div>
     </section>
     <article class="ces-article ces-article--a" id="story">
-          <nav class="ces-crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="ces-crumb__sep" aria-hidden="true"></span><a href="../paper-publications.html">Knowledge Hub</a><span class="ces-crumb__sep" aria-hidden="true"></span><a href="index.html">Customer Stories</a><span class="ces-crumb__sep" aria-hidden="true"></span><span aria-current="page">Four targets, one tube: screening for AHPND and EHP before stocking</span></nav>
+          <nav class="ces-crumb st-crumb" aria-label="Breadcrumb"><a class="st-crumb__home" href="../index.html">Home</a><span class="st-crumb__sep" aria-hidden="true"></span><span class="st-crumb__menu-wrap"><button class="st-crumb__more" type="button" aria-label="Show more breadcrumb items" aria-expanded="false" aria-controls="st-crumb-menu"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button><ul class="st-crumb__menu" id="st-crumb-menu"><li><a href="../paper-publications.html">Knowledge Hub</a></li><li><a href="index.html">Customer Stories</a></li></ul></span><span class="st-crumb__sep" aria-hidden="true"></span><span aria-current="page">Four targets, one tube: screening for AHPND and EHP before stocking</span></nav>
           <p>At a hatchery in Lampung, the QC team checks broodstock and post-larvae before every sale. With ShrimProtect MultiGuard AHPND/EMS &amp; EHP they now read two diseases in a single qPCR run.</p>
           <h2>Two diseases, two tests, one long morning</h2>
           <p>AHPND is caused by Vibrio parahaemolyticus carrying the pirA and pirB toxin genes. EHP is a microsporidian that infects the hepatopancreas. Both slow growth and can ruin a stocking, and testing each one separately meant more tubes, more pipetting and more room for error.</p>
@@ -262,6 +264,7 @@
   <script src="../script.js"></script>
   <script src="../mobile-menu.js"></script>
   <script src="editorial.js"></script>
+  <script src="../story-crumb.js"></script>
   <script src="variant-switcher.js"></script>
 </body>
 </html>

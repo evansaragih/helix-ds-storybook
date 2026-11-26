@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="../customer-stories/longform.css">
+  <link rel="stylesheet" href="../story-crumb.css">
   <link rel="stylesheet" href="application-note.css">
   <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
 </head>
@@ -82,15 +83,13 @@
     <main id="main" class="ls">
       <header class="ls__wrap ls__header an__head">
         <div class="an__head-main">
-          <nav class="ls__crumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><img src="../assets/customer-stories/lf-crumb-chevron.svg" alt="" width="12" height="12"><a href="../paper-publications.html" aria-label="Knowledge Hub, Application Notes">···</a><img src="../assets/customer-stories/lf-crumb-chevron.svg" alt="" width="12" height="12"><span aria-current="page">Profiling oral bacterial communities from buccal swabs with BiomeSeq</span></nav>
-          <span class="ls__badge">Application note  •  Library prep</span>
+          <nav class="ls__crumb st-crumb" aria-label="Breadcrumb"><a class="st-crumb__home" href="../index.html">Home</a><span class="st-crumb__sep" aria-hidden="true"></span><span class="st-crumb__menu-wrap"><button class="st-crumb__more" type="button" aria-label="Show more breadcrumb items" aria-expanded="false" aria-controls="st-crumb-menu"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button><ul class="st-crumb__menu" id="st-crumb-menu"><li><a href="../paper-publications.html">Knowledge Hub</a></li><li><a href="index.html">Application Notes</a></li></ul></span><span class="st-crumb__sep" aria-hidden="true"></span><span aria-current="page">Profiling oral bacterial communities from buccal swabs with BiomeSeq</span></nav>
           <h1 class="ls__title">Profiling oral bacterial communities from buccal swabs with BiomeSeq</h1>
-          <p class="ls__meta">Nusantics R&amp;D  •  November 2026  •  PDF, 12 pages, 1.4 MB  •  8 min read</p>
+          <p class="ls__meta">November 2026  •  8 min read</p>
           <ul class="an__kw" aria-label="Keywords"><li class="ls__tag">16S rRNA</li><li class="ls__tag">V3–V4</li><li class="ls__tag">Illumina MiSeq</li><li class="ls__tag">Buccal swab</li><li class="ls__tag">RUO</li></ul>
         </div>
         <aside class="an__pdf" aria-label="PDF version">
           <div class="an__pdf-cover"><span class="an__pdf-kicker">Application note</span><span class="an__pdf-title">Profiling oral bacterial communities with BiomeSeq</span></div>
-          <p class="an__pdf-meta">PDF  •  12 pages  •  1.4 MB</p>
           <a class="an__dl" href="#" download>Download PDF</a>
         </aside>
       </header>
@@ -170,6 +169,7 @@
 
   <script src="../script.js"></script>
   <script src="../mobile-menu.js"></script>
+  <script src="../story-crumb.js"></script>
   <script src="application-note.js"></script>
 </body>
 </html>

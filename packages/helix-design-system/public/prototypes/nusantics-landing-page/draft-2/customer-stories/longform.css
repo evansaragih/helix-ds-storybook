@@ -1,19 +1,18 @@
 /* Customer story, long-form detail. Source: Figma "Knowledge Hub / Customer Story Detail / Long-form" 777:2792, 777:3495, 777:4674 (1280px wide). Shares tokens, nav and footer with styles.css. All content is synthetic / illustrative. */
 body { background: var(--surface-subtle); }
-.nav { background: var(--surface-default); }
 .ls { padding-bottom: 96px; }
 .ls > * { margin-inline: auto; }
 .ls__wrap { max-width: calc(1120px + 2 * var(--gutter)); padding-inline: var(--gutter); margin-inline: auto; }
 
+
+
 /* Header */
-.ls__header { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding-top: 120px; padding-bottom: 32px; animation: ls-in var(--motion-duration-slow) var(--motion-easing-decelerate) both; }
-.ls__crumb { display: flex; align-items: center; flex-wrap: wrap; }
-.ls__crumb a, .ls__crumb [aria-current] { padding: 4px 6px; border-radius: var(--radius-lg); font-size: 13px; line-height: 19.2px; color: var(--text-subtler); text-decoration: none; }
-.ls__crumb a:hover { background: var(--surface-hover); }
-.ls__crumb img { display: block; width: 12px; height: 12px; margin-inline: 6px; flex: none; }
-.ls__badge { display: inline-flex; align-items: center; padding: 3px 12px; border-radius: 9999px; background: var(--surface-subtle-primary); color: var(--text-primary); font-size: 13px; line-height: 19.2px; }
+.ls__header { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding-top: 80px; padding-bottom: 32px; animation: ls-in var(--motion-duration-slow) var(--motion-easing-decelerate) both; }
+.ls__crumb { flex-wrap: nowrap; }
 .ls__title { margin: 0; font: 700 39px/46.8px var(--font-heading); color: var(--text-primary); }
 .ls__meta { margin: 0; font-size: 13px; line-height: 19.2px; color: var(--text-subtler); white-space: pre-wrap; }
+
+.ls__header .st-tag { background: var(--surface-default); border: 1px solid var(--stroke-subtle); color: var(--text-subtler); }
 
 /* Cover */
 .ls__cover { margin: 0; }
@@ -76,8 +75,8 @@ body { background: var(--surface-subtle); }
 .ls__pcard img { display: block; width: 100%; height: 140px; object-fit: cover; border-radius: var(--radius-lg); }
 .ls__pcopy { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; flex: 1; }
 .ls__pname { margin: 0; font: 500 20px/30px var(--font-body); letter-spacing: -0.01px; color: var(--text-secondary); }
-.ls__prole { margin: 0; font-size: 16px; line-height: 24px; color: var(--text-subtle); }
-.ls__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; margin-top: auto; }
+.ls__prole { margin: 0; font-size: 16px; line-height: 24px; color: var(--text-subtler); }
+.ls__tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .ls__tag { display: inline-flex; align-items: center; height: 24px; padding: 2px 8px; border: 1px solid var(--stroke-subtle); border-radius: var(--radius-lg); background: var(--surface-default); font-size: 10px; line-height: 15.6px; color: var(--text-subtler); white-space: nowrap; }
 .ls__pbtn { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 8px 12px; border: 0.5px solid var(--stroke-subtle); border-radius: var(--radius-md); background: var(--surface-default); font: 400 13px/19.2px var(--font-body); letter-spacing: -0.13px; color: var(--text-subtler); box-shadow: var(--inset-highlight), 0 1px 4px var(--shadow-neutral); text-decoration: none; transition: background-color var(--motion-duration-fast) var(--motion-easing-standard); }
 .ls__pbtn:hover { background: var(--surface-subtle); }
@@ -153,7 +152,7 @@ body { background: var(--surface-subtle); }
 }
 @media (max-width: 720px) {
   .ls__wrap { padding-inline: 20px; }
-  .ls__header { padding-top: 96px; }
+  .ls__header { padding-top: 80px; }
   .ls__title { font-size: 31px; line-height: 37px; }
   .ls__keys { grid-template-columns: 1fr; }
   .ls__keys li + li { border-left: 0; border-top: 1px solid var(--stroke-subtle); }

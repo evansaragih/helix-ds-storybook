@@ -1,0 +1,21 @@
+/* Collapsed breadcrumb: Home › ⋯ › title. The ⋯ button opens the middle items. */
+.st-crumb { --st-crumb-color: var(--text-subtler); --st-crumb-hover: var(--surface-hover); display: flex; align-items: center; min-width: 0; max-width: 100%; font-size: 13px; line-height: 19.2px; color: var(--st-crumb-color); }
+.st-crumb--on-photo { --st-crumb-color: var(--text-on-primary); --st-crumb-hover: rgba(255, 255, 255, 0.16); }
+.st-crumb a, .st-crumb__more, .st-crumb [aria-current] { padding: 4px 6px; border-radius: var(--radius-lg); color: var(--st-crumb-color); text-decoration: none; }
+.st-crumb a, .st-crumb__more { transition: background-color var(--motion-duration-fast) var(--motion-easing-standard); }
+.st-crumb a:hover, .st-crumb__more:hover, .st-crumb__more[aria-expanded="true"] { background: var(--st-crumb-hover); }
+.st-crumb [aria-current] { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-crumb__sep { flex: none; width: 12px; height: 12px; margin-inline: 2px; background: currentColor; opacity: 0.8;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m4.5 2.5 3.5 3.5-3.5 3.5' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px 12px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='m4.5 2.5 3.5 3.5-3.5 3.5' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px 12px no-repeat; }
+.st-crumb__home, .st-crumb__menu-wrap { flex: none; }
+.st-crumb__home { margin-left: -6px; } /* link padding is 6px: pull it back so the label lines up with the page content edge */
+.st-crumb__menu-wrap { position: relative; display: flex; }
+.st-crumb__more { display: inline-flex; align-items: center; justify-content: center; border: 0; background: none; cursor: pointer; font: inherit; }
+.st-crumb__more svg { display: block; width: 16px; height: 16px; }
+.st-crumb__menu { position: absolute; z-index: 20; top: calc(100% + 4px); left: 0; min-width: 200px; margin: 0; padding: 4px; list-style: none; background: var(--surface-default); border: 1px solid var(--stroke-subtle); border-radius: var(--radius-lg); box-shadow: 0 4px 12px var(--shadow-neutral);
+  opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity var(--motion-duration-fast) var(--motion-easing-standard), transform var(--motion-duration-fast) var(--motion-easing-standard), visibility 0s linear var(--motion-duration-fast); }
+.st-crumb__menu.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.st-crumb .st-crumb__menu a { display: block; padding: 8px 12px; color: var(--text-subtle); white-space: nowrap; }
+.st-crumb .st-crumb__menu a:hover { background: var(--surface-hover); }
+@media (prefers-reduced-motion: reduce) { .st-crumb a, .st-crumb__more, .st-crumb__menu { transition: none; } }

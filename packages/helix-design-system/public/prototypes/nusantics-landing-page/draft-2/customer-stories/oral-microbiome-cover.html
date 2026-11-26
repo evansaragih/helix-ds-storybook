@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@700&family=Rubik:wght@400;500&display=swap">
   <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="cover.css">
+  <link rel="stylesheet" href="story-tags.css">
+  <link rel="stylesheet" href="../story-crumb.css">
   <script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -88,12 +90,12 @@
             <span class="cs-hero__scrim cs-hero__scrim--grad"></span>
           </div>
           <div class="cs-wrap cs-hero__inner">
-            <nav class="cs-crumb" aria-label="Breadcrumb"><a href="index.html"><span class="cs-crumb__chev" aria-hidden="true"></span>Customer Stories</a></nav>
+            <nav class="cs-crumb st-crumb st-crumb--on-photo" aria-label="Breadcrumb"><a class="st-crumb__home" href="../index.html">Home</a><span class="st-crumb__sep" aria-hidden="true"></span><span class="st-crumb__menu-wrap"><button class="st-crumb__more" type="button" aria-label="Show more breadcrumb items" aria-expanded="false" aria-controls="st-crumb-menu"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><circle cx="3.5" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.5" cy="8" r="1.25"/></svg></button><ul class="st-crumb__menu" id="st-crumb-menu"><li><a href="../paper-publications.html">Knowledge Hub</a></li><li><a href="index.html">Customer Stories</a></li></ul></span><span class="st-crumb__sep" aria-hidden="true"></span><span aria-current="page">Mapping the oral microbiome from a simple cheek swab</span></nav>
             <div class="cs-hero__content">
-              <span class="cs-field">Microbiome research</span>
               <h1 class="cs-hero__title" id="cs-title">Mapping the oral microbiome from a simple cheek swab</h1>
               <p class="cs-hero__summary">A university lab profiled the bacteria in 120 volunteers' mouths using BiomeSeq and the Nusantics Dashboard, without building a sequencing pipeline of their own.</p>
-              <p class="cs-hero__meta"><span>Oral Microbiome Research Lab</span><span class="cs-hero__sep" aria-hidden="true">•</span><span>Bandung, Indonesia</span><span class="cs-hero__sep" aria-hidden="true">•</span><time datetime="2026-11-16">November 16, 2026</time></p>
+              <p class="cs-hero__meta"><span>Bandung, Indonesia</span><span class="cs-hero__sep" aria-hidden="true">•</span><time datetime="2026-11-16">November 16, 2026</time></p>
+              <ul class="st-tags" aria-label="Products used"><li class="st-tag">BiomeSeq</li><li class="st-tag">Nusantics Dashboard</li><li class="st-tag">DNA Extraction Kit</li></ul>
             </div>
           </div>
         </div>
@@ -263,6 +265,7 @@
   <script src="../script.js"></script>
   <script src="../mobile-menu.js"></script>
   <script src="cover.js"></script>
+  <script src="../story-crumb.js"></script>
   <script src="variant-switcher.js"></script>
 </body>
 </html>
