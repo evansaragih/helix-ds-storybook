@@ -70,7 +70,7 @@ const components: NavItem[] = [
   { label: 'Upload Progress Drawer', id: 'upload-progress-drawer' },
   { label: 'Meta Badge', id: 'info-badge' },
   { label: 'Metric Tile', id: 'metric-tile' },
-  { label: 'Date Pickers', id: 'date-picker' },
+  { label: 'Input Pickers', id: 'date-picker' },
   { label: 'Comparison Tables', id: 'comparison-table' },
   { label: 'Dashboard Layout', id: 'dashboard-layout' },
 ];
@@ -94,7 +94,6 @@ const levelById: Record<string, ComponentLevel> = {
   'upload-progress-drawer': 'Organism',
   'info-badge': 'Organism',
   'metric-tile': 'Organism',
-  'date-picker': 'Organism',
   'comparison-table': 'Organism',
   'dashboard-layout': 'Template',
 };

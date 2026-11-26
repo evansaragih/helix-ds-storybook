@@ -159,10 +159,49 @@ export const componentChangelogs: ComponentChangelog[] = [
     ],
   },
   {
-    id: 'datepicker', category: 'Organism/Date Pickers', name: 'Date Picker', status: 'stable',
-    description: 'Text input paired with a calendar popover for selecting a single date, a date range, a month, or a year, with min/max date constraints and a clear button.',
+    id: 'datepicker', category: 'Molecule/Input Pickers', name: 'Date Picker', status: 'stable',
+    description: 'Calendar panel for picking a single date, a date range (two months side by side, optionally with start and end times), a whole week, or a date and time. Compose it in a Popover under an Input for a date field; for time only, a month, a quarter or a week list use Time, Month, Quarter or Week Picker.',
     changelog: [
       { date: '2026-07-08', version: '0.0.1', summary: 'Documented in Storybook with Playground story.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Aligned the panel with the Figma Date Picker (node 8370:4116): Popover-style gray shell around a white body, 36px header with the chevrons at the edges and full month names, 13px Regular text, and Today drawn as a subtle brand cell instead of a dot.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Range now shows two months side by side (Start | End), with the arrows moving both; added mode="week" (a click selects the whole week, read from onRangeChange) and showWeekNumbers, a W column with the ISO week of each row.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Date and Time gained timeInput (spinner | dropdown), showSeconds (default on), showAmPm and a Now / Set row with onSet; Range gained showTime with Start time and End time fields and onRangeSet. The value now keeps seconds.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'mode="time" is kept for compatibility and now renders the new Time Picker; the Figma Date Picker no longer has a Time mode.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added keyboard navigation to the calendar: a roving tab stop on the days, arrow keys move by a day or a week, Home / End go to the start and end of the week, PageUp / PageDown by a month (Shift: a year), disabled days are skipped and the visible month follows the focus.' },
+    ],
+  },
+  {
+    id: 'monthpicker', category: 'Molecule/Input Pickers', name: 'Month Picker', status: 'beta',
+    description: 'Panel for choosing a single month: a year header with chevrons and a 3x4 grid of months. onChange receives the 1st of the month; isDisabled greys out months. Use Quarter Picker for a quarter and Date Picker for a day or week.',
+    changelog: [
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added Month Picker, mirroring the Figma Month Picker (node 8418:6821): year header, 3x4 month tiles with Default, Hover, Selected and Disabled states, Bahasa Indonesia month names by default (locale prop).' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Tile labels are now 13px Regular (were 16px), following the Figma _period-cell update (node 8402:69689).' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added keyboard navigation: a roving tab stop on the tiles, arrow keys move between tiles and skip disabled ones, Home / End jump to the first and last, PageUp / PageDown change the year.' },
+    ],
+  },
+  {
+    id: 'quarterpicker', category: 'Molecule/Input Pickers', name: 'Quarter Picker', status: 'beta',
+    description: 'Panel for choosing a single quarter: a year header with chevrons and four tiles, Q1 to Q4, each with its months. onChange receives the 1st day of the quarter; isDisabled greys out quarters. Use Month Picker for a month.',
+    changelog: [
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added Quarter Picker, mirroring the Figma Quarter Picker (node 8418:6841): year header and four tiles with a months line, using the same tile as Month Picker.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'The Q1 to Q4 label is now 13px Regular (was 16px), following the Figma _period-cell update (node 8402:69689).' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added keyboard navigation: a roving tab stop on the tiles, arrow keys move between tiles and skip disabled ones, Home / End jump to the first and last, PageUp / PageDown change the year.' },
+    ],
+  },
+  {
+    id: 'timepicker', category: 'Molecule/Input Pickers', name: 'Time Picker', status: 'beta',
+    description: 'Panel for choosing a time of day: scroll columns for hours, minutes, optional seconds and AM/PM, and a Now / Set row. onChange fires on every change, onSet when Set is pressed. For a date and time together use Date Picker mode="date-time".',
+    changelog: [
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added Time Picker, mirroring the Figma Time Picker (node 8416:6688) with showSeconds (default on) and showAmPm (default off); it replaces DatePicker mode="time", which now renders it.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added keyboard navigation: Tab reaches the selected cell of each column, ArrowUp / ArrowDown step and select, Home / End / PageUp / PageDown jump, ArrowLeft / ArrowRight hop between columns.' },
+    ],
+  },
+  {
+    id: 'weekpicker', category: 'Molecule/Input Pickers', name: 'Week Picker', status: 'beta',
+    description: 'Panel for choosing one week as a date range: a month and year header and a list of the weeks of that month, each labelled with its range (W1 (1 - 7 Jan 2026)). Weeks are 7-day blocks from the 1st, so the last can be shorter. For a calendar that selects a whole row use Date Picker mode="week".',
+    changelog: [
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added Week Picker, mirroring the Figma Week Picker (node 8507:8808): month and year header, week rows with a check on the chosen one, onChange receives { start, end }.' },
+      { date: '2026-11-26', version: '0.0.1', summary: 'Added keyboard navigation: a roving tab stop on the week rows, ArrowUp / ArrowDown move between rows, Home / End jump to the first and last, PageUp / PageDown change the month.' },
     ],
   },
   {
